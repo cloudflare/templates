@@ -8,7 +8,8 @@ addEventListener('fetch', event => {
 
 async function fetchAndApply(request) {  
   if (request.headers.get('x-real-ip') === '225.0.0.1') {
-    return new Response('Forbidden')
+    return new Response('Sorry, this page is not available.',
+        { status: 403, statusText: 'Forbidden' })
   }
 
   const response = await fetch(request)

@@ -7,7 +7,8 @@ addEventListener('fetch', event => {
 
 async function fetchAndApply(request) {  
   if (request.method === 'POST' || request.method === 'PUT') {
-    return new Response('Forbidden')
+    return new Response('Sorry, this page is not available.',
+        { status: 403, statusText: 'Forbidden' })
   }
 
   const response = await fetch(request)
