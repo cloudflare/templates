@@ -5,35 +5,47 @@ addEventListener('fetch', event => {
 })
 
 async function fetchAndApply(request) {
-  const control = 'experiment-0=control'
-  const test = 'experiment-0=test'
-  const controlUriSuffix = '/control'
-  const testUriSuffix = '/test'
-  let suffix = ''
+  const name = 'experiment-0'
+  let group          // 'control' or 'test', set below
+  let isNew = false  // is the group newly-assigned?
 
+  // Determine which group this request is in.
   const cookie = request.headers.get('Cookie')
-  if (cookie === undefined || (!cookie.includes(control) && !cookie.includes(test))) {
+  if (cookie && cookie.includes(name + '=control')) {
+    group = 'control'
+  } else if (cookie && cookie.includes(name + '=test')) {
+    group = 'test'
+  } else {
     // 50/50 Split
-    if (Math.floor(Math.random() * 2)) {
-      suffix = controlUriSuffix
-    } else {
-      suffix = testUriSuffix
-    }
+    group = Math.random() < 0.5 ? 'control' : 'test'
+    isNew = true
   }
 
-  if (cookie.includes(control)) {
-    suffix = controlUriSuffix
-  } else if (cookie.includes(test)) {
-    suffix = testUriSuffix
-  }
+  // We'll prefix the request path with the experiment name. This way,
+  // the origin server merely has to have two copies of the site under
+  // top-level directories named "control" and "test".
+  let url = new URL(request.url)
+  url.pathname = '/' + group + url.pathname
 
-  const init = {
+  const modifiedRequest = new Request(url, {
     method: request.method,
     headers: request.headers
-  }
+  })
 
-  const modifiedRequest = new Request(request.url+suffix, init)
-  // We are assuming that the server is adding the Set-Cookie header with the correct slice
   const response = await fetch(modifiedRequest)
-  return response
+
+  if (isNew) {
+    // The experiment was newly-assigned, so add a Set-Cookie header
+    // to the response.
+    const newHeaders = new Headers(response.headers)
+    newHeaders.append('Set-Cookie', name + "=" + group)
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: newHeaders
+    })
+  } else {
+    // Return response unmodified.
+    return response
+  }
 }
