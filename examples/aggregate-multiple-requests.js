@@ -13,7 +13,7 @@ addEventListener('fetch', event => {
 async function fetchAndLog(request) {
     const init = {
       method: 'GET',
-      headers: new Headers({'Authorization': 'XXXXXX', 'Content-Type': 'text/plain'})
+      headers: {'Authorization': 'XXXXXX', 'Content-Type': 'text/plain'}
     }
     const [btcResp, ethResp, ltcResp] = await Promise.all([
       fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot',init),
@@ -32,7 +32,7 @@ async function fetchAndLog(request) {
   
     const responseInit = {
       status: 200,
-      headers: new Headers({'Content-Type': 'application/json'})
+      headers: {'Content-Type': 'application/json'}
     }
     return new Response(JSON.stringify(combined), responseInit)
 }
