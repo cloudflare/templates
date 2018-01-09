@@ -11,6 +11,5 @@ async function fetchAndApply(request) {
         { status: 403, statusText: 'Forbidden' })
   }
 
-  const response = await fetch(request)
-  return response
+  return fetch(request)
 }

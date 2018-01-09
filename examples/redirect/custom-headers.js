@@ -20,6 +20,5 @@ async function fetchAndApply(request) {
       headers: request.headers
     }
     const modifiedRequest = new Request(request.url + suffix, init)
-    const response = await fetch(modifiedRequest)
-    return response
+    return fetch(modifiedRequest)
 }
