@@ -7,7 +7,7 @@ addEventListener('fetch', event => {
 
 async function fetchAndApply(request) {  
   if (request.method === 'POST' || request.method === 'PUT') {
-    return new Response('Sorry, this page is not available.',
+    return new Response('Sorry, this page is not available via that method.',
         { status: 403, statusText: 'Forbidden' })
   }
 

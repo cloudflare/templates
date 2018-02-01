@@ -1,4 +1,4 @@
-//Create a Cloudflare Worker to perform A/B Testing on your site.
+// Serve different variants of your site to different visitors
 
 addEventListener('fetch', event => {
   event.respondWith(fetchAndApply(event.request))

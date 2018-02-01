@@ -1,6 +1,6 @@
 // Blacklist IP addresses. 
 // This snippet of code prevents a specific IP, 
-// in this case '225.0.0.1' from connecting to the origin.
+// in this case '225.0.0.1', from connecting to the origin.
 
 addEventListener('fetch', event => {
   event.respondWith(fetchAndApply(event.request))
