@@ -148,23 +148,16 @@ function slackResponse(text, attachmentText) {
     attachments: []
   }
 
-  if (attachmentText.length > 0) {
+  if (attachmentText) {
     attachmentText.forEach(val => {
       content.attachments.push({ text: val })
     })
   }
 
-  try {
-    return new Response(JSON.stringify(content), {
-      headers: jsonHeaders,
-      status: 200
-    })
-  } catch (e) {
-    return simpleResponse(
-      200,
-      "Sorry, I had an issue generating a response. Try again in a bit!"
-    )
-  }
+  return new Response(JSON.stringify(content), {
+    headers: jsonHeaders,
+    status: 200
+  })
 }
 
 /**
@@ -178,25 +171,21 @@ function parseMessage(message) {
   // 2. Lookup the ticker <-> id (name) mapping
   // 3. Return the name value
   // 4. Else, just return the provided value from the message.
-  try {
-    let text = message.get("text").trim()
-    let vals = text.split(" ")
-    // Example: /slashcommand BTC EUR
-    let currency = vals[0]
-    let display = vals[1]
+  let text = message.get("text").trim()
+  let vals = text.split(" ")
+  // Example: /slashcommand BTC EUR
+  let currency = vals[0]
+  let display = vals[1]
 
-    // If we can't find the ticker => ID in our map, we
-    // use the user-provided value.
-    if (tickerMap.has(currency)) {
-      currency = tickerMap.get(currency)
-    }
+  // If we can't find the ticker => ID in our map, we
+  // use the user-provided value.
+  if (tickerMap.has(currency)) {
+    currency = tickerMap.get(currency)
+  }
 
-    return {
-      currency: currency,
-      display: display
-    }
-  } catch (e) {
-    return null
+  return {
+    currency: currency,
+    display: display
   }
 }
 
@@ -235,12 +224,23 @@ async function currencyRequest(currency, display) {
     let reply = {
       currency: data[0].name,
       symbol: data[0].symbol,
-      USD: data[0].price_usd,
+      price_usd: data[0].price_usd,
       percent_change_1h: `${data[0].percent_change_1h}%`,
       percent_change_24h: `${data[0].percent_change_24h}%`,
       percent_change_7d: `${data[0].percent_change_7d}%`,
       updated: new Date(parseInt(`${data[0].last_updated}000`)).toUTCString(),
       cached: cachedResponse
+    }
+
+    if (display !== "USD") {
+      let key = `price_${display}` // e.g. price_eur or price_jpy
+      let price = data[0][key] || null
+
+      // Only add the converted currency to the reply if it exists in the API
+      // response.
+      if (price) {
+        reply.display = price
+      }
     }
 
     return reply
@@ -260,21 +260,16 @@ async function slackWebhookHandler(request) {
   // - Slack authenticates via a verification token.
   // - The webhook payload is provided as POST form data
 
-  if (request.method != "POST") {
+  if (request.method !== "POST") {
     return simpleResponse(
       200,
-      `Hi, I'm ${BOT_NAME}, a Slack bot for fetching the latest crypto-currenncy prices. Find my source code at ${REPO_URL}`
+      `Hi, I'm ${BOT_NAME}, a Slack bot for fetching the latest crypto-currency prices. Find my source code at ${REPO_URL}`
     )
   }
 
-  let formData
-  try {
-    formData = await request.formData()
-    if (formData.get("token").toString() !== SLACK_TOKEN) {
-      return simpleResponse(403, "invalid Slack verification token")
-    }
-  } catch (e) {
-    return simpleResponse(400, "could not decode POST form data")
+  let formData = await request.formData()
+  if (formData.get("token") !== SLACK_TOKEN) {
+    return simpleResponse(403, "invalid Slack verification token")
   }
 
   try {
@@ -284,16 +279,17 @@ async function slackWebhookHandler(request) {
     }
 
     let reply = await currencyRequest(parsed.currency, parsed.display)
+    let line = `Current price (${reply.currency}): 💵 $USD${reply.price_usd}`
+    if (reply.display) {
+      line = `${line} (${parsed.display} ${reply.display})`
+    }
 
-    return slackResponse(
-      `Current price (${reply.currency}): 💵 $USD${reply.USD}`,
-      [
-        `1h Δ: ${reply.percent_change_1h} · 24h Δ: ${
-          reply.percent_change_24h
-        } · 7d Δ: ${reply.percent_change_7d}`,
-        `Updated: ${reply.updated} | ${reply.cached}`
-      ]
-    )
+    return slackResponse(line, [
+      (`1h Δ: ${reply.percent_change_1h} · 24h Δ: ${
+        reply.percent_change_24h
+      } · 7d Δ: ${reply.percent_change_7d}`,
+      `Updated: ${reply.updated} | (cached: ${reply.cached})`)
+    ])
   } catch (e) {
     return simpleResponse(
       200,
