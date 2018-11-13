@@ -189,7 +189,7 @@ async function modifyHtmlChunk(content, request) {
         let cssString = "<style" + mediaStr + ">\n";
         cssString += fontCSS;
         cssString += "\n</style>\n";
-        content = content.replace(matchString, cssString)
+        content = content.split(matchString).join(cssString);
       }
       match = fontCSSRegex.exec(content);
     }

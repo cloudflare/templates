@@ -304,8 +304,7 @@ async function modifyHtmlChunk(content, patterns, request) {
       }
       const proxyUrl = await hashContent(pageUrl, originalUrl, fetchUrl, request);
       if (proxyUrl) {
-        console.log("Replacing '" + originalUrl + "' with '" + proxyUrl + "'"); 
-        content = content.replace(new RegExp(originalUrl, 'g'), proxyUrl)
+        content = content.split(originalUrl).join(proxyUrl);
       }
       match = pattern.exec(content);
     }
