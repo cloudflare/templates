@@ -1,5 +1,3 @@
-var PRELOAD = true;
-
 /**
  * Main worker entry point. Looks for font requests that are being proxied and
  * requests for HTML content. All major browsers explicitly send an accept: text/html
@@ -11,25 +9,14 @@ addEventListener("fetch", event => {
   event.passThroughOnException();
 
   const url = new URL(event.request.url);
-  // Only process HTTP/2 traffic
-  if (url.protocol == 'https:') {
-    const bypass = url.searchParams.get('cf-worker') == 'bypass';
-    if (!bypass) {
-      PRELOAD = !(url.searchParams.get('cf-preload') == 'disable');
-      if (url.pathname.startsWith('/fonts.gstatic.com/')) {
-        // Restrict proxying to same-site referer
-        const referer = event.request.headers.get('referer');
-        if (referer) {
-          const refererUrl = new URL(referer);
-          if (refererUrl.origin == url.origin) {
-            // Pass the font requests through to the origin font server
-            // (through the underlying request cache).
-            event.respondWith(fetch('https:/' + url.pathname, event.request));
-          }
-        }
-      } else if (event.request.headers.get('accept').indexOf("text/html") !== -1) {
-        event.respondWith(processHtmlRequest(event.request));
-      }
+  const bypass = url.searchParams.get('cf-worker') == 'bypass';
+  if (!bypass) {
+    if (url.pathname.startsWith('/fonts.gstatic.com/')) {
+      // Pass the font requests through to the origin font server
+      // (through the underlying request cache).
+      event.respondWith(fetch('https:/' + url.pathname, event.request));
+    } else if (event.request.headers.get('accept').indexOf("text/html") !== -1) {
+      event.respondWith(processHtmlRequest(event.request));
     }
   }
 })
@@ -105,84 +92,90 @@ async function modifyHtmlStream(readable, writable, charset, request) {
 
   let partial = '';
   let content = '';
-  let preloads = [];
 
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) {
-      if (partial.length) {
-        partial = await modifyHtmlChunk(partial, request, preloads);
-        await writer.write(encoder.encode(partial));
-        partial = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        if (partial.length) {
+          partial = await modifyHtmlChunk(partial, request);
+          await writer.write(encoder.encode(partial));
+          partial = '';
+        }
+        break;
       }
-      break;
-    }
-    try {
-      let chunk = decoder.decode(value, {stream:true});
+      try {
+        let chunk = decoder.decode(value, {stream:true});
 
-      // Look inside of the first chunk for a HTML charset meta tag.
-      // If one is found, update the decoder and change it to UTF-8
-      if (firstChunk) {
-        firstChunk = false;
-        const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
-        const charsetMatch = charsetRegex.exec(chunk);
-        if (charsetMatch) {
-          const docCharset = charsetMatch[1].toLowerCase();
-          if (docCharset !== charset) {
-            charset = docCharset;
-            try {
-              decoder = new TextDecoder(charset);
-            } catch {
-              decoder = new TextDecoder();
+        // Look inside of the first chunk for a HTML charset meta tag.
+        // If one is found, update the decoder and change it to UTF-8
+        if (firstChunk) {
+          firstChunk = false;
+          const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
+          const charsetMatch = charsetRegex.exec(chunk);
+          if (charsetMatch) {
+            const docCharset = charsetMatch[1].toLowerCase();
+            if (docCharset !== charset) {
+              charset = docCharset;
+              try {
+                decoder = new TextDecoder(charset);
+              } catch {
+                decoder = new TextDecoder();
+              }
+              chunk = decoder.decode(value, {stream:true});
             }
-            chunk = decoder.decode(value, {stream:true});
-          }
-          if (docCharset != 'utf-8') {
-            chunk = chunk.replace(charsetRegex, '<meta charset="utf-8">');
+            if (docCharset != 'utf-8') {
+              chunk = chunk.replace(charsetRegex, '<meta charset="utf-8">');
+            }
           }
         }
-      }
 
-      // TODO: Optimize this so we aren't continuously adding strings together
-      content = partial + chunk;
-      partial = '';
+        // TODO: Optimize this so we aren't continuously adding strings together
+        content = partial + chunk;
+        partial = '';
 
-      // See if there is an unclosed link tag at the end (and if so, carve it out
-      // to complete when the remainder comes in).
-      // This isn't perfect (case sensitive and doesn't allow whitespace in the tag)
-      // but it is good enough for our purpose and much faster than a regex.
-      const linkPos = content.lastIndexOf('<link');
-      if (linkPos >= 0) {
-        const linkClose = content.indexOf('/>', linkPos);
-        if (linkClose == -1) {
-          partial = content.slice(linkPos);
-          content = content.slice(0, linkPos);
+        // See if there is an unclosed link tag at the end (and if so, carve it out
+        // to complete when the remainder comes in).
+        // This isn't perfect (case sensitive and doesn't allow whitespace in the tag)
+        // but it is good enough for our purpose and much faster than a regex.
+        const linkPos = content.lastIndexOf('<link');
+        if (linkPos >= 0) {
+          const linkClose = content.indexOf('/>', linkPos);
+          if (linkClose == -1) {
+            partial = content.slice(linkPos);
+            content = content.slice(0, linkPos);
+          }
         }
-      }
 
+        if (content.length) {
+          content = await modifyHtmlChunk(content, request);
+        }
+      } catch (e) {
+        console.error(e, e.stack);
+      }
       if (content.length) {
-        content = await modifyHtmlChunk(content, request, preloads);
+        await writer.write(encoder.encode(content));
+        content = '';
       }
-    } catch (e) {
-      console.error(e, e.stack);
     }
-    if (content.length) {
-      await writer.write(encoder.encode(content));
-      content = '';
-    }
+  } catch(e) {
+    console.error(e, e.stack);
   }
 
-  await writer.close()
+  try {
+    await writer.close()
+  } catch(e) {
+    console.error(e, e.stack);
+  }
 }
 
 /**
  * Identify any <link> tags that pull ing Google font css and inline the css file.
- * Also add preload tags for any font files that include the ascii character range.
  * 
  * @param {*} content - Text chunk from the streaming HTML (or accumulated head)
  * @param {*} request - Original request object for downstream use.
  */
-async function modifyHtmlChunk(content, request, preloads) {
+async function modifyHtmlChunk(content, request) {
   // Fully tokenizing and parsing the HTML is expensive.  This regex is much faster and should be reasonably safe.
   // It looks for Stylesheet links for the Google fonts css and extracts the URL as match #1.  It shouldn't match
   // in-text content because the < > brackets would be escaped in the HTML.  There is some potential risk of
@@ -192,8 +185,8 @@ async function modifyHtmlChunk(content, request, preloads) {
   while (match != null) {
     const matchString = match[0];
     if (matchString.indexOf('stylesheet') >= 0) {
-      const fontInfo = await fetchCSS(match[1], request);
-      if (fontInfo.css.length) {
+      const fontCSS = await fetchCSS(match[1], request);
+      if (fontCSS.length) {
         // See if there is a media type on the link tag
         let mediaStr = '';
         const mediaMatch = matchString.match(/media\s*=\s*['"][^'"]*['"]/mig);
@@ -202,31 +195,11 @@ async function modifyHtmlChunk(content, request, preloads) {
         }
         // Replace the actual css
         let cssString = "<style" + mediaStr + ">\n";
-        cssString += fontInfo.css;
+        cssString += fontCSS;
         cssString += "\n</style>\n";
-        // Keep track of the preload URLs
-        if (PRELOAD) {
-          for (fontUrl in fontInfo.urls) {
-            preloads.push(fontUrl);
-          }
-          preloads.concat(fontInfo.urls);
-        }
-        content = content.replace(matchString, cssString)
+        content = content.split(matchString).join(cssString);
       }
       match = fontCSSRegex.exec(content);
-    }
-  }
-
-  // Add preload hints before the closing head tag (if there is one)
-  if (preloads.length) {
-    let offset = content.indexOf('</head');
-    if (offset >= 0) {
-      let preloadStr = "\n"
-      while (preloads.length) {
-        fontUrl = preloads.pop();
-        preloadStr += '<link rel="preload" href="' + fontUrl + '" as="font">\n';
-      }
-      content = content.substring(0, offset) + preloadStr + content.substring(offset);
     }
   }
 
@@ -246,10 +219,7 @@ var FONT_CACHE = {};
  * and the origin can be used for rewriting the font paths.
  */
 async function fetchCSS(url, request) {
-  let result = {
-    css: '',
-    urls: {}
-  };
+  let fontCSS = "";
   const userAgent = request.headers.get('user-agent');
   const clientAddr = request.headers.get('cf-connecting-ip');
   const browser = getCacheKey(userAgent);
@@ -260,7 +230,7 @@ async function fetchCSS(url, request) {
   let foundInCache = false;
   if (cacheKey in FONT_CACHE) {
     // hit in the memory cache
-    result = FONT_CACHE[cacheKey];
+    fontCSS = FONT_CACHE[cacheKey];
     foundInCache = true;
   } else {
     // Try pulling it from the cache API (wrap it in case it's not implemented)
@@ -268,7 +238,7 @@ async function fetchCSS(url, request) {
       cache = await caches.open('Google-Fonts');
       let response = await cache.match(cacheKeyRequest);
       if (response) {
-        result = response.json();
+        fontCSS = response.text();
         foundInCache = true;
       }
     } catch(e) {
@@ -285,63 +255,30 @@ async function fetchCSS(url, request) {
     if (clientAddr) {
       headers['X-Forwarded-For'] = clientAddr;
     }
-    const response = await fetch(url, {headers: headers});
-    result.css = await response.text();
 
-    // Rewrite all of the font URLs to come through the worker
-    const pageUrl = new URL(request.url);
-    const originPath = pageUrl.origin + '/fonts.gstatic.com/';
-    result.css = result.css.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, originPath);
-
-    // Get all of the urls for the font files (for preloading)
-    const urlRegex = /url\s*\(\s*([^\s)]*)\)([^}]*unicode-range\s*:\s*([^;]*))?/mgi;
-    const unicodeRangeRegex = /U\+([^-,]+)(-([^\s,]+))?/mgi;
-    let match = urlRegex.exec(result.css);
-    while (match != null) {
-      fontUrl = match[1];
-      if (match.length >= 4) {
-        // If the font specifies a unicode range, just preload the fonts that
-        // include the ascii range (0-128)
-        let ascii = false;
-        const unicodeRanges = match[3];
-        if (unicodeRanges.startsWith('U+0000')) {
-          ascii = true;
-        } else {
-          let uMatch = unicodeRangeRegex.exec(unicodeRanges);
-          while (uMatch != null) {
-            const rangeStart = parseInt(uMatch[1], 16);
-            if (rangeStart <= 128) {
-              ascii = true;
-              break;
-            }
-            uMatch = unicodeRangeRegex.exec(unicodeRanges);
-          }
-        }
-        if (ascii) {
-          result.urls[fontUrl] = true;
-        }
-      } else {
-        // If no unicode range is specified then default to preloading it (though
-        // it's possible that the browsers that don't support woff2 and unicode ranges
-        // also don't support preloading).
-        result.urls[fontUrl] = true;
-      }
-      match = urlRegex.exec(result.css);
-    }
-
-    // Add the css info to the font caches
-    FONT_CACHE[cacheKey] = result;
     try {
-      if (cache) {
-        const cacheResponse = new Response(JSON.stringify(result), {ttl: 86400});
-        cache.put(cacheKeyRequest, cacheResponse);
+      const response = await fetch(url, {headers: headers});
+      fontCSS = await response.text();
+
+      // Rewrite all of the font URLs to come through the worker
+      fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '/fonts.gstatic.com/');
+
+      // Add the css info to the font caches
+      FONT_CACHE[cacheKey] = fontCSS;
+      try {
+        if (cache) {
+          const cacheResponse = new Response(fontCSS, {ttl: 86400});
+          cache.put(cacheKeyRequest, cacheResponse);
+        }
+      } catch(e) {
+        console.error(e, e.stack);
       }
     } catch(e) {
       console.error(e, e.stack);
     }
   }
 
-  return result;
+  return fontCSS;
 }
 
 /**
