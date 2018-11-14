@@ -343,47 +343,51 @@ async function hashContent(pageUrl, originalUrl, url, request) {
   }
 
   if (!foundInCache) {
-    let headers = {'Referer': request.url,
-                   'User-Agent': userAgent};
-    if (clientAddr) {
-      headers['X-Forwarded-For'] = clientAddr;
-    }
-    const response = await fetch(url, {headers: headers});
-    let content = await response.arrayBuffer();
-    if (content) {
-      const hashBuffer = await crypto.subtle.digest('SHA-1', content);
-      hash = hex(hashBuffer);
-      proxyUrl = constructProxyUrl(pageUrl, originalUrl, hash);
+    try {
+      let headers = {'Referer': request.url,
+                    'User-Agent': userAgent};
+      if (clientAddr) {
+        headers['X-Forwarded-For'] = clientAddr;
+      }
+      const response = await fetch(url, {headers: headers});
+      let content = await response.arrayBuffer();
+      if (content) {
+        const hashBuffer = await crypto.subtle.digest('SHA-1', content);
+        hash = hex(hashBuffer);
+        proxyUrl = constructProxyUrl(pageUrl, originalUrl, hash);
 
-      // Add the hash to the local cache
-      try {
-        if (cache) {
-          let ttl = 60;
-          const cacheControl = response.headers.get('cache-control');
-          const maxAgeRegex = /max-age\s*=\s*(\d+)/i;
-          const match = maxAgeRegex.exec(cacheControl);
-          if (match) {
-            ttl = parseInt(match[1], 10);
+        // Add the hash to the local cache
+        try {
+          if (cache) {
+            let ttl = 60;
+            const cacheControl = response.headers.get('cache-control');
+            const maxAgeRegex = /max-age\s*=\s*(\d+)/i;
+            const match = maxAgeRegex.exec(cacheControl);
+            if (match) {
+              ttl = parseInt(match[1], 10);
+            }
+            const hashCacheResponse = new Response(hash, {ttl: ttl});
+            cache.put(hashCacheKey, hashCacheResponse);
           }
-          const hashCacheResponse = new Response(hash, {ttl: ttl});
-          cache.put(hashCacheKey, hashCacheResponse);
+        } catch(e) {
+          console.error(e, e.stack);
         }
-      } catch(e) {
-        console.error(e, e.stack);
-      }
 
-      // Add the actual response to the cache for the new URL
-      try {
-        if (cache) {
-          const cacheKey = new Request(proxyUrl);
-          const cacheResponse = new Response(content, response);
-          cacheResponse.headers.set('Cache-Control', 'max-age=315360000');
-          cacheResponse.headers.set('ttl', '315360000');
-          cache.put(hashCacheKey, cacheResponse);
+        // Add the actual response to the cache for the new URL
+        try {
+          if (cache) {
+            const cacheKey = new Request(proxyUrl);
+            const cacheResponse = new Response(content, response);
+            cacheResponse.headers.set('Cache-Control', 'max-age=315360000');
+            cacheResponse.headers.set('ttl', '315360000');
+            cache.put(hashCacheKey, cacheResponse);
+          }
+        } catch(e) {
+          console.error(e, e.stack);
         }
-      } catch(e) {
-        console.error(e, e.stack);
       }
+    } catch(e) {
+      console.error(e, e.stack);
     }
   }
 

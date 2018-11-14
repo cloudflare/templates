@@ -93,72 +93,80 @@ async function modifyHtmlStream(readable, writable, charset, request) {
   let partial = '';
   let content = '';
 
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) {
-      if (partial.length) {
-        partial = await modifyHtmlChunk(partial, request);
-        await writer.write(encoder.encode(partial));
-        partial = '';
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        if (partial.length) {
+          partial = await modifyHtmlChunk(partial, request);
+          await writer.write(encoder.encode(partial));
+          partial = '';
+        }
+        break;
       }
-      break;
-    }
-    try {
-      let chunk = decoder.decode(value, {stream:true});
+      try {
+        let chunk = decoder.decode(value, {stream:true});
 
-      // Look inside of the first chunk for a HTML charset meta tag.
-      // If one is found, update the decoder and change it to UTF-8
-      if (firstChunk) {
-        firstChunk = false;
-        const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
-        const charsetMatch = charsetRegex.exec(chunk);
-        if (charsetMatch) {
-          const docCharset = charsetMatch[1].toLowerCase();
-          if (docCharset !== charset) {
-            charset = docCharset;
-            try {
-              decoder = new TextDecoder(charset);
-            } catch {
-              decoder = new TextDecoder();
+        // Look inside of the first chunk for a HTML charset meta tag.
+        // If one is found, update the decoder and change it to UTF-8
+        if (firstChunk) {
+          firstChunk = false;
+          const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
+          const charsetMatch = charsetRegex.exec(chunk);
+          if (charsetMatch) {
+            const docCharset = charsetMatch[1].toLowerCase();
+            if (docCharset !== charset) {
+              charset = docCharset;
+              try {
+                decoder = new TextDecoder(charset);
+              } catch {
+                decoder = new TextDecoder();
+              }
+              chunk = decoder.decode(value, {stream:true});
             }
-            chunk = decoder.decode(value, {stream:true});
-          }
-          if (docCharset != 'utf-8') {
-            chunk = chunk.replace(charsetRegex, '<meta charset="utf-8">');
+            if (docCharset != 'utf-8') {
+              chunk = chunk.replace(charsetRegex, '<meta charset="utf-8">');
+            }
           }
         }
-      }
 
-      // TODO: Optimize this so we aren't continuously adding strings together
-      content = partial + chunk;
-      partial = '';
+        // TODO: Optimize this so we aren't continuously adding strings together
+        content = partial + chunk;
+        partial = '';
 
-      // See if there is an unclosed link tag at the end (and if so, carve it out
-      // to complete when the remainder comes in).
-      // This isn't perfect (case sensitive and doesn't allow whitespace in the tag)
-      // but it is good enough for our purpose and much faster than a regex.
-      const linkPos = content.lastIndexOf('<link');
-      if (linkPos >= 0) {
-        const linkClose = content.indexOf('/>', linkPos);
-        if (linkClose == -1) {
-          partial = content.slice(linkPos);
-          content = content.slice(0, linkPos);
+        // See if there is an unclosed link tag at the end (and if so, carve it out
+        // to complete when the remainder comes in).
+        // This isn't perfect (case sensitive and doesn't allow whitespace in the tag)
+        // but it is good enough for our purpose and much faster than a regex.
+        const linkPos = content.lastIndexOf('<link');
+        if (linkPos >= 0) {
+          const linkClose = content.indexOf('/>', linkPos);
+          if (linkClose == -1) {
+            partial = content.slice(linkPos);
+            content = content.slice(0, linkPos);
+          }
         }
-      }
 
+        if (content.length) {
+          content = await modifyHtmlChunk(content, request);
+        }
+      } catch (e) {
+        console.error(e, e.stack);
+      }
       if (content.length) {
-        content = await modifyHtmlChunk(content, request);
+        await writer.write(encoder.encode(content));
+        content = '';
       }
-    } catch (e) {
-      console.error(e, e.stack);
     }
-    if (content.length) {
-      await writer.write(encoder.encode(content));
-      content = '';
-    }
+  } catch(e) {
+    console.error(e, e.stack);
   }
 
-  await writer.close()
+  try {
+    await writer.close()
+  } catch(e) {
+    console.error(e, e.stack);
+  }
 }
 
 /**
@@ -247,18 +255,23 @@ async function fetchCSS(url, request) {
     if (clientAddr) {
       headers['X-Forwarded-For'] = clientAddr;
     }
-    const response = await fetch(url, {headers: headers});
-    fontCSS = await response.text();
 
-    // Rewrite all of the font URLs to come through the worker
-    fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '/fonts.gstatic.com/');
-
-    // Add the css info to the font caches
-    FONT_CACHE[cacheKey] = fontCSS;
     try {
-      if (cache) {
-        const cacheResponse = new Response(fontCSS, {ttl: 86400});
-        cache.put(cacheKeyRequest, cacheResponse);
+      const response = await fetch(url, {headers: headers});
+      fontCSS = await response.text();
+
+      // Rewrite all of the font URLs to come through the worker
+      fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '/fonts.gstatic.com/');
+
+      // Add the css info to the font caches
+      FONT_CACHE[cacheKey] = fontCSS;
+      try {
+        if (cache) {
+          const cacheResponse = new Response(fontCSS, {ttl: 86400});
+          cache.put(cacheKeyRequest, cacheResponse);
+        }
+      } catch(e) {
+        console.error(e, e.stack);
       }
     } catch(e) {
       console.error(e, e.stack);
