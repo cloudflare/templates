@@ -9,17 +9,47 @@ addEventListener("fetch", event => {
   event.passThroughOnException();
 
   const url = new URL(event.request.url);
-  const bypass = url.searchParams.get('cf-worker') == 'bypass';
+  const bypass = url.searchParams.get('cf-worker') === 'bypass';
   if (!bypass) {
+    const accept = event.request.headers.get('accept');
     if (url.pathname.startsWith('/fonts.gstatic.com/')) {
       // Pass the font requests through to the origin font server
       // (through the underlying request cache).
-      event.respondWith(fetch('https:/' + url.pathname, event.request));
-    } else if (event.request.headers.get('accept').indexOf("text/html") !== -1) {
+      event.respondWith(proxyRequest('https:/' + url.pathname, event.request));
+    } else if (accept && accept.indexOf("text/html") !== -1) {
       event.respondWith(processHtmlRequest(event.request));
     }
   }
-})
+});
+
+// Workers can only decode utf-8 so keep a list of character encodings that can be decoded.
+const VALID_CHARSETS = ['utf-8', 'utf8', 'iso-8859-1', 'us-ascii'];
+
+/**
+ * Generate a new request based on the original (re-using the request object is frowned upon in App workers)
+ * @param {*} url The URL to proxy
+ * @param {*} request The original request (to copy parameters from)
+ */
+async function proxyRequest(url, request) {
+  let init = {
+    method: request.method,
+    headers: {}
+  };
+  // Only pass through a subset of headers
+  const proxy_headers = ["Accept", "Accept-Encoding", "Accept-Language", "Referer", "User-Agent"];
+  for (let name of proxy_headers) {
+    let value = request.headers.get(name);
+    if (value) {
+      init.headers[name] = value;
+    }
+  }
+  // Add an X-Forwarded-For with the client IP
+  const clientAddr = request.headers.get('cf-connecting-ip');
+  if (clientAddr) {
+    init.headers['X-Forwarded-For'] = clientAddr;
+  }
+  return fetch(url, init);
+}
 
 /**
  * Handle all of the processing for a (likely) HTML request.
@@ -30,35 +60,34 @@ addEventListener("fetch", event => {
  * HTML is extracted and converted to utf-8 and that the downstream response is identified
  * as utf-8.
  * 
- * @param {*} request 
+ * @param {*} request The original request
  */
 async function processHtmlRequest(request) {
   // Fetch from origin server.
   const response = await fetch(request)
-  if (response.headers.get("content-type").indexOf("text/html") !== -1) {
+  let contentType = response.headers.get("content-type");
+  if (contentType && contentType.indexOf("text/html") !== -1) {
+
+    // Workers can only decode utf-8. If it is anything else, pass the
+    // response through unmodified
+    const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
+    const match = charsetRegex.exec(contentType);
+    if (match !== null) {
+      let charset = match[1].toLowerCase();
+      if (!VALID_CHARSETS.includes(charset)) {
+        return response;
+      }
+    }
     
     // Create an identity TransformStream (a.k.a. a pipe).
     // The readable side will become our new response body.
     const { readable, writable } = new TransformStream();
 
-    // get the character encoding if available
-    const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
-    let contentType = response.headers.get("content-type");
-    const match = charsetRegex.exec(contentType);
-    let charset = null;
-    if (match !== null) {
-      charset = match[1].toLowerCase();
-      contentType = contentType.replace(charsetRegex, "charset=utf-8");
-    } else {
-      contentType += "; charset=utf-8";
-    }
-
     // Create a cloned response with our modified stream and content type header
     const newResponse = new Response(readable, response);
-    newResponse.headers.set('Content-Type', contentType);
 
     // Start the async processing of the response stream (don't wait for it to finish)
-    modifyHtmlStream(response.body, writable, charset, request);
+    modifyHtmlStream(response.body, writable, request);
 
     // Return the in-process response so it can be streamed.
     return newResponse;
@@ -68,33 +97,63 @@ async function processHtmlRequest(request) {
 }
 
 /**
+ * Check to see if the HTML chunk includes a meta tag for an unsupported charset
+ * @param {*} chunk - Chunk of HTML to scan
+ * @returns {bool} - true if the HTML chunk includes a meta tag for an unsupported charset
+ */
+function chunkContainsInvalidCharset(chunk) {
+  let invalid = false;
+
+  // meta charset
+  const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
+  const charsetMatch = charsetRegex.exec(chunk);
+  if (charsetMatch) {
+    const docCharset = charsetMatch[1].toLowerCase();
+    if (!VALID_CHARSETS.includes(docCharset)) {
+      invalid = true;
+    }
+  }
+  // content-type
+  const contentTypeRegex = /<\s*meta[^>]+http-equiv\s*=\s*['"]\s*content-type[^>]*>/mgi;
+  const contentTypeMatch = contentTypeRegex.exec(chunk);
+  if (contentTypeMatch) {
+    const metaTag = contentTypeMatch[0];
+    const metaRegex = /charset\s*=\s*([^\s"]*)/mgi;
+    const metaMatch = metaRegex.exec(metaTag);
+    if (metaMatch) {
+      const charset = metaMatch[1].toLowerCase();
+      if (!VALID_CHARSETS.includes(charset)) {
+        invalid = true;
+      }
+    }
+  }
+  return invalid;
+}
+
+/**
  * Process the streaming HTML response from the origin server.
  * - Attempt to buffer the full head to reduce the likelihood of the font css spanning multiple response chunks
- * - Scan the first response chunk for a charset meta tag (and replace it with utf-8 if found)
+ * - Scan the first response chunk for a charset meta tag (and bail if it isn't a supported charset)
  * - Pass the gathered head and each subsequent chunk to modifyHtmlChunk() for actual processing of the text.
  * 
  * @param {*} readable - Input stream (from the origin).
  * @param {*} writable - Output stream (to the browser).
- * @param {*} charset - Detected charset from the http response headers (if any).
  * @param {*} request - Original request object for downstream use.
  */
-async function modifyHtmlStream(readable, writable, charset, request) {
+async function modifyHtmlStream(readable, writable, request) {
   const reader = readable.getReader()
   const writer = writable.getWriter()
   const encoder = new TextEncoder();
-  let decoder = null;
-  try {
-    decoder = charset === null ? new TextDecoder() : new TextDecoder(charset);
-  } catch {
-    decoder = new TextDecoder();
-  }
+  let decoder = new TextDecoder("utf-8", {fatal: true});
+
   let firstChunk = true;
+  let unsupportedCharset = false;
 
   let partial = '';
   let content = '';
 
   try {
-    while (true) {
+    for(;;) {
       const { done, value } = await reader.read()
       if (done) {
         if (partial.length) {
@@ -104,29 +163,40 @@ async function modifyHtmlStream(readable, writable, charset, request) {
         }
         break;
       }
-      try {
-        let chunk = decoder.decode(value, {stream:true});
 
-        // Look inside of the first chunk for a HTML charset meta tag.
-        // If one is found, update the decoder and change it to UTF-8
+      let chunk = null;
+      if (unsupportedCharset) {
+        // Pass the data straight through
+        await writer.write(value);
+        continue;
+      } else {
+        try {
+          chunk = decoder.decode(value, {stream:true});
+        } catch (e) {
+          // Decoding failed, switch to passthrough
+          unsupportedCharset = true;
+          if (partial.length) {
+            await writer.write(encoder.encode(partial));
+            partial = '';
+          }
+          await writer.write(value);
+          continue;
+        }
+      }
+
+      try {
+        // Look inside of the first chunk for a HTML charset or content-type meta tag.
         if (firstChunk) {
           firstChunk = false;
-          const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
-          const charsetMatch = charsetRegex.exec(chunk);
-          if (charsetMatch) {
-            const docCharset = charsetMatch[1].toLowerCase();
-            if (docCharset !== charset) {
-              charset = docCharset;
-              try {
-                decoder = new TextDecoder(charset);
-              } catch {
-                decoder = new TextDecoder();
-              }
-              chunk = decoder.decode(value, {stream:true});
+          if (chunkContainsInvalidCharset(chunk)) {
+            // switch to passthrough
+            unsupportedCharset = true;
+            if (partial.length) {
+              await writer.write(encoder.encode(partial));
+              partial = '';
             }
-            if (docCharset != 'utf-8') {
-              chunk = chunk.replace(charsetRegex, '<meta charset="utf-8">');
-            }
+            await writer.write(value);
+            continue;
           }
         }
 
@@ -141,7 +211,7 @@ async function modifyHtmlStream(readable, writable, charset, request) {
         const linkPos = content.lastIndexOf('<link');
         if (linkPos >= 0) {
           const linkClose = content.indexOf('/>', linkPos);
-          if (linkClose == -1) {
+          if (linkClose === -1) {
             partial = content.slice(linkPos);
             content = content.slice(0, linkPos);
           }
@@ -151,7 +221,7 @@ async function modifyHtmlStream(readable, writable, charset, request) {
           content = await modifyHtmlChunk(content, request);
         }
       } catch (e) {
-        console.error(e, e.stack);
+        // Ignore the exception
       }
       if (content.length) {
         await writer.write(encoder.encode(content));
@@ -159,13 +229,13 @@ async function modifyHtmlStream(readable, writable, charset, request) {
       }
     }
   } catch(e) {
-    console.error(e, e.stack);
+    // Ignore the exception
   }
 
   try {
     await writer.close()
   } catch(e) {
-    console.error(e, e.stack);
+    // Ignore the exception
   }
 }
 
@@ -182,7 +252,7 @@ async function modifyHtmlChunk(content, request) {
   // matching it in an inline script (unlikely but possible).
   const fontCSSRegex = /<link\s+[^>]*href\s*=\s*['"]((https?:)?\/\/fonts.googleapis.com\/css[^'"]+)[^>]*>/mgi;
   let match = fontCSSRegex.exec(content);
-  while (match != null) {
+  while (match !== null) {
     const matchString = match[0];
     if (matchString.indexOf('stylesheet') >= 0) {
       const fontCSS = await fetchCSS(match[1], request);
@@ -242,7 +312,7 @@ async function fetchCSS(url, request) {
         foundInCache = true;
       }
     } catch(e) {
-      console.error(e, e.stack);
+      // Ignore the exception
     }
   }
 
@@ -271,10 +341,10 @@ async function fetchCSS(url, request) {
           cache.put(cacheKeyRequest, cacheResponse);
         }
       } catch(e) {
-        console.error(e, e.stack);
+        // Ignore the exception
       }
     } catch(e) {
-      console.error(e, e.stack);
+      // Ignore the exception
     }
   }
 
@@ -286,6 +356,7 @@ async function fetchCSS(url, request) {
  * Others will use a common fallback css fetched without a user agent string (ttf).
  * 
  * @param {*} userAgent - Browser user agent string
+ * @returns {*} - A browser-version-specific string like Chrome61
  */
 function getCacheKey(userAgent) {
   let os = '';
