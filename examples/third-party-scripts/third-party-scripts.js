@@ -54,7 +54,7 @@ addEventListener("fetch", event => {
   event.passThroughOnException();
 
   const url = new URL(event.request.url);
-  const bypass = new URL(event.request.url).searchParams.get('cf-worker') == 'bypass';
+  const bypass = new URL(event.request.url).searchParams.get('cf-worker') === 'bypass';
   if (!bypass) {
     let accept = event.request.headers.get('accept');
     if (isProxyRequest(url)) {
@@ -63,14 +63,18 @@ addEventListener("fetch", event => {
       event.respondWith(processHtmlRequest(event.request));
     }
   }
-})
+});
+
+// Workers can only decode utf-8 so keep a list of character encodings that can be decoded.
+const VALID_CHARSETS = ['utf-8', 'utf8', 'iso-8859-1', 'us-ascii'];
 
 /**
  * See if the requested resource is a proxy request to an overwritten origin
  * (something that starts with a prefix in one of our lists).
  * 
- * @param {*} url 
- * @param {*} request 
+ * @param {*} url - Requested URL
+ * @param {*} request - Original Request
+ * @returns {*} - true if the URL matches one of the proxy paths
  */
 function isProxyRequest(url) {
   let found_prefix = false;
@@ -87,6 +91,8 @@ function isProxyRequest(url) {
 /**
  * Fetch a proxied URL and make it cacheable since it is hashed.
  * @param {URL} url - Unmodified request URL
+ * @param {*} request - The original request
+ * @returns {*} - fetch response
  */
 async function proxyUrl(url, request) {
   // See if we have a cached response with the hash
@@ -98,7 +104,7 @@ async function proxyUrl(url, request) {
       return response;
     }
   } catch(e) {
-    console.error(e, e.stack);
+    // Ignore the exception
   }
 
   let originUrl = 'https:/' + url.pathname + url.search;
@@ -108,18 +114,25 @@ async function proxyUrl(url, request) {
   }
 
   // TODO: Add an additional caching layer for the origin requests to ignore cache-control: private
-  const userAgent = request.headers.get('user-agent');
+  let init = {
+    method: request.method,
+    headers: {}
+  };
+  // Only pass through a subset of headers
+  const proxy_headers = ["Accept", "Accept-Encoding", "Accept-Language", "Referer", "User-Agent"];
+  for (let name of proxy_headers) {
+    let value = request.headers.get(name);
+    if (value) {
+      init.headers[name] = value;
+    }
+  }
+  // Add an X-Forwarded-For with the client IP
   const clientAddr = request.headers.get('cf-connecting-ip');
-  const referer = request.headers.get('referer');
-  let headers = {'User-Agent': userAgent};
   if (clientAddr) {
-    headers['X-Forwarded-For'] = clientAddr;
+    init.headers['X-Forwarded-For'] = clientAddr;
   }
-  if (referer) {
-    headers['Referer'] = referer;
-  }
-  const response = await fetch(originUrl, {headers: headers});
-  if (response && response.status == 200) {
+  const response = await fetch(originUrl, init);
+  if (response && response.status === 200) {
     // Only include a strict subset of response headers
     let responseHeaders = {'Cache-Control': 'private; max-age=315360000'};
     const contentType = response.headers.get('content-type');
@@ -145,34 +158,33 @@ async function proxyUrl(url, request) {
  * HTML is extracted and converted to utf-8 and that the downstream response is identified
  * as utf-8.
  * 
- * @param {*} request 
+ * @param {*} request - The original request
  */
 async function processHtmlRequest(request) {
   // Fetch from origin server.
   const response = await fetch(request)
   let contentType = response.headers.get("content-type");
   if (contentType && contentType.indexOf("text/html") !== -1) {
+    // Workers can only decode utf-8. If it is anything else, pass the
+    // response through unmodified
+    const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
+    const match = charsetRegex.exec(contentType);
+    if (match !== null) {
+      let charset = match[1].toLowerCase();
+      if (!VALID_CHARSETS.includes(charset)) {
+        return response;
+      }
+    }
+
     // Create an identity TransformStream (a.k.a. a pipe).
     // The readable side will become our new response body.
     const { readable, writable } = new TransformStream();
 
-    // get the character encoding if available
-    const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
-    const match = charsetRegex.exec(contentType);
-    let charset = null;
-    if (match !== null) {
-      charset = match[1].toLowerCase();
-      contentType = contentType.replace(charsetRegex, "charset=utf-8");
-    } else {
-      contentType += "; charset=utf-8";
-    }
-
     // Create a cloned response with our modified stream and content type header
     const newResponse = new Response(readable, response);
-    newResponse.headers.set('Content-Type', contentType);
 
     // Start the async processing of the response stream (don't wait for it to finish)
-    modifyHtmlStream(response.body, writable, charset, request);
+    modifyHtmlStream(response.body, writable, request);
 
     // Return the in-process response so it can be streamed.
     return newResponse;
@@ -182,27 +194,57 @@ async function processHtmlRequest(request) {
 }
 
 /**
+ * Check to see if the HTML chunk includes a meta tag for an unsupported charset
+ * @param {*} chunk - Chunk of HTML to scan
+ * @returns {bool} - true if the HTML chunk includes a meta tag for an unsupported charset
+ */
+function chunkContainsInvalidCharset(chunk) {
+  let invalid = false;
+
+  // meta charset
+  const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
+  const charsetMatch = charsetRegex.exec(chunk);
+  if (charsetMatch) {
+    const docCharset = charsetMatch[1].toLowerCase();
+    if (!VALID_CHARSETS.includes(docCharset)) {
+      invalid = true;
+    }
+  }
+  // content-type
+  const contentTypeRegex = /<\s*meta[^>]+http-equiv\s*=\s*['"]\s*content-type[^>]*>/mgi;
+  const contentTypeMatch = contentTypeRegex.exec(chunk);
+  if (contentTypeMatch) {
+    const metaTag = contentTypeMatch[0];
+    const metaRegex = /charset\s*=\s*([^\s"]*)/mgi;
+    const metaMatch = metaRegex.exec(metaTag);
+    if (metaMatch) {
+      const charset = metaMatch[1].toLowerCase();
+      if (!VALID_CHARSETS.includes(charset)) {
+        invalid = true;
+      }
+    }
+  }
+  return invalid;
+}
+
+/**
  * Process the streaming HTML response from the origin server.
  * - Attempt to buffer the full head to reduce the likelihood of the patterns spanning multiple response chunks
- * - Scan the first response chunk for a charset meta tag (and replace it with utf-8 if found)
+ * - Scan the first response chunk for a charset meta tag (and bail if it isn't a supported charset)
  * - Pass the gathered head and each subsequent chunk to modifyHtmlChunk() for actual processing of the text.
  * 
  * @param {*} readable - Input stream (from the origin).
  * @param {*} writable - Output stream (to the browser).
- * @param {*} charset - Detected charset from the http response headers (if any).
  * @param {*} request - Original request object for downstream use.
  */
-async function modifyHtmlStream(readable, writable, charset, request) {
+async function modifyHtmlStream(readable, writable, request) {
   const reader = readable.getReader()
   const writer = writable.getWriter()
   const encoder = new TextEncoder();
-  let decoder = null;
-  try {
-    decoder = charset === null ? new TextDecoder() : new TextDecoder(charset);
-  } catch {
-    decoder = new TextDecoder();
-  }
+  let decoder = new TextDecoder("utf-8", {fatal: true});
+
   let firstChunk = true;
+  let unsupportedCharset = false;
   
   // build the list of url patterns we are going to look for.
   let patterns = [];
@@ -214,7 +256,7 @@ async function modifyHtmlStream(readable, writable, charset, request) {
   let partial = '';
   let content = '';
 
-  while (true) {
+  for (;;) {
     const { done, value } = await reader.read();
     if (done) {
       if (partial.length) {
@@ -224,29 +266,40 @@ async function modifyHtmlStream(readable, writable, charset, request) {
       partial = '';
       break;
     }
-    try {
-      let chunk = decoder.decode(value, {stream:true});
 
-      // Look inside of the first chunk for a HTML charset meta tag.
-      // If one is found, update the decoder and change it to UTF-8
+    let chunk = null;
+    if (unsupportedCharset) {
+      // Pass the data straight through
+      await writer.write(value);
+      continue;
+    } else {
+      try {
+        chunk = decoder.decode(value, {stream:true});
+      } catch (e) {
+        // Decoding failed, switch to passthrough
+        unsupportedCharset = true;
+        if (partial.length) {
+          await writer.write(encoder.encode(partial));
+          partial = '';
+        }
+        await writer.write(value);
+        continue;
+      }
+    }
+
+    try {
+      // Look inside of the first chunk for a HTML charset or content-type meta tag.
       if (firstChunk) {
         firstChunk = false;
-        const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
-        const charsetMatch = charsetRegex.exec(chunk);
-        if (charsetMatch) {
-          const docCharset = charsetMatch[1].toLowerCase();
-          if (docCharset !== charset) {
-            charset = docCharset;
-            try {
-              decoder = new TextDecoder(charset);
-            } catch {
-              decoder = new TextDecoder();
-            }
-            chunk = decoder.decode(value, {stream:true});
+        if (chunkContainsInvalidCharset(chunk)) {
+          // switch to passthrough
+          unsupportedCharset = true;
+          if (partial.length) {
+            await writer.write(encoder.encode(partial));
+            partial = '';
           }
-          if (docCharset != 'utf-8') {
-            chunk = chunk.replace(charsetRegex, '<meta charset="utf-8">');
-          }
+          await writer.write(value);
+          continue;
         }
       }
 
@@ -261,7 +314,7 @@ async function modifyHtmlStream(readable, writable, charset, request) {
       const scriptPos = content.lastIndexOf('<script');
       if (scriptPos >= 0) {
         const scriptClose = content.indexOf('>', scriptPos);
-        if (scriptClose == -1) {
+        if (scriptClose === -1) {
           partial = content.slice(scriptPos);
           content = content.slice(0, scriptPos);
         }
@@ -271,7 +324,7 @@ async function modifyHtmlStream(readable, writable, charset, request) {
         content = await modifyHtmlChunk(content, patterns, request);
       }
     } catch (e) {
-      console.error(e, e.stack);
+      // Ignore the exception
     }
     if (content.length) {
       await writer.write(encoder.encode(content));
@@ -286,6 +339,7 @@ async function modifyHtmlStream(readable, writable, charset, request) {
  * that are proxied through the origin.
  * 
  * @param {*} content - Text chunk from the streaming HTML (or accumulated head)
+ * @param {*} patterns - RegEx patterns to match
  * @param {*} request - Original request object for downstream use.
  */
 async function modifyHtmlChunk(content, patterns, request) {
@@ -296,13 +350,13 @@ async function modifyHtmlChunk(content, patterns, request) {
   const pageUrl = new URL(request.url);
   for (let pattern of patterns) {
     let match = pattern.exec(content);
-    while (match != null) {
+    while (match !== null) {
       const originalUrl = match[1];
       let fetchUrl = originalUrl;
       if (fetchUrl.startsWith('//')) {
         fetchUrl = pageUrl.protocol + fetchUrl;
       }
-      const proxyUrl = await hashContent(pageUrl, originalUrl, fetchUrl, request);
+      const proxyUrl = await hashContent(originalUrl, fetchUrl, request);
       if (proxyUrl) {
         content = content.split(originalUrl).join(proxyUrl);
       }
@@ -317,10 +371,11 @@ async function modifyHtmlChunk(content, patterns, request) {
  * Use a local cache because some scripts use cache-control: private to prevent
  * proxies from caching.
  * 
- * @param {*} url - URL for the Google font css.
+ * @param {*} originalUrl - Unmodified URL
+ * @param {*} url - URL for the third-party request
  * @param {*} request - Original request for the page HTML so the user-agent can be passed through 
  */
-async function hashContent(pageUrl, originalUrl, url, request) {
+async function hashContent(originalUrl, url, request) {
   let proxyUrl = null;
   let hash = null;
   const userAgent = request.headers.get('user-agent');
@@ -335,11 +390,11 @@ async function hashContent(pageUrl, originalUrl, url, request) {
     let response = await cache.match(hashCacheKey);
     if (response) {
       hash = response.text();
-      proxyUrl = constructProxyUrl(pageUrl, originalUrl, hash);
+      proxyUrl = constructProxyUrl(originalUrl, hash);
       foundInCache = true;
     }
   } catch(e) {
-    console.error(e, e.stack);
+    // Ignore the exception
   }
 
   if (!foundInCache) {
@@ -354,7 +409,7 @@ async function hashContent(pageUrl, originalUrl, url, request) {
       if (content) {
         const hashBuffer = await crypto.subtle.digest('SHA-1', content);
         hash = hex(hashBuffer);
-        proxyUrl = constructProxyUrl(pageUrl, originalUrl, hash);
+        proxyUrl = constructProxyUrl(originalUrl, hash);
 
         // Add the hash to the local cache
         try {
@@ -370,7 +425,7 @@ async function hashContent(pageUrl, originalUrl, url, request) {
             cache.put(hashCacheKey, hashCacheResponse);
           }
         } catch(e) {
-          console.error(e, e.stack);
+          // Ignore the exception
         }
 
         // Add the actual response to the cache for the new URL
@@ -380,14 +435,14 @@ async function hashContent(pageUrl, originalUrl, url, request) {
             const cacheResponse = new Response(content, response);
             cacheResponse.headers.set('Cache-Control', 'max-age=315360000');
             cacheResponse.headers.set('ttl', '315360000');
-            cache.put(hashCacheKey, cacheResponse);
+            cache.put(cacheKey, cacheResponse);
           }
         } catch(e) {
-          console.error(e, e.stack);
+          // Ignore the exception
         }
       }
     } catch(e) {
-      console.error(e, e.stack);
+      // Ignore the exception
     }
   }
 
@@ -396,10 +451,11 @@ async function hashContent(pageUrl, originalUrl, url, request) {
 
 /**
  * Generate the proxy URL given the content hash and base URL
- * @param {*} url 
- * @param {*} hash 
+ * @param {*} originalUrl - Original URL
+ * @param {*} hash - Hash of content
+ * @returns {*} - URL with content hash appended
  */
-function constructProxyUrl(pageUrl, originalUrl, hash) {
+function constructProxyUrl(originalUrl, hash) {
   let proxyUrl = null;
   let pathStart = originalUrl.indexOf('//');
   if (pathStart >= 0) {
@@ -417,7 +473,8 @@ function constructProxyUrl(pageUrl, originalUrl, hash) {
 /**
  * Convert a buffer into a hex string (for hashes).
  * From: https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
- * @param {*} buffer 
+ * @param {*} buffer - Binary buffer
+ * @returns {*} - Hex string of the binary buffer
  */
 function hex(buffer) {
   var hexCodes = [];
