@@ -17,7 +17,7 @@ addEventListener("fetch", event => {
       // (through the underlying request cache).
       event.respondWith(proxyRequest('https:/' + url.pathname, event.request));
     } else if (accept && accept.indexOf("text/html") !== -1) {
-      event.respondWith(processHtmlRequest(event.request));
+      event.respondWith(processHtmlRequest(event.request, event));
     }
   }
 });
@@ -26,7 +26,11 @@ addEventListener("fetch", event => {
 const VALID_CHARSETS = ['utf-8', 'utf8', 'iso-8859-1', 'us-ascii'];
 
 /**
- * Generate a new request based on the original (re-using the request object is frowned upon in App workers)
+ * Generate a new request based on the original. Filter the request
+ * headers to prevent leaking user data (cookies, etc) and filter
+ * the response headers to prevent the origin setting policy on
+ * our origin.
+ * 
  * @param {*} url The URL to proxy
  * @param {*} request The original request (to copy parameters from)
  */
@@ -36,8 +40,12 @@ async function proxyRequest(url, request) {
     headers: {}
   };
   // Only pass through a subset of headers
-  const proxy_headers = ["Accept", "Accept-Encoding", "Accept-Language", "Referer", "User-Agent"];
-  for (let name of proxy_headers) {
+  const proxyHeaders = ["Accept",
+                        "Accept-Encoding",
+                        "Accept-Language",
+                        "Referer",
+                        "User-Agent"];
+  for (let name of proxyHeaders) {
     let value = request.headers.get(name);
     if (value) {
       init.headers[name] = value;
@@ -48,7 +56,29 @@ async function proxyRequest(url, request) {
   if (clientAddr) {
     init.headers['X-Forwarded-For'] = clientAddr;
   }
-  return fetch(url, init);
+
+  const response = await fetch(url, init);
+  if (response) {
+    const responseHeaders = ["Content-Type",
+                             "Cache-Control",
+                             "Expires",
+                             "Accept-Ranges",
+                             "Date",
+                             "Last-Modified",
+                             "ETag"];
+    // Only include a strict subset of response headers
+    let responseInit = {status: response.status, headers: {}};
+    for (let name of responseHeaders) {
+      let value = response.headers.get(name);
+      if (value) {
+        responseInit.headers[name] = value;
+      }
+    }
+    const newResponse = new Response(response.body, responseInit);
+    return newResponse;
+  }
+
+  return response;
 }
 
 /**
@@ -61,10 +91,11 @@ async function proxyRequest(url, request) {
  * as utf-8.
  * 
  * @param {*} request The original request
+ * @param {*} event worker event object
  */
-async function processHtmlRequest(request) {
+async function processHtmlRequest(request, event) {
   // Fetch from origin server.
-  const response = await fetch(request)
+  const response = await fetch(request);
   let contentType = response.headers.get("content-type");
   if (contentType && contentType.indexOf("text/html") !== -1) {
 
@@ -87,7 +118,7 @@ async function processHtmlRequest(request) {
     const newResponse = new Response(readable, response);
 
     // Start the async processing of the response stream (don't wait for it to finish)
-    modifyHtmlStream(response.body, writable, request);
+    modifyHtmlStream(response.body, writable, request, event);
 
     // Return the in-process response so it can be streamed.
     return newResponse;
@@ -139,10 +170,11 @@ function chunkContainsInvalidCharset(chunk) {
  * @param {*} readable - Input stream (from the origin).
  * @param {*} writable - Output stream (to the browser).
  * @param {*} request - Original request object for downstream use.
+ * @param {*} event - Worker event object
  */
-async function modifyHtmlStream(readable, writable, request) {
-  const reader = readable.getReader()
-  const writer = writable.getWriter()
+async function modifyHtmlStream(readable, writable, request, event) {
+  const reader = readable.getReader();
+  const writer = writable.getWriter();
   const encoder = new TextEncoder();
   let decoder = new TextDecoder("utf-8", {fatal: true});
 
@@ -154,10 +186,10 @@ async function modifyHtmlStream(readable, writable, request) {
 
   try {
     for(;;) {
-      const { done, value } = await reader.read()
+      const { done, value } = await reader.read();
       if (done) {
         if (partial.length) {
-          partial = await modifyHtmlChunk(partial, request);
+          partial = await modifyHtmlChunk(partial, request, event);
           await writer.write(encoder.encode(partial));
           partial = '';
         }
@@ -218,7 +250,7 @@ async function modifyHtmlStream(readable, writable, request) {
         }
 
         if (content.length) {
-          content = await modifyHtmlChunk(content, request);
+          content = await modifyHtmlChunk(content, request, event);
         }
       } catch (e) {
         // Ignore the exception
@@ -233,7 +265,7 @@ async function modifyHtmlStream(readable, writable, request) {
   }
 
   try {
-    await writer.close()
+    await writer.close();
   } catch(e) {
     // Ignore the exception
   }
@@ -244,8 +276,9 @@ async function modifyHtmlStream(readable, writable, request) {
  * 
  * @param {*} content - Text chunk from the streaming HTML (or accumulated head)
  * @param {*} request - Original request object for downstream use.
+ * @param {*} event - Worker event object
  */
-async function modifyHtmlChunk(content, request) {
+async function modifyHtmlChunk(content, request, event) {
   // Fully tokenizing and parsing the HTML is expensive.  This regex is much faster and should be reasonably safe.
   // It looks for Stylesheet links for the Google fonts css and extracts the URL as match #1.  It shouldn't match
   // in-text content because the < > brackets would be escaped in the HTML.  There is some potential risk of
@@ -255,7 +288,7 @@ async function modifyHtmlChunk(content, request) {
   while (match !== null) {
     const matchString = match[0];
     if (matchString.indexOf('stylesheet') >= 0) {
-      const fontCSS = await fetchCSS(match[1], request);
+      const fontCSS = await fetchCSS(match[1], request, event);
       if (fontCSS.length) {
         // See if there is a media type on the link tag
         let mediaStr = '';
@@ -287,6 +320,7 @@ var FONT_CACHE = {};
  * @param {*} url - URL for the Google font css.
  * @param {*} request - Original request for the page HTML so the user-agent can be passed through 
  * and the origin can be used for rewriting the font paths.
+ * @param {*} event - Worker event object
  */
 async function fetchCSS(url, request) {
   let fontCSS = "";
@@ -305,7 +339,7 @@ async function fetchCSS(url, request) {
   } else {
     // Try pulling it from the cache API (wrap it in case it's not implemented)
     try {
-      cache = await caches.open('Google-Fonts');
+      cache = await caches.default;
       let response = await cache.match(cacheKeyRequest);
       if (response) {
         fontCSS = response.text();
@@ -319,8 +353,9 @@ async function fetchCSS(url, request) {
   if (!foundInCache) {
     let headers = {'Referer': request.url};
     if (browser) {
-      // Only pass through the user agent if it is a known browser, otherwise get a default css.
       headers['User-Agent'] = userAgent;
+    } else {
+      headers['User-Agent'] = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)";
     }
     if (clientAddr) {
       headers['X-Forwarded-For'] = clientAddr;
@@ -338,7 +373,7 @@ async function fetchCSS(url, request) {
       try {
         if (cache) {
           const cacheResponse = new Response(fontCSS, {ttl: 86400});
-          cache.put(cacheKeyRequest, cacheResponse);
+          event.waitUntil(cache.put(cacheKeyRequest, cacheResponse));
         }
       } catch(e) {
         // Ignore the exception
@@ -356,7 +391,7 @@ async function fetchCSS(url, request) {
  * Others will use a common fallback css fetched without a user agent string (ttf).
  * 
  * @param {*} userAgent - Browser user agent string
- * @returns {*} - A browser-version-specific string like Chrome61
+ * @returns {*} A browser-version-specific string like Chrome61
  */
 function getCacheKey(userAgent) {
   let os = '';
@@ -366,7 +401,7 @@ function getCacheKey(userAgent) {
     os = match[1];
   }
 
-  let mobile = ''
+  let mobile = '';
   if (userAgent.match(/Mobile/mgi)) {
     mobile = 'Mobile';
   }

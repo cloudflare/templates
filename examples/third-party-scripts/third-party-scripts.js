@@ -36,7 +36,7 @@ const SCRIPT_URLS = [
   '/www.google-analytics.com/analytics.js',
   '/www.googletagmanager.com/gtag/js',
   '/www.googletagmanager.com/gtm.js',
-  '/www.googletagservices.com/tag/js/gpt.js',
+  '/www.googletagservices.com/tag/js/gpt.js'
 ];
 
 // Regex patterns for matching script and link tags
@@ -89,37 +89,32 @@ function isProxyRequest(url) {
 }
 
 /**
- * Fetch a proxied URL and make it cacheable since it is hashed.
+ * Generate a new request based on the original. Filter the request
+ * headers to prevent leaking user data (cookies, etc) and filter
+ * the response headers to prevent the origin setting policy on
+ * our origin.
+ *
  * @param {URL} url - Unmodified request URL
  * @param {*} request - The original request
  * @returns {*} - fetch response
  */
 async function proxyUrl(url, request) {
-  // See if we have a cached response with the hash
-  try {
-    const cacheKey = new Request(url);
-    let cache = await caches.open('Third-Parties');
-    let response = await cache.match(cacheKey);
-    if (response) {
-      return response;
-    }
-  } catch(e) {
-    // Ignore the exception
-  }
-
   let originUrl = 'https:/' + url.pathname + url.search;
   let hashOffset = originUrl.indexOf('cf_hash=');
   if (hashOffset >= 2) {
     originUrl = originUrl.substring(0, hashOffset - 1);
   }
 
-  // TODO: Add an additional caching layer for the origin requests to ignore cache-control: private
+  // Filter the request headers
   let init = {
     method: request.method,
     headers: {}
   };
-  // Only pass through a subset of headers
-  const proxy_headers = ["Accept", "Accept-Encoding", "Accept-Language", "Referer", "User-Agent"];
+  const proxy_headers = ["Accept",
+                         "Accept-Encoding",
+                         "Accept-Language",
+                         "Referer",
+                         "User-Agent"];
   for (let name of proxy_headers) {
     let value = request.headers.get(name);
     if (value) {
@@ -131,22 +126,35 @@ async function proxyUrl(url, request) {
   if (clientAddr) {
     init.headers['X-Forwarded-For'] = clientAddr;
   }
+
+  // Filter the response headers
   const response = await fetch(originUrl, init);
-  if (response && response.status === 200) {
-    // Only include a strict subset of response headers
-    let responseHeaders = {'Cache-Control': 'private; max-age=315360000'};
-    const contentType = response.headers.get('content-type');
-    if (contentType) {
-      responseHeaders['Content-Type'] = contentType;
+  if (response) {
+    const responseHeaders = ["Content-Type",
+                             "Cache-Control",
+                             "Expires",
+                             "Accept-Ranges",
+                             "Date",
+                             "Last-Modified",
+                             "ETag"];
+    let responseInit = {status: response.status, headers: {}};
+    for (let name of responseHeaders) {
+      let value = response.headers.get(name);
+      if (value) {
+        responseInit.headers[name] = value;
+      }
+    }
+    // Extend the cache time for successful responses (since the url is
+    // specific to the hashed content).
+    if (response.status === 200) {
+      responseInit.headers['Cache-Control'] = 'private; max-age=315360000';
     }
 
-    // Extend the browser cache time for the hashed URL
-    const newResponse = new Response(response.body, responseHeaders);
-    newResponse.headers.set('Cache-Control', 'private; max-age=315360000');
+    const newResponse = new Response(response.body, responseInit);
     return newResponse;
-  } else {
-    return response;
   }
+
+  return response;
 }
 
 /**
@@ -162,7 +170,7 @@ async function proxyUrl(url, request) {
  */
 async function processHtmlRequest(request) {
   // Fetch from origin server.
-  const response = await fetch(request)
+  const response = await fetch(request);
   let contentType = response.headers.get("content-type");
   if (contentType && contentType.indexOf("text/html") !== -1) {
     // Workers can only decode utf-8. If it is anything else, pass the
@@ -238,8 +246,8 @@ function chunkContainsInvalidCharset(chunk) {
  * @param {*} request - Original request object for downstream use.
  */
 async function modifyHtmlStream(readable, writable, request) {
-  const reader = readable.getReader()
-  const writer = writable.getWriter()
+  const reader = readable.getReader();
+  const writer = writable.getWriter();
   const encoder = new TextEncoder();
   let decoder = new TextDecoder("utf-8", {fatal: true});
 
@@ -331,7 +339,7 @@ async function modifyHtmlStream(readable, writable, request) {
       content = '';
     }
   }
-  await writer.close()
+  await writer.close();
 }
 
 /**
@@ -374,19 +382,20 @@ async function modifyHtmlChunk(content, patterns, request) {
  * @param {*} originalUrl - Unmodified URL
  * @param {*} url - URL for the third-party request
  * @param {*} request - Original request for the page HTML so the user-agent can be passed through 
+ * @param {*} event - Worker event object.
  */
 async function hashContent(originalUrl, url, request) {
   let proxyUrl = null;
   let hash = null;
   const userAgent = request.headers.get('user-agent');
   const clientAddr = request.headers.get('cf-connecting-ip');
-  const hashCacheKey = new Request(url);
+  const hashCacheKey = new Request(url + "cf-hash-key");
   let cache = null;
 
   let foundInCache = false;
   // Try pulling it from the cache API (wrap it in case it's not implemented)
   try {
-    cache = await caches.open('Third-Parties');
+    cache = await caches.default;
     let response = await cache.match(hashCacheKey);
     if (response) {
       hash = response.text();
@@ -423,19 +432,6 @@ async function hashContent(originalUrl, url, request) {
             }
             const hashCacheResponse = new Response(hash, {ttl: ttl});
             cache.put(hashCacheKey, hashCacheResponse);
-          }
-        } catch(e) {
-          // Ignore the exception
-        }
-
-        // Add the actual response to the cache for the new URL
-        try {
-          if (cache) {
-            const cacheKey = new Request(proxyUrl);
-            const cacheResponse = new Response(content, response);
-            cacheResponse.headers.set('Cache-Control', 'max-age=315360000');
-            cacheResponse.headers.set('ttl', '315360000');
-            cache.put(cacheKey, cacheResponse);
           }
         } catch(e) {
           // Ignore the exception
@@ -480,10 +476,10 @@ function hex(buffer) {
   var hexCodes = [];
   var view = new DataView(buffer);
   for (var i = 0; i < view.byteLength; i += 4) {
-    var value = view.getUint32(i)
-    var stringValue = value.toString(16)
-    var padding = '00000000'
-    var paddedValue = (padding + stringValue).slice(-padding.length)
+    var value = view.getUint32(i);
+    var stringValue = value.toString(16);
+    var padding = '00000000';
+    var paddedValue = (padding + stringValue).slice(-padding.length);
     hexCodes.push(paddedValue);
   }
   return hexCodes.join("");
