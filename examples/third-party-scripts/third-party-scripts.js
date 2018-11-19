@@ -57,7 +57,8 @@ addEventListener("fetch", event => {
   const bypass = new URL(event.request.url).searchParams.get('cf-worker') === 'bypass';
   if (!bypass) {
     let accept = event.request.headers.get('accept');
-    if (isProxyRequest(url)) {
+    if (event.request.method === 'GET' &&
+        isProxyRequest(url)) {
       event.respondWith(proxyUrl(url, event.request));
     } else if (accept && accept.indexOf("text/html") >= 0) {
       event.respondWith(processHtmlRequest(event.request));
