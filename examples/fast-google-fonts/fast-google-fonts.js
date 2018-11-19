@@ -12,7 +12,8 @@ addEventListener("fetch", event => {
   const bypass = url.searchParams.get('cf-worker') === 'bypass';
   if (!bypass) {
     const accept = event.request.headers.get('accept');
-    if (url.pathname.startsWith('/fonts.gstatic.com/')) {
+    if (event.request.method === 'GET' &&
+        url.pathname.startsWith('/fonts.gstatic.com/')) {
       // Pass the font requests through to the origin font server
       // (through the underlying request cache).
       event.respondWith(proxyRequest('https:/' + url.pathname, event.request));
