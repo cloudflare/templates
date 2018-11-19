@@ -67,7 +67,9 @@ async function proxyRequest(url, request) {
                              "Last-Modified",
                              "ETag"];
     // Only include a strict subset of response headers
-    let responseInit = {status: response.status, headers: {}};
+    let responseInit = {status: response.status,
+                        statusText: response.statusText,
+                        headers: {}};
     for (let name of responseHeaders) {
       let value = response.headers.get(name);
       if (value) {
@@ -339,7 +341,7 @@ async function fetchCSS(url, request) {
   } else {
     // Try pulling it from the cache API (wrap it in case it's not implemented)
     try {
-      cache = await caches.default;
+      cache = caches.default;
       let response = await cache.match(cacheKeyRequest);
       if (response) {
         fontCSS = response.text();

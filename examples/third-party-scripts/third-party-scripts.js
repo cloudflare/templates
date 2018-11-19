@@ -137,7 +137,9 @@ async function proxyUrl(url, request) {
                              "Date",
                              "Last-Modified",
                              "ETag"];
-    let responseInit = {status: response.status, headers: {}};
+    let responseInit = {status: response.status,
+                        statusText: response.statusText,
+                        headers: {}};
     for (let name of responseHeaders) {
       let value = response.headers.get(name);
       if (value) {
@@ -395,7 +397,7 @@ async function hashContent(originalUrl, url, request) {
   let foundInCache = false;
   // Try pulling it from the cache API (wrap it in case it's not implemented)
   try {
-    cache = await caches.default;
+    cache = caches.default;
     let response = await cache.match(hashCacheKey);
     if (response) {
       hash = response.text();
