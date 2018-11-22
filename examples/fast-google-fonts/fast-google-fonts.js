@@ -326,8 +326,8 @@ var FONT_CACHE = {};
  */
 async function fetchCSS(url, request) {
   let fontCSS = "";
-  if (!url.startsWith('http'))
-    url = 'https://' + url;
+  if (url.startsWith('/'))
+    url = 'https:' + url;
   const userAgent = request.headers.get('user-agent');
   const clientAddr = request.headers.get('cf-connecting-ip');
   const browser = getCacheKey(userAgent);
