@@ -117,17 +117,16 @@ async function processHtmlRequest(request, event) {
     // The readable side will become our new response body.
     const { readable, writable } = new TransformStream();
 
-    // Create a cloned response with our modified stream and content type header
+    // Create a cloned response with our modified stream
     const newResponse = new Response(readable, response);
 
-    // Start the async processing of the response stream (don't wait for it to finish)
+    // Start the async processing of the response stream
     modifyHtmlStream(response.body, writable, request, event);
 
     // Return the in-process response so it can be streamed.
     return newResponse;
-  } else {
-    return response;
   }
+  return response;
 }
 
 /**
@@ -327,6 +326,8 @@ var FONT_CACHE = {};
  */
 async function fetchCSS(url, request) {
   let fontCSS = "";
+  if (!url.startsWith('http'))
+    url = 'https://' + url;
   const userAgent = request.headers.get('user-agent');
   const clientAddr = request.headers.get('cf-connecting-ip');
   const browser = getCacheKey(userAgent);
