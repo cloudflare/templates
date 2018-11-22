@@ -367,20 +367,22 @@ async function fetchCSS(url, request) {
 
     try {
       const response = await fetch(url, {headers: headers});
-      fontCSS = await response.text();
+      if (response && response.status === 200) {
+        fontCSS = await response.text();
 
-      // Rewrite all of the font URLs to come through the worker
-      fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '/fonts.gstatic.com/');
+        // Rewrite all of the font URLs to come through the worker
+        fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '/fonts.gstatic.com/');
 
-      // Add the css info to the font caches
-      FONT_CACHE[cacheKey] = fontCSS;
-      try {
-        if (cache) {
-          const cacheResponse = new Response(fontCSS, {ttl: 86400});
-          event.waitUntil(cache.put(cacheKeyRequest, cacheResponse));
+        // Add the css info to the font caches
+        FONT_CACHE[cacheKey] = fontCSS;
+        try {
+          if (cache) {
+            const cacheResponse = new Response(fontCSS, {ttl: 86400});
+            event.waitUntil(cache.put(cacheKeyRequest, cacheResponse));
+          }
+        } catch(e) {
+          // Ignore the exception
         }
-      } catch(e) {
-        // Ignore the exception
       }
     } catch(e) {
       // Ignore the exception
