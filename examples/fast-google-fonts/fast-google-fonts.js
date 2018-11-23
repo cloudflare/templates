@@ -7,18 +7,16 @@
 addEventListener("fetch", event => {
   // Fail-safe in case of an unhandled exception
   event.passThroughOnException();
-
   const url = new URL(event.request.url);
   const bypass = url.searchParams.get('cf-worker') === 'bypass';
   if (!bypass) {
-    const accept = event.request.headers.get('accept');
     if (event.request.method === 'GET' &&
         url.pathname.startsWith('/fonts.gstatic.com/')) {
       // Pass the font requests through to the origin font server
       // (through the underlying request cache).
       event.respondWith(proxyRequest('https:/' + url.pathname, event.request));
-    } else if (accept && accept.indexOf("text/html") !== -1) {
-      event.respondWith(processHtmlRequest(event.request, event));
+    } else {
+      event.respondWith(processRequest(event.request, event));
     }
   }
 });
@@ -77,8 +75,31 @@ async function proxyRequest(url, request) {
         responseInit.headers[name] = value;
       }
     }
+    // Add some security headers to make sure there isn't scriptable content
+    // being proxied.
+    responseInit.headers['X-Content-Type-Options'] = "nosniff";
     const newResponse = new Response(response.body, responseInit);
     return newResponse;
+  }
+
+  return response;
+}
+
+/**
+ * Handle all non-proxied requests. Send HTML or CSS on for further processing
+ * and pass everything else through unmodified.
+ * @param {*} request - Original request
+ * @param {*} event - Original worker event
+ */
+async function processRequest(request, event) {
+  const response = await fetch(request);
+  if (response && response.status === 200) {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("text/html") !== -1) {
+      return await processHtmlResponse(response, event.request, event);
+    } else if (contentType && contentType.indexOf("text/css") !== -1) {
+      return await processStylesheetResponse(response, event.request, event);
+    }
   }
 
   return response;
@@ -93,40 +114,68 @@ async function proxyRequest(url, request) {
  * HTML is extracted and converted to utf-8 and that the downstream response is identified
  * as utf-8.
  * 
+ * @param {*} response The original response
  * @param {*} request The original request
  * @param {*} event worker event object
  */
-async function processHtmlRequest(request, event) {
-  // Fetch from origin server.
-  const response = await fetch(request);
-  let contentType = response.headers.get("content-type");
-  if (contentType && contentType.indexOf("text/html") !== -1) {
-
-    // Workers can only decode utf-8. If it is anything else, pass the
-    // response through unmodified
-    const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
-    const match = charsetRegex.exec(contentType);
-    if (match !== null) {
-      let charset = match[1].toLowerCase();
-      if (!VALID_CHARSETS.includes(charset)) {
-        return response;
-      }
+async function processHtmlResponse(response, request, event) {
+  // Workers can only decode utf-8. If it is anything else, pass the
+  // response through unmodified
+  const contentType = response.headers.get("content-type");
+  const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
+  const match = charsetRegex.exec(contentType);
+  if (match !== null) {
+    let charset = match[1].toLowerCase();
+    if (!VALID_CHARSETS.includes(charset)) {
+      return response;
     }
-    
-    // Create an identity TransformStream (a.k.a. a pipe).
-    // The readable side will become our new response body.
-    const { readable, writable } = new TransformStream();
-
-    // Create a cloned response with our modified stream
-    const newResponse = new Response(readable, response);
-
-    // Start the async processing of the response stream
-    modifyHtmlStream(response.body, writable, request, event);
-
-    // Return the in-process response so it can be streamed.
-    return newResponse;
   }
-  return response;
+  
+  // Create an identity TransformStream (a.k.a. a pipe).
+  // The readable side will become our new response body.
+  const { readable, writable } = new TransformStream();
+
+  // Create a cloned response with our modified stream
+  const newResponse = new Response(readable, response);
+
+  // Start the async processing of the response stream
+  modifyHtmlStream(response.body, writable, request, event);
+
+  // Return the in-process response so it can be streamed.
+  return newResponse;
+}
+
+/**
+ * Handle the processing of stylesheets (that might have a @import)
+ * 
+ * @param {*} response - The stylesheet response
+ * @param {*} request - The original request
+ * @param {*} event - The original worker event
+ */
+async function processStylesheetResponse(response, request, event) {
+  let body = response.body;
+  try {
+    body = await response.text();
+    const fontCSSRegex = /@import\s*(url\s*)?[\('"\s]+((https?:)?\/\/fonts.googleapis.com\/css[^'"\)]+)[\s'"\)]+\s*;/mgi;
+    let match = fontCSSRegex.exec(body);
+    while (match !== null) {
+      const matchString = match[0];
+      const fontCSS = await fetchCSS(match[2], request, event);
+      if (fontCSS.length) {
+        body = body.split(matchString).join(fontCSS);
+      }
+      match = fontCSSRegex.exec(body);
+    }
+  } catch (e) {
+    // Ignore the exception, the original body will be passed through.
+  }
+
+  // Return a cloned response with the (possibly modified) body.
+  // We can't just return the original response since we already
+  // consumed the body.
+  const newResponse = new Response(body, response);
+
+  return newResponse;
 }
 
 /**
