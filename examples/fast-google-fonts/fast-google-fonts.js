@@ -14,7 +14,13 @@ addEventListener("fetch", event => {
         url.pathname.startsWith('/fonts.gstatic.com/')) {
       // Pass the font requests through to the origin font server
       // (through the underlying request cache).
-      event.respondWith(proxyRequest('https:/' + url.pathname, event.request));
+      event.respondWith(proxyRequest('https:/' + url.pathname + url.search,
+                                     event.request));
+    } else if (event.request.method === 'GET' &&
+               url.pathname.startsWith('/fonts.googleapis.com/')) {
+      // Proxy the stylesheet for pages using CSP
+      event.respondWith(proxyStylesheet('https:/' + url.pathname + url.search,
+                                        event.request));
     } else {
       event.respondWith(processRequest(event.request, event));
     }
@@ -86,6 +92,27 @@ async function proxyRequest(url, request) {
 }
 
 /**
+ * Handle a proxied stylesheet request.
+ * 
+ * @param {*} url The URL to proxy
+ * @param {*} request The original request (to copy parameters from)
+ */
+async function proxyStylesheet(url, request) {
+  let css = await fetchCSS(url, request)
+  if (css) {
+    const responseInit = {headers: {
+      "Content-Type": "text/css; charset=utf-8",
+      "Cache-Control": "private, max-age=86400, stale-while-revalidate=604800"
+    }};
+    const newResponse = new Response(css, responseInit);
+    return newResponse;
+  } else {
+    // Do a straight-through proxy as fallback
+    return proxyRequest(url, request);
+  }
+}
+
+/**
  * Handle all non-proxied requests. Send HTML or CSS on for further processing
  * and pass everything else through unmodified.
  * @param {*} request - Original request
@@ -130,6 +157,46 @@ async function processHtmlResponse(response, request, event) {
       return response;
     }
   }
+  // See if the stylesheet should be embedded or proxied.
+  // CSP blocks embedded CSS by default so fall back to proxying
+  // the stylesheet through the origin.
+  //
+  // Note: only 'self' and 'unsafe-inline' CSP rules for style-src
+  // are recognized. If explicit URLs are used instead then the
+  // HTML will not be modified.
+  let embedStylesheet = true;
+  let csp = response.headers.get("Content-Security-Policy");
+  if (csp) {
+    // Get the style policy that will be applied to the document
+    let ok = false;
+    let cspRule = null;
+    const styleRegex = /style-src[^;]*/gmi;
+    let match = styleRegex.exec(csp);
+    if (match !== null) {
+      cspRule = match[0];
+    } else {
+      const defaultRegex = /default-src[^;]*/gmi;
+      let match = defaultRegex.exec(csp);
+      if (match !== null) {
+        cspRule = match[0];
+      }
+    }
+    if (cspRule !== null) {
+      if (cspRule.indexOf("'unsafe-inline'") >= 0) {
+        ok = true;
+        embedStylesheet = true;
+      } else if (cspRule.indexOf("'self'") >= 0) {
+        ok = true;
+        embedStylesheet = false;
+      }
+    }
+  
+    // If CSP is enabled but there are no style rules, just bail
+    // (shouldn't work even normally but no reason to touch it).
+    if (!ok) {
+      return response;
+    }
+  }
   
   // Create an identity TransformStream (a.k.a. a pipe).
   // The readable side will become our new response body.
@@ -139,7 +206,7 @@ async function processHtmlResponse(response, request, event) {
   const newResponse = new Response(readable, response);
 
   // Start the async processing of the response stream
-  modifyHtmlStream(response.body, writable, request, event);
+  modifyHtmlStream(response.body, writable, request, event, embedStylesheet);
 
   // Return the in-process response so it can be streamed.
   return newResponse;
@@ -222,8 +289,9 @@ function chunkContainsInvalidCharset(chunk) {
  * @param {*} writable - Output stream (to the browser).
  * @param {*} request - Original request object for downstream use.
  * @param {*} event - Worker event object
+ * @param {bool} embedStylesheet - true if the stylesheet should be embedded in the HTML
  */
-async function modifyHtmlStream(readable, writable, request, event) {
+async function modifyHtmlStream(readable, writable, request, event, embedStylesheet) {
   const reader = readable.getReader();
   const writer = writable.getWriter();
   const encoder = new TextEncoder();
@@ -240,7 +308,7 @@ async function modifyHtmlStream(readable, writable, request, event) {
       const { done, value } = await reader.read();
       if (done) {
         if (partial.length) {
-          partial = await modifyHtmlChunk(partial, request, event);
+          partial = await modifyHtmlChunk(partial, request, event, embedStylesheet);
           await writer.write(encoder.encode(partial));
           partial = '';
         }
@@ -301,7 +369,7 @@ async function modifyHtmlStream(readable, writable, request, event) {
         }
 
         if (content.length) {
-          content = await modifyHtmlChunk(content, request, event);
+          content = await modifyHtmlChunk(content, request, event, embedStylesheet);
         }
       } catch (e) {
         // Ignore the exception
@@ -328,8 +396,9 @@ async function modifyHtmlStream(readable, writable, request, event) {
  * @param {*} content - Text chunk from the streaming HTML (or accumulated head)
  * @param {*} request - Original request object for downstream use.
  * @param {*} event - Worker event object
- */
-async function modifyHtmlChunk(content, request, event) {
+ * @param {bool} embedStylesheet - true if the stylesheet should be embedded in the HTML
+*/
+async function modifyHtmlChunk(content, request, event, embedStylesheet) {
   // Fully tokenizing and parsing the HTML is expensive.  This regex is much faster and should be reasonably safe.
   // It looks for Stylesheet links for the Google fonts css and extracts the URL as match #1.  It shouldn't match
   // in-text content because the < > brackets would be escaped in the HTML.  There is some potential risk of
@@ -339,19 +408,28 @@ async function modifyHtmlChunk(content, request, event) {
   while (match !== null) {
     const matchString = match[0];
     if (matchString.indexOf('stylesheet') >= 0) {
-      const fontCSS = await fetchCSS(match[1], request, event);
-      if (fontCSS.length) {
-        // See if there is a media type on the link tag
-        let mediaStr = '';
-        const mediaMatch = matchString.match(/media\s*=\s*['"][^'"]*['"]/mig);
-        if (mediaMatch) {
-          mediaStr = ' ' + mediaMatch[0];
+      if (embedStylesheet) {
+        const fontCSS = await fetchCSS(match[1], request, event);
+        if (fontCSS.length) {
+          // See if there is a media type on the link tag
+          let mediaStr = '';
+          const mediaMatch = matchString.match(/media\s*=\s*['"][^'"]*['"]/mig);
+          if (mediaMatch) {
+            mediaStr = ' ' + mediaMatch[0];
+          }
+          // Replace the actual css
+          let cssString = "<style" + mediaStr + ">\n";
+          cssString += fontCSS;
+          cssString += "\n</style>\n";
+          content = content.split(matchString).join(cssString);
         }
-        // Replace the actual css
-        let cssString = "<style" + mediaStr + ">\n";
-        cssString += fontCSS;
-        cssString += "\n</style>\n";
-        content = content.split(matchString).join(cssString);
+      } else {
+        // Rewrite the URL to proxy it through the origin
+        let originalUrl = match[1];
+        let startPos = originalUrl.indexOf('/fonts.googleapis.com');
+        let newUrl = originalUrl.substr(startPos);
+        let newString = matchString.split(originalUrl).join(newUrl);
+        content = content.split(matchString).join(newString);
       }
       match = fontCSSRegex.exec(content);
     }
