@@ -401,7 +401,7 @@ async function hashContent(originalUrl, url, request) {
     cache = caches.default;
     let response = await cache.match(hashCacheKey);
     if (response) {
-      hash = response.text();
+      hash = await response.text();
       proxyUrl = constructProxyUrl(originalUrl, hash);
       foundInCache = true;
     }
