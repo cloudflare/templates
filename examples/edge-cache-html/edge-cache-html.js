@@ -28,10 +28,9 @@ async function processRequest(originalRequest, event) {
   let {response, cacheVer, status} = await getCachedResponse(originalRequest);
 
   if (response === null) {
-    status = 'Miss';
     // Clone the request, add the edge-cache header and send it through.
     let request = new Request(originalRequest);
-    request.headers.set('x-HTML-Edge-Cache', 'supports=cache,purgeall');
+    request.headers.set('x-HTML-Edge-Cache', 'supports=cache,purgeall,bypass-cookies');
     response = await fetch(request);
 
     if (response) {
@@ -47,8 +46,6 @@ async function processRequest(originalRequest, event) {
         }
       }
     }
-  } else {
-    status = 'Hit';
   }
 
   const accept = originalRequest.headers.get('Accept');
@@ -78,7 +75,7 @@ async function getCachedResponse(request) {
   // Only check for HTML GET requests (saves on reading from KV unnecessarily)
   // and not when there are cache-control headers on the request (refresh)
   const accept = request.headers.get('Accept');
-  const cacheControl = request.headers.get('Accept');
+  const cacheControl = request.headers.get('Cache-Control');
   if (cacheControl === null && request.method === 'GET' && accept && accept.indexOf('text/html') >= 0) {
     // Build the versioned URL for checking the cache
     cacheVer = await GetCurrentCacheVersion(cacheVer);
