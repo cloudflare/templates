@@ -30,7 +30,7 @@ async function processRequest(originalRequest, event) {
   if (response === null) {
     // Clone the request, add the edge-cache header and send it through.
     let request = new Request(originalRequest);
-    request.headers.set('x-HTML-Edge-Cache', 'supports=cache,purgeall,bypass-cookies');
+    request.headers.set('x-HTML-Edge-Cache', 'supports=cache|purgeall|bypass-cookies');
     response = await fetch(request);
 
     if (response) {
@@ -40,10 +40,7 @@ async function processRequest(originalRequest, event) {
         status += ', Purged';
       }
       if (options.cache) {
-        const cached = await cacheResponse(cacheVer, originalRequest, response, event);
-        if (cached) {
-          status += ', Cached';
-        }
+        status += await cacheResponse(cacheVer, originalRequest, response, event);
       }
     }
   }
@@ -130,7 +127,8 @@ async function getCachedResponse(request) {
         status = 'Miss';
       }
     } catch (err) {
-      // Ignore the exception
+      // Send the exception back in the response header for debugging
+      status = "Cache Read Exception: " + err.message;
     }
   }
 
@@ -153,21 +151,24 @@ async function purgeCache(cacheVer, event) {
  * 
  * @param {Int} cacheVer - Current cache version (if already retrieved)
  * @param {Request} request - Original Request
- * @param {Response} response - Response to (maybe) cache
+ * @param {Response} originalResponse - Response to (maybe) cache
  * @param {Event} event - Original event
  * @returns {bool} true if the response was cached
  */
-async function cacheResponse(cacheVer, request, response, event) {
-  let cached = false;
+async function cacheResponse(cacheVer, request, originalResponse, event) {
+  let status = "";
   const accept = request.headers.get('Accept');
-  if (request.method === 'GET' && response.status === 200 && accept && accept.indexOf('text/html') >= 0) {
+  if (request.method === 'GET' && originalResponse.status === 200 && accept && accept.indexOf('text/html') >= 0) {
     cacheVer = await GetCurrentCacheVersion(cacheVer);
     const cacheKeyRequest = GenerateCacheRequest(request, cacheVer);
 
     try {
       // Move the cache headers out of the way so the response can actually be cached.
+      // First clone the response so there is a parallel body stream and then
+      // create a new response object based on the clone that we can edit.
       let cache = caches.default;
-      response = response.clone();
+      let clonedResponse = originalResponse.clone();
+      let response = new Response(clonedResponse.body, clonedResponse);
       for (header of CACHE_HEADERS) {
         let value = response.headers.get(header);
         if (value) {
@@ -175,14 +176,16 @@ async function cacheResponse(cacheVer, request, response, event) {
           response.headers.set('x-HTML-Edge-Cache-' + header, value);
         }
       }
+      response.headers.delete('Set-Cookie');
       response.headers.set('Cache-Control', 'public; max-age=315360000');
       event.waitUntil(cache.put(cacheKeyRequest, response));
-      cached = true;
+      status = ", Cached";
     } catch (err) {
-      // Ignore the exception
+      // Send the exception back in the response header for debugging
+      status = ", Cache Write Exception: " + err.message;
     }
   }
-  return cached;
+  return status;
 }
 
 /******************************************************************************
@@ -203,7 +206,7 @@ function getResponseOptions(response) {
 
   let header = response.headers.get('x-HTML-Edge-Cache');
   if (header) {
-    let commands = header.split(';');
+    let commands = header.split(',');
     for (let command of commands) {
       if (command.trim() === 'purgeall') {
         options.purge = true;
@@ -212,7 +215,7 @@ function getResponseOptions(response) {
       } else if (command.trim().startsWith('bypass-cookies')) {
         let separator = command.indexOf('=');
         if (separator >= 0) {
-          let cookies = command.substr(separator + 1).split(',');
+          let cookies = command.substr(separator + 1).split('|');
           for (let cookie of cookies) {
             cookie = cookie.trim();
             if (cookie.length) {
