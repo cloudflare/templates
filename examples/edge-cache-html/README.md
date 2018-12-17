@@ -57,7 +57,7 @@ Once the cache purging configuration is available it is time to actually install
 
 ![Launch Editor](docs/dashboard-workers.png)
 
-Your editor may look slightly different depending on the account level and if support for multiple worker scripts is enabled or not but the basics should be the same. To get to the actual script editor you will either click on a button to edit or add the script:
+Your editor may look slightly different depending on the account level and if support for multiple worker scripts is enabled or not but the basics should be the same. To get to the actual script editor you will either click on a button to edit or add the script. In single-script mode it will launch directly into the script editing UI and there is no need to "Add".
 
 ![Scripts](docs/workers-scripts.png)
 
