@@ -6,6 +6,24 @@ Installation instructions are available [below](#Installation).
 
 ## How it works
 
+* The worker processes all requests that come through it, adding an "x-HTML-Edge-Cache' header to the requests so that the origin will know that the edge-cache is enabled (and optionally what features it supports).
+* If the origin responds with an "x-HTML-Edge-Cache" response header then the commands from the header are processed and the response is passed through unmodified to the user.
+  * A ```purgeall``` command causes the cache to be cleared and is sent by the origin in response to changes to the content.
+  * A ```cache``` command causes the page to be cached and future requests for the page will be served from the cache directly from the edge.
+  * A ```bypass-cookies``` command can be combined with a cache command to specify cookie prefixes that should bypass the cache. This is mostly used to detect logged-in users which may get a different experience.
+
+The worker cache is a local cache specific to each edge location but purge commands need to be able to purge the cache globally. The worker script handles cache purges in one of two ways:
+
+1. (preferred) Using a cache version number that is stored in KV.
+    * When requests come in, the current cache version is appended to the request URLs to generate versioned URLs for checking the cache (and for storing content in the cache).
+    * When a purge command arrives, the cache version number is incremented in KV which causes the resource URLs to change.
+    * Old cached content will be aged out of the cache naturally as it will no longer be accessed.
+1. Using the Cloudflare API to purge the global cache for the zone. This clears the worker caches but also the regular cache for the zone including all of the images and scripts.
+
+The worker cache respects the caching headers for any responses that are passed to the cache so we need to modify the responses to make them cacheable. When the HTML is stored in the cache the original cache headers are copied to new headers and replaced with headers that allow the page to be cached for a year. When the response is pulled out of cache the original headers are restored.
+
+For the bypass-cookies support, when a response is retrieved from cache it is checked to see if it has a bypass-cookies command in the x-HTML_Edge-Cache response headers. If it does then the cookie prefixes are compared to any cookies on the request and if there is a match the cached response is discarded and the request is passed through to the origin (bypassing the cache).  In theory this allows for different cookies and settings to be specified for different responses (though in practice it is pretty unlikely).
+
 ## Installation
 
 Edge caching support requires a Cloudflare Worker script that runs on the edge as well as a content management system (like WordPress) that supports integrating with the worker. A plugin for WordPress support is available as part of this sample [here](WordPress%20Plugin/).
