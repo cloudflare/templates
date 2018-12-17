@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name:  Cloudflare Page Cache
-Plugin URI:   https://github.com/cloudflare/worker-examples
-Description:  Cache HTML pages on the Cloudflare CDN
-Version:      20181212
+Plugin URI:   https://github.com/cloudflare/worker-examples/tree/master/examples/edge-cache-html
+Description:  Cache HTML pages on the Cloudflare CDN when used with the page cache Worker.
+Version:      1.0
 Author:       Patrick Meenan
 Author URI:   https://www.webpagetest.org/
 License:      MIT

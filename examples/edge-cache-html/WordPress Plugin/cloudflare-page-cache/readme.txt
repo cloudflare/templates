@@ -3,7 +3,7 @@ Contributors: patrickmeenan
 Tags: cache,performance,speed,cloudflare
 Requires at least: 3.3.1
 Tested up to: 5.0
-Requires PHP: 5.3
+Requires PHP: 5.2.4
 Stable tag: trunk
 License: MIT
 License URI: https://opensource.org/licenses/MIT
@@ -11,12 +11,12 @@ License URI: https://opensource.org/licenses/MIT
 Adds support for caching pages on Cloudflare and automatic purging when content changes.
 
 == Description ==
-Integrates with the \"Edge Cache HTML\" Cloudflare Worker to edge-cache the generated HTML for anonymous users (not logged-in) resulting in huge performance gains, particularly on slower hosting.
+Integrates with the \"[Edge Cache HTML](https://github.com/cloudflare/worker-examples/tree/master/examples/edge-cache-html)\" Cloudflare Worker to edge-cache the generated HTML for anonymous users (not logged-in) resulting in huge performance gains, particularly on slower hosting.
 
 == Installation ==
 # FROM YOUR WORDPRESS DASHBOARD
 1. Visit “Plugins” → Add New
-1. Search for Cloudflare Page Cache
+1. Search for \"Cloudflare Page Cache\"
 1. Activate Cloudflare Page Cache from your Plugins page.
 
 # FROM WORDPRESS.ORG

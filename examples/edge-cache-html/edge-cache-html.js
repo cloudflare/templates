@@ -1,5 +1,14 @@
-// IMPORTANT: A Key/Value Namespace must be bound to this worker script
-// using the variable name EDGE_CACHE.
+// IMPORTANT: Either A Key/Value Namespace must be bound to this worker script
+// using the variable name EDGE_CACHE. or the API parameters below should be
+// configured. KV is recommended if possible since it can purge just the HTML
+// instead of the full cache.
+
+// API settings if KV isn't being used
+const CLOUDFLARE_API = {
+  email: "", // From https://dash.cloudflare.com/profile
+  key: "",   // Global API Key from https://dash.cloudflare.com/profile
+  zone: ""   // "Zone ID" from the API section of the dashboard overview page https://dash.cloudflare.com/
+};
 
 /**
  * Main worker entry point. 
@@ -11,7 +20,13 @@ addEventListener("fetch", event => {
   // Only process requests if KV store is set up and there is no
   // HTML edge cache in front of this worker (only the outermost cache
   // should handle HTML caching in case there are varying levels of support).
-  if (typeof EDGE_CACHE !== 'undefined' && upstreamCache === null) {
+  let configured = false;
+  if (typeof EDGE_CACHE !== 'undefined') {
+    configured = true;
+  } else if (CLOUDFLARE_API.email.length && CLOUDFLARE_API.key.length && CLOUDFLARE_API.zone.length) {
+    configured = true;
+  }
+  if ( configured && upstreamCache === null) {
     event.passThroughOnException();
     event.respondWith(processRequest(request, event));
   }
@@ -136,14 +151,27 @@ async function getCachedResponse(request) {
 }
 
 /**
- * Asynchronously purge the HTML cache (bump the cache version).
+ * Asynchronously purge the HTML cache.
  * @param {Int} cacheVer - Current cache version (if retrieved)
  * @param {Event} event - Original event
  */
 async function purgeCache(cacheVer, event) {
-  cacheVer = await GetCurrentCacheVersion(cacheVer);
-  cacheVer++;
-  event.waitUntil(EDGE_CACHE.put('html_cache_version', cacheVer.toString()));
+  if (typeof EDGE_CACHE !== 'undefined') {
+    // Purge the KV cache by bumping the version number
+    cacheVer = await GetCurrentCacheVersion(cacheVer);
+    cacheVer++;
+    event.waitUntil(EDGE_CACHE.put('html_cache_version', cacheVer.toString()));
+  } else {
+    // Purge everything using the API
+    const url = "https://api.cloudflare.com/client/v4/zones/" + CLOUDFLARE_API.zone + "/purge_cache";
+    event.waitUntil(fetch(url,{
+      method: 'POST',
+      headers: {'X-Auth-Email': CLOUDFLARE_API.email,
+                'X-Auth-Key': CLOUDFLARE_API.key,
+                'Content-Type': 'application/json'},
+      body: JSON.stringify({purge_everything: true})
+    }));
+  }
 }
 
 /**
@@ -237,14 +265,18 @@ function getResponseOptions(response) {
  */
 async function GetCurrentCacheVersion(cacheVer) {
   if (cacheVer === null) {
-    cacheVer = await EDGE_CACHE.get('html_cache_version');
-    if (cacheVer === null) {
-      // Uninitialized - first time through, initialize KV with a value
-      // Blocking but should only happen immediately after worker activation.
-      cacheVer = 0;
-      await EDGE_CACHE.put('html_cache_version', cacheVer.toString());
+    if (typeof EDGE_CACHE !== 'undefined') {
+      cacheVer = await EDGE_CACHE.get('html_cache_version');
+      if (cacheVer === null) {
+        // Uninitialized - first time through, initialize KV with a value
+        // Blocking but should only happen immediately after worker activation.
+        cacheVer = 0;
+        await EDGE_CACHE.put('html_cache_version', cacheVer.toString());
+      } else {
+        cacheVer = parseInt(cacheVer);
+      }
     } else {
-      cacheVer = parseInt(cacheVer);
+      cacheVer = -1;
     }
   }
   return cacheVer;
