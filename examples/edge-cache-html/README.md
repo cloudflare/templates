@@ -42,7 +42,7 @@ The name of the KV store doesn't matter - use something memorable and descriptiv
 ![KV Store](docs/workers-kv.png)
 
 #### API
-Purging using the API (only when KV is not available) requires configuring the script with an API key, account email address and zone ID. THere is a section at the top of the script where each value should be entered.
+Purging using the API (only when KV is not available) requires configuring the script with an API key, account email address and zone ID. There is a section at the top of the script where each value should be entered.
 
 The zone ID is available on the main dashboard page in a box in the bottom-right corner:
 
@@ -53,7 +53,7 @@ The account email address and API key are both available on the [profile page](h
 ![Profile Page](docs/dashboard-profile.png)
 
 ### Worker Script
-Once the cache purging configuration is available it is time to actually install the worker script to run for your zone.  That is done through the workers tab in the dashboard by clicking on the "Launch EDitor" button.
+Once the cache purging configuration is available it is time to actually install the worker script to run for your zone.  That is done through the workers tab in the dashboard by clicking on the "Launch Editor" button.
 
 ![Launch Editor](docs/dashboard-workers.png)
 
