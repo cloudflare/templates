@@ -40,7 +40,7 @@ addEventListener("fetch", event => {
  * @param {Event} event - Original event (for additional async waiting)
  */
 async function processRequest(originalRequest, event) {
-  let {response, cacheVer, status} = await getCachedResponse(originalRequest);
+  let {response, cacheVer, status, bypassCache} = await getCachedResponse(originalRequest);
 
   if (response === null) {
     // Clone the request, add the edge-cache header and send it through.
@@ -54,7 +54,7 @@ async function processRequest(originalRequest, event) {
         await purgeCache(cacheVer, event);
         status += ', Purged';
       }
-      if (options.cache) {
+      if (options.cache && !bypassCache) {
         status += await cacheResponse(cacheVer, originalRequest, response, event);
       }
     }
@@ -82,7 +82,8 @@ const CACHE_HEADERS = ['Cache-Control', 'Expires', 'Pragma'];
 async function getCachedResponse(request) {
   let response = null;
   let cacheVer = null;
-  let status = 'Bypass';
+  let bypassCache = false;
+  let status = 'Miss';
 
   // Only check for HTML GET requests (saves on reading from KV unnecessarily)
   // and not when there are cache-control headers on the request (refresh)
@@ -98,8 +99,6 @@ async function getCachedResponse(request) {
       let cache = caches.default;
       let cachedResponse = await cache.match(cacheKeyRequest);
       if (cachedResponse) {
-        let bypassCache = false;
-
         // Copy Response object so that we can edit headers.
         cachedResponse = new Response(cachedResponse.body, cachedResponse);
 
@@ -147,7 +146,7 @@ async function getCachedResponse(request) {
     }
   }
 
-  return {response, cacheVer, status};
+  return {response, cacheVer, status, bypassCache};
 }
 
 /**

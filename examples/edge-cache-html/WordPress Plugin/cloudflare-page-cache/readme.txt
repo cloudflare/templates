@@ -11,15 +11,15 @@ License URI: https://opensource.org/licenses/MIT
 Adds support for caching pages on Cloudflare and automatic purging when content changes.
 
 == Description ==
-Integrates with the \"[Edge Cache HTML](https://github.com/cloudflare/worker-examples/tree/master/examples/edge-cache-html)\" Cloudflare Worker to edge-cache the generated HTML for anonymous users (not logged-in) resulting in huge performance gains, particularly on slower hosting.
+Integrates with the "[Edge Cache HTML](https://github.com/cloudflare/worker-examples/tree/master/examples/edge-cache-html)" Cloudflare Worker to edge-cache the generated HTML for anonymous users (not logged-in) resulting in huge performance gains, particularly on slower hosting.
 
 == Installation ==
 # FROM YOUR WORDPRESS DASHBOARD
 1. Visit “Plugins” → Add New
-1. Search for \"Cloudflare Page Cache\"
+1. Search for "Cloudflare Page Cache"
 1. Activate Cloudflare Page Cache from your Plugins page.
 
 # FROM WORDPRESS.ORG
-1. Download Cloudflare Page Cache
+1. Download [Cloudflare Page Cache](https://wordpress.org/plugins/cloudflare-page-cache/)
 1. Upload the “cloudflare-page-cache” directory to your “/wp-content/plugins/” directory, using ftp, sftp, scp etc.
 1. Activate Cloudflare Page Cache from your Plugins page.
