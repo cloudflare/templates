@@ -476,7 +476,7 @@ async function fetchCSS(url, request) {
       cache = caches.default;
       let response = await cache.match(cacheKeyRequest);
       if (response) {
-        fontCSS = response.text();
+        fontCSS = await response.text();
         foundInCache = true;
       }
     } catch(e) {
