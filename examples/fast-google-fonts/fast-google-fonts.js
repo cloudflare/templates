@@ -230,6 +230,7 @@ async function processStylesheetResponse(response, request, event) {
       const fontCSS = await fetchCSS(match[2], request, event);
       if (fontCSS.length) {
         body = body.split(matchString).join(fontCSS);
+        fontCSSRegex.lastIndex -= matchString.length - fontCSS.length;
       }
       match = fontCSSRegex.exec(body);
     }
@@ -422,6 +423,7 @@ async function modifyHtmlChunk(content, request, event, embedStylesheet) {
           cssString += fontCSS;
           cssString += "\n</style>\n";
           content = content.split(matchString).join(cssString);
+          fontCSSRegex.lastIndex -= matchString.length - cssString.length;
         }
       } else {
         // Rewrite the URL to proxy it through the origin
@@ -430,6 +432,7 @@ async function modifyHtmlChunk(content, request, event, embedStylesheet) {
         let newUrl = originalUrl.substr(startPos);
         let newString = matchString.split(originalUrl).join(newUrl);
         content = content.split(matchString).join(newString);
+        fontCSSRegex.lastIndex -= matchString.length - newString.length;
       }
       match = fontCSSRegex.exec(content);
     }

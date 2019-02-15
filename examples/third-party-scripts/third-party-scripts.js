@@ -370,6 +370,7 @@ async function modifyHtmlChunk(content, patterns, request) {
       const proxyUrl = await hashContent(originalUrl, fetchUrl, request);
       if (proxyUrl) {
         content = content.split(originalUrl).join(proxyUrl);
+        pattern.lastIndex -= originalUrl.length - proxyUrl.length;
       }
       match = pattern.exec(content);
     }
