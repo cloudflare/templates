@@ -62,6 +62,7 @@ async function processRequest(originalRequest, event) {
         await purgeCache(cacheVer, event);
         status += ', Purged';
       }
+      bypassCache = bypassCache || shouldBypassEdgeCache(request, response);
       if (options.cache && !bypassCache) {
         status += await cacheResponse(cacheVer, originalRequest, response, event);
       }
@@ -78,6 +79,41 @@ async function processRequest(originalRequest, event) {
   }
 
   return response;
+}
+
+/**
+ * Determine if the cache should be bypassed for the given request/response pair.
+ * Specifically, if the request includes a cookie that the response flags for bypass.
+ * Can be used on cache lookups to determine if the request needs to go to the origin and
+ * origin responses to determine if they should be written to cache.
+ * @param {Request} request - Request
+ * @param {Response} response - Response
+ * @returns {bool} true if the cache should be bypassed
+ */
+function shouldBypassEdgeCache(request, response) {
+  let bypassCache = false;
+
+  if (request && response) {
+    const options = getEdgeCacheResponseOptions(response);
+    const cookieHeader = request.headers.get('cookie');
+    if (cookieHeader && cookieHeader.length && options.bypassCookies.length) {
+      const cookies = cookieHeader.split(';');
+      for (let cookie of cookies) {
+        // See if the cookie starts with any of the logged-in user prefixes
+        for (let prefix of options.bypassCookies) {
+          if (cookie.trim().startsWith(prefix)) {
+            bypassCache = true;
+            break;
+          }
+        }
+        if (bypassCache) {
+          break;
+        }
+      }
+    }
+  }
+
+  return bypassCache;
 }
 
 const CACHE_HEADERS = ['Cache-Control', 'Expires', 'Pragma'];
@@ -115,24 +151,8 @@ async function getCachedResponse(request) {
         // Copy Response object so that we can edit headers.
         cachedResponse = new Response(cachedResponse.body, cachedResponse);
 
-        // Check to see if the response needs to be skipped for a login cookie.
-        const options = getResponseOptions(cachedResponse);
-        const cookieHeader = request.headers.get('cookie');
-        if (cookieHeader && cookieHeader.length && options.bypassCookies.length) {
-          const cookies = cookieHeader.split(';');
-          for (let cookie of cookies) {
-            // See if the cookie starts with any of the logged-in user prefixes
-            for (let prefix of options.bypassCookies) {
-              if (cookie.trim().startsWith(prefix)) {
-                bypassCache = true;
-                break;
-              }
-            }
-            if (bypassCache) {
-              break;
-            }
-          }
-        }
+        // Check to see if the response needs to be bypassed because of a cookie
+        bypassCache = shouldBypassEdgeCache(request, cachedResponse);
       
         // Copy the original cache headers back and clean up any control headers
         if (bypassCache) {
