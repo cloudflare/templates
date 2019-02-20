@@ -94,7 +94,7 @@ function shouldBypassEdgeCache(request, response) {
   let bypassCache = false;
 
   if (request && response) {
-    const options = getEdgeCacheResponseOptions(response);
+    const options = getResponseOptions(response);
     const cookieHeader = request.headers.get('cookie');
     if (cookieHeader && cookieHeader.length && options.bypassCookies.length) {
       const cookies = cookieHeader.split(';');
