@@ -26,7 +26,15 @@ addEventListener("fetch", event => {
   } else if (CLOUDFLARE_API.email.length && CLOUDFLARE_API.key.length && CLOUDFLARE_API.zone.length) {
     configured = true;
   }
-  if ( configured && upstreamCache === null) {
+
+  // Bypass processing of image requests
+  const accept = request.headers.get('Accept');
+  let isImage = false;
+  if (accept && (accept.indexOf('image/*') !== -1 || accept.indexOf('image/webp') !== -1)) {
+    isImage = true;
+  }
+
+  if (configured && !isImage && upstreamCache === null) {
     event.passThroughOnException();
     event.respondWith(processRequest(request, event));
   }
