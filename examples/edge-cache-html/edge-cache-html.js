@@ -27,10 +27,10 @@ addEventListener("fetch", event => {
     configured = true;
   }
 
-  // Bypass processing of image requests
+  // Bypass processing of image requests (for everything except Firefox which doesn't use image/*)
   const accept = request.headers.get('Accept');
   let isImage = false;
-  if (accept && (accept.indexOf('image/*') !== -1 || accept.indexOf('image/webp') !== -1)) {
+  if (accept && (accept.indexOf('image/*') !== -1)) {
     isImage = true;
   }
 
