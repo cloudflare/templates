@@ -7,22 +7,25 @@
 addEventListener("fetch", event => {
   // Fail-safe in case of an unhandled exception
   event.passThroughOnException();
-  const url = new URL(event.request.url);
-  const bypass = url.searchParams.get('cf-worker') === 'bypass';
-  if (!bypass) {
-    if (event.request.method === 'GET' &&
-        url.pathname.startsWith('/fonts.gstatic.com/')) {
+  if (event.request.method === 'GET') {
+    const url = new URL(event.request.url);
+    const accept = originalRequest.headers.get('Accept');
+    if (url.pathname.startsWith('/fonts.gstatic.com/')) {
       // Pass the font requests through to the origin font server
       // (through the underlying request cache).
       event.respondWith(proxyRequest('https:/' + url.pathname + url.search,
                                      event.request));
-    } else if (event.request.method === 'GET' &&
-               url.pathname.startsWith('/fonts.googleapis.com/')) {
-      // Proxy the stylesheet for pages using CSP
-      event.respondWith(proxyStylesheet('https:/' + url.pathname + url.search,
-                                        event.request));
-    } else {
-      event.respondWith(processRequest(event.request, event));
+    } else if (accept && (accept.indexOf('text/html') >= 0 || accept.indexOf('text/css') >= 0)) {
+      // The only interesting (non-proxied) requests are for HTML and CSS.
+      // All of the major browsers advertise they are requesting HTML or CSS in the accept header.
+      // For any browsers that don't (curl, etc), they will just fall-back to non-accelerated.
+      if (url.pathname.startsWith('/fonts.googleapis.com/')) {
+        // Proxy the stylesheet for pages using CSP
+        event.respondWith(proxyStylesheet('https:/' + url.pathname + url.search,
+                                          event.request));
+      } else {
+        event.respondWith(processRequest(event.request, event));
+      }
     }
   }
 });
