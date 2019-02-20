@@ -89,7 +89,12 @@ async function getCachedResponse(request) {
   // and not when there are cache-control headers on the request (refresh)
   const accept = request.headers.get('Accept');
   const cacheControl = request.headers.get('Cache-Control');
-  if (cacheControl === null && request.method === 'GET' && accept && accept.indexOf('text/html') >= 0) {
+  let noCache = false;
+  if (cacheControl && cacheControl.indexOf('no-cache') !== -1) {
+    noCache = true;
+    status = 'Bypass for Reload';
+  }
+  if (!noCache && request.method === 'GET' && accept && accept.indexOf('text/html') >= 0) {
     // Build the versioned URL for checking the cache
     cacheVer = await GetCurrentCacheVersion(cacheVer);
     const cacheKeyRequest = GenerateCacheRequest(request, cacheVer);
