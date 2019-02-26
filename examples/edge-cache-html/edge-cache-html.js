@@ -10,6 +10,14 @@ const CLOUDFLARE_API = {
   zone: ""   // "Zone ID" from the API section of the dashboard overview page https://dash.cloudflare.com/
 };
 
+// Default cookie prefixes for bypass
+const DEFAULT_BYPASS_COOKIES = [
+  "wp-",
+  "wordpress",
+  "comment_",
+  "woocommerce_"
+];
+
 /**
  * Main worker entry point. 
  */
@@ -48,6 +56,9 @@ addEventListener("fetch", event => {
  * @param {Event} event - Original event (for additional async waiting)
  */
 async function processRequest(originalRequest, event) {
+  let cfCacheStatus = null;
+  const accept = originalRequest.headers.get('Accept');
+  const isHTML = (accept && accept.indexOf('text/html') >= 0);
   let {response, cacheVer, status, bypassCache} = await getCachedResponse(originalRequest);
 
   if (response === null) {
@@ -58,23 +69,42 @@ async function processRequest(originalRequest, event) {
 
     if (response) {
       const options = getResponseOptions(response);
-      if (options.purge) {
+      if (options && options.purge) {
         await purgeCache(cacheVer, event);
         status += ', Purged';
       }
       bypassCache = bypassCache || shouldBypassEdgeCache(request, response);
-      if (options.cache && !bypassCache) {
+      if ((!options || options.cache) && isHTML &&
+          originalRequest.method === 'GET' && response.status === 200 &&
+          !bypassCache) {
         status += await cacheResponse(cacheVer, originalRequest, response, event);
+      }
+    }
+  } else {
+    // If the origin didn't send the control header we will send the cached response but update
+    // the cached copy asynchronously (stale-while-revalidate). This commonly happens with
+    // a server-side disk cache that serves the HTML directly from disk.
+    cfCacheStatus = 'HIT';
+    if (originalRequest.method === 'GET' && response.status === 200 && isHTML) {
+      bypassCache = bypassCache || shouldBypassEdgeCache(originalRequest, response);
+      if (!bypassCache) {
+        const options = getResponseOptions(response);
+        if (!options) {
+          status += ', Refreshed';
+          event.waitUntil(updateCache(originalRequest, cacheVer, event));
+        }
       }
     }
   }
 
-  const accept = originalRequest.headers.get('Accept');
-  if (response && status !== null && originalRequest.method === 'GET' && response.status === 200 && accept && accept.indexOf('text/html') >= 0) {
+  if (response && status !== null && originalRequest.method === 'GET' && response.status === 200 && isHTML) {
     response = new Response(response.body, response);
     response.headers.set('x-HTML-Edge-Cache-Status', status);
     if (cacheVer !== null) {
       response.headers.set('x-HTML-Edge-Cache-Version', cacheVer.toString());
+    }
+    if (cfCacheStatus) {
+      response.headers.set('CF-Cache-Status', cfCacheStatus);
     }
   }
 
@@ -96,11 +126,15 @@ function shouldBypassEdgeCache(request, response) {
   if (request && response) {
     const options = getResponseOptions(response);
     const cookieHeader = request.headers.get('cookie');
-    if (cookieHeader && cookieHeader.length && options.bypassCookies.length) {
+    let bypassCookies = DEFAULT_BYPASS_COOKIES;
+    if (options) {
+      bypassCookies = options.bypassCookies;
+    }
+    if (cookieHeader && cookieHeader.length && bypassCookies.length) {
       const cookies = cookieHeader.split(';');
       for (let cookie of cookies) {
         // See if the cookie starts with any of the logged-in user prefixes
-        for (let prefix of options.bypassCookies) {
+        for (let prefix of bypassCookies) {
           if (cookie.trim().startsWith(prefix)) {
             bypassCache = true;
             break;
@@ -159,16 +193,16 @@ async function getCachedResponse(request) {
           status = 'Bypass Cookie';
         } else {
           status = 'Hit';
-          response = cachedResponse;
-          response.headers.delete('x-HTML-Edge-Cache');
-          response.headers.delete('Cache-Control');
+          cachedResponse.headers.delete('Cache-Control');
+          cachedResponse.headers.delete('x-HTML-Edge-Cache-Status');
           for (header of CACHE_HEADERS) {
-            let value = response.headers.get('x-HTML-Edge-Cache-' + header);
+            let value = cachedResponse.headers.get('x-HTML-Edge-Cache-Header-' + header);
             if (value) {
-              response.headers.delete('x-HTML-Edge-Cache-' + header);
-              response.headers.set(header, value);
+              cachedResponse.headers.delete('x-HTML-Edge-Cache-Header-' + header);
+              cachedResponse.headers.set(header, value);
             }
           }
+          response = cachedResponse;
         }
       } else {
         status = 'Miss';
@@ -207,6 +241,31 @@ async function purgeCache(cacheVer, event) {
 }
 
 /**
+ * Update the cached copy of the given page
+ * @param {Request} originalRequest - Original Request
+ * @param {String} cacheVer - Cache Version
+ * @param {EVent} event - Original event
+ */
+async function updateCache(originalRequest, cacheVer, event) {
+  // Clone the request, add the edge-cache header and send it through.
+  let request = new Request(originalRequest);
+  request.headers.set('x-HTML-Edge-Cache', 'supports=cache|purgeall|bypass-cookies');
+  response = await fetch(request);
+
+  if (response) {
+    status = ': Fetched';
+    const options = getResponseOptions(response);
+    if (options && options.purge) {
+      await purgeCache(cacheVer, event);
+    }
+    let bypassCache = shouldBypassEdgeCache(request, response);
+    if ((!options || options.cache) && !bypassCache) {
+      await cacheResponse(cacheVer, originalRequest, response, event);
+    }
+  }
+}
+
+/**
  * Cache the returned content (but only if it was a successful GET request)
  * 
  * @param {Int} cacheVer - Current cache version (if already retrieved)
@@ -233,7 +292,7 @@ async function cacheResponse(cacheVer, request, originalResponse, event) {
         let value = response.headers.get(header);
         if (value) {
           response.headers.delete(header);
-          response.headers.set('x-HTML-Edge-Cache-' + header, value);
+          response.headers.set('x-HTML-Edge-Cache-Header-' + header, value);
         }
       }
       response.headers.delete('Set-Cookie');
@@ -241,8 +300,7 @@ async function cacheResponse(cacheVer, request, originalResponse, event) {
       event.waitUntil(cache.put(cacheKeyRequest, response));
       status = ", Cached";
     } catch (err) {
-      // Send the exception back in the response header for debugging
-      status = ", Cache Write Exception: " + err.message;
+      // status = ", Cache Write Exception: " + err.message;
     }
   }
   return status;
@@ -258,14 +316,14 @@ async function cacheResponse(cacheVer, request, originalResponse, event) {
  * @returns {*} Parsed commands
  */
 function getResponseOptions(response) {
-  let options = {
-    purge: false,
-    cache: false,
-    bypassCookies: []
-  };
-
+  let options = null;
   let header = response.headers.get('x-HTML-Edge-Cache');
   if (header) {
+    options = {
+      purge: false,
+      cache: false,
+      bypassCookies: []
+    };
     let commands = header.split(',');
     for (let command of commands) {
       if (command.trim() === 'purgeall') {
