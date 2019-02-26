@@ -2,7 +2,7 @@
 Contributors: patrickmeenan
 Tags: cache,performance,speed,cloudflare
 Requires at least: 3.3.1
-Tested up to: 5.0
+Tested up to: 5.1
 Requires PHP: 5.2.4
 Stable tag: trunk
 License: MIT
