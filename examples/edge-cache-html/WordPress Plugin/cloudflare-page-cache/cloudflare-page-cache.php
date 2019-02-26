@@ -3,7 +3,7 @@
 Plugin Name:  Cloudflare Page Cache
 Plugin URI:   https://github.com/cloudflare/worker-examples/tree/master/examples/edge-cache-html
 Description:  Cache HTML pages on the Cloudflare CDN when used with the page cache Worker.
-Version:      1.1
+Version:      1.2
 Author:       Patrick Meenan
 Author URI:   https://www.cloudflare.com/
 License:      MIT
@@ -24,7 +24,9 @@ function cloudflare_page_cache_init_action() {
 	// Add the edge-cache headers
   if (!is_user_logged_in() ) {
     header( 'x-HTML-Edge-Cache: cache,bypass-cookies=wp-|wordpress|comment_|woocommerce_' );
-  }
+  } else {
+    header( 'x-HTML-Edge-Cache: nocache' );
+	}
 
 	// Post ID is received
 	add_action( 'wp_trash_post', 'cloudflare_page_cache_purge1', 0 );
