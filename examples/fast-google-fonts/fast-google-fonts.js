@@ -9,7 +9,7 @@ addEventListener("fetch", event => {
   event.passThroughOnException();
   if (event.request.method === 'GET') {
     const url = new URL(event.request.url);
-    const accept = originalRequest.headers.get('Accept');
+    const accept = event.request.headers.get('Accept');
     if (url.pathname.startsWith('/fonts.gstatic.com/')) {
       // Pass the font requests through to the origin font server
       // (through the underlying request cache).
