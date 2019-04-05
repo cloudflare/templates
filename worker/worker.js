@@ -7,8 +7,5 @@ addEventListener('fetch', event => {
  * @param {Request} request
  */
 async function handleRequest(request) {
-    const { greet } = wasm_bindgen;
-    await wasm_bindgen(wasm)
-    const greeting = greet()
-    return new Response(greeting, {status: 200})
+    return new Response("Hello worker!", {status: 200})
 }
