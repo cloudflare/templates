@@ -16,8 +16,13 @@ This repository contains examples of how Workers can be used to accomplish commo
       <a href="https://community.cloudflare.com/tags/workers">
          Community
       </a>
+     <br/>
+     <br/>
+     ⚡️
    </h3>
+  
 </div>
+  
   
 
 ## What is Workers?
