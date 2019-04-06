@@ -18,8 +18,6 @@ This repository contains examples of how Workers can be used to accomplish commo
       </a>
    </h3>
 </div>
-
-<br/>
   
 
 ## What is Workers?
