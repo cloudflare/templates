@@ -1,13 +1,27 @@
-# Cloudflare Workers | Recipes
-This repository contains examples of how Workers can be used to accomplish common tasks. **You are welcome to use, modify, and extend this code!** If you have an additional example you think would be valuable, please submit a pull request.
+<h1 align="center">Cloudflare Workers | Recipes</h1>
 
-<div style="text-align:center;margin:auto;width:100%">
-   
-[In-Browser Editor](https://cloudflareworkers.com/) | [Official Workers Documentation](https://developers.cloudflare.com/workers/) | [Community](https://community.cloudflare.com/tags/workers)
+This repository contains examples of how Workers can be used to accomplish common tasks. **You are welcome to use, modify, and extend this code!** Pull requests are encourged.
   
+
+<div align="center">
+   <h3 align="center">
+      <a href="https://cloudflareworkers.com/">
+         In-Browser Editor
+      </a>
+      <span> | </span>
+      <a href="https://developers.cloudflare.com/workers">
+         Official Workers Documentation
+      </a>
+      <span> | </span>
+      <a href="https://community.cloudflare.com/tags/workers">
+         Community
+      </a>
+   </h3>
 </div>
 
----
+<br/>
+  
+
 ## What is Workers?
 
 Workers make it possible to write serverless JavaScript applications and run them on Cloudflare's global cloud network of 165 data centers. Workers ...
@@ -48,4 +62,5 @@ async function readFromStorage (event) {
 
 You  can use Workers to perform cryptographic operations using the WebCrypto API, rewrite HTML response streams on-the-fly and serve dynamic content to visitors halfway around the world in milliseconds.
 
-> Questions about Workers can be addressed on our [community site](https://community.cloudflare.com/tags/workers)!
+## Questions
+Questions about Workers can be addressed on our [community site](https://community.cloudflare.com/tags/workers).
