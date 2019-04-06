@@ -60,7 +60,7 @@ async function readFromStorage (event) {
 }
 ```
 
-You  can use Workers to perform cryptographic operations using the WebCrypto API, rewrite HTML response streams on-the-fly and serve dynamic content to visitors halfway around the world in milliseconds.
+You  can use Workers to perform cryptographic operations using the WebCrypto API, rewrite HTML response streams on-the-fly and serve dynamic content to visitors halfway around the world in milliseconds!
 
 ## Questions
 Questions about Workers can be addressed on our [community site](https://community.cloudflare.com/tags/workers).
