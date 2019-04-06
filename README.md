@@ -1,6 +1,6 @@
 <h1 align="center">Cloudflare Workers | Recipes</h1>
 
-This repository contains examples of how Workers can be used to accomplish common tasks. **You are welcome to use, modify, and extend this code!** Pull requests are encourged.
+This repository contains examples of how Workers can be used to accomplish common tasks. You are welcome to use, modify, and extend this code! Pull requests are encourged.
   
 
 <div align="center">
