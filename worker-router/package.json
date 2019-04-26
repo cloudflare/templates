@@ -1,0 +1,23 @@
+{
+ "name": "template-creator",
+ "version": "1.0.0",
+ "description": "package for creating workers templates",
+ "main": "index.js",
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "format": "prettier --write '**/*.{js,css,md}'"
+ },
+ "author": "",
+ "license": "ISC",
+ "devDependencies": {
+  "husky": "^2.1.0",
+  "prettier": "^1.17.0"
+ },
+ "husky": {
+  "hooks": {
+   "pre-commit": "npm  run format",
+   "pre-push": "npm  run format",
+   "...": "..."
+  }
+ }
+}
