@@ -25,7 +25,7 @@ const Path = regExp => req => {
 /**
  * Router handles the logic of what handler is matched given conditions for each request
  *  */
-export class Router {
+class Router {
   constructor() {
     this.routes = []
   }
@@ -33,7 +33,7 @@ export class Router {
   handle(conditions, handler) {
     this.routes.push({
       conditions,
-      handler
+      handler,
     })
     return this
   }
@@ -69,8 +69,8 @@ export class Router {
       status: 404,
       statusText: 'not found',
       headers: {
-        'content-type': 'text/plain'
-      }
+        'content-type': 'text/plain',
+      },
     })
   }
 
@@ -99,7 +99,7 @@ addEventListener('fetch', event => {
 })
 function handler(request) {
   const init = {
-    headers: { 'content-type': 'application/json' }
+    headers: { 'content-type': 'application/json' },
   }
   const body = JSON.stringify({ some: 'json' })
   return new Response(body, init)
@@ -108,9 +108,9 @@ async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
   r.get('/bar', () => new Response('responding for /bar'))
-  r.get('/foo', req => fetch(req)) // return what the original repsonse would have been
+  r.get('/foo', req => new Response('responding for /foo')) // return what the original repsonse would have been
   r.get('/foo.*', req => handler(req))
-  r.post('/foo.*', req => handler(req))
+  r.post('/foo.*', req => new Response('responding for the last foo regex'))
 
   const resp = await r.route(request)
   return resp
