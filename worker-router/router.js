@@ -108,9 +108,11 @@ async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
   r.get('/bar', () => new Response('responding for /bar'))
-  r.get('/foo', req => new Response('responding for /foo')) // return what the original repsonse would have been
+  r.get('/foo', req => new Response('responding for /foo'))
   r.get('/foo.*', req => handler(req))
-  r.post('/foo.*', req => new Response('responding for the last foo regex'))
+  // NOTE: below will never be hit, but is demostrating how to
+  // return what the original repsonse would have been
+  r.post('/foo.*', req => fetch(req))
 
   const resp = await r.route(request)
   return resp
