@@ -23,9 +23,10 @@ const Path = regExp => req => {
 }
 
 /**
- * Router handles the logic of what handler is matched given conditions for each request
+ * Router handles the logic of what handler is matched given conditions
+ * for each request
  *  */
-export class Router {
+class Router {
   constructor() {
     this.routes = []
   }
@@ -110,10 +111,10 @@ function handler(request) {
 async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
-  r.get('/bar', () => new Response('responding for /bar'))
-  r.get('/foo', req => fetch(req)) // return what the original repsonse would have been
-  r.get('/foo.*', req => handler(req))
-  r.post('/foo.*', req => handler(req))
+  r.get('.*/bar', () => new Response('responding for /bar'))
+  r.get('.*/foo', req => handler(req))
+  r.post('.*/foo.*', req => handler(req))
+  r.get('/demos/router/foo', req => fetch(req)) // return the response from the origin
 
   const resp = await r.route(request)
   return resp
