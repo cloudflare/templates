@@ -1,5 +1,5 @@
 {
-    "name": "{{ project_name }}",
+    "name": "{{ project-name }}",
     "version": "1.0.0",
     "description": "package for creating workers templates",
     "main": "index.js",
