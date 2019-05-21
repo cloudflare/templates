@@ -23,7 +23,8 @@ const Path = regExp => req => {
 }
 
 /**
- * Router handles the logic of what handler is matched given conditions for each request
+ * Router handles the logic of what handler is matched given conditions
+ * for each request
  *  */
 class Router {
   constructor() {
@@ -94,9 +95,11 @@ class Router {
 /**
  * Example of how router can be used in an application
  *  */
+
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
+
 function handler(request) {
   const init = {
     headers: { 'content-type': 'application/json' },
@@ -104,15 +107,14 @@ function handler(request) {
   const body = JSON.stringify({ some: 'json' })
   return new Response(body, init)
 }
+
 async function handleRequest(request) {
   const r = new Router()
   // Replace with the approriate paths and handlers
-  r.get('/bar', () => new Response('responding for /bar'))
-  r.get('/foo', req => new Response('responding for /foo'))
-  r.get('/foo.*', req => handler(req))
-  // NOTE: below will never be hit, but is demostrating how to
-  // return what the original repsonse would have been
-  r.post('/foo.*', req => fetch(req))
+  r.get('.*/bar', () => new Response('responding for /bar'))
+  r.get('.*/foo', req => handler(req))
+  r.post('.*/foo.*', req => handler(req))
+  r.get('/demos/router/foo', req => fetch(req)) // return the response from the origin
 
   const resp = await r.route(request)
   return resp
