@@ -17,12 +17,12 @@ publishing the resulting worker to Cloudflare's worker infrastructure.
 
 ## 🚴 Usage
 
-### 🐑 Use `cargo generate` to Clone this Template
+### 🐑 Use `wrangler generate` to Clone this Template
 
-[Learn more about `cargo generate` here.](https://github.com/ashleygwilliams/cargo-generate)
+[Learn more about `wrangler generate` here.](https://github.com/cloudflare/wrangler)
 
 ```
-cargo generate --git https://github.com/ashleygwilliams/rustwasm-worker-template.git --name wasm-worker
+wrangler generate wasm-worker  https://github.com/cloudflare/rustwasm-worker-template.git
 cd wasm-worker
 ```
 
