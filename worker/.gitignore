@@ -5,3 +5,4 @@ bin/
 pkg/
 wasm-pack.log
 worker/generated/
+node_modules/
