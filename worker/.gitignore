@@ -4,6 +4,6 @@ Cargo.lock
 bin/
 pkg/
 wasm-pack.log
-worker/generated/
+worker/
 node_modules/
 .cargo-ok
