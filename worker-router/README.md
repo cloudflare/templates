@@ -15,7 +15,7 @@ You can use [wrangler](https://github.com/cloudflare/wrangler) to generate a new
 wrangler generate myApp https://github.com/cloudflare/worker-template-router
 ```
 
-Before publishing your code you need to edit `wrangler.toml` file and add your `account_id` (Your Cloudflare account ID) number, for more information about publishing your code [check](https://workers.cloudflare.com/docs/quickstart/configuring-and-publishing/) documentaion.
+Before publishing your code you need to edit `wrangler.toml` file and add your Cloudflare `account_id` - more information about publishing your code can be found [in the documentation](https://workers.cloudflare.com/docs/quickstart/configuring-and-publishing/).
 
 Once you are ready, you can publish your code by running the following command:
 
