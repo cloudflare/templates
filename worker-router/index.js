@@ -23,6 +23,8 @@ async function handleRequest(request) {
   r.post('.*/foo.*', req => handler(req))
   r.get('/demos/router/foo', req => fetch(req)) // return the response from the origin
 
+  r.get('/', () => new Response('Hello worker!')) // return a default message for the root route
+  
   const resp = await r.route(request)
   return resp
 }
