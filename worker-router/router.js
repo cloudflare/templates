@@ -48,15 +48,15 @@ class Router {
   }
 
   patch(url, handler) {
-    return this.handler([Patch, Path(url)], handler)
+    return this.handle([Patch, Path(url)], handler)
   }
 
   delete(url, handler) {
-    return this.handler([Delete, Path(url)], handler)
+    return this.handle([Delete, Path(url)], handler)
   }
 
   all(handler) {
-    return this.handler([], handler)
+    return this.handle([], handler)
   }
 
   route(req) {
