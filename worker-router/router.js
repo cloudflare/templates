@@ -19,7 +19,8 @@ const Referrer = host => Header('referrer', host.toLowerCase())
 const Path = regExp => req => {
   const url = new URL(req.url)
   const path = url.pathname
-  return path.match(regExp) && path.match(regExp)[0] === path
+  const match = path.match(regExp) || []
+  return match[0] === path
 }
 
 /**
