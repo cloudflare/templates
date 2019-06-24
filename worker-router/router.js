@@ -9,7 +9,7 @@ const Post = Method('post')
 const Put = Method('put')
 const Patch = Method('patch')
 const Delete = Method('delete')
-const Head = Method('patch')
+const Head = Method('head')
 const Options = Method('options')
 
 const Header = (header, val) => req => req.headers.get(header) === val
