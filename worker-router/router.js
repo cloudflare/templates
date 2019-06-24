@@ -4,13 +4,15 @@
  * that method, header, etc..
  *  */
 const Method = method => req => req.method.toLowerCase() === method.toLowerCase()
-const Get = Method('get')
-const Post = Method('post')
-const Put = Method('put')
-const Patch = Method('patch')
+const Connect = Method('connect')
 const Delete = Method('delete')
+const Get = Method('get')
 const Head = Method('head')
 const Options = Method('options')
+const Patch = Method('patch')
+const Post = Method('post')
+const Put = Method('put')
+const Trace = Method('trace')
 
 const Header = (header, val) => req => req.headers.get(header) === val
 const Host = host => Header('host', host.toLowerCase())
@@ -40,20 +42,40 @@ class Router {
     return this
   }
 
+  connect(url, handler) {
+    return this.handle([Connect, Path(url)], handler)
+  }
+
+  delete(url, handler) {
+    return this.handle([Delete, Path(url)], handler)
+  }
+
   get(url, handler) {
     return this.handle([Get, Path(url)], handler)
   }
 
-  post(url, handler) {
-    return this.handle([Post, Path(url)], handler)
+  head(url, handler) {
+    return this.handle([Head, Path(url)], handler)
+  }
+
+  options(url, handler) {
+    return this.handle([Options, Path(url)], handler)
   }
 
   patch(url, handler) {
     return this.handle([Patch, Path(url)], handler)
   }
 
-  delete(url, handler) {
-    return this.handle([Delete, Path(url)], handler)
+  post(url, handler) {
+    return this.handle([Post, Path(url)], handler)
+  }
+
+  put(url, handler) {
+    return this.handle([Put, Path(url)], handler)
+  }
+
+  trace(url, handler) {
+    return this.handle([Trace, Path(url)], handler)
   }
 
   all(handler) {
