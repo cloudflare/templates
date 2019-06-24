@@ -1,8 +1,8 @@
 /**
- * Conditions are helper functions that when passed a request
- * will return a boolean for if that request uses
- * that method, header, etc..
- *  */
+ * Helper functions that when passed a request will return a
+ * boolean indicating if the request uses that HTTP method,
+ * header, host or referrer.
+ */
 const Method = method => req => req.method.toLowerCase() === method.toLowerCase()
 const Connect = Method('connect')
 const Delete = Method('delete')
@@ -26,9 +26,9 @@ const Path = regExp => req => {
 }
 
 /**
- * Router handles the logic of what handler is matched given conditions
- * for each request
- *  */
+ * The Router handles determines which handler is matched given the
+ * conditions present for each request.
+ */
 class Router {
   constructor() {
     this.routes = []
@@ -98,8 +98,10 @@ class Router {
     })
   }
 
-  // resolve returns the matching route that returns true for
-  // all the conditions if any
+  /**
+  * resolve returns the matching route for a request that returns
+  * true for all conditions (if any).
+  */
   resolve(req) {
     return this.routes.find(r => {
       if (!r.conditions || (Array.isArray(r) && !r.conditions.length)) {
