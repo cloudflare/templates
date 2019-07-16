@@ -58,7 +58,7 @@ describe('speedtest-down', () => {
     const reqTime = headers.get('cf-meta-request-time');
 
     expect(reqTime).toBeDefined();
-    expect(+reqTime).toBeLessThan(+new Date());
+    expect(+reqTime).toBeLessThanOrEqual(+new Date());
     expect(+reqTime).toBeGreaterThan(+new Date() - 60 * 1000);
   });
 });
@@ -106,7 +106,7 @@ describe('speedtest-up', () => {
     const reqTime = headers.get('cf-meta-request-time');
 
     expect(reqTime).toBeDefined();
-    expect(+reqTime).toBeLessThan(+new Date());
+    expect(+reqTime).toBeLessThanOrEqual(+new Date());
     expect(+reqTime).toBeGreaterThan(+new Date() - 60 * 1000);
   });
 });
