@@ -1,0 +1,30 @@
+{
+  "name": "speedtest-worker",
+  "version": "1.0.0",
+  "description": "Worker for testing connection speed",
+  "author": "Vasco Asturiano <vasco@cloudflare.com>",
+  "main": "index.js",
+  "scripts": {
+    "build": "wrangler build",
+    "test": "NODE_ENV=test jest --verbose --no-cache",
+    "test-dev": "NODE_ENV=test jest --watch --no-cache",
+    "format": "prettier --write '**/*.{js,css,json,md}'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format",
+      "pre-push": "yarn test && yarn format"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
+    "@dollarshaveclub/cloudworker": "^0.0.11",
+    "husky": "^2.4.1",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "request": "^2.88.0"
+  }
+}
