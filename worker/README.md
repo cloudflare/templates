@@ -8,7 +8,7 @@ A template for kick starting a Cloudflare worker project.
 To generate using [wrangler](https://github.com/cloudflare/wrangler)
 
 ```
-wrangler generate myApp https://github.com/cloudflare/worker-template
+wrangler generate projectname https://github.com/cloudflare/worker-template
 ```
 
 #### Serverless
