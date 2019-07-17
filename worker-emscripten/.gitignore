@@ -1,0 +1,12 @@
+/target
+**/*.rs.bk
+Cargo.lock
+bin/
+pkg/
+wasm-pack.log
+worker/
+node_modules/
+dist/
+build/
+emscripten.*
+.cargo-ok
