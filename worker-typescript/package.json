@@ -18,7 +18,6 @@
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
-    "mocha-typescript": "^1.1.17",
     "service-worker-mock": "^2.0.3",
     "source-map-support": "^0.5.12",
     "ts-loader": "^6.0.4",
