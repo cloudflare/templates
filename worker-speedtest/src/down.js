@@ -32,8 +32,6 @@ async function handleRequest(request) {
     ? Math.min(MAX_BYTES, Math.abs(+qs.bytes))
     : DEFAULT_NUM_BYTES;
 
-  const clientIp = request.headers.get('CF-Connecting-IP');
-
   const res = new Response(genContent(numBytes));
 
   res.headers.set('access-control-allow-origin', '*');
@@ -41,30 +39,15 @@ async function handleRequest(request) {
   res.headers.set('cache-control', 'no-store');
   res.headers.set('content-type', 'application/octet-stream');
 
-  const exposedRequestHeaders = [
-    'colo',
-    'asn',
-    'country',
-    'city',
-    'postalCode',
-    'latitude',
-    'longitude',
-    'timezone'
-  ].filter(p => (request.cf || {}).hasOwnProperty(p));
-
-  exposedRequestHeaders.forEach(p =>
-    res.headers.set(`cf-meta-${p}`, request.cf[p])
-  );
-
-  res.headers.set('cf-meta-ip', clientIp);
+  request.cf &&
+    request.cf.colo &&
+    res.headers.set('cf-meta-colo', request.cf.colo);
 
   res.headers.set('cf-meta-request-time', +reqTime);
 
   res.headers.set(
     'access-control-expose-headers',
-    ['ip', 'request-time', ...exposedRequestHeaders]
-      .map(p => `cf-meta-${p}`)
-      .join(',')
+    'cf-meta-colo, cf-meta-request-time'
   );
 
   return res;
