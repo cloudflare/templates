@@ -24,3 +24,5 @@ wrangler preview
 ```
 
 then change the url to `https://placehold.co/600x400.jpg?width=100`
+
+Shoutout to [Surma](https://twitter.com/dassurma) for his [webpack-emscripten-wasm](https://gist.github.com/surma/b2705b6cca29357ebea1c9e6e15684cc) gist that was instrumental in getting this working!
