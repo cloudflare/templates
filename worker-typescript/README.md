@@ -1,6 +1,6 @@
-# 👷 `cf-worker-typescript-template` Hello World
+# ʕ •́؈•̀) `cf-worker-typescript-template`
 
-A template for kick starting a Typescript Cloudflare worker project.
+A batteries included template for kick starting a TypeScript Cloudflare worker project.
 
 ## Getting Started
 
@@ -30,4 +30,4 @@ For information on how to preview and publish your worker, please see the `wrang
 
 ## Issues
 
-If you run into issues with this specific project, please feel free to file an issue!
+If you run into issues with this specific project, please feel free to file an issue [here](https://github.com/EverlastingBugstopper/cf-worker-typescript-template/issues). If the problem is with `wrangler`, please file an issue [here](https://github.com/cloudflare/wrangler/issues).
