@@ -7,7 +7,9 @@
     "build": "webpack",
     "dev": "NODE_ENV=development npm run build",
     "fmt": "tslint --fix -p ./",
-    "test": "tsc --project ./test && mocha --require source-map-support/register --recursive transpiled_tests/test"
+    "test:clean": "rm -rf ./transpiled/src ./transpiled/test",
+    "test": "npm run test:clean && npm run transpile && mocha --require source-map-support/register --recursive transpiled/test",
+    "transpile": "tsc --project ./test"
   },
   "author": "Avery Harnish",
   "license": "MIT",

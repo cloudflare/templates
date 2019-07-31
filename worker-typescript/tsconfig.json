@@ -13,9 +13,9 @@
   },
   "include": [
     "./src/*.ts",
-    "./src/*.tsx",
+    "./test/*.ts",
     "./src/**/*.ts",
-    "./src/**/*.tsx",
+    "./test/**/*.ts",
     "./node_modules/@cloudflare/workers-types/index.d.ts"
   ],
   "exclude": ["node_modules/", "dist/"]

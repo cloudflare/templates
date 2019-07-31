@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "../transpiled_tests",
+        "outDir": "../transpiled",
         "target": "esnext",
         "module": "commonjs",
         "sourceMap": true,

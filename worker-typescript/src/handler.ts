@@ -1,3 +1,3 @@
 export async function handleRequest(request: Request): Promise<Response> {
-    return new Response("Hello worker!");
+    return new Response(`request method: ${request.method}`);
 }
