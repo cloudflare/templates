@@ -1,17 +1,17 @@
 {
-  "name": "cf-worker-typescript-template",
+  "name": "{{ project name }}",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
     "dev": "NODE_ENV=development npm run build",
-    "fmt": "tslint --fix -p ./",
+    "format": "prettier --write '**/*.{ts,js,css,json,md}'",
     "test:clean": "rm -rf ./transpiled/src ./transpiled/test",
     "test": "npm run test:clean && npm run transpile && mocha --require source-map-support/register --recursive transpiled/test",
     "transpile": "tsc --project ./test"
   },
-  "author": "Avery Harnish",
+  "author": "{{ authors }}",
   "license": "MIT",
   "devDependencies": {
     "@cloudflare/workers-types": "^1.0.1",
@@ -19,10 +19,10 @@
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
+    "prettier": "^1.18.2",
     "service-worker-mock": "^2.0.3",
     "source-map-support": "^0.5.12",
     "ts-loader": "^6.0.4",
-    "tslint": "^5.18.0",
     "typescript": "^3.5.3",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.6"
