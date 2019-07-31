@@ -6,23 +6,23 @@
   "scripts": {
     "build": "webpack",
     "dev": "NODE_ENV=development npm run build",
-    "test": "mocha -r @babel/register -r ts-loader ./test/*"
+    "fmt": "tslint --fix -p ./",
+    "test:clean": "rm -rf ./transpiled/src ./transpiled/test",
+    "test": "npm run test:clean && npm run transpile && mocha --require source-map-support/register --recursive transpiled/test",
+    "transpile": "tsc --project ./test"
   },
   "author": "Avery Harnish",
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/register": "^7.4.4",
     "@cloudflare/workers-types": "^1.0.1",
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
-    "babel-loader": "^8.0.6",
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "service-worker-mock": "^2.0.3",
+    "source-map-support": "^0.5.12",
     "ts-loader": "^6.0.4",
-    "ts-node": "^8.3.0",
-    "tsconfig-paths": "^3.8.0",
+    "tslint": "^5.18.0",
     "typescript": "^3.5.3",
     "webpack": "^4.35.3",
     "webpack-cli": "^3.3.6"

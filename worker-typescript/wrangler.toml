@@ -1,0 +1,6 @@
+name = "cf-worker-typescript-template"
+type = "webpack"
+zone_id = ""
+private = false
+account_id = ""
+route = ""
