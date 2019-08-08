@@ -1,5 +1,5 @@
 {
-  "name": "{{ project name }}",
+  "name": "{{ project-name }}",
   "version": "1.0.0",
   "description": "Cloudflare worker TypeScript template",
   "main": "index.js",
