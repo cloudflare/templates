@@ -21,6 +21,7 @@
     "mocha": "^6.1.4",
     "prettier": "^1.18.2",
     "service-worker-mock": "^2.0.3",
+    "source-map-loader": "^0.2.4",
     "source-map-support": "^0.5.12",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
