@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "{{ project-name }}",
   "version": "1.0.0",
   "description": "A template for kick starting a Cloudflare Workers project",
