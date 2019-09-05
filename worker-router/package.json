@@ -1,5 +1,6 @@
 {
     "name": "{{ project-name }}",
+    "private": true,
     "version": "1.0.0",
     "description": "package for creating workers templates",
     "main": "index.js",
