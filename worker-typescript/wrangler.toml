@@ -1,5 +1,6 @@
+name = "ts"
 type = "webpack"
 zone_id = ""
-private = false
 account_id = ""
 route = ""
+workers_dot_dev = true
