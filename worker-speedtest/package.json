@@ -1,5 +1,6 @@
 {
   "name": "speedtest-worker",
+  "private": true,
   "version": "1.0.0",
   "description": "Worker for testing connection speed",
   "author": "Vasco Asturiano <vasco@cloudflare.com>",
