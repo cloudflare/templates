@@ -4,7 +4,8 @@
  * static site handler.
  * @param {Event} event
  */
-async function handleApiRequests(request) {
+async function handleApiRequests(event) {
+	const { request } = event
 	if (request.method !== 'GET' || !request.pathname.startsWith('/api')) {
 		return new Response('Hello worker!', { status: 200 })
 	}

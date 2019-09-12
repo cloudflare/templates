@@ -4,46 +4,39 @@ import mime from 'mime/lite';
  * Fetch and log a request
  * @param {Request} request
  */
-async function handleStaticRequests(request) {
+async function handleStaticRequests(event) {
   try {
-    let parsedUrl = new URL(request.url)
-    let pathname = parsedUrl.pathname
+    const cache = caches.default;
+    const req = event.request;
+    const path = new URL(req.url).pathname;
 
-    // this would also be eliminated if the `asset manifest` was calculated
-    // before upload
-    let path = normalize_path(pathname)
+    if (
+      req.method === "GET"
+      && typeof __STATIC_CONTENT !== "undefined"
+      // && path in assetManifest
+    ) {
+      let res = await cache.match(req);
 
-    let contentType = mime.getType(path)
+      if (res) {
+        return event.respondWith(res);
+      }
 
-    let body = await STATIC_CONTENT.get(path, 'arrayBuffer')
+      const contentType = mime.getType(path);
+      const body = await __STATIC_CONTENT.get(
+        assetManifest[path],
+        "arrayBuffer"
+      );
 
-    let res = new Response(body, { status: 200 })
-    res.headers.set('Content-type', contentType)
-    return res
-  } catch (err) {
-    console.log(err)
-    let res = new Response(err.body, { status: err.status })
-    res.headers.set('Content-type', 'text/html')
-    return res
-  }
-}
+      res = new Response(body, { status: 200 });
+      res.headers.set("Content-Type", contentType);
 
-/**
- * gets the path to look up in KV
- * e.g. /dir/ -> dir/index.html
- * @param {*} path
- */
-function normalize_path(path) { // TODO: handle this by generating Asset Manifest
-  // strip first slash
-  path = path.replace(/^\/+/, '')
-  // root page
-  if (path == '') {
-    return 'index.html'
-    // directory page with a trailing /
-  } else if (path.endsWith('/')) {
-    return path + 'index.html'
-    // normal path, no need to do anything!
-  } else {
-    return path
-  }
+      if (cachePaths.some(cachePath => minimatch(path, cachePath))) {
+        res.headers.set("Cache-Control", "max-age=31536000, immutable");
+        event.waitUntil(cache.put(req, res));
+      }
+
+      event.respondWith(res);
+    }
+  // first iteration: swallow the error and fall back to Not Found(?)
+  } catch(e) {}
 }

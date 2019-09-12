@@ -12,7 +12,7 @@ import { handleNotFound } from './static/notfound'
  * to remaining event listeners on undefined routes.
  */
 addEventListener('fetch', event => {
-	let response = await handleApiRequests(event.request)
+	let response = await handleApiRequests(event)
 
 	if (response) event.respondWith(response)
 })
@@ -24,7 +24,7 @@ addEventListener('fetch', event => {
  * response out of KV, and actually returning it to the eyeball.
  */
 addEventListener('fetch', event => {
-	let response = handleStaticRequests(event.request)
+	let response = handleStaticRequests(event)
 
 	if (response) event.respondWith(response)
 })
@@ -35,6 +35,4 @@ addEventListener('fetch', event => {
  * trivial to give the user custom control over this, as we have done here
  * for workers docs.
  */
-addEventListener('fetch', event => {
-	event.respondWith(handleNotFound(event.request))
-})
+addEventListener('fetch', handleNotFound)
