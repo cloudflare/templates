@@ -504,7 +504,7 @@ async function fetchCSS(url, request) {
         fontCSS = await response.text();
 
         // Rewrite all of the font URLs to come through the worker
-        fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '/fonts.gstatic.com/');
+        fontCSS = fontCSS.replace(/(https?:)?\/\/fonts\.gstatic\.com\//mgi, '//fonts.gstatic.com/');
 
         // Add the css info to the font caches
         FONT_CACHE[cacheKey] = fontCSS;
@@ -561,7 +561,7 @@ function getCacheKey(userAgent) {
 
   // Detect Safari and Webview next
   const webkitRegex = /\s+AppleWebKit\/(\d+)/mgi;
-  match = webkitRegex.exec(userAgent.match);
+  match = webkitRegex.exec(userAgent);
   if (match) {
     return 'WebKit' + match[1] + os + mobile;
   }
