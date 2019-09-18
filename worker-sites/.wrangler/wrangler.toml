@@ -1,6 +1,7 @@
 account_id = ""
 name = "worker"
 type = "webpack"
-route = ""
-workers_dot_dev = true
-zone_id = ""
+workers_dev = true
+kv-namespaces = [
+	{ binding = "__STATIC_CONTENT", id = "46d4f7a8964e49dba81f72ae4a42f209", bucket = "../public" }
+]
