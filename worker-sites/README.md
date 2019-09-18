@@ -9,7 +9,7 @@ A template for bootstrapping a Workers Sites project.
 To generate using [wrangler](https://github.com/cloudflare/wrangler)
 
 ```
-wrangler generate projectname https://github.com/cloudflare/worker-template
+wrangler generate projectname https://github.com/cloudflare/worker-sites-template
 ```
 
 #### Serverless
