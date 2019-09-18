@@ -11,9 +11,7 @@
   },
   "author": "Ashley Lewis <ashleymichal@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "mime": "^2.4.4"
-  },
+  "dependencies": {},
   "devDependencies": {
     "prettier": "^1.18.2"
   }
