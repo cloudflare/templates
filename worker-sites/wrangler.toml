@@ -1,0 +1,7 @@
+account_id = ""
+name = "worker"
+type = "webpack"
+workers_dev = true
+kv-namespaces = [
+	{ binding = "__STATIC_CONTENT", id = "", bucket = "./public" }
+]

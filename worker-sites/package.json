@@ -1,18 +1,20 @@
 {
-  "name": "cra-site",
-  "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "0.9.5"
-  },
-  "devDependencies": {},
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "A template for kick starting a Cloudflare Workers project",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write '**/*.js'"
   },
-  "homepage": ""
+  "author": "Ashley Lewis <ashleymichal@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mime": "^2.4.4"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2"
+  }
 }
