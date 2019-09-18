@@ -4,14 +4,4 @@ A template for bootstrapping a Workers Sites project.
 
 [`index.js`](https://github.com/cloudflare/worker-sites-template/blob/master/index.js) is the content of the Workers script.
 
-#### Wrangler
-
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
-
-```
-wrangler generate projectname https://github.com/cloudflare/worker-sites-template
-```
-
-#### Serverless
-
-To deploy using serverless add a [`serverless.yml`](https://serverless.com/framework/docs/providers/cloudflare/) file.
+You'll need to link to [this unpublished npm package](https://github.com/cloudflare/kv-asset-something) before this worker will build.
