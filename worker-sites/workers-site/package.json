@@ -6,5 +6,7 @@
   "main": "index.js",
   "author": "Ashley Lewis <ashleymichal@gmail.com>",
   "license": "MIT",
-  "dependencies": {}
+  "dependencies": {
+    "@cloudflare/kv-asset-handler": "0.0.1"
+  }
 }
