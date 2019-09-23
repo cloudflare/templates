@@ -1,0 +1,10 @@
+account_id = "dc56444c4c955a1653106ccf997c1067"
+name = "my-react-app"
+type = "webpack"
+route = ""
+workers_dev = true
+zone_id = ""
+
+[site]
+bucket = "./build"
+entry-point = "workers-site"
