@@ -26,13 +26,13 @@ addEventListener('fetch', event => {
 
 async function handleEvent(event) {
   const url = new URL(event.request.url)
-    let options = {}
+  let options = {}
 
-    /**
-     * You can add custom logic to how we fetch your assets
-     * by configuring the function `mapRequestToAsset`
-     */
-    // options.mapRequestToAsset = handlePrefix(/^\/docs/)
+  /**
+   * You can add custom logic to how we fetch your assets
+   * by configuring the function `mapRequestToAsset`
+   */
+  // options.mapRequestToAsset = handlePrefix(/^\/docs/)
 
   try {
     if (DEBUG) {
@@ -48,7 +48,11 @@ async function handleEvent(event) {
         status: 404,
       })
     } else {
-      return new Response(`"${options.mapRequestToAsset(event.request).url}" not found`, {
+      let requestedAsset = options.mapRequestToAsset
+        ? options.mapRequestToAsset(event.request).url
+        : mapRequestToAsset(event.request.url)
+
+      return new Response(`"${requestedAsset}" not found`, {
         status: 404,
       })
     }
@@ -70,7 +74,7 @@ function handlePrefix(prefix) {
 
     // strip the prefix from the path for lookup
     url.pathname = url.pathname.replace(prefix, '/')
-    
+
     // inherit all other props from the default request
     return new Request(url.toString(), defaultAssetKey)
   }
