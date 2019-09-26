@@ -4,12 +4,17 @@ import {
 } from '@cloudflare/kv-asset-handler'
 
 // do not set to true in production!
-const DEBUG = false
+const DEBUG = true
 
 addEventListener('fetch', event => {
   try {
     event.respondWith(handleEvent(event))
   } catch (e) {
+    if (DEBUG) {
+    return event.respondWith(new Response(e.message || e.toString(), {
+      status: 404,
+    }))
+  }
     event.respondWith(new Response('Internal Error', { status: 500 }))
   }
 })
