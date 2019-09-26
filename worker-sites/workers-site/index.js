@@ -10,7 +10,7 @@ addEventListener('fetch', event => {
     if (DEBUG) {
       return event.respondWith(
         new Response(e.message || e.toString(), {
-          status: 404,
+          status: 500,
         }),
       )
     }
@@ -18,19 +18,23 @@ addEventListener('fetch', event => {
   }
 })
 
-const myMapRequestToAsset = request => {
-  // start with the default map
-  let newRequest = mapRequestToAsset(request)
-  // strip the prefix from looking up all files
-  return new Request(newRequest.url.replace('/docs', ''), newRequest)
-}
 async function handleEvent(event) {
   const url = new URL(event.request.url)
   try {
     let options = {
-      mapRequestToAsset: myMapRequestToAsset,
+      // customize how incoming requests will map to assets
+      mapRequestToAsset: request => {
+        // compute the key used by default (e.g. / -> index.html)
+        let defaultAssetKey = mapRequestToAsset(request)
+        let url = new URL(defaultAssetKey.url)
+        // strip the prefix from looking up /docs for all files
+        url.pathname = url.pathname.replace(/^\/docs/, '/')
+        // inherit all other props from the default request
+        return new Request(url.toString(), defaultAssetKey)
+      },
     }
     if (DEBUG) {
+      // customize caching
       options.cacheControl = {
         bypassCache: true,
       }
