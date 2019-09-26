@@ -43,6 +43,7 @@ async function handleEvent(event) {
     }
     return await getAssetFromKV(event, options)
   } catch (e) {
+    // if an error is thrown try to serve the asset at 404.html
     if (!DEBUG) {
       try {
         return await getAssetFromKV(event, {
