@@ -43,19 +43,24 @@ async function handleEvent(event) {
     }
     return await getAssetFromKV(event, options)
   } catch (e) {
-    if (DEBUG) {
-      return new Response(e.message || e.toString(), {
-        status: 404,
-      })
-    } else {
-      let requestedAsset = options.mapRequestToAsset
-        ? options.mapRequestToAsset(event.request).url
-        : mapRequestToAsset(event.request.url)
-
-      return new Response(`"${requestedAsset}" not found`, {
-        status: 404,
-      })
+    if (!DEBUG) {
+      try {
+        return await getAssetFromKV(event, {
+          mapRequestToAsset: notFoundAsset(),
+        })
+      } catch (e) {}
     }
+
+    return new Response(e.message || e.toString(), { status: 500 })
+  }
+}
+
+function notFoundAsset(assetName = '404.html') {
+  return request => {
+    const notFoundURL = new URL(request.url)
+    notFoundURL.pathname = assetName
+
+    return new Request(notFoundURL, { status: 404 })
   }
 }
 
