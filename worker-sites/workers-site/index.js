@@ -20,7 +20,6 @@ addEventListener('fetch', event => {
 
 async function handleEvent(event) {
   const url = new URL(event.request.url)
-  try {
     let options = {
       // customize how incoming requests will map to assets
       mapRequestToAsset: request => {
@@ -33,6 +32,7 @@ async function handleEvent(event) {
         return new Request(url.toString(), defaultAssetKey)
       },
     }
+  try {
     if (DEBUG) {
       // customize caching
       options.cacheControl = {
@@ -46,7 +46,7 @@ async function handleEvent(event) {
         status: 404,
       })
     } else {
-      return new Response(`"${mapRequestToAsset(url.pathname)}" not found`, {
+      return new Response(`"${options.mapRequestToAsset(event.request).url}" not found`, {
         status: 404,
       })
     }
