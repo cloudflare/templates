@@ -46,9 +46,11 @@ async function handleEvent(event) {
     // if an error is thrown try to serve the asset at 404.html
     if (!DEBUG) {
       try {
-        return await getAssetFromKV(event, {
-          mapRequestToAsset: notFoundAsset(),
+        let notFoundResponse = await getAssetFromKV(event, {
+          mapRequestToAsset: notFoundAsset('404.html'),
         })
+
+        return new Response(notFoundResponse.body, { ...notFoundResponse, status: 404 })
       } catch (e) {}
     }
 
@@ -61,7 +63,7 @@ function notFoundAsset(assetName = '404.html') {
     const notFoundURL = new URL(request.url)
     notFoundURL.pathname = assetName
 
-    return new Request(notFoundURL, { status: 404 })
+    return new Request(notFoundURL)
   }
 }
 
