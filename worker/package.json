@@ -10,7 +10,7 @@
   },
   "author": "{{ authors }}",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "prettier": "^1.18.2"
   }
 }
