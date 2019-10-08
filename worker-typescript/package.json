@@ -7,7 +7,7 @@
     "build": "webpack",
     "dev": "NODE_ENV=development npm run build",
     "format": "prettier --write '**/*.{ts,js,css,json,md}'",
-    "test:clean": "rm -rf ./transpiled/src ./transpiled/test",
+    "test:clean": "rimraf ./transpiled/src ./transpiled/test",
     "test": "npm run test:clean && npm run transpile && mocha --require source-map-support/register --recursive transpiled/test",
     "transpile": "tsc --project ./test"
   },
@@ -20,6 +20,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "prettier": "^1.18.2",
+    "rimraf": "^3.0.0",
     "service-worker-mock": "^2.0.3",
     "source-map-loader": "^0.2.4",
     "source-map-support": "^0.5.12",
