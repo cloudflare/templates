@@ -3,3 +3,4 @@ zone_id = ""
 account_id = ""
 route = ""
 workers_dot_dev = true
+webpack_config = "webpack.config.js"
