@@ -9,7 +9,7 @@ This template is meant to be used with [Wrangler](https://github.com/cloudflare/
 To generate using Wrangler, run this command:
 
 ```bash
-wrangler generate my-ts-project https://github.com/cloudflare/workers-typescript-template
+wrangler generate my-ts-project https://github.com/EverlastingBugstopper/worker-typescript-template
 ```
 
 ### 👩 💻 Developing
