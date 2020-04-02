@@ -1,22 +1,22 @@
+// import the emscripten glue code
 import emscripten from './build/module.js'
-//import the emscripten glue code
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event))
 })
 
-//this is where the magic happens
-//we send our own instantiateWasm function
-//to the emscripten module
-//so we can initialize the WASM instance ourselves
-//since Workers puts your wasm file in global scope
-//as a binding. In this case, this binding is called
-//'wasmprogram' as that is the name wrangler uses
-//for any uploaded wasm
+// this is where the magic happens
+// we send our own instantiateWasm function
+// to the emscripten module
+// so we can initialize the WASM instance ourselves
+// since Workers puts your wasm file in global scope
+// as a binding. In this case, this binding is called
+// `wasm` as that is the name Wrangler uses
+// for any uploaded wasm module
 let emscripten_module = new Promise((resolve, reject) => {
   emscripten({
     instantiateWasm(info, receive) {
-      let instance = new WebAssembly.Instance(wasmprogram, info)
+      let instance = new WebAssembly.Instance(wasm, info)
       receive(instance)
       return instance.exports
     },
@@ -29,10 +29,6 @@ let emscripten_module = new Promise((resolve, reject) => {
   })
 })
 
-/**
- * Fetch and log a request
- * @param {Request} request
- */
 async function handleRequest(event) {
   let request = event.request
   let response = await fetch(request)
