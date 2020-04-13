@@ -1,0 +1,15 @@
+{
+  "author": "{{ authors }}",
+  "version": "1.0.0",
+  "scripts": {
+    "predeploy": "bash build.sh",
+    "deploy": "wrangler publish"
+  },
+  "dependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "text-encoding": "^0.7.0",
+    "webpack": "^4.42.1"
+  },
+  "description": "A template for kick starting a Cloudflare Workers project",
+  "license": "MIT"
+}
