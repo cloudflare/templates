@@ -12,6 +12,4 @@ To generate using [wrangler](https://github.com/cloudflare/wrangler)
 wrangler generate projectname https://github.com/cloudflare/worker-template
 ```
 
-#### Serverless
-
-To deploy using serverless add a [`serverless.yml`](https://serverless.com/framework/docs/providers/cloudflare/) file.
+Further documentation for Wrangler can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler).
