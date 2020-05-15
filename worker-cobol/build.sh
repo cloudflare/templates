@@ -21,5 +21,5 @@ docker run \
   xtuc/cobaul \
   /worker/src/worker.cob
 
-sed -i 's/import\.meta/({})/' build/out.js
+sed -i.bu 's/import\.meta/({})/' build/out.js
 echo "$(cat src/pre.js);$(cat build/out.js)" > build/out.js
