@@ -7,22 +7,27 @@ A template for kick starting a Cloudflare worker project with emscripten
 [`build.js`](build.js) holds the command we use to call emscripten.  
 [`webpack.config.js`](webpack.config.js) holds the webpack config we use to bundle the emscripten output together with your script.
 
-This template requires [docker](https://docs.docker.com/install/) for providing the emscripten build environment. While we believe this provides the best developer experience, if you wish to not use docker you can delete the check for docker and the docker parts of the build command in `build.js`. Note this means you must have emscripten installed on your machine.
+This template requires [Docker](https://docs.docker.com/install/) for providing the emscripten build environment. While we believe this provides the best developer experience, if you wish to not use Docker you can delete the check for docker and the docker parts of the build command in `build.js`. Note this means you must have emscripten installed on your machine.
 
-#### Wrangler
+## Wrangler
 
-This template requires the ^1.1.0 version of [wrangler](https://github.com/cloudflare/wrangler)
+This template requires version >=1.6.0 of [Wrangler](https://github.com/cloudflare/wrangler)
 
-```
-wrangler generate myapp https://github.com/ashleygwilliams/worker-emscripten-template
-```
-
-To demo
-
-```
-wrangler preview
+```console
+$ wrangler generate myapp https://github.com/cloudflare/worker-emscripten-template
+🔧   Creating project called `myapp`...
+✨   Done! New project created /path/to/myapp
 ```
 
-then change the url to `https://placehold.co/600x400.jpg?width=100`
+To demo you can use [`wrangler dev`](https://developers.cloudflare.com/workers/tooling/wrangler/commands/#dev-(alpha))
+
+```console
+$ wrangler dev
+👂 Listening on http://localhost:8787
+```
+
+```console
+$ curl http://localhost:8787/600*400.jpg?width=100
+```
 
 Shoutout to [Surma](https://twitter.com/dassurma) for his [webpack-emscripten-wasm](https://gist.github.com/surma/b2705b6cca29357ebea1c9e6e15684cc) gist that was instrumental in getting this working!
