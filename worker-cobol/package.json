@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "scripts": {
     "predeploy": "bash build.sh",
-    "deploy": "wrangler publish"
+    "deploy": "wrangler publish",
+    "predev": "bash build.sh",
+    "dev": "wrangler dev",
+    "prepreview": "bash build.sh",
+    "preview": "wrangler preview"
   },
-  "dependencies": {
+  "devDependencies": {
     "copy-webpack-plugin": "^5.1.1",
     "text-encoding": "^0.7.0",
     "webpack": "^4.42.1"
