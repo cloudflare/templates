@@ -13,7 +13,7 @@ describe('handler returns response with request method', () => {
     'TRACE',
     'PATCH',
   ]
-  methods.forEach(method => {
+  methods.forEach((method) => {
     it(method, async () => {
       const result = await handleRequest(new Request('/', { method }))
       const text = await result.text()

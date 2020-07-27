@@ -14,17 +14,17 @@
   "author": "author",
   "license": "MIT OR Apache-2.0",
   "devDependencies": {
-    "@cloudflare/workers-types": "^1.0.9",
+    "@cloudflare/workers-types": "^2.0.0",
     "@types/chai": "^4.2.11",
-    "@types/mocha": "^5.2.7",
+    "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
-    "mocha": "^6.2.3",
-    "prettier": "^1.19.1",
+    "mocha": "^8.0.1",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "service-worker-mock": "^2.0.5",
-    "ts-loader": "^6.2.2",
-    "typescript": "^3.9.3",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   }
 }
