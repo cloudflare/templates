@@ -17,7 +17,7 @@ function handler(request) {
 
 async function handleRequest(request) {
     const r = new Router()
-    // Replace with the approriate paths and handlers
+    // Replace with the appropriate paths and handlers
     r.get('.*/bar', () => new Response('responding for /bar'))
     r.get('.*/foo', request => handler(request))
     r.post('.*/foo.*', request => handler(request))
