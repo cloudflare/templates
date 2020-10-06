@@ -1,15 +1,19 @@
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { SQSClient, SendMessageCommand } = require("@aws-sdk/client-sqs");
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 
 async function handleRequest(request) {
+    await sqsExample();
     const item = await dynamoExample();
     return new Response(JSON.stringify(item), {
     headers: { 'content-type': 'application/json' },
   })
 }
+
+const myRegion = "us-west-2"
 
 async function myCredentialProvider() {
     return {
@@ -21,7 +25,7 @@ async function myCredentialProvider() {
 
 async function dynamoExample() {
     const client = new DynamoDBClient({
-        region: "us-west-2",
+        region: myRegion,
         credentialDefaultProvider: myCredentialProvider
     });
 
@@ -40,4 +44,19 @@ async function dynamoExample() {
     });
     const results = await client.send(get);
     return results.Item;
+}
+
+async function sqsExample() {
+    const client = new SQSClient({
+        region: myRegion,
+        credentialDefaultProvider: myCredentialProvider
+    });
+
+    const send = new SendMessageCommand({
+        // use wrangler secrets to provide this global variable
+        QueueUrl: AWS_SQS_QUEUE_URL,
+        MessageBody: "Hello SQS from a Cloudflare Worker"
+    });
+
+    return client.send(send);
 }
