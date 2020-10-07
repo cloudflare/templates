@@ -13,6 +13,7 @@ async function handleRequest(request) {
   })
 }
 
+// replace with your region
 const myRegion = "us-west-2"
 
 async function myCredentialProvider() {
