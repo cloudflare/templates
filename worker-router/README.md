@@ -4,9 +4,6 @@ Selects the logic to respond to requests based on the `request` method and URL. 
 
 [`index.js`](https://github.com/cloudflare/worker-template-router/blob/master/index.js) is the content of the Workers script.
 
-Live Demos are hosted on `workers-tooling.cf/demos/router`:
-[Demo /bar](http://workers-tooling.cf/demos/router/bar) | [Demo /foo](http://workers-tooling.cf/demos/router/foo)
-
 #### Wrangler
 
 You can use [wrangler](https://github.com/cloudflare/wrangler) to generate a new Cloudflare Workers project based on this template by running the following command from your terminal:
