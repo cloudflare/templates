@@ -1,0 +1,16 @@
+name = "worker"
+# type = "javascript" is required to use the `[build]` section
+type = "javascript"
+workers_dev = true
+account_id = ""
+route = ""
+zone_id = ""
+
+[build]
+# Upload the code directly from the src directory.
+upload_dir = "src"
+# The "modules" upload format is required for all projects that implement a Durable Object namespace.
+upload_format = "modules"
+
+[durable_objects]
+classes = [{binding = "Counter", class_name = "Counter"}]
