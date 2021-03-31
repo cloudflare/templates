@@ -7,8 +7,8 @@ export default {
 }
 
 async function handleRequest(request, env) {
-  let id = env.Counter.idFromName("A");
-  let obj = env.Counter.get(id);
+  let id = env.COUNTER.idFromName("A");
+  let obj = env.COUNTER.get(id);
   let resp = await obj.fetch(request.url);
   let count = await resp.text();
 

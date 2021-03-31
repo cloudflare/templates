@@ -13,4 +13,4 @@ upload_dir = "src"
 upload_format = "modules"
 
 [durable_objects]
-classes = [{binding = "Counter", class_name = "Counter"}]
+bindings = [{name = "COUNTER", class_name = "Counter"}]
