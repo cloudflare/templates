@@ -45,6 +45,15 @@ const template = `
         updateCount(count)
       }
     })
+
+    ws.addEventListener("close", () => {
+      console.log('Closed websocket')
+
+      const list = document.querySelector("#events")
+      list.innerText = ""
+      updateCount(0)
+      setErrorMessage()
+    })
   }
 
   const url = new URL(window.location)
@@ -67,13 +76,7 @@ const template = `
     list.prepend(item)
   }
 
-  const closeConnection = () => {
-    ws.close()
-    const list = document.querySelector("#events")
-    list.innerText = ""
-    updateCount(0)
-    setErrorMessage()
-  }
+  const closeConnection = () => ws.close()
 
   document.querySelector("#close").addEventListener("click", closeConnection)
   document.querySelector("#unknown").addEventListener("click", () => ws.send("HUH"))
