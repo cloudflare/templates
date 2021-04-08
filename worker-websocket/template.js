@@ -9,7 +9,7 @@ const template = `
 <p>Number of clicks: <span id="num"></span></p>
 <button id="click">Click me</button>
 
-<p>You can also send a message that the WebSocket server doesn't recorgnize. This will cause the WebSocket server to return an "error" payload back to the client.</p>
+<p>You can also send a message that the WebSocket server doesn't recognize. This will cause the WebSocket server to return an "error" payload back to the client.</p>
 <button id="unknown">Simulate Unknown Message</button>
 
 <p>When you're done clicking, you can close the connection below. Further clicks won't work until you refresh the page.</p>

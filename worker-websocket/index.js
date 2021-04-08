@@ -25,14 +25,6 @@ async function handleSession(websocket) {
 }
 
 const websocketHandler = async request => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*'
-  }
-
-  if (request.method == "OPTIONS") {
-    return new Response("OK", { headers })
-  }
-
   const upgradeHeader = request.headers.get("Upgrade")
   if (upgradeHeader !== "websocket") {
     return new Response("Expected websocket", { status: 400 })
