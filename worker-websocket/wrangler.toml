@@ -1,6 +1,6 @@
 name = "websocket-template"
 type = "webpack"
-account_id = "dc56444c4c955a1653106ccf997c1067"
+account_id = "8995c0f49cdcf57eb54d2c1e52b7d2f3"
 workers_dev = true
 route = ""
 zone_id = ""
