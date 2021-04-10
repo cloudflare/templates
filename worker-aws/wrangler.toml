@@ -8,5 +8,6 @@ zone_id = ""
 [vars]
 AWS_REGION = "us-west-2"
 AWS_DYNAMO_TABLE = "test_table_name"
+AWS_DYNAMO_PRIMARYKEY = "test_primary_key"
 AWS_AURORA_TABLE = "friends"
 AWS_AURORA_RESOURCE_ARN = ""

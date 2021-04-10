@@ -22,10 +22,9 @@ async function handleRequest(request) {
     window.crypto = crypto
 
     // uncomment the example you want to try out, comment the rest
-    const result =
-       await sqsExample();
-    // await dynamoExample();
-    // await auroraExample(request);
+    const result = await sqsExample();
+    // const result = await dynamoExample();
+    // const result = await auroraExample(request);
 
     return new Response(JSON.stringify(result), {
     headers: { 'content-type': 'text/plain' },
@@ -58,13 +57,15 @@ async function dynamoExample() {
         TableName: AWS_DYNAMO_TABLE,
         Item: {
             "greeting": { S: "Hello!" },
-            "my_primary_key": { S: "world" }
+            [AWS_DYNAMO_PRIMARYKEY]: { S: "world" }
         }
     });
     await client.send(put);
     const get = new GetItemCommand({
         TableName: AWS_DYNAMO_TABLE,
-        Key: { "my_primary_key": { S: "world" } }
+        Key: {
+            [AWS_DYNAMO_PRIMARYKEY]: { S: "world" }
+        }
     });
     const results = await client.send(get);
     return results.Item;
