@@ -21,7 +21,8 @@ async function handleRequest(request) {
     global.window = {}
     window.crypto = crypto
 
-    // uncomment the example you want to try out, comment the rest
+    // TODO: Try all the examples!
+    // Uncomment the example you'd like to try:
     const result = await sqsExample();
     // const result = await dynamoExample();
     // const result = await auroraExample(request);
@@ -90,9 +91,9 @@ async function auroraGetData(ID) {
   });
 
   const call = new ExecuteStatementCommand({
-    // This SQL command is susceptible to SQL Injections and
-    // is not production ready
-    sql: `SELECT * FROM ${AWS_AURORA_TABLE_NAME} WHERE id = ${ID};`,
+    // IMPORTANT: This is NOT production ready!
+    // This SQL command is susceptible to SQL Injections
+    sql: `SELECT * FROM ${AWS_AURORA_TABLE} WHERE id = ${ID};`,
     resourceArn: AWS_AURORA_RESOURCE_ARN,
     secretArn: AWS_AURORA_SECRET_ARN
   })
@@ -123,10 +124,9 @@ async function auroraPostData(jsonData) {
   })
 
   const call = new ExecuteStatementCommand({
-
-    // This SQL command is susceptible to SQL Injections and
-    // is not production ready
-    sql: `INSERT INTO ${AWS_AURORA_TABLE_NAME}(${keys}) VALUES (${values});`,
+    // IMPORTANT: This is NOT production ready!
+    // This SQL command is susceptible to SQL Injections
+    sql: `INSERT INTO ${AWS_AURORA_TABLE}(${keys}) VALUES (${values});`,
     resourceArn: AWS_AURORA_RESOURCE_ARN,
     secretArn: AWS_AURORA_SECRET_ARN
   })
