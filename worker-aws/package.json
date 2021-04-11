@@ -14,7 +14,9 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^1.0.0-gamma.10",
-    "@aws-sdk/client-sqs": "^1.0.0-gamma.10"
+    "@aws-sdk/client-dynamodb": "^3.3.0",
+    "@aws-sdk/client-sqs": "^3.3.0",
+    "@aws-sdk/client-rds": "^3.3.0",
+    "@aws-sdk/client-rds-data": "^3.3.0"
   }
 }
