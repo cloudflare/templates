@@ -13,7 +13,7 @@ async function handleRequest(request) {
   const load = new Promise((resolve, reject) => {
     EM({
       instantiateWasm(info, receive) {
-        let instance = new WebAssembly.Instance(wasm, info)
+        let instance = new WebAssembly.Instance(WASM_MODULE, info)
         receive(instance)
         return instance.exports
       },
