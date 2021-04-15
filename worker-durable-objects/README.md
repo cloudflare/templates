@@ -1,5 +1,7 @@
 # 👷 Durable Objects template
 
+## NOTE: You must be using wrangler 1.16 or newer to use this template
+
 A template for kick-starting a Cloudflare Workers project that uses Durable Objects.
 
 This template is meant to be the simplest way to get started with Durable Objects, for developers who just want to be able to write some code without worrying about a JavaScript bundler. If you want to be able to bundle dependencies alongside your code, you're better off starting with one of the other Durable Objects templates:

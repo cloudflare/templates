@@ -8,9 +8,10 @@ zone_id = ""
 
 [build]
 # Upload the code directly from the src directory.
-upload_dir = "src"
-# The "modules" upload format is required for all projects that implement a Durable Object namespace.
-upload_format = "modules"
+upload.dir = "src"
+# The "modules" upload format is required for all projects that export a Durable Objects class
+upload.format = "modules"
+upload.main = "./index.mjs"
 
 [durable_objects]
 bindings = [{name = "COUNTER", class_name = "Counter"}]
