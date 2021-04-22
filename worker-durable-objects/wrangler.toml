@@ -6,12 +6,12 @@ account_id = ""
 route = ""
 zone_id = ""
 
-[build]
+[build.upload]
 # Upload the code directly from the src directory.
-upload.dir = "src"
+dir = "src"
 # The "modules" upload format is required for all projects that export a Durable Objects class
-upload.format = "modules"
-upload.main = "./index.mjs"
+format = "modules"
+main = "./index.mjs"
 
 [durable_objects]
 bindings = [{name = "COUNTER", class_name = "Counter"}]
