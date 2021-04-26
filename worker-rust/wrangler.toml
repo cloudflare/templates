@@ -1,4 +1,4 @@
-name = "rust"
+name = "{{project-name}}"
 type = "rust"
 
 account_id = ""
