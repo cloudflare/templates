@@ -14,7 +14,7 @@ wrangler generate my-ts-project https://github.com/cloudflare/worker-typescript-
 
 ### 👩 💻 Developing
 
-[`src/index.js`](./src/index.ts) calls the request handler in [`src/handler.ts`](./src/handler.ts), and will return the [request method](https://developer.mozilla.org/en-US/docs/Web/API/Request/method) for the given request.
+[`src/index.ts`](./src/index.ts) calls the request handler in [`src/handler.ts`](./src/handler.ts), and will return the [request method](https://developer.mozilla.org/en-US/docs/Web/API/Request/method) for the given request.
 
 ### 🧪 Testing
 
