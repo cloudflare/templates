@@ -1,6 +1,6 @@
 # 👷 Durable Objects template
 
-## NOTE: You must be using wrangler 1.16.0-durable-objects-rc.0 or newer to use this template
+## Note: You must use [wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update) 1.17 or newer to use this template.
 
 A template for kick-starting a Cloudflare Workers project that uses Durable Objects.
 
