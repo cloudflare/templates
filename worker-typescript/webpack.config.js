@@ -1,17 +1,14 @@
 const path = require('path')
-const webpack = require('webpack')
-
-const mode = process.env.NODE_ENV || 'production'
 
 module.exports = {
   output: {
-    filename: `worker.${mode}.js`,
+    filename: 'worker.js',
     path: path.join(__dirname, 'dist'),
   },
-  mode,
+  devtool: 'cheap-module-source-map',
+  mode: 'development',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    plugins: [],
   },
   module: {
     rules: [
@@ -19,9 +16,10 @@ module.exports = {
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          transpileOnly: true,
-        },
-      },
+          // transpileOnly is useful to skip typescript checks occasionally:
+          // transpileOnly: true,
+        }
+      }
     ],
   },
 }

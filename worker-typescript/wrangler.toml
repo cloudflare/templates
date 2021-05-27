@@ -1,3 +1,4 @@
+name = "worker-typescript-template"
 type = "webpack"
 zone_id = ""
 account_id = ""

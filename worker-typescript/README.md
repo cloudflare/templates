@@ -18,7 +18,7 @@ wrangler generate my-ts-project https://github.com/cloudflare/worker-typescript-
 
 ### 🧪 Testing
 
-This template comes with mocha tests which simply test that the request handler can handle each request method. `npm test` will run your tests.
+This template comes with jest tests which simply test that the request handler can handle each request method. `npm test` will run your tests.
 
 ### ✏️ Formatting
 
