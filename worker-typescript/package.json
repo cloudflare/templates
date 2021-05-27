@@ -5,13 +5,33 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "webpack",
-    "dev": "NODE_ENV=development npm run build",
-    "format": "prettier --write  '*.json' 'src/**/*.{js,ts}' 'tests/**/*.{js,ts}'",
-    "lint": "eslint --max-warnings=0 src && prettier --check '*.json' 'src/**/*.{js,ts}' 'tests/**/*.{js,ts}'",
+    "format": "prettier --write  '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
+    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "test": "jest --config jestconfig.json --verbose"
   },
   "author": "author",
   "license": "MIT OR Apache-2.0",
+  "eslintConfig": {
+    "root": true,
+    "parserOptions": {
+      "ecmaVersion": 11,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "globals": {
+      "xhr_calls": true
+    },
+    "extends": [
+      "typescript",
+      "prettier"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "no-constant-condition": "off"
+    }
+  },
   "dependencies": {
     "@cloudflare/workers-types": "^2.2.2",
     "@types/jest": "^26.0.23",

@@ -18,8 +18,8 @@ module.exports = {
         options: {
           // transpileOnly is useful to skip typescript checks occasionally:
           // transpileOnly: true,
-        }
-      }
+        },
+      },
     ],
   },
 }
