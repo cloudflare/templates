@@ -3,7 +3,5 @@
   "semi": false,
   "trailingComma": "all",
   "tabWidth": 2,
-  "printWidth": 119,
-  "bracketSpacing": false,
-  "arrowParens": "avoid"
+  "printWidth": 80
 }

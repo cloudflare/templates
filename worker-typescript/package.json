@@ -13,24 +13,10 @@
   "license": "MIT OR Apache-2.0",
   "eslintConfig": {
     "root": true,
-    "parserOptions": {
-      "ecmaVersion": 11,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true
-      }
-    },
-    "globals": {
-      "xhr_calls": true
-    },
     "extends": [
       "typescript",
       "prettier"
-    ],
-    "rules": {
-      "@typescript-eslint/no-explicit-any": "off",
-      "no-constant-condition": "off"
-    }
+    ]
   },
   "dependencies": {
     "@cloudflare/workers-types": "^2.2.2",
