@@ -10,14 +10,12 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "esModuleInterop": true,
-    "types": ["@cloudflare/workers-types"]
+    "types": [
+      "@cloudflare/workers-types",
+      "@types/jest",
+      "@types/service-worker-mock"
+    ]
   },
-  "include": [
-    "./src/*.ts",
-    "./test/*.ts",
-    "./src/**/*.ts",
-    "./test/**/*.ts",
-    "./node_modules/@cloudflare/workers-types/index.d.ts"
-  ],
-  "exclude": ["node_modules/", "dist/"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "test"]
 }

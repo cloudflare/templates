@@ -2,6 +2,8 @@
 
 A batteries included template for kick starting a TypeScript Cloudflare worker project.
 
+## Note: You must use [wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update) 1.17 or newer to use this template.
+
 ## 🔋 Getting Started
 
 This template is meant to be used with [Wrangler](https://github.com/cloudflare/wrangler). If you are not already familiar with the tool, we recommend that you install the tool and configure it to work with your [Cloudflare account](https://dash.cloudflare.com). Documentation can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler/).
@@ -18,7 +20,7 @@ wrangler generate my-ts-project https://github.com/cloudflare/worker-typescript-
 
 ### 🧪 Testing
 
-This template comes with mocha tests which simply test that the request handler can handle each request method. `npm test` will run your tests.
+This template comes with jest tests which simply test that the request handler can handle each request method. `npm test` will run your tests.
 
 ### ✏️ Formatting
 

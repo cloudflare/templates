@@ -1,6 +1,11 @@
-type = "webpack"
+name = "worker-typescript-template"
+type = "javascript"
 zone_id = ""
 account_id = ""
 route = ""
 workers_dev = true
-webpack_config = "webpack.config.js"
+
+[build]
+command = "npm install && npm run build"
+[build.upload]
+format = "service-worker"
