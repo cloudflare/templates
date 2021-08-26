@@ -20,29 +20,16 @@ async function handleRequest(request, env) {
 export class Counter {
   constructor(state, env) {
     this.state = state;
-  }
-
-  async initialize() {
-    let stored = await this.state.storage.get("value");
-    this.value = stored || 0;
+    // `blockConcurrencyWhile()` ensures no requests are delivered until
+    // initialization completes.
+    this.state.blockConcurrencyWhile(async () => {
+        let stored = await this.state.storage.get("value");
+        this.value = stored || 0;
+    })
   }
 
   // Handle HTTP requests from clients.
   async fetch(request) {
-    // Make sure we're fully initialized from storage.
-    if (!this.initializePromise) {
-      this.initializePromise = this.initialize().catch((err) => {
-        // If anything throws during initialization then we need to be
-        // sure sure that a future request will retry initialize().
-        // Note that the concurrency involved in resetting this shared
-        // promise on an error can be tricky to get right -- we don't
-        // recommend customizing it.
-        this.initializePromise = undefined;
-        throw err
-      });
-    }
-    await this.initializePromise;
-
     // Apply requested action.
     let url = new URL(request.url);
     let currentValue = this.value;
