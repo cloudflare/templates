@@ -1,39 +1,41 @@
-# 👷‍♀️🦀🕸️ `rustwasm-worker-template`
+# Getting Started
 
-A template for kick starting a Cloudflare worker project using
-[`wasm-pack`](https://github.com/rustwasm/wasm-pack).
+A template for kick starting a Cloudflare worker project using [`workers-rs`](https://github.com/cloudflare/workers-rs).
 
-This template is designed for compiling Rust libraries into WebAssembly and
-publishing the resulting worker to Cloudflare's worker infrastructure.
+This template is designed for compiling Rust to WebAssembly and publishing the resulting worker to 
+Cloudflare's [edge infrastructure](https://www.cloudflare.com/network/).
 
-## 🔋 Batteries Included
+## Usage 
 
-* [`wasm-bindgen`](https://github.com/rustwasm/wasm-bindgen) for communicating
-  between WebAssembly and JavaScript.
-* [`console_error_panic_hook`](https://github.com/rustwasm/console_error_panic_hook)
-  for logging panic messages to the developer console.
-* [`wee_alloc`](https://github.com/rustwasm/wee_alloc), an allocator optimized
-  for small code size.
+This template starts you off with a `src/lib.rs` file, acting as an entrypoint for requests hitting
+your Worker. Feel free to add more code in this file, or create Rust modules anywhere else for this
+project to use. 
 
-## 🚴 Usage
+With `wrangler`, you can build, test, and deploy your Worker with the following commands: 
 
-### 🐑 Use `wrangler generate` to Clone this Template
+```bash
+# compiles your project to WebAssembly and will warn of any issues
+wrangler build 
 
-[Learn more about `wrangler generate` here.](https://github.com/cloudflare/wrangler)
+# run your Worker in an ideal development workflow (with a local server, file watcher & more)
+wrangler dev
 
-```
-wrangler generate wasm-worker  https://github.com/cloudflare/rustwasm-worker-template.git
-cd wasm-worker
+# deploy your Worker globally to the Cloudflare network (update your wrangler.toml file for configuration)
+wrangler publish
 ```
 
-### 🛠️ Build with `wasm-pack build`
+Read the latest `worker` crate documentation here: https://docs.rs/worker
 
-```
-wasm-pack build
-```
+## WebAssembly
 
-### 🔬 Test in Headless Browsers with `wasm-pack test`
+`workers-rs` (the Rust SDK for Cloudflare Workers used in this template) is meant to be executed as 
+compiled WebAssembly, and as such so **must** all the code you write and depend upon. All crates and
+modules used in Rust-based Workers projects have to compile to the `wasm32-unknown-unknown` triple. 
 
-```
-wasm-pack test --headless --firefox
-```
+Read more about this on the [`workers-rs` project README](https://github.com/cloudflare/workers-rs).
+
+## Issues
+
+If you have any problems with the `worker` crate, please open an issue on the upstream project 
+issue tracker on the [`workers-rs` repository](https://github.com/cloudflare/workers-rs).
+

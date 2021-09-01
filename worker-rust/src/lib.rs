@@ -1,22 +1,54 @@
-extern crate cfg_if;
-extern crate wasm_bindgen;
+use serde_json::json;
+use worker::*;
 
 mod utils;
 
-use cfg_if::cfg_if;
-use wasm_bindgen::prelude::*;
-
-cfg_if! {
-    // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-    // allocator.
-    if #[cfg(feature = "wee_alloc")] {
-        extern crate wee_alloc;
-        #[global_allocator]
-        static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-    }
+fn log_request(req: &Request) {
+    console_log!(
+        "{:?} - [{}], located at: {:?}, within: {}",
+        Date::now(),
+        req.path(),
+        req.cf().coordinates().unwrap_or_default(),
+        req.cf().region().unwrap_or("unknown region".into())
+    );
 }
 
-#[wasm_bindgen]
-pub fn greet() -> String {
-    "Hello, wasm-worker!".to_string()
+#[event(fetch)]
+pub async fn main(req: Request, env: Env) -> Result<Response> {
+    log_request(&req);
+
+    // Optionally, get more helpful error messages written to the console in the case of a panic.
+    utils::set_panic_hook();
+
+    // Optionally, use the Router to handle matching endpoints, use ":name" placeholders, or "*name"
+    // catch-alls to match on specific patterns. The Router takes some data with its `new` method
+    // that can be shared throughout all routes. If you don't need any shared data, use `()`.
+    let router = Router::new(());
+
+    // Add as many routes as your Worker needs! Each route will get a `Request` for handling HTTP
+    // functionality and a `RouteContext` which you can use to  and get route parameters and
+    // Enviornment bindings like KV Stores, Durable Objects, Secrets, and Variables.
+    router
+        .post_async("/form/:field", |mut req, ctx| async move {
+            if let Some(name) = ctx.param("field") {
+                let form = req.form_data().await?;
+                match form.get(name) {
+                    Some(FormEntry::Field(value)) => {
+                        return Response::from_json(&json!({ name: value }))
+                    }
+                    Some(FormEntry::File(_)) => {
+                        return Response::error("`field` param in form shouldn't be a File", 422);
+                    }
+                    None => return Response::error("Bad Request", 400),
+                }
+            }
+
+            Response::error("Bad Request", 400)
+        })
+        .get("/worker-version", |_, ctx| {
+            let version = ctx.var("WORKERS_RS_VERSION")?.to_string();
+            Response::ok(version)
+        })
+        .run(req, env)
+        .await
 }

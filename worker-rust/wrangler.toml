@@ -1,7 +1,23 @@
-name = "{{project-name}}"
-type = "rust"
-
-account_id = ""
+name = "test-template"
+type = "javascript"
 workers_dev = true
-route = ""
-zone_id = ""
+compatibility_date = "2021-08-27" # required
+compatibility_flags = [ "formdata_parser_supports_files" ] # required
+
+[vars]
+WORKERS_RS_VERSION = "0.0.1"
+
+[build]
+command = "cargo install -q rust-worker-build && rust-worker-build --release" # required
+
+[build.upload]
+dir    = "build/worker"
+format = "modules"
+main   = "./shim.mjs"
+
+[[build.upload.rules]]
+globs = ["**/*.wasm"]
+type  = "CompiledWasm"
+
+# read more about configuring your Worker via wrangler.toml at:
+# https://developers.cloudflare.com/workers/cli-wrangler/configuration
