@@ -86,18 +86,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "edgeworker-sys"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f9fe485ba45e41249e3b2c1ee4f60f55af121be41e33c214011b725b8e15444f"
-dependencies = [
- "cfg-if 0.1.10",
- "js-sys",
- "wasm-bindgen",
- "web-sys",
-]
-
-[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -257,28 +245,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3cb00336871be5ed2c8ed44b60ae9959dc5b9f08539422ed43f09e34ecaeba21"
 
 [[package]]
-name = "libworker"
-version = "0.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b1a188b550acadc81d9fe9f2dd6af0c7e084d1d9373ee6fcc8128ff742fc433"
-dependencies = [
- "async-trait",
- "chrono",
- "chrono-tz",
- "edgeworker-sys",
- "futures",
- "http",
- "js-sys",
- "matchit",
- "serde",
- "serde_json",
- "url",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "worker-kv",
-]
-
-[[package]]
 name = "log"
 version = "0.4.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -310,6 +276,17 @@ name = "memory_units"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8452105ba047068f40ff7093dd1d9da90898e63dd61736462e9cdda6a90ad3c3"
+
+[[package]]
+name = "name"
+version = "0.1.0"
+dependencies = [
+ "cfg-if 0.1.10",
+ "console_error_panic_hook",
+ "serde_json",
+ "wee_alloc",
+ "worker",
+]
 
 [[package]]
 name = "num-integer"
@@ -461,17 +438,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-xid",
-]
-
-[[package]]
-name = "test"
-version = "0.1.0"
-dependencies = [
- "cfg-if 0.1.10",
- "console_error_panic_hook",
- "serde_json",
- "wee_alloc",
- "worker",
 ]
 
 [[package]]
@@ -674,17 +640,25 @@ checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
 
 [[package]]
 name = "worker"
-version = "0.0.1"
+version = "0.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b325fe03f1a0e4eba5cf4c1423e9a87d9cd2fa089966dcc69831d5f74f88296"
+checksum = "9c9f2133f202313d54963c4299b169cb7567e78bf7fe46d3a5fd42d2487a46bc"
 dependencies = [
  "async-trait",
- "edgeworker-sys",
+ "chrono",
+ "chrono-tz",
+ "futures",
+ "http",
  "js-sys",
- "libworker",
+ "matchit",
+ "serde",
+ "serde_json",
+ "url",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "workers-rs-macros",
+ "worker-kv",
+ "worker-macros",
+ "worker-sys",
 ]
 
 [[package]]
@@ -701,18 +675,29 @@ dependencies = [
 ]
 
 [[package]]
-name = "workers-rs-macros"
+name = "worker-macros"
 version = "0.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03cf30941aac308bc9a0ca9dad203db9b9f217ece6b997d58266063b905acc36"
+checksum = "ffb0170a9530c0d137e38915a385837d47109b3717f2f1c83f1cbcadf246eccc"
 dependencies = [
  "async-trait",
- "edgeworker-sys",
- "libworker",
  "proc-macro2",
  "quote",
  "syn",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "wasm-bindgen-macro-support",
+ "worker-sys",
+]
+
+[[package]]
+name = "worker-sys"
+version = "0.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4604db1de9c0c8e9fe83a9825dbd34047d3c5741c8681f1fbccdd7cc9dd8bdb8"
+dependencies = [
+ "cfg-if 0.1.10",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
 ]

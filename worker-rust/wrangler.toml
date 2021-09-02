@@ -5,10 +5,10 @@ compatibility_date = "2021-08-27" # required
 compatibility_flags = [ "formdata_parser_supports_files" ] # required
 
 [vars]
-WORKERS_RS_VERSION = "0.0.1"
+WORKERS_RS_VERSION = "0.0.2"
 
 [build]
-command = "cargo install -q rust-worker-build && rust-worker-build --release" # required
+command = "cargo install -q worker-build && worker-build --release" # required
 
 [build.upload]
 dir    = "build/worker"
