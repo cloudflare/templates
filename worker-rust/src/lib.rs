@@ -27,7 +27,7 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
 
     // Add as many routes as your Worker needs! Each route will get a `Request` for handling HTTP
     // functionality and a `RouteContext` which you can use to  and get route parameters and
-    // Enviornment bindings like KV Stores, Durable Objects, Secrets, and Variables.
+    // Environment bindings like KV Stores, Durable Objects, Secrets, and Variables.
     router
         .post_async("/form/:field", |mut req, ctx| async move {
             if let Some(name) = ctx.param("field") {
