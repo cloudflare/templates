@@ -21,9 +21,9 @@ pub async fn main(req: Request, env: Env) -> Result<Response> {
     utils::set_panic_hook();
 
     // Optionally, use the Router to handle matching endpoints, use ":name" placeholders, or "*name"
-    // catch-alls to match on specific patterns. The Router takes some data with its `new` method
-    // that can be shared throughout all routes. If you don't need any shared data, use `()`.
-    let router = Router::new(());
+    // catch-alls to match on specific patterns. Alternatively, use `Router::with_data(D)` to 
+    // provide arbitrary data that will be accessible in each route via the `ctx.data()` method.
+    let router = Router::new();
 
     // Add as many routes as your Worker needs! Each route will get a `Request` for handling HTTP
     // functionality and a `RouteContext` which you can use to  and get route parameters and
