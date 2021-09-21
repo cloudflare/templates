@@ -1,6 +1,6 @@
 # 👷 Durable Objects template
 
-## Note: You must use [wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update) 1.17 or newer to use this template.
+## Note: You must use [wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update) 1.19.3 or newer to use this template.
 
 ## Please read the [Durable Object documentation](https://developers.cloudflare.com/workers/learning/using-durable-objects) before using this template.
 
@@ -14,5 +14,3 @@ This template is meant to be the simplest way to get started with Durable Object
 Worker code is in `src/`. The normal fetch handler and the Durable Object `Counter` class are in `src/index.mjs`.
 
 Wrangler is configured to upload all files in the `src/` directory, and `index.mjs` is configured to be the main module.
-
-On your first publish, you must use `wrangler publish --new-class Counter` to allow the Counter class to implement Durable Objects.
