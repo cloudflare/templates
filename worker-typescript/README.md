@@ -1,4 +1,4 @@
-# ʕ •́؈•̀) `workers-typescript-template`
+# ʕ •́؈•̀) `worker-typescript-template`
 
 A batteries included template for kick starting a TypeScript Cloudflare worker project.
 
@@ -32,7 +32,7 @@ For information on how to preview and publish your worker, please see the [Wrang
 
 ## 🤢 Issues
 
-If you run into issues with this specific project, please feel free to file an issue [here](https://github.com/cloudflare/workers-typescript-template/issues). If the problem is with Wrangler, please file an issue [here](https://github.com/cloudflare/wrangler/issues).
+If you run into issues with this specific project, please feel free to file an issue [here](https://github.com/cloudflare/worker-typescript-template/issues). If the problem is with Wrangler, please file an issue [here](https://github.com/cloudflare/wrangler/issues).
 
 ## ⚠️ Caveats
 
