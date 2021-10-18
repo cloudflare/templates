@@ -3,7 +3,7 @@
     "outDir": "./dist",
     "module": "commonjs",
     "target": "esnext",
-    "lib": ["esnext", "webworker"],
+    "lib": ["esnext"],
     "alwaysStrict": true,
     "strict": true,
     "preserveConstEnums": true,
