@@ -1,8 +1,7 @@
 name = "{{project-name}}"
 type = "javascript"
 workers_dev = true
-compatibility_date = "2021-08-27" # required
-compatibility_flags = [ "formdata_parser_supports_files" ] # required
+compatibility_date = "2021-11-05"
 
 [vars]
 WORKERS_RS_VERSION = "0.0.7"
