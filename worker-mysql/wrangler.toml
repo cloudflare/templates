@@ -1,4 +1,4 @@
-name = "worker-template-postgres"
+name = "worker-template-mysql"
 type = "javascript"
 account_id = ""
 workers_dev = true
@@ -7,7 +7,7 @@ zone_id = ""
 compatibility_date = "2021-10-07"
 
 [build]
-command = "npm install && npm test && npm run build && cp ./src/driver/**/*.wasm ./dist"
+command = "npm install && npm run build && cp ./src/driver/**/*.wasm ./dist"
 
 [build.upload]
 format = "modules"
