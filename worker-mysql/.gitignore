@@ -1,0 +1,12 @@
+/target
+/dist
+/tscOutDir
+**/*.rs.bk
+Cargo.lock
+bin/
+pkg/
+wasm-pack.log
+worker/
+node_modules/
+.cargo-ok
+.DS_Store
