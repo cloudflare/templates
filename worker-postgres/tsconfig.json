@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext", "webworker"],
+    "alwaysStrict": true,
+    "strict": true,
+    "noEmitOnError": true,
+    "moduleResolution": "node",
+    "outDir": "tscOutDir",
+    "preserveConstEnums": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "types": ["@cloudflare/workers-types", "node", "jest"]
+  },
+  "include": ["src/**/*", "src/types"],
+  "exclude": ["node_modules", "dist"]
+}
