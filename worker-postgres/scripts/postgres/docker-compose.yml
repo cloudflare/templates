@@ -2,6 +2,7 @@ version: '2.1'
 services:
   postgresql:
     image: docker.io/bitnami/postgresql:11
+    container_name: postgres_postgresql_1
     volumes:
       - 'postgresql_data:/bitnami/postgresql'
     environment:
