@@ -156,7 +156,7 @@ namespace Deno {
       let cfAccess = {}
 
       // @ts-ignore
-      if (!globalThis.CF_CLIENT_ID || !globalThis.CF_CLIENT_SECRET) {
+      if (globalThis.CF_CLIENT_ID && globalThis.CF_CLIENT_SECRET) {
         cfAccess = {
           // @ts-ignore
           'CF-Access-Client-ID': globalThis.CF_CLIENT_ID,
