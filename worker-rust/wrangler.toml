@@ -1,22 +1,22 @@
 name = "{{project-name}}"
 type = "javascript"
 workers_dev = true
-compatibility_date = "2021-11-05"
+compatibility_date = "2022-01-20"
 
 [vars]
-WORKERS_RS_VERSION = "0.0.7"
+WORKERS_RS_VERSION = "0.0.8"
 
 [build]
 command = "cargo install -q worker-build && worker-build --release" # required
 
 [build.upload]
-dir    = "build/worker"
+dir = "build/worker"
 format = "modules"
-main   = "./shim.mjs"
+main = "./shim.mjs"
 
 [[build.upload.rules]]
 globs = ["**/*.wasm"]
-type  = "CompiledWasm"
+type = "CompiledWasm"
 
 # read more about configuring your Worker via wrangler.toml at:
 # https://developers.cloudflare.com/workers/cli-wrangler/configuration
