@@ -20,40 +20,29 @@ async function handleRequest(request, env) {
 export class Counter {
   constructor(state, env) {
     this.state = state;
-    // `blockConcurrencyWhile()` ensures no requests are delivered until
-    // initialization completes.
-    this.state.blockConcurrencyWhile(async () => {
-        let stored = await this.state.storage.get("value");
-        this.value = stored || 0;
-    })
   }
 
   // Handle HTTP requests from clients.
   async fetch(request) {
     // Apply requested action.
     let url = new URL(request.url);
-    let currentValue = this.value;
+    let value = await this.state.storage.get("value") || 0;
     switch (url.pathname) {
     case "/increment":
-      currentValue = ++this.value;
-      await this.state.storage.put("value", this.value);
+      ++value;
+      await this.state.storage.put("value", value);
       break;
     case "/decrement":
-      currentValue = --this.value;
-      await this.state.storage.put("value", this.value);
+      --value;
+      await this.state.storage.put("value", value);
       break;
     case "/":
-      // Just serve the current value. No storage calls needed!
+      // Just serve the current value.
       break;
     default:
       return new Response("Not found", {status: 404});
     }
 
-    // Return `currentValue`. Note that `this.value` may have been
-    // incremented or decremented by a concurrent request when we
-    // yielded the event loop to `await` the `storage.put` above!
-    // That's why we stored the counter value created by this
-    // request in `currentValue` before we used `await`.
-    return new Response(currentValue);
+    return new Response(value);
   }
 }
