@@ -26,7 +26,11 @@ export class Counter {
   async fetch(request) {
     // Apply requested action.
     let url = new URL(request.url);
+
+    // explanation of why this is safe and fast:
+    // https://blog.cloudflare.com/durable-objects-easy-fast-correct-choose-three/
     let value = await this.state.storage.get("value") || 0;
+
     switch (url.pathname) {
     case "/increment":
       ++value;
