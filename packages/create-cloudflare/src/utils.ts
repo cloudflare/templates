@@ -6,18 +6,26 @@ import { exec } from 'child_process';
 export const run = promisify(exec);
 export const exists = fs.existsSync;
 
-export const git = (...args: string[]) => {
-  return run(`git ${args.join(' ')}`);
+// TODO: throw if non-zero
+export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
+
+export function toRemote(remote: string): string {
+	let idx = remote.lastIndexOf('#');
+	if (idx === -1) remote;
+
+	let plain = remote.substring(0, idx++);
+	let branch = remote.substring(idx);
+	return `-b ${branch} ${plain}`;
 }
 
 // @see https://stackoverflow.com/a/52269934/3577474
-export async function sparse(remote: string, target: string, filter: string) {
-	await git('clone --depth 1 --filter=blob:none --sparse', remote, target);
-	await git('sparse-checkout set', filter);
+export async function sparse(remote: string, dest: string, subdir: string) {
+	await git('clone --depth 1 --filter=blob:none --sparse', toRemote(remote), dest);
+	await git('sparse-checkout set', subdir);
 }
 
-export async function clone(remote: string, target: string) {
-	await git('clone --depth 1', remote, target);
+export async function clone(remote: string, dest: string) {
+	await git('clone --depth 1', toRemote(remote), dest);
 }
 
 export async function cleanup(target: string, init: boolean) {
