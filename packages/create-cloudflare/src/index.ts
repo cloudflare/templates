@@ -5,7 +5,6 @@ import * as utils from './utils';
 // yarn create cloudflare workers airtable
 
 export type Argv = {
-	cwd: string;
 	init?: boolean;
 	force?: boolean;
 	debug?: boolean;
@@ -16,15 +15,21 @@ export type Argv = {
 }
 
 export async function setup(dir: string, argv: Argv) {
-	argv.cwd = path.resolve(argv.cwd || '.');
+	let cwd = process.cwd();
 
-	let target = path.join(argv.cwd, dir);
+	// let target = path.join(cwd, dir);
+	let target = path.join(cwd, 'foobar');
 
-	if (utils.exists(target) && !argv.force) {
-		let pretty = path.relative(process.cwd(), target);
-		let msg = `Refusing to overwrite existing "${pretty}" directory.\n`;
-		msg += 'Please specify a different directory or use the `--force` flag.';
-		throw new Error(msg);
+	if (utils.exists(target)) {
+		if (argv.force) {
+			if (target.startsWith(cwd)) await utils.rmdir(target);
+			else throw new Error('Refusing to manipulate the file system outside the PWD location.\nPlease specify a different target directory.');
+		} else {
+			let pretty = path.relative(cwd, target);
+			let msg = `Refusing to overwrite existing "${pretty}" directory.\n`;
+			msg += 'Please specify a different directory or use the `--force` flag.';
+			throw new Error(msg);
+		}
 	}
 
 	let isRemote = false;

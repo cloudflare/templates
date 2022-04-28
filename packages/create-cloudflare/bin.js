@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 const argv = require('mri')(process.argv.slice(2), {
 	alias: {
-		C: 'cwd',
 		v: 'version',
 		h: 'help',
-		// c: 'cfw',
 	},
 	default: {
-		cwd: '.',
 		init: true,
 		force: false,
 		debug: false

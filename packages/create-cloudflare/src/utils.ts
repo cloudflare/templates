@@ -6,6 +6,10 @@ import { exec } from 'child_process';
 export const run = promisify(exec);
 export const exists = fs.existsSync;
 
+export function rmdir(dir: string): Promise<void> {
+	return fs.promises.rm(dir, { recursive: true });
+}
+
 // TODO: throw if non-zero
 export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
 
@@ -29,9 +33,8 @@ export async function clone(remote: string, dest: string) {
 }
 
 export async function cleanup(target: string, init: boolean) {
-	await fs.promises.rm(
-		join(target, '.git'),
-		{ recursive: true }
+	await rmdir(
+		join(target, '.git')
 	);
 	if (init) {
 		await git('init -b main', target);
