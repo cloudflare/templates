@@ -1,10 +1,12 @@
 import * as fs from 'fs';
-import { join } from 'path';
 import { promisify } from 'util';
+import { join, relative } from 'path';
 import { exec } from 'child_process';
 
 export const run = promisify(exec);
 export const exists = fs.existsSync;
+
+export { join, relative };
 
 export function rmdir(dir: string): Promise<void> {
 	return fs.promises.rm(dir, { recursive: true });
@@ -13,23 +15,26 @@ export function rmdir(dir: string): Promise<void> {
 // TODO: throw if non-zero
 export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
 
-export function toRemote(remote: string): string {
+export async function clone(remote: string, dest: string, subdir?: string) {
+	let args = ['clone --depth 1'];
+
+	// @see https://stackoverflow.com/a/52269934/3577474
+	if (subdir) args.push('--filter=blob:none --sparse');
+
 	let idx = remote.lastIndexOf('#');
-	if (idx === -1) return remote;
+	if (idx === -1) {
+		args.push(remote);
+	} else {
+		args.push(`-b ${remote.substring(idx + 1)}`);
+		args.push(remote.substring(0, idx));
+	}
 
-	let plain = remote.substring(0, idx++);
-	let branch = remote.substring(idx);
-	return `-b ${branch} ${plain}`;
-}
+	args.push(dest);
+	await git(...args);
 
-// @see https://stackoverflow.com/a/52269934/3577474
-export async function sparse(remote: string, dest: string, subdir: string) {
-	await git('clone --depth 1 --filter=blob:none --sparse', toRemote(remote), dest);
-	await run(`git sparse-checkout set "${subdir}"`, { cwd: dest });
-}
-
-export async function clone(remote: string, dest: string) {
-	await git('clone --depth 1', toRemote(remote), dest);
+	if (subdir) {
+		await run(`git sparse-checkout set "${subdir}"`, { cwd: dest });
+	}
 }
 
 export async function cleanup(target: string, init: boolean) {

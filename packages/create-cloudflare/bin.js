@@ -25,23 +25,32 @@ if (argv.help) {
 	let output = '';
 
 	output += '\n  Usage';
-	output += '\n    npm init cloudflare <directory> -- [options]';
-	output += '\n    pnpm create cloudflare <directory> [options]';
-	output += '\n    yarn create cloudflare <directory> [options]';
+	output += '\n    npm init cloudflare <directory> <source> -- [options]';
+	output += '\n    pnpm create cloudflare <directory> <source> [options]';
+	output += '\n    yarn create cloudflare <directory> <source> [options]';
+	output += '\n';
+	output += '\n  Sources';
+	output += '\n    • Example — A name or path to an official example subdirectory.';
+	output += '\n        Visit https://github.com/cloudflare/worker-examples/tree/main/contents for options'; // TODO: update; get nice-name redirect
+	output += '\n    • URL — Any valid git repository address.';
+	output += '\n        [user@]host.xz:path/to/repo.git[#branch]';
+	output += '\n        git://host.xz[:port]/path/to/repo.git[#branch]';
+	output += '\n        ssh://[user@]host.xz[:port]/path/to/repo.git[#branch]';
+	output += '\n        http[s]://host.xz[:port]/path/to/repo.git[#branch]';
+	output += '\n        ftp[s]://host.xz[:port]/path/to/repo.git[#branch]';
 	output += '\n';
 	output += '\n  Options';
-	output += '\n        --force        Force overwrite target directory';
-	output += '\n        --no-init      Do not initialize a git repository';
-	output += '\n        --debug        Print additional error details';
-	output += '\n    -v, --version      Displays current version';
-	output += '\n    -h, --help         Displays this message';
+	output += '\n    --force         Force overwrite target directory';
+	output += '\n    --no-init       Do not initialize a git repository';
+	output += '\n    --debug         Print additional error details';
+	output += '\n    --version, -v   Displays current version';
+	output += '\n    --help, -h      Displays this message';
 	output += '\n';
 	output += '\n  Examples';
-	output += '\n    $ npm init cloudflare my-project';
-	output += '\n    $ npm init cloudflare my-project -- --no-init';
-	output += '\n    $ npm init cloudflare my-project -- pages svelte-kit';
-	output += '\n    $ npm init cloudflare my-project -- https://github.com/user/repo.git';
-	output += '\n    $ npm init cloudflare my-project -- https://github.com/user/repo.git#branch';
+	output += '\n    $ npm init cloudflare my-project pages/svelte-kit -- --debug';
+	output += '\n    $ yarn create cloudflare my-project workshops/intro-workers --force';
+	output += '\n    $ pnpm create cloudflare my-project https://github.com/user/repo.git#branch';
+	output += '\n    $ npm init cloudflare my-project https://github.com/user/repo.git';
 	output += '\n';
 
 	exit(output, 0);
@@ -54,10 +63,10 @@ if (argv.version) {
 
 (async function () {
 	try {
-		console.log(argv);
-		let dir = argv._.join('-').trim().replace(/[\s_]+/g, '-');
-		if (!dir) return exit('Missing <name> argument', 1);
-		await require('.').setup(dir, argv);
+		let [dir, source] = argv._;
+		if (!dir) return exit('Missing <directory> argument', 1);
+		if (!source) return exit('Missing <source> argument', 1);
+		await require('.').setup(dir, source, argv);
 	} catch (err) {
 		exit(err && err.stack || err, 1);
 	}
