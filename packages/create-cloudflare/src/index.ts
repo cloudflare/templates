@@ -17,8 +17,8 @@ export type Argv = {
 export async function setup(dir: string, argv: Argv) {
 	let cwd = process.cwd();
 
-	// let target = path.join(cwd, dir);
-	let target = path.join(cwd, 'foobar');
+	let target = path.join(cwd, dir);
+	console.log({ target });
 
 	if (utils.exists(target)) {
 		if (argv.force) {
@@ -57,12 +57,15 @@ export async function setup(dir: string, argv: Argv) {
 		source = 'https://github.com/cloudflare/worker-examples.git';
 	}
 
+	return console.log({ target, source, filter });
+
 	try {
 		// TODO: throw on non-zero exit
 		if (isRemote) await utils.clone(source, target);
 		else await utils.sparse(source, target, filter!);
 	} catch (err) {
 		if (argv.debug) console.error((err as Error).toString());
+		// todo: git version compare ~> >=2.19
 		throw new Error(`Error cloning "${source}" repository`);
 	}
 
