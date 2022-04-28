@@ -25,20 +25,23 @@ if (argv.help) {
 	let output = '';
 
 	output += '\n  Usage';
-	output += '\n    npm init worktop <name> [options]';
+	output += '\n    npm init cloudflare <directory> -- [options]';
+	output += '\n    pnpm create cloudflare <directory> [options]';
+	output += '\n    yarn create cloudflare <directory> [options]';
 	output += '\n';
 	output += '\n  Options';
-	output += '\n    -C, --cwd          Directory to resolve from';
 	output += '\n        --force        Force overwrite target directory';
+	output += '\n        --no-init      Do not initialize a git repository';
+	output += '\n        --debug        Print additional error details';
 	output += '\n    -v, --version      Displays current version';
 	output += '\n    -h, --help         Displays this message';
 	output += '\n';
 	output += '\n  Examples';
-	output += '\n    $ npm init worktop my-worker';
-	output += '\n    $ yarn create worktop my-worker --force';
-	output += '\n    $ npm init worktop my-worker --env cloudflare';
-	output += '\n    $ npm init worktop my-worker --env cloudflare';
-	output += '\n    $ npm init worktop my-worker --env deno';
+	output += '\n    $ npm init cloudflare my-project';
+	output += '\n    $ npm init cloudflare my-project -- --no-init';
+	output += '\n    $ npm init cloudflare my-project -- pages svelte-kit';
+	output += '\n    $ npm init cloudflare my-project -- https://github.com/user/repo.git';
+	output += '\n    $ npm init cloudflare my-project -- https://github.com/user/repo.git#branch';
 	output += '\n';
 
 	exit(output, 0);
