@@ -11,7 +11,7 @@ export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
 
 export function toRemote(remote: string): string {
 	let idx = remote.lastIndexOf('#');
-	if (idx === -1) remote;
+	if (idx === -1) return remote;
 
 	let plain = remote.substring(0, idx++);
 	let branch = remote.substring(idx);
