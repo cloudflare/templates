@@ -25,7 +25,7 @@ export function toRemote(remote: string): string {
 // @see https://stackoverflow.com/a/52269934/3577474
 export async function sparse(remote: string, dest: string, subdir: string) {
 	await git('clone --depth 1 --filter=blob:none --sparse', toRemote(remote), dest);
-	await git('sparse-checkout set', subdir);
+	await run(`git sparse-checkout set "${subdir}"`, { cwd: dest });
 }
 
 export async function clone(remote: string, dest: string) {
