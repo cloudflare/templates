@@ -1,71 +1,60 @@
-import * as path from 'path';
+import semiver from 'semiver';
 import * as utils from './utils';
 
-// yarn create cloudflare pages nuxt
-// yarn create cloudflare workers airtable
+// yarn create cloudflare foobar pages/nuxt
+// yarn create cloudflare foobar workers-airtable
+// yarn create cloudflare foobar https://.../user/repo
 
-export type Argv = {
+export interface Argv {
 	init?: boolean;
 	force?: boolean;
 	debug?: boolean;
-	_:
-		| [] // ~> interactive
-		| [string] // URL / ???
-		| [string, string] // [worker|pages, directory]
 }
 
-export async function setup(dir: string, argv: Argv) {
+export async function setup(dir: string, src: string, argv: Argv) {
 	let cwd = process.cwd();
-
-	let target = path.join(cwd, dir);
-	console.log({ target });
+	let target = utils.join(cwd, dir);
 
 	if (utils.exists(target)) {
 		if (argv.force) {
 			if (target.startsWith(cwd)) await utils.rmdir(target);
 			else throw new Error('Refusing to manipulate the file system outside the PWD location.\nPlease specify a different target directory.');
 		} else {
-			let pretty = path.relative(cwd, target);
+			let pretty = utils.relative(cwd, target);
 			let msg = `Refusing to overwrite existing "${pretty}" directory.\n`;
 			msg += 'Please specify a different directory or use the `--force` flag.';
 			throw new Error(msg);
 		}
 	}
 
-	let isRemote = false;
-	let [source, filter] = argv._ || [];
-	console.log({ source, filter });
-
-	if (!source) {
-		// TODO: interactive list w/ selection menu
-		throw new Error('Missing source value(s).\nPlease view the `--help` text.');
-	}
-
-	if (/^(https?|ftps?|file|git|ssh):\/\//.test(source)) isRemote = true;
-	// [user@]host.xz:path/to/repo.git/
-	else if (!filter && source.includes(':')) isRemote = true;
-	else {
-		source = source.toLowerCase();
-		// TODO: interactive type-based list
-		if (!filter) throw new Error('Missing filter');
-
-		if (/^workers?/.test(source)) filter = 'workers/' + filter;
-		else if (source === 'pages') filter = 'pages/' + filter;
-		else throw new Error(`Invalid "${source}" source.`);
-
+	let source = '', filter = '';
+	if (/^(https?|ftps?|file|git|ssh):\/\//.test(src) || src.includes(':')) {
+		source = src; // allows [user@]host.xz:path/to/repo.git/
+	} else {
 		// TODO: change me post-release
 		source = 'https://github.com/cloudflare/worker-examples.git';
+		filter = src;
 	}
 
-	return console.log({ target, source, filter });
+	// filter uses `git sparse-checkout` wxhich requires 2.19+
+	if (filter) {
+		try {
+			var { stdout } = await utils.git('version');
+		} catch (err) {
+			throw new Error('Missing `git` executable');
+		}
+
+		let [version] = /\d+.\d+.\d+/.exec(stdout) || [];
+		if (!version) throw new Error('Unknown `git` version');
+
+		let num = semiver(version, '2.19.0'); // -1~>lesser; 0~>equal; 1~>greater
+		if (num < 0) throw new Error('Requires git version 2.19.0 or newer');
+	}
 
 	try {
-		// TODO: throw on non-zero exit
-		if (isRemote) await utils.clone(source, target);
-		else await utils.sparse(source, target, filter!);
+		await utils.clone(source, target, filter);
 	} catch (err) {
 		if (argv.debug) console.error((err as Error).toString());
-		// todo: git version compare ~> >=2.19
 		throw new Error(`Error cloning "${source}" repository`);
 	}
 
