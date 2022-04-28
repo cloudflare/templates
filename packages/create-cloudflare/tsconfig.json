@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "lib": ["esnext"],
+    "target": "esnext",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictFunctionTypes": true,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "module": "esnext",
+    "checkJs": true,
+    "noEmit": true,
+  },
+  "include": [
+    "bin.js",
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

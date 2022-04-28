@@ -2,23 +2,22 @@
 const argv = require('mri')(process.argv.slice(2), {
 	alias: {
 		C: 'cwd',
-		e: 'env',
-		f: 'format',
-		t: 'typescript',
-		// m: 'monorepo',
 		v: 'version',
 		h: 'help',
 		// c: 'cfw',
 	},
 	default: {
-		C: '.',
+		cwd: '.',
+		init: true,
 		force: false,
-		e: 'cloudflare',
-		f: '', // ~> env-default
+		debug: false
 	}
 });
 
-/** @param {string} msg */
+/**
+ * @param {string} msg
+ * @returns {never}
+ */
 function exit(msg, code = 1) {
 	if (code) process.stderr.write(msg + '\n');
 	else process.stdout.write(msg + '\n');
@@ -33,11 +32,6 @@ if (argv.help) {
 	output += '\n';
 	output += '\n  Options';
 	output += '\n    -C, --cwd          Directory to resolve from';
-	output += '\n    -t, --typescript   Setup project for TypeScript usage';
-	output += '\n    -e, --env          Target platform environment (default "cloudflare")';
-	output += '\n    -f, --format       Worker/Script output format (default "module")';
-	// output += '\n    -m, --monorepo     Force directory overwrite';
-	// output += '\n    -c, --cfw          Force directory overwrite';
 	output += '\n        --force        Force overwrite target directory';
 	output += '\n    -v, --version      Displays current version';
 	output += '\n    -h, --help         Displays this message';
@@ -55,11 +49,12 @@ if (argv.help) {
 
 if (argv.version) {
 	let pkg = require('./package.json');
-	return exit(`${pkg.name}, v${pkg.version}`, 0);
+	exit(`${pkg.name}, v${pkg.version}`, 0);
 }
 
 (async function () {
 	try {
+		console.log(argv);
 		let dir = argv._.join('-').trim().replace(/[\s_]+/g, '-');
 		if (!dir) return exit('Missing <name> argument', 1);
 		await require('.').setup(dir, argv);
