@@ -12,7 +12,6 @@ export function rmdir(dir: string): Promise<void> {
 	return fs.promises.rm(dir, { recursive: true });
 }
 
-// TODO: throw if non-zero
 export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
 
 export async function clone(remote: string, dest: string, subdir?: string) {
@@ -23,6 +22,9 @@ export async function clone(remote: string, dest: string, subdir?: string) {
 
 	let idx = remote.lastIndexOf('#');
 	if (idx === -1) {
+		if (remote.includes('worker-examples')) {
+			args.push('-b dev'); // TODO remove me
+		}
 		args.push(remote);
 	} else {
 		args.push(`-b ${remote.substring(idx + 1)}`);
