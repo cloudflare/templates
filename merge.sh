@@ -21,7 +21,7 @@ git filter-repo --to-subdirectory-filter ${rn} --force
 cd ../..
 git remote add ${rn} clones/wip
 git fetch ${rn}
-git rebase --rebase-merges --onto dev --root ${rn}/migrate --committer-date-is-author-date
+git rebase --rebase-merges --onto dev --root ${rn}/migrate --committer-date-is-author-date --merge -s recursive -X theirs
 
 git checkout -b ${rn}
 git checkout dev
