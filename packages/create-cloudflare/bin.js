@@ -31,7 +31,7 @@ if (argv.help) {
 	output += '\n';
 	output += '\n  Sources';
 	output += '\n    • Example — A name or path to an official example subdirectory.';
-	output += '\n        Visit https://github.com/cloudflare/worker-examples/tree/main/contents for options'; // TODO: update; get nice-name redirect
+	output += '\n        Visit https://github.com/cloudflare/worker-examples/tree/dev for options'; // TODO: update; get nice-name redirect
 	output += '\n    • URL — Any valid git repository address.';
 	output += '\n        [user@]host.xz:path/to/repo.git[#branch]';
 	output += '\n        git://host.xz[:port]/path/to/repo.git[#branch]';
