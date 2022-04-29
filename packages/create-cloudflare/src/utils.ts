@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { tmpdir } from 'os';
 import { promisify } from 'util';
 import { join, relative } from 'path';
 import { exec } from 'child_process';
@@ -8,17 +9,23 @@ export const exists = fs.existsSync;
 
 export { join, relative };
 
-export function rmdir(dir: string): Promise<void> {
-	return fs.promises.rm(dir, { recursive: true });
+export async function rmdir(dir: string): Promise<void> {
+	if (exists(dir)) fs.promises.rm(dir, { recursive: true });
 }
 
 export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
 
+export const rand = () => Math.random().toString(16).substring(2);
+
 export async function clone(remote: string, dest: string, subdir?: string) {
 	let args = ['clone --depth 1'];
+	let target = dest;
 
-	// @see https://stackoverflow.com/a/52269934/3577474
-	if (subdir) args.push('--filter=blob:none --sparse');
+	if (subdir) {
+		// @see https://stackoverflow.com/a/52269934/3577474
+		args.push('--filter=blob:none --sparse');
+		target = join(tmpdir(), rand() + '-' + rand());
+	}
 
 	let idx = remote.lastIndexOf('#');
 	if (idx === -1) {
@@ -31,11 +38,17 @@ export async function clone(remote: string, dest: string, subdir?: string) {
 		args.push(remote.substring(0, idx));
 	}
 
-	args.push(dest);
+	args.push(target);
 	await git(...args);
 
 	if (subdir) {
-		await run(`git sparse-checkout set "${subdir}"`, { cwd: dest });
+		// sparse keeps the {subdir} structure, so w/o
+		// the tmpdir() juggle, we would have {target}/{subdir} result
+		await run(`git sparse-checkout set "${subdir}"`, { cwd: target });
+
+		// effectively `$ mv {tmp/subdir} {dest}
+		await fs.promises.rename(join(target, subdir), dest);
+		await rmdir(target); // rm -rf tmpdir
 	}
 }
 
