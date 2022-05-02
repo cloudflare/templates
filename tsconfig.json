@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "allowJs": true,
+    "lib": ["es2020"],
+    "target": "es2020",
+    "removeComments": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "types": ["@cloudflare/workers-types"],
+    "strictFunctionTypes": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "alwaysStrict": true,
+    "module": "esnext",
+    "checkJs": true,
+    "noEmit": true
+  },
+  "include": [
+    "worker/**/*",
+    "worker-*/**/*"
+  ],
+  "exclude": [
+    "worker-speedtest/src/test.js",
+    "worker-typescript/test"
+  ]
+}
