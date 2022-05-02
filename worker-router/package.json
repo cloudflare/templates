@@ -2,7 +2,6 @@
   "private": true,
   "version": "0.0.0",
   "dependencies": {
-    "itty-router": "^2.1.9",
-    "serverless-cloudflare-workers": "^1.2.0"
+    "itty-router": "^2.1.9"
   }
 }

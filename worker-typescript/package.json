@@ -4,27 +4,13 @@
   "main": "dist/worker.js",
   "scripts": {
     "build": "webpack",
-    "lint": "eslint --max-warnings=0 src && prettier --check '*.{json,js}' 'src/**/*.{js,ts}' 'test/**/*.{js,ts}'",
     "test": "jest --config jestconfig.json --verbose"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "typescript",
-      "prettier"
-    ]
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",
     "@types/jest": "^26.0.23",
     "@types/service-worker-mock": "^2.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    "eslint": "^7.21.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-config-typescript": "^3.0.0",
     "jest": "^27.0.1",
-    "prettier": "^2.3.0",
     "service-worker-mock": "^2.0.5",
     "ts-jest": "^27.0.1",
     "ts-loader": "^9.2.2",
