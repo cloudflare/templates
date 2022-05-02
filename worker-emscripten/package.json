@@ -1,21 +1,7 @@
 {
-  "name": "{{ project-name }}",
-  "version": "1.0.0",
-  "description": "A template for kick starting a Cloudflare Workers + Emscripten + Wasm project",
+  "private": true,
+  "version": "0.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write '**/*.{js,css,json,md}'"
-  },
-  "prettier": {
-    "singleQuote": true,
-    "semi": false,
-    "tabWidth": 2,
-    "trailingComma": "all",
-    "printWidth": 80
-  },
-  "author": "{{ authors }}",
-  "license": "MIT",
   "devDependencies": {
     "copy-webpack-plugin": "^5.0.3",
     "exports-loader": "^0.7.0",

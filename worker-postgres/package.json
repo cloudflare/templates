@@ -1,15 +1,10 @@
 {
   "private": true,
-  "name": "worker-template-postgres",
-  "version": "1.0.0",
-  "description": "A template for kick starting a Cloudflare Workers project",
+  "version": "0.0.0",
   "module": "./dist/index.mjs",
   "scripts": {
-    "build": "esbuild --bundle --sourcemap --outfile=dist/index.mjs --minify --format=esm ./src/index.js --external:*.wasm --inject:./src/deno/workers-override.ts",
-    "format": "prettier --write '**/*.{js,css,json,md}'"
+    "build": "esbuild --bundle --sourcemap --outfile=dist/index.mjs --minify --format=esm ./src/index.js --external:*.wasm --inject:./src/deno/workers-override.ts"
   },
-  "author": "Cloudflare Workers Team <workers@cloudflare.com>",
-  "license": "MIT",
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",
     "@types/jest": "^26.0.23",

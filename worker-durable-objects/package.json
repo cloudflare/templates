@@ -1,6 +1,5 @@
 {
-  "name": "{{ project-name }}",
-  "version": "1.0.0",
-  "description": "A template for kick-starting a Cloudflare Workers project using Durable Objects",
+  "private": true,
+  "version": "0.0.0",
   "module": "./src/index.mjs"
 }
