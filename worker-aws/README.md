@@ -32,9 +32,9 @@ After that you can use `wrangler publish` as normal. See the [wrangler documenta
 
 This template pieces together a few AWS products:
 
-* [SQS Queue](https://console.aws.amazon.com/sqs/v2/home?region=us-west-2#/create-queue)
-* [DynamoDB table](https://console.aws.amazon.com/dynamodb/home?region=us-west-2#create-table:)
-* [Aurora RDS (**serverless**)](https://console.aws.amazon.com/rds/home?region=us-west-2#launch-dbinstance:gdb=false;s3-import=false)<br>_**Important:** You must enable "Data API" under the **Connectivity** settings._<br>_**Note:** You will need [Secrets Manager](https://us-west-2.console.aws.amazon.com/secretsmanager/home) for the RDS credentials._
+- [SQS Queue](https://console.aws.amazon.com/sqs/v2/home?region=us-west-2#/create-queue)
+- [DynamoDB table](https://console.aws.amazon.com/dynamodb/home?region=us-west-2#create-table:)
+- [Aurora RDS (**serverless**)](https://console.aws.amazon.com/rds/home?region=us-west-2#launch-dbinstance:gdb=false;s3-import=false)<br>_**Important:** You must enable "Data API" under the **Connectivity** settings._<br>_**Note:** You will need [Secrets Manager](https://us-west-2.console.aws.amazon.com/secretsmanager/home) for the RDS credentials._
 
 The Aurora RDS example assumes the following SQL structure:
 

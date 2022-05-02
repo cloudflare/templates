@@ -1,8 +1,9 @@
 # WordPress Page Cache Plugin
+
 Integrates with the [Edge Cache HTML worker](..) script to cache WordPress pages on the edge:
 
-* Caches HTML on the Cloudflare edge for visitors that aren't logged-in (logged-in users bypass the cache).
-* Automatically invalidates the cache when content is changed (including changes to the themes).
+- Caches HTML on the Cloudflare edge for visitors that aren't logged-in (logged-in users bypass the cache).
+- Automatically invalidates the cache when content is changed (including changes to the themes).
 
 The plugin requires no configuration once installed and activated. As long as the plugin is active and the Worker is running for the domain the edge-caching support is enabled.
 

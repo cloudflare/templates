@@ -1,0 +1,6 @@
+*-lock.*
+*.lock
+*.log
+
+build/
+dist/

@@ -85,12 +85,12 @@ const template = `
     document.querySelector("#error").innerHTML = message ? message : ""
   }
 </script>
-`
+`;
 
 export default () => {
   return new Response(template, {
     headers: {
-      'Content-type': 'text/html; charset=utf-8'
-    }
-  })
-}
+      'Content-type': 'text/html; charset=utf-8',
+    },
+  });
+};

@@ -5,23 +5,18 @@
 
 // API settings if KV isn't being used
 const CLOUDFLARE_API = {
-  email: "", // From https://dash.cloudflare.com/profile
-  key: "",   // Global API Key from https://dash.cloudflare.com/profile
-  zone: ""   // "Zone ID" from the API section of the dashboard overview page https://dash.cloudflare.com/
+  email: '', // From https://dash.cloudflare.com/profile
+  key: '', // Global API Key from https://dash.cloudflare.com/profile
+  zone: '', // "Zone ID" from the API section of the dashboard overview page https://dash.cloudflare.com/
 };
 
 // Default cookie prefixes for bypass
-const DEFAULT_BYPASS_COOKIES = [
-  "wp-",
-  "wordpress",
-  "comment_",
-  "woocommerce_"
-];
+const DEFAULT_BYPASS_COOKIES = ['wp-', 'wordpress', 'comment_', 'woocommerce_'];
 
 /**
- * Main worker entry point. 
+ * Main worker entry point.
  */
-addEventListener("fetch", event => {
+addEventListener('fetch', event => {
   const request = event.request;
   let upstreamCache = request.headers.get('x-HTML-Edge-Cache');
 
@@ -31,14 +26,18 @@ addEventListener("fetch", event => {
   let configured = false;
   if (typeof EDGE_CACHE !== 'undefined') {
     configured = true;
-  } else if (CLOUDFLARE_API.email.length && CLOUDFLARE_API.key.length && CLOUDFLARE_API.zone.length) {
+  } else if (
+    CLOUDFLARE_API.email.length &&
+    CLOUDFLARE_API.key.length &&
+    CLOUDFLARE_API.zone.length
+  ) {
     configured = true;
   }
 
   // Bypass processing of image requests (for everything except Firefox which doesn't use image/*)
   const accept = request.headers.get('Accept');
   let isImage = false;
-  if (accept && (accept.indexOf('image/*') !== -1)) {
+  if (accept && accept.indexOf('image/*') !== -1) {
     isImage = true;
   }
 
@@ -51,15 +50,15 @@ addEventListener("fetch", event => {
 /**
  * Process every request coming through to add the edge-cache header,
  * watch for purge responses and possibly cache HTML GET requests.
- * 
+ *
  * @param {Request} originalRequest - Original request
  * @param {Event} event - Original event (for additional async waiting)
  */
 async function processRequest(originalRequest, event) {
   let cfCacheStatus = null;
   const accept = originalRequest.headers.get('Accept');
-  const isHTML = (accept && accept.indexOf('text/html') >= 0);
-  let {response, cacheVer, status, bypassCache} = await getCachedResponse(originalRequest);
+  const isHTML = accept && accept.indexOf('text/html') >= 0;
+  let { response, cacheVer, status, bypassCache } = await getCachedResponse(originalRequest);
 
   if (response === null) {
     // Clone the request, add the edge-cache header and send it through.
@@ -74,9 +73,13 @@ async function processRequest(originalRequest, event) {
         status += ', Purged';
       }
       bypassCache = bypassCache || shouldBypassEdgeCache(request, response);
-      if ((!options || options.cache) && isHTML &&
-          originalRequest.method === 'GET' && response.status === 200 &&
-          !bypassCache) {
+      if (
+        (!options || options.cache) &&
+        isHTML &&
+        originalRequest.method === 'GET' &&
+        response.status === 200 &&
+        !bypassCache
+      ) {
         status += await cacheResponse(cacheVer, originalRequest, response, event);
       }
     }
@@ -97,7 +100,13 @@ async function processRequest(originalRequest, event) {
     }
   }
 
-  if (response && status !== null && originalRequest.method === 'GET' && response.status === 200 && isHTML) {
+  if (
+    response &&
+    status !== null &&
+    originalRequest.method === 'GET' &&
+    response.status === 200 &&
+    isHTML
+  ) {
     response = new Response(response.body, response);
     response.headers.set('x-HTML-Edge-Cache-Status', status);
     if (cacheVer !== null) {
@@ -154,7 +163,7 @@ const CACHE_HEADERS = ['Cache-Control', 'Expires', 'Pragma'];
 
 /**
  * Check for cached HTML GET requests.
- * 
+ *
  * @param {Request} request - Original request
  */
 async function getCachedResponse(request) {
@@ -187,7 +196,7 @@ async function getCachedResponse(request) {
 
         // Check to see if the response needs to be bypassed because of a cookie
         bypassCache = shouldBypassEdgeCache(request, cachedResponse);
-      
+
         // Copy the original cache headers back and clean up any control headers
         if (bypassCache) {
           status = 'Bypass Cookie';
@@ -209,11 +218,11 @@ async function getCachedResponse(request) {
       }
     } catch (err) {
       // Send the exception back in the response header for debugging
-      status = "Cache Read Exception: " + err.message;
+      status = 'Cache Read Exception: ' + err.message;
     }
   }
 
-  return {response, cacheVer, status, bypassCache};
+  return { response, cacheVer, status, bypassCache };
 }
 
 /**
@@ -229,14 +238,19 @@ async function purgeCache(cacheVer, event) {
     event.waitUntil(EDGE_CACHE.put('html_cache_version', cacheVer.toString()));
   } else {
     // Purge everything using the API
-    const url = "https://api.cloudflare.com/client/v4/zones/" + CLOUDFLARE_API.zone + "/purge_cache";
-    event.waitUntil(fetch(url,{
-      method: 'POST',
-      headers: {'X-Auth-Email': CLOUDFLARE_API.email,
-                'X-Auth-Key': CLOUDFLARE_API.key,
-                'Content-Type': 'application/json'},
-      body: JSON.stringify({purge_everything: true})
-    }));
+    const url =
+      'https://api.cloudflare.com/client/v4/zones/' + CLOUDFLARE_API.zone + '/purge_cache';
+    event.waitUntil(
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-Auth-Email': CLOUDFLARE_API.email,
+          'X-Auth-Key': CLOUDFLARE_API.key,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ purge_everything: true }),
+      })
+    );
   }
 }
 
@@ -267,7 +281,7 @@ async function updateCache(originalRequest, cacheVer, event) {
 
 /**
  * Cache the returned content (but only if it was a successful GET request)
- * 
+ *
  * @param {Int} cacheVer - Current cache version (if already retrieved)
  * @param {Request} request - Original Request
  * @param {Response} originalResponse - Response to (maybe) cache
@@ -275,9 +289,14 @@ async function updateCache(originalRequest, cacheVer, event) {
  * @returns {bool} true if the response was cached
  */
 async function cacheResponse(cacheVer, request, originalResponse, event) {
-  let status = "";
+  let status = '';
   const accept = request.headers.get('Accept');
-  if (request.method === 'GET' && originalResponse.status === 200 && accept && accept.indexOf('text/html') >= 0) {
+  if (
+    request.method === 'GET' &&
+    originalResponse.status === 200 &&
+    accept &&
+    accept.indexOf('text/html') >= 0
+  ) {
     cacheVer = await GetCurrentCacheVersion(cacheVer);
     const cacheKeyRequest = GenerateCacheRequest(request, cacheVer);
 
@@ -298,7 +317,7 @@ async function cacheResponse(cacheVer, request, originalResponse, event) {
       response.headers.delete('Set-Cookie');
       response.headers.set('Cache-Control', 'public; max-age=315360000');
       event.waitUntil(cache.put(cacheKeyRequest, response));
-      status = ", Cached";
+      status = ', Cached';
     } catch (err) {
       // status = ", Cache Write Exception: " + err.message;
     }
@@ -322,7 +341,7 @@ function getResponseOptions(response) {
     options = {
       purge: false,
       cache: false,
-      bypassCookies: []
+      bypassCookies: [],
     };
     let commands = header.split(',');
     for (let command of commands) {

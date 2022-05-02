@@ -19,7 +19,7 @@ $ wrangler generate myapp https://github.com/cloudflare/worker-emscripten-templa
 ✨   Done! New project created /path/to/myapp
 ```
 
-To demo you can use [`wrangler dev`](https://developers.cloudflare.com/workers/tooling/wrangler/commands/#dev-(alpha))
+To demo you can use [`wrangler dev`](<https://developers.cloudflare.com/workers/tooling/wrangler/commands/#dev-(alpha)>)
 
 ```console
 $ wrangler dev

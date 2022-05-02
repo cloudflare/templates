@@ -1,11 +1,11 @@
-const {ProvidePlugin} = require("webpack");
-const CopyPlugin = require('copy-webpack-plugin')
+const { ProvidePlugin } = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   // devtool: "inline-source-map",
   node: {
-    fs: "empty"
+    fs: 'empty',
   },
   plugins: [
     new CopyPlugin([
@@ -18,7 +18,7 @@ module.exports = {
     ]),
     new ProvidePlugin({
       TextDecoder: ['text-encoding', 'TextDecoder'],
-      TextEncoder: ['text-encoding', 'TextEncoder']
-    })
-  ]
+      TextEncoder: ['text-encoding', 'TextEncoder'],
+    }),
+  ],
 };

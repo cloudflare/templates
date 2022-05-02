@@ -39,16 +39,11 @@ async function handleRequest(request) {
   res.headers.set('cache-control', 'no-store');
   res.headers.set('content-type', 'application/octet-stream');
 
-  request.cf &&
-    request.cf.colo &&
-    res.headers.set('cf-meta-colo', request.cf.colo);
+  request.cf && request.cf.colo && res.headers.set('cf-meta-colo', request.cf.colo);
 
   res.headers.set('cf-meta-request-time', +reqTime);
 
-  res.headers.set(
-    'access-control-expose-headers',
-    'cf-meta-colo, cf-meta-request-time'
-  );
+  res.headers.set('access-control-expose-headers', 'cf-meta-colo, cf-meta-request-time');
 
   return res;
 }

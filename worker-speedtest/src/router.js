@@ -3,8 +3,7 @@
  * boolean indicating if the request uses that HTTP method,
  * header, host or referrer.
  */
-const Method = method => req =>
-  req.method.toLowerCase() === method.toLowerCase();
+const Method = method => req => req.method.toLowerCase() === method.toLowerCase();
 const Connect = Method('connect');
 const Delete = Method('delete');
 const Get = Method('get');
@@ -38,7 +37,7 @@ class Router {
   handle(conditions, handler) {
     this.routes.push({
       conditions,
-      handler
+      handler,
     });
     return this;
   }
@@ -94,8 +93,8 @@ class Router {
       status: 404,
       statusText: 'not found',
       headers: {
-        'content-type': 'text/plain'
-      }
+        'content-type': 'text/plain',
+      },
     });
   }
 

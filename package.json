@@ -1,3 +1,10 @@
 {
-  "private": true
+  "private": true,
+  "scripts": {
+    "format": "prettier . --write",
+    "pretest": "prettier . --check"
+  },
+  "devDependencies": {
+    "prettier": "2.6.2"
+  }
 }

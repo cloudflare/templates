@@ -36,7 +36,7 @@ const SCRIPT_URLS = [
   '/www.google-analytics.com/analytics.js',
   '/www.googletagmanager.com/gtag/js',
   '/www.googletagmanager.com/gtm.js',
-  '/www.googletagservices.com/tag/js/gpt.js'
+  '/www.googletagservices.com/tag/js/gpt.js',
 ];
 
 // Regex patterns for matching script and link tags
@@ -49,7 +49,7 @@ const PATTERN_POST = '[^\'" ]+)\\s*["\'][^>]*>';
  * for navigational requests and the fallback is to just pass the request through
  * unmodified (safe).
  */
-addEventListener("fetch", event => {
+addEventListener('fetch', event => {
   // Fail-safe in case of an unhandled exception
   event.passThroughOnException();
 
@@ -57,10 +57,9 @@ addEventListener("fetch", event => {
   const bypass = new URL(event.request.url).searchParams.get('cf-worker') === 'bypass';
   if (!bypass) {
     let accept = event.request.headers.get('accept');
-    if (event.request.method === 'GET' &&
-        isProxyRequest(url)) {
+    if (event.request.method === 'GET' && isProxyRequest(url)) {
       event.respondWith(proxyUrl(url, event.request));
-    } else if (accept && accept.indexOf("text/html") >= 0) {
+    } else if (accept && accept.indexOf('text/html') >= 0) {
       event.respondWith(processHtmlRequest(event.request));
     }
   }
@@ -72,7 +71,7 @@ const VALID_CHARSETS = ['utf-8', 'utf8', 'iso-8859-1', 'us-ascii'];
 /**
  * See if the requested resource is a proxy request to an overwritten origin
  * (something that starts with a prefix in one of our lists).
- * 
+ *
  * @param {*} url - Requested URL
  * @param {*} request - Original Request
  * @returns {*} - true if the URL matches one of the proxy paths
@@ -109,13 +108,9 @@ async function proxyUrl(url, request) {
   // Filter the request headers
   let init = {
     method: request.method,
-    headers: {}
+    headers: {},
   };
-  const proxy_headers = ["Accept",
-                         "Accept-Encoding",
-                         "Accept-Language",
-                         "Referer",
-                         "User-Agent"];
+  const proxy_headers = ['Accept', 'Accept-Encoding', 'Accept-Language', 'Referer', 'User-Agent'];
   for (let name of proxy_headers) {
     let value = request.headers.get(name);
     if (value) {
@@ -131,16 +126,20 @@ async function proxyUrl(url, request) {
   // Filter the response headers
   const response = await fetch(originUrl, init);
   if (response) {
-    const responseHeaders = ["Content-Type",
-                             "Cache-Control",
-                             "Expires",
-                             "Accept-Ranges",
-                             "Date",
-                             "Last-Modified",
-                             "ETag"];
-    let responseInit = {status: response.status,
-                        statusText: response.statusText,
-                        headers: {}};
+    const responseHeaders = [
+      'Content-Type',
+      'Cache-Control',
+      'Expires',
+      'Accept-Ranges',
+      'Date',
+      'Last-Modified',
+      'ETag',
+    ];
+    let responseInit = {
+      status: response.status,
+      statusText: response.statusText,
+      headers: {},
+    };
     for (let name of responseHeaders) {
       let value = response.headers.get(name);
       if (value) {
@@ -164,21 +163,21 @@ async function proxyUrl(url, request) {
  * Handle all of the processing for a (likely) HTML request.
  * - Pass through the request to the origin and inspect the response.
  * - If the response is HTML set up a streaming transform and pass it on to modifyHtmlStream for processing
- * 
+ *
  * Extra care needs to be taken to make sure the character encoding from the original
  * HTML is extracted and converted to utf-8 and that the downstream response is identified
  * as utf-8.
- * 
+ *
  * @param {*} request - The original request
  */
 async function processHtmlRequest(request) {
   // Fetch from origin server.
   const response = await fetch(request);
-  let contentType = response.headers.get("content-type");
-  if (contentType && contentType.indexOf("text/html") !== -1) {
+  let contentType = response.headers.get('content-type');
+  if (contentType && contentType.indexOf('text/html') !== -1) {
     // Workers can only decode utf-8. If it is anything else, pass the
     // response through unmodified
-    const charsetRegex = /charset\s*=\s*([^\s;]+)/mgi;
+    const charsetRegex = /charset\s*=\s*([^\s;]+)/gim;
     const match = charsetRegex.exec(contentType);
     if (match !== null) {
       let charset = match[1].toLowerCase();
@@ -213,7 +212,7 @@ function chunkContainsInvalidCharset(chunk) {
   let invalid = false;
 
   // meta charset
-  const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/mgi;
+  const charsetRegex = /<\s*meta[^>]+charset\s*=\s*['"]([^'"]*)['"][^>]*>/gim;
   const charsetMatch = charsetRegex.exec(chunk);
   if (charsetMatch) {
     const docCharset = charsetMatch[1].toLowerCase();
@@ -222,11 +221,11 @@ function chunkContainsInvalidCharset(chunk) {
     }
   }
   // content-type
-  const contentTypeRegex = /<\s*meta[^>]+http-equiv\s*=\s*['"]\s*content-type[^>]*>/mgi;
+  const contentTypeRegex = /<\s*meta[^>]+http-equiv\s*=\s*['"]\s*content-type[^>]*>/gim;
   const contentTypeMatch = contentTypeRegex.exec(chunk);
   if (contentTypeMatch) {
     const metaTag = contentTypeMatch[0];
-    const metaRegex = /charset\s*=\s*([^\s"]*)/mgi;
+    const metaRegex = /charset\s*=\s*([^\s"]*)/gim;
     const metaMatch = metaRegex.exec(metaTag);
     if (metaMatch) {
       const charset = metaMatch[1].toLowerCase();
@@ -243,7 +242,7 @@ function chunkContainsInvalidCharset(chunk) {
  * - Attempt to buffer the full head to reduce the likelihood of the patterns spanning multiple response chunks
  * - Scan the first response chunk for a charset meta tag (and bail if it isn't a supported charset)
  * - Pass the gathered head and each subsequent chunk to modifyHtmlChunk() for actual processing of the text.
- * 
+ *
  * @param {*} readable - Input stream (from the origin).
  * @param {*} writable - Output stream (to the browser).
  * @param {*} request - Original request object for downstream use.
@@ -252,11 +251,11 @@ async function modifyHtmlStream(readable, writable, request) {
   const reader = readable.getReader();
   const writer = writable.getWriter();
   const encoder = new TextEncoder();
-  let decoder = new TextDecoder("utf-8", {fatal: true});
+  let decoder = new TextDecoder('utf-8', { fatal: true });
 
   let firstChunk = true;
   let unsupportedCharset = false;
-  
+
   // build the list of url patterns we are going to look for.
   let patterns = [];
   for (let scriptUrl of SCRIPT_URLS) {
@@ -285,7 +284,7 @@ async function modifyHtmlStream(readable, writable, request) {
       continue;
     } else {
       try {
-        chunk = decoder.decode(value, {stream:true});
+        chunk = decoder.decode(value, { stream: true });
       } catch (e) {
         // Decoding failed, switch to passthrough
         unsupportedCharset = true;
@@ -318,7 +317,7 @@ async function modifyHtmlStream(readable, writable, request) {
       content = partial + chunk;
       partial = '';
 
-      // See if there is an unclosed script tag at the end (and if so, carve 
+      // See if there is an unclosed script tag at the end (and if so, carve
       // it out to complete when the remainder comes in).
       // This isn't perfect (case sensitive and doesn't allow whitespace in the tag)
       // but it is good enough for our purpose and much faster than a regex.
@@ -348,7 +347,7 @@ async function modifyHtmlStream(readable, writable, request) {
 /**
  * Find any of the script tags we are looking for and replace them with hashed versions
  * that are proxied through the origin.
- * 
+ *
  * @param {*} content - Text chunk from the streaming HTML (or accumulated head)
  * @param {*} patterns - RegEx patterns to match
  * @param {*} request - Original request object for downstream use.
@@ -382,10 +381,10 @@ async function modifyHtmlChunk(content, patterns, request) {
  * Fetch the original content and return a hash of the result (for detecting changes).
  * Use a local cache because some scripts use cache-control: private to prevent
  * proxies from caching.
- * 
+ *
  * @param {*} originalUrl - Unmodified URL
  * @param {*} url - URL for the third-party request
- * @param {*} request - Original request for the page HTML so the user-agent can be passed through 
+ * @param {*} request - Original request for the page HTML so the user-agent can be passed through
  * @param {*} event - Worker event object.
  */
 async function hashContent(originalUrl, url, request) {
@@ -393,7 +392,7 @@ async function hashContent(originalUrl, url, request) {
   let hash = null;
   const userAgent = request.headers.get('user-agent');
   const clientAddr = request.headers.get('cf-connecting-ip');
-  const hashCacheKey = new Request(url + "cf-hash-key");
+  const hashCacheKey = new Request(url + 'cf-hash-key');
   let cache = null;
 
   let foundInCache = false;
@@ -406,18 +405,17 @@ async function hashContent(originalUrl, url, request) {
       proxyUrl = constructProxyUrl(originalUrl, hash);
       foundInCache = true;
     }
-  } catch(e) {
+  } catch (e) {
     // Ignore the exception
   }
 
   if (!foundInCache) {
     try {
-      let headers = {'Referer': request.url,
-                    'User-Agent': userAgent};
+      let headers = { 'Referer': request.url, 'User-Agent': userAgent };
       if (clientAddr) {
         headers['X-Forwarded-For'] = clientAddr;
       }
-      const response = await fetch(url, {headers: headers});
+      const response = await fetch(url, { headers: headers });
       let content = await response.arrayBuffer();
       if (content) {
         const hashBuffer = await crypto.subtle.digest('SHA-1', content);
@@ -434,14 +432,14 @@ async function hashContent(originalUrl, url, request) {
             if (match) {
               ttl = parseInt(match[1], 10);
             }
-            const hashCacheResponse = new Response(hash, {ttl: ttl});
+            const hashCacheResponse = new Response(hash, { ttl: ttl });
             cache.put(hashCacheKey, hashCacheResponse);
           }
-        } catch(e) {
+        } catch (e) {
           // Ignore the exception
         }
       }
-    } catch(e) {
+    } catch (e) {
       // Ignore the exception
     }
   }
@@ -486,5 +484,5 @@ function hex(buffer) {
     var paddedValue = (padding + stringValue).slice(-padding.length);
     hexCodes.push(paddedValue);
   }
-  return hexCodes.join("");
+  return hexCodes.join('');
 }

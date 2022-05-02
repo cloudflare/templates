@@ -1,6 +1,6 @@
-const CopyPlugin = require('copy-webpack-plugin')
-const path = require('path')
-const spawn = require('child_process').spawnSync
+const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const spawn = require('child_process').spawnSync;
 
 module.exports = {
   context: path.resolve(__dirname, '.'),
@@ -11,14 +11,14 @@ module.exports = {
     {
       apply: compiler => {
         compiler.hooks.compilation.tap('emscripten-build', compilation => {
-          let result = spawn('node', ['build.js'], { stdio: 'inherit' })
+          let result = spawn('node', ['build.js'], { stdio: 'inherit' });
 
           if (result.status != 0) {
-            compilation.errors.push('emscripten build failed')
+            compilation.errors.push('emscripten build failed');
           } else {
-            console.log('emscripten build complete')
+            console.log('emscripten build complete');
           }
-        })
+        });
       },
     },
     new CopyPlugin([
@@ -41,4 +41,4 @@ module.exports = {
       },
     ],
   },
-}
+};

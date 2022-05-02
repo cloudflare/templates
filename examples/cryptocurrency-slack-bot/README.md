@@ -2,9 +2,9 @@
 
 A [Slack bot](https://api.slack.com/slash-commands) for fetching the latest cryptocurrency prices, built entirely using [Cloudflare Workers](https://developers.cloudflare.com/workers/), Cloudflare's serverless platform
 
-* It uses the [CoinMarketCap API](https://coinmarketcap.com/api/) to fetch crypto-currency prices
-* It caches a map of "ticker" codes (e.g. "BTC" or "ETH") to their public identifiers
-* ... and it uses Cloudflare's cache to minimize the need to hit the API on every invocation, whilst still serving recent price data.
+- It uses the [CoinMarketCap API](https://coinmarketcap.com/api/) to fetch crypto-currency prices
+- It caches a map of "ticker" codes (e.g. "BTC" or "ETH") to their public identifiers
+- ... and it uses Cloudflare's cache to minimize the need to hit the API on every invocation, whilst still serving recent price data.
 
 ## Demo
 

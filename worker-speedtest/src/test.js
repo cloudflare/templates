@@ -11,14 +11,11 @@ beforeAll(async () => {
 describe('speedtest-down', () => {
   const getResponse = async numBytes => {
     const url = new URL(
-      `https://someurl.com/down${
-        numBytes !== undefined ? `?bytes=${numBytes}` : ''
-      }`
+      `https://someurl.com/down${numBytes !== undefined ? `?bytes=${numBytes}` : ''}`
     );
     return await handleRequest(new Request(url));
   };
-  const getContent = async (...params) =>
-    await (await getResponse(...params)).text();
+  const getContent = async (...params) => await (await getResponse(...params)).text();
 
   test('default bytes', async () => {
     const content = await getContent();
@@ -64,11 +61,7 @@ describe('speedtest-down', () => {
 });
 
 describe('speedtest-up', () => {
-  const getResponse = async ({
-    numBytes = 0,
-    method = 'POST',
-    ...other
-  } = {}) => {
+  const getResponse = async ({ numBytes = 0, method = 'POST', ...other } = {}) => {
     const config = { method, ...other };
     if (method === 'POST') {
       config.body = '0'.repeat(numBytes);
@@ -78,8 +71,7 @@ describe('speedtest-up', () => {
     const req = new Request('https://someurl.com/up', config);
     return await handleRequest(req);
   };
-  const getContent = async (...params) =>
-    await (await getResponse(...params)).text();
+  const getContent = async (...params) => await (await getResponse(...params)).text();
 
   test('get request', async () => {
     const content = await getContent({ method: 'GET' });
