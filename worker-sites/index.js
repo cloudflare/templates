@@ -13,6 +13,10 @@ addEventListener('fetch', event => {
   event.respondWith(handleEvent(event));
 });
 
+/**
+ * @param {FetchEvent} event
+ * @returns {Promise<Response>}
+ */
 async function handleEvent(event) {
   let options = {};
 
@@ -67,6 +71,8 @@ async function handleEvent(event) {
  * the url. This can be useful if you are deploying to a
  * route on a zone, or if you only want your static content
  * to exist at a specific path.
+ * @param {string} prefix
+ * @returns {(request: Request) => Request}
  */
 function handlePrefix(prefix) {
   return request => {
