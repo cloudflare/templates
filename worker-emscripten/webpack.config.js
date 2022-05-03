@@ -6,7 +6,7 @@ module.exports = {
   entry: './index.js',
   output: {
     path: resolve(__dirname, 'build'),
-    filename: 'index.js'
+    filename: 'index.js',
   },
   devtool: 'nosources-source-map',
   target: 'webworker',

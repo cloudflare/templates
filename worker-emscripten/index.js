@@ -16,13 +16,15 @@ let emscripten_module = new Promise((resolve, reject) => {
       receive(instance);
       return instance.exports;
     },
-  }).then(mod => {
-    resolve({
-      init: mod.cwrap('init', 'number', ['number']),
-      resize: mod.cwrap('resize', 'number', ['number', 'number']),
-      module: mod,
-    });
-  }).catch(reject);
+  })
+    .then(mod => {
+      resolve({
+        init: mod.cwrap('init', 'number', ['number']),
+        resize: mod.cwrap('resize', 'number', ['number', 'number']),
+        module: mod,
+      });
+    })
+    .catch(reject);
 });
 
 export default {
@@ -57,5 +59,5 @@ export default {
 
     // Return the response.
     return newResponse;
-  }
-}
+  },
+};

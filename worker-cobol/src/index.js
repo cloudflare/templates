@@ -39,5 +39,5 @@ export default {
       console.log(e);
       return new Response(e.stack, { status: 500 });
     }
-  }
-}
+  },
+};

@@ -26,12 +26,9 @@ async function handleRequest() {
   // const result = await dynamoExample();
   // const result = await auroraExample(request);
 
-  return new Response(
-    JSON.stringify(result),
-    {
-      headers: { 'content-type': 'text/plain' },
-    }
-  );
+  return new Response(JSON.stringify(result), {
+    headers: { 'content-type': 'text/plain' },
+  });
 }
 
 async function sqsExample() {

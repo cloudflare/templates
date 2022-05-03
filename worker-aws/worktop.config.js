@@ -3,8 +3,8 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 
 // @ts-ignore
 export default define({
-	modify(config) {
-		config.plugins = config.plugins || [];
-		config.plugins.push(NodeModulesPolyfillPlugin());
-	}
+  modify(config) {
+    config.plugins = config.plugins || [];
+    config.plugins.push(NodeModulesPolyfillPlugin());
+  },
 });
