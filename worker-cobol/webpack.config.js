@@ -2,6 +2,7 @@ const { ProvidePlugin } = require('webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   entry: './src/index.js',
   // devtool: "inline-source-map",
   node: {
