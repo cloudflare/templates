@@ -1,9 +1,9 @@
 import { Client } from './driver/mysql';
 
 interface Bindings {
-	TUNNEL_HOST?: string;
-	CF_CLIENT_ID?: string;
-	CF_CLIENT_SECRET?: string;
+  TUNNEL_HOST?: string;
+  CF_CLIENT_ID?: string;
+  CF_CLIENT_SECRET?: string;
 }
 
 const worker: ExportedHandler<Bindings> = {

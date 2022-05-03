@@ -1,11 +1,5 @@
-type = "javascript"
 name = "<< todo >>"
-
 account_id = "<< todo >>"
-zone_id = "<< todo >>"
 workers_dev = true
 
-[build.upload]
-format = "modules"
-main = "./index.mjs"
-dir = "src"
+compatibility_date = "2022-05-03"

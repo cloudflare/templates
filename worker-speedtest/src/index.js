@@ -1,15 +1,25 @@
-const Router = require('./router');
+import down from './down.js';
+import up from './up.js';
 
-const downHandler = require('./down');
-const upHandler = require('./up');
+export default {
+  /**
+   * @param {Request} req
+   * @returns {Promise<Response>}
+   */
+  async fetch(req) {
+    let url = new URL(req.url);
+    let path = url.pathname.replace(/[/]$/, '');
 
-async function handleRequest(request) {
-  const r = new Router();
-
-  r.get('.*/down', downHandler);
-  r.post('.*/up', upHandler);
-
-  return await r.route(request);
-}
-
-module.exports = handleRequest;
+    switch (path) {
+      case '/down': {
+        return down(req);
+      }
+      case '/up': {
+        return up(req);
+      }
+      default: {
+        return new Response('Not found', { status: 404 });
+      }
+    }
+  },
+};

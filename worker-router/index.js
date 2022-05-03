@@ -20,11 +20,8 @@ router.get('/example/:text', ({ params }) => {
   // Decode text like "Hello%20world" into "Hello world"
   let input = decodeURIComponent(params.text);
 
-  // Construct a buffer from our input
-  let buffer = Buffer.from(input, 'utf8');
-
-  // Serialise the buffer into a base64 string
-  let base64 = buffer.toString('base64');
+  // Serialise the input into a base64 string
+  let base64 = btoa(input);
 
   // Return the HTML with the string to the client
   return new Response(`<p>Base64 encoding: <code>${base64}</code></p>`, {
@@ -52,7 +49,8 @@ router.post('/post', async request => {
 
   // If the POST data is JSON then attach it to our response.
   if (request.headers.get('Content-Type') === 'application/json') {
-    fields['json'] = await request.json();
+    let json = await request.json();
+    Object.assign(fields, { json });
   }
 
   // Serialise the JSON to a string.
@@ -73,10 +71,6 @@ Visit any page that doesn't exist (e.g. /foobar) to see it in action.
 */
 router.all('*', () => new Response('404, not found!', { status: 404 }));
 
-/*
-This snippet ties our worker to the router we deifned above, all incoming requests
-are passed to the router where your routes are called and the response is sent.
-*/
-addEventListener('fetch', e => {
-  e.respondWith(router.handle(e.request));
-});
+export default {
+  fetch: router.handle,
+};

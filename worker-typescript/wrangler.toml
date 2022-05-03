@@ -1,12 +1,4 @@
-type = "javascript"
 name = "<< todo >>"
-
 account_id = "<< todo >>"
-zone_id = "<< todo >>"
 workers_dev = true
-
-[build]
-command = "npm run build"
-
-[build.upload]
-format = "service-worker"
+compatibility_date = "2022-05-03"

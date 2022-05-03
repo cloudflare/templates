@@ -1,11 +1,7 @@
 import template from './template';
 
 let count = 0;
-
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
-
+/** @param {WebSocket} websocket */
 async function handleSession(websocket) {
   websocket.accept();
   websocket.addEventListener('message', async ({ data }) => {
@@ -24,8 +20,9 @@ async function handleSession(websocket) {
   });
 }
 
-const websocketHandler = async request => {
-  const upgradeHeader = request.headers.get('Upgrade');
+/** @param {Request} req */
+async function websocketHandler(req) {
+  const upgradeHeader = req.headers.get('Upgrade');
   if (upgradeHeader !== 'websocket') {
     return new Response('Expected websocket', { status: 400 });
   }
@@ -37,20 +34,26 @@ const websocketHandler = async request => {
     status: 101,
     webSocket: client,
   });
-};
-
-async function handleRequest(request) {
-  try {
-    const url = new URL(request.url);
-    switch (url.pathname) {
-      case '/':
-        return template();
-      case '/ws':
-        return websocketHandler(request);
-      default:
-        return new Response('Not found', { status: 404 });
-    }
-  } catch (err) {
-    return new Response(err.toString());
-  }
 }
+
+export default {
+  /**
+   * @param {Request} req
+   */
+  async fetch(req) {
+    try {
+      const url = new URL(req.url);
+      switch (url.pathname) {
+        case '/':
+          return template();
+        case '/ws':
+          return await websocketHandler(req);
+        default:
+          return new Response('Not found', { status: 404 });
+      }
+    } catch (err) {
+      /** @type {Error} */ let e = err;
+      return new Response(e.toString());
+    }
+  },
+};

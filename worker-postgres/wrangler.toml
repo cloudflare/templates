@@ -1,20 +1,9 @@
-type = "javascript"
 name = "<< todo >>"
-
 account_id = "<< todo >>"
-zone_id = "<< todo >>"
 workers_dev = true
 
+main = "dist/index.mjs"
 compatibility_date = "2021-10-07"
 
 [build]
-command = "npm install && npm run build && cp ./src/driver/**/*.wasm ./dist"
-
-[build.upload]
-format = "modules"
-main = "./index.mjs"
-dir = "dist"
-
-[[build.upload.rules]]
-type = "CompiledWasm"
-globs = ["**/*.wasm"]
+command = "npm run build && cp ./src/driver/**/*.wasm ./dist"

@@ -1,5 +1,7 @@
-import { handleRequest } from './handler';
+const worker: ExportedHandler = {
+  async fetch(req) {
+    return new Response(`request method: ${req.method}`);
+  },
+};
 
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request));
-});
+export default worker;

@@ -1,5 +1,4 @@
-This directory contains the source for the original bundled driver as well as artifacts created by
-`edgeworkerizer.py` to enable it to run on Cloudflare Workers.
+This directory contains the source for the original bundled driver as well as artifacts created by `edgeworkerizer.py` to enable it to run on Cloudflare Workers.
 
 ### Bundle Deno PostgreSQL driver
 
