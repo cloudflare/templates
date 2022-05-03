@@ -3,9 +3,12 @@ const CopyPlugin = require('copy-webpack-plugin');
 const spawn = require('child_process').spawnSync;
 
 module.exports = {
-  context: resolve(__dirname, '.'),
-  devtool: 'nosources-source-map',
   entry: './index.js',
+  output: {
+    path: resolve(__dirname, 'build'),
+    filename: 'index.js'
+  },
+  devtool: 'nosources-source-map',
   target: 'webworker',
   plugins: [
     {
