@@ -2,8 +2,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "deploy": "wrangler publish index.js",
-    "dev": "wrangler dev index.js --local"
+    "deploy": "wrangler publish src/lib.rs",
+    "dev": "wrangler dev src/lib.rs --local"
   },
   "devDependencies": {
     "wrangler": "0.0.27"

@@ -1,9 +1,11 @@
-type = "webpack"
 name = "<< todo >>"
-
 account_id = "<< todo >>"
-zone_id = "<< todo >>"
 workers_dev = true
+
+compatibility_date = "2022-05-03"
+
+[build]
+command = "npm run build"
 
 [vars]
 AWS_REGION = "us-west-2"

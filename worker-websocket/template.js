@@ -1,4 +1,4 @@
-const template = `
+const html = `
 <style>
   body {
     margin: 1rem;
@@ -57,7 +57,7 @@ const template = `
   }
 
   const url = new URL(window.location)
-  url.protocol = "wss"
+  url.protocol = location.protocol.replace("http", "ws")
   url.pathname = "/ws"
   websocket(url)
 
@@ -88,7 +88,7 @@ const template = `
 `;
 
 export default () => {
-  return new Response(template, {
+  return new Response(html, {
     headers: {
       'Content-type': 'text/html; charset=utf-8',
     },

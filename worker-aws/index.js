@@ -1,6 +1,6 @@
-const { DynamoDBClient, GetItemCommand, PutItemCommand } = require('@aws-sdk/client-dynamodb');
-const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs');
-const { RDSDataClient, ExecuteStatementCommand } = require('@aws-sdk/client-rds-data');
+import { DynamoDBClient, GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { RDSDataClient, ExecuteStatementCommand } from '@aws-sdk/client-rds-data';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 
 addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request));
@@ -14,7 +14,7 @@ async function myCredentialProvider() {
   };
 }
 
-async function handleRequest(request) {
+async function handleRequest() {
   // The AWS SDK tries to use crypto from off of the window,
   // so we need to trick it into finding it where it expects it
   global.window = {};

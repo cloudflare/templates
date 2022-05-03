@@ -1,7 +1,17 @@
 {
   "private": true,
+  "type": "module",
   "version": "0.0.0",
+  "scripts": {
+    "deploy": "wrangler publish src/index.js",
+    "dev": "wrangler dev src/index.js --local",
+    "test": "uvu test -i utils"
+  },
   "devDependencies": {
-    "@dollarshaveclub/cloudworker": "^0.0.11"
+    "@cloudflare/workers-types": "^3.0.0",
+    "@types/service-worker-mock": "^2.0.1",
+    "service-worker-mock": "^2.0.5",
+    "uvu": "^0.5.3",
+    "wrangler": "0.0.27"
   }
 }

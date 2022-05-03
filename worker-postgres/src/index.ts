@@ -1,8 +1,8 @@
 import { Client } from './driver/postgres';
 
 interface Bindings {
-	CF_CLIENT_ID?: string;
-	CF_CLIENT_SECRET?: string;
+  CF_CLIENT_ID?: string;
+  CF_CLIENT_SECRET?: string;
 }
 
 declare global {
