@@ -1,4 +1,5 @@
-node_modules/
-worker/
-.cargo-ok
-package-lock.json
+.DS_Store
+/node_modules
+*-lock.*
+*.lock
+*.log

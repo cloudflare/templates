@@ -1,4 +1,7 @@
-dist
-node_modules
-transpiled
-/.idea/
+.DS_Store
+/node_modules
+*-lock.*
+*.lock
+*.log
+
+/dist
