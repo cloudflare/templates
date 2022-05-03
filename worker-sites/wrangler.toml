@@ -1,5 +1,9 @@
-account_id = ""
-name = "my-site"
 type = "webpack"
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-site = { bucket = "./public" }
+
+[site]
+bucket = "./public"

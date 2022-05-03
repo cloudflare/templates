@@ -1,11 +1,12 @@
-name = "worker-typescript-template"
 type = "javascript"
-zone_id = ""
-account_id = ""
-route = ""
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
 
 [build]
-command = "npm install && npm run build"
+command = "npm run build"
+
 [build.upload]
 format = "service-worker"

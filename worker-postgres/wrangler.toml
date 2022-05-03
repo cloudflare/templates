@@ -1,9 +1,10 @@
-name = "worker-template-postgres"
 type = "javascript"
-account_id = ""
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-route = ""
-zone_id = ""
+
 compatibility_date = "2021-10-07"
 
 [build]
@@ -12,7 +13,7 @@ command = "npm install && npm run build && cp ./src/driver/**/*.wasm ./dist"
 [build.upload]
 format = "modules"
 main = "./index.mjs"
-dir = "./dist"
+dir = "dist"
 
 [[build.upload.rules]]
 type = "CompiledWasm"

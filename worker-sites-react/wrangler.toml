@@ -1,9 +1,9 @@
-account_id = "dc56444c4c955a1653106ccf997c1067"
-name = "my-react-app"
 type = "webpack"
-route = ""
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-zone_id = ""
 
 [site]
 bucket = "./build"

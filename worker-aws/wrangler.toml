@@ -1,9 +1,9 @@
-name = "aws-worker"
 type = "webpack"
-account_id = ""
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-route = ""
-zone_id = ""
 
 [vars]
 AWS_REGION = "us-west-2"

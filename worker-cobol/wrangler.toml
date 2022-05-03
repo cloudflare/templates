@@ -1,8 +1,8 @@
-name = "cobol-worker"
 type = "webpack"
 webpack_config = "webpack.config.js"
 
-account_id = ""
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-route = ""
-zone_id = ""

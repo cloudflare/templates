@@ -1,7 +1,13 @@
 import { Client } from './driver/mysql';
 
-export default {
-  async fetch(request: Request, env, ctx: ExecutionContext) {
+interface Bindings {
+	TUNNEL_HOST?: string;
+	CF_CLIENT_ID?: string;
+	CF_CLIENT_SECRET?: string;
+}
+
+const worker: ExportedHandler<Bindings> = {
+  async fetch(request, env, ctx) {
     // Add Cloudflare Access Service Token credentials as global variables, used when Worker
     // establishes the connection to Cloudflare Tunnel. This ensures only approved services can
     // connect to your Tunnel.
@@ -28,8 +34,10 @@ export default {
 
       // Return result from database.
       return new Response(JSON.stringify({ result }));
-    } catch (e) {
-      return new Response((e as Error).message);
+    } catch (err) {
+      return new Response((err as Error).message);
     }
   },
 };
+
+export default worker;

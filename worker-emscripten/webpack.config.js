@@ -1,9 +1,9 @@
+const { resolve } = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
-const path = require('path');
 const spawn = require('child_process').spawnSync;
 
 module.exports = {
-  context: path.resolve(__dirname, '.'),
+  context: resolve(__dirname, '.'),
   devtool: 'nosources-source-map',
   entry: './index.js',
   target: 'webworker',

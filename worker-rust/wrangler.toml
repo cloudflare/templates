@@ -1,6 +1,10 @@
-name = "{{project-name}}"
 type = "javascript"
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
+
 compatibility_date = "2022-01-20"
 
 [vars]
@@ -17,6 +21,3 @@ main = "./shim.mjs"
 [[build.upload.rules]]
 globs = ["**/*.wasm"]
 type = "CompiledWasm"
-
-# read more about configuring your Worker via wrangler.toml at:
-# https://developers.cloudflare.com/workers/cli-wrangler/configuration

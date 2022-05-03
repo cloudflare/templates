@@ -1,7 +1,6 @@
-name = "router"
 type = "webpack"
+name = "<< todo >>"
 
-account_id = ""
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-route = ""
-zone_id = ""

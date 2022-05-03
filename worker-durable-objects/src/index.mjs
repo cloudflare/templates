@@ -1,28 +1,32 @@
-// Worker
-
-export default {
+/**
+ * Worker
+ * @type {ExportedHandler}
+ */
+const worker = {
   async fetch(request, env) {
-    return await handleRequest(request, env);
-  },
+		let id = env.COUNTER.idFromName('A');
+		let obj = env.COUNTER.get(id);
+		let resp = await obj.fetch(request.url);
+		let count = await resp.text();
+
+		return new Response("Durable Object 'A' count: " + count);
+  }
 };
 
-async function handleRequest(request, env) {
-  let id = env.COUNTER.idFromName('A');
-  let obj = env.COUNTER.get(id);
-  let resp = await obj.fetch(request.url);
-  let count = await resp.text();
+export default worker;
 
-  return new Response("Durable Object 'A' count: " + count);
-}
-
-// Durable Object
-
+/**
+ * Durable Object
+ */
 export class Counter {
-  constructor(state, env) {
+  constructor(state) {
     this.state = state;
   }
 
-  // Handle HTTP requests from clients.
+  /**
+	 * Handle HTTP requests from clients.
+	 * @param {Request} request
+	 */
   async fetch(request) {
     // Apply requested action.
     let url = new URL(request.url);

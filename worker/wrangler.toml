@@ -1,7 +1,11 @@
-name = "helloworld"
 type = "javascript"
+name = "<< todo >>"
 
-account_id = ""
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-route = ""
-zone_id = ""
+
+[build.upload]
+format = "modules"
+main = "./index.mjs"
+dir = "src"

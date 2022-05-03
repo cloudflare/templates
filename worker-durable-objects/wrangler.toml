@@ -1,17 +1,14 @@
-name = "worker"
-# type = "javascript" is required to use the `[build]` section
 type = "javascript"
+name = "<< todo >>"
+
+account_id = "<< todo >>"
+zone_id = "<< todo >>"
 workers_dev = true
-account_id = ""
-route = ""
-zone_id = ""
 
 [build.upload]
-# Upload the code directly from the src directory.
-dir = "src"
-# The "modules" upload format is required for all projects that export a Durable Objects class
 format = "modules"
 main = "./index.mjs"
+dir = "src"
 
 [durable_objects]
 bindings = [{name = "COUNTER", class_name = "Counter"}]
