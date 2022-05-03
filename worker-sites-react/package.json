@@ -1,16 +1,22 @@
 {
   "private": true,
   "version": "0.0.0",
-  "dependencies": {
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
-    "react-scripts": "3.1.2"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "deploy": "wrangler publish",
+    "dev": "wrangler dev --local",
+    "react:start": "react-scripts start",
+    "react:build": "react-scripts build",
+    "react:eject": "react-scripts eject",
+    "react:test": "react-scripts test"
+  },
+  "dependencies": {
+    "@cloudflare/kv-asset-handler": "~0.1.2",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
+  },
+  "devDependencies": {
+    "react-scripts": "5.0.1",
+    "wrangler": "0.0.27"
   },
   "eslintConfig": {
     "extends": "react-app"
