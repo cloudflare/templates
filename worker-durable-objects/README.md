@@ -1,4 +1,4 @@
-# 👷 Durable Objects template
+# Template: worker-durable-objects
 
 ## Note: You must use [wrangler](https://developers.cloudflare.com/workers/cli-wrangler/install-update) 1.19.3 or newer to use this template.
 
@@ -6,11 +6,16 @@
 
 A template for kick-starting a Cloudflare Workers project that uses Durable Objects.
 
-This template is meant to be the simplest way to get started with Durable Objects, for developers who just want to be able to write some code without worrying about a JavaScript bundler. If you want to be able to bundle dependencies alongside your code, you're better off starting with one of the other Durable Objects templates:
+## Setup
 
-- Rollup + ES Modules: https://github.com/cloudflare/durable-objects-rollup-esm
-- Webpack + CommonJS Modules: https://github.com/cloudflare/durable-objects-webpack-commonjs
+To create a `my-project` directory using this template, run:
 
-Worker code is in `src/`. The normal fetch handler and the Durable Object `Counter` class are in `src/index.mjs`.
+```sh
+$ npm init cloudflare my-project worker-durable-objects
+# or
+$ yarn create cloudflare my-project worker-durable-objects
+# or
+$ pnpm create cloudflare my-project worker-durable-objects
+```
 
-Wrangler is configured to upload all files in the `src/` directory, and `index.mjs` is configured to be the main module.
+> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.

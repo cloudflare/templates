@@ -1,15 +1,17 @@
-# 👷 `worker-template` Hello World
+# Template: worker
 
-A template for kick starting a Cloudflare worker project.
+A simple template for kick starting a Cloudflare worker project.
 
-[`index.js`](https://github.com/cloudflare/worker-template/blob/master/index.js) is the content of the Workers script.
+## Setup
 
-#### Wrangler
+To create a `my-project` directory using this template, run:
 
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
-
+```sh
+$ npm init cloudflare my-project worker
+# or
+$ yarn create cloudflare my-project worker
+# or
+$ pnpm create cloudflare my-project worker
 ```
-wrangler generate projectname https://github.com/cloudflare/worker-template
-```
 
-Further documentation for Wrangler can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler).
+> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.

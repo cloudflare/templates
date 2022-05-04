@@ -1,14 +1,26 @@
-# Cloudflare Workers + MySQL
+# Template: worker-mysql
 
-This repo contains example code and a MySQL driver that can be used in any Workers project. If you
-are interested in using the driver _outside_ of this template, copy the `driver/mysql` module
-into your project's `node_modules` or directly alongside your source.
+This repo contains example code and a MySQL driver that can be used in any Workers project. If you are interested in using the driver _outside_ of this template, copy the `driver/mysql` module into your project's `node_modules` or directly alongside your source.
+
+## Setup
+
+To create a `my-project` directory using this template, run:
+
+```sh
+$ npm init cloudflare my-project worker-mysql
+# or
+$ yarn create cloudflare my-project worker-mysql
+# or
+$ pnpm create cloudflare my-project worker-mysql
+```
+
+> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
 
 ## Usage
 
 Before you start, please refer to the **[official tutorial](https://developers.cloudflare.com/workers/tutorials/query-postgres-from-workers-using-database-connectors)**.
 
-```typescript
+```ts
 const mysql = new Client();
 const mysqlClient = await mysql.connect({
   username: '<DATABASE_USER>',

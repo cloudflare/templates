@@ -1,34 +1,39 @@
-# Using AWS from Cloudflare Workers
+# Template: worker-aws
 
 This is a template for using Amazon Web Services such as DynamoDB and SQS from a Cloudflare Worker.
 
 This project is not related to, affiliated with, sponsored or endorsed by Amazon Web Services.
 
-### Wrangler
+## Setup
 
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
+To create a `my-project` directory using this template, run:
 
+```sh
+$ npm init cloudflare my-project worker-aws
+# or
+$ yarn create cloudflare my-project worker-aws
+# or
+$ pnpm create cloudflare my-project worker-aws
 ```
-wrangler generate projectname https://github.com/cloudflare/workers-aws-template
-cd projectname
-```
 
-[`index.js`](https://github.com/cloudflare/workers-aws-template/blob/master/index.js) is the content of the Workers script. In handleRequest, uncomment the example for the service you want to try out.
+> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
+
+[`index.js`](https://github.com/cloudflare/workers-aws-template/blob/master/index.js) is the content of the Workers script. In `handleRequest`, uncomment the example for the service you want to try out.
 
 You'll need to use wrangler secrets to add appropriate values for `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, plus any of the service specific secrets, e.g.
 
-```
-wrangler secret put AWS_ACCESS_KEY_ID
-wrangler secret put AWS_SECRET_ACCESS_KEY
-wrangler secret put AWS_AURORA_SECRET_ARN
-wrangler secret put AWS_SQS_QUEUE_URL
+```sh
+$ wrangler secret put AWS_ACCESS_KEY_ID
+$ wrangler secret put AWS_SECRET_ACCESS_KEY
+$ wrangler secret put AWS_AURORA_SECRET_ARN
+$ wrangler secret put AWS_SQS_QUEUE_URL
 ```
 
-Configuration of less sensitive values such as AWS_REGION can be done in wrangler.toml vars if you'd prefer.
+Configuration of less sensitive values such as AWS_REGION can be done in the `[vars]` block of your `wrangler.toml` file if you'd prefer.
 
 After that you can use `wrangler publish` as normal. See the [wrangler documentation](https://developers.cloudflare.com/workers/cli-wrangler) for more information.
 
-### AWS Resources
+## AWS Resources
 
 This template pieces together a few AWS products:
 
@@ -66,6 +71,6 @@ $ curl https://<worker>?ID=2
 #=> [[{"longValue":2},{"stringValue":"bob"},{"stringValue":"YYYY-MM-DD HH:mm:ss"}]]
 ```
 
-### AWS SDK for JavaScript
+## AWS SDK for JavaScript
 
 These examples use [v3 of the AWS SDK for JavaScript](https://github.com/aws/aws-sdk-js-v3), see that repository for more information.

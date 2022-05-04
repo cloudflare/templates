@@ -1,14 +1,26 @@
-# Cloudflare Workers + PostgreSQL
+# Template: worker-postgres
 
-This repo contains example code and a PostgreSQL driver that can be used in any Workers project. If
-you are interested in using the driver _outside_ of this template, copy the `driver/postgres` module
-into your project's `node_modules` or directly alongside your source.
+This repo contains example code and a PostgreSQL driver that can be used in any Workers project. If you are interested in using the driver _outside_ of this template, copy the `driver/postgres` module into your project's `node_modules` or directly alongside your source.
+
+## Setup
+
+To create a `my-project` directory using this template, run:
+
+```sh
+$ npm init cloudflare my-project worker-postgres
+# or
+$ yarn create cloudflare my-project worker-postgres
+# or
+$ pnpm create cloudflare my-project worker-postgres
+```
+
+> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
 
 ## Usage
 
 Before you start, please refer to the **[official tutorial](https://developers.cloudflare.com/workers/tutorials/query-postgres-from-workers-using-database-connectors)**.
 
-```typescript
+```ts
 const client = new Client({
   user: '<DATABASE_USER>',
   database: '<DATABASE_NAME>',
