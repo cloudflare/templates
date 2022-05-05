@@ -34,10 +34,18 @@ export async function clone(remote: Remote, dest: string, argv: Argv) {
 	let { source, filter } = remote;
 	let target=dest, sparse=false;
 
+	function bail(msg: string, err?: unknown): never {
+		if (argv.debug && err && err instanceof Error) {
+			let x = (err.stack || err.message);
+			msg += '\n' + (x.includes('\n') ? x.replace(/(\r?\n)/g, '$1    ') : x);
+		}
+		throw msg;
+	}
+
 	try {
 		var { stdout } = await git('version');
 	} catch (err) {
-		throw 'Missing `git` executable';
+		return bail('Missing `git` executable', err);
 	}
 
 	let [version] = /\d+.\d+.\d+/.exec(stdout) || [];
@@ -69,14 +77,17 @@ export async function clone(remote: Remote, dest: string, argv: Argv) {
 		args.push(target);
 		await git(...args);
 	} catch (err) {
-		throw `Error cloning "${source}" repository`;
+		return bail(`Error cloning "${source}" repository`, err);
 	}
 
 	if (filter) {
 		// sparse keeps the {filter} structure, so w/o
 		// the tmpdir() juggle, we would have {target}/{filter} result
 		// @see https://git-scm.com/docs/git-sparse-checkout/2.26.0
-		if (sparse) await run(`git sparse-checkout set "${filter}"`, { cwd: target });
+		if (sparse) {
+			try { await run(`git sparse-checkout set "${filter}"`, { cwd: target }) }
+			catch (err) { return bail(`Error with "${filter}" checkout`, err) }
+		}
 
 		// effectively `$ mv {tmp/filter} {dest}
 		await fs.promises.rename(join(target, filter), dest);
@@ -95,7 +106,7 @@ export async function clone(remote: Remote, dest: string, argv: Argv) {
 		try {
 			await git(...args, dest);
 		} catch (err) {
-			throw `Error initializing repository`;
+			return bail(`Error initializing repository`, err);
 		}
 	}
 }
