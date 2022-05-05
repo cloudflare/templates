@@ -1,4 +1,3 @@
-import semiver from 'semiver';
 import * as utils from './utils';
 
 // yarn create cloudflare foobar pages/nuxt
@@ -30,21 +29,6 @@ export async function setup(dir: string, src: string, argv: Argv) {
 		// TODO: change me post-release
 		source = 'https://github.com/cloudflare/worker-examples.git';
 		filter = src;
-	}
-
-	// filter uses `git sparse-checkout` wxhich requires 2.19+
-	if (filter) {
-		try {
-			var { stdout } = await utils.git('version');
-		} catch (err) {
-			throw new Error('Missing `git` executable');
-		}
-
-		let [version] = /\d+.\d+.\d+/.exec(stdout) || [];
-		if (!version) throw new Error('Unknown `git` version');
-
-		let num = semiver(version, '2.19.0'); // -1~>lesser; 0~>equal; 1~>greater
-		if (num < 0) throw new Error('Requires git version 2.19.0 or newer');
 	}
 
 	try {

@@ -3,6 +3,7 @@ import { tmpdir } from 'os';
 import { promisify } from 'util';
 import { join, relative } from 'path';
 import { exec } from 'child_process';
+import semiver from 'semiver';
 
 export const run = promisify(exec);
 export const exists = fs.existsSync;
@@ -19,12 +20,25 @@ export const rand = () => Math.random().toString(16).substring(2);
 
 export async function clone(remote: string, dest: string, subdir?: string) {
 	let args = ['clone --depth 1'];
-	let target = dest;
+	let target=dest, sparse=false;
+
+	try {
+		var { stdout } = await git('version');
+	} catch (err) {
+		throw new Error('Missing `git` executable');
+	}
 
 	if (subdir) {
-		// @see https://stackoverflow.com/a/52269934/3577474
-		args.push('--filter=blob:none --sparse');
+		let [version] = /\d+.\d+.\d+/.exec(stdout) || [];
+		if (!version) throw new Error('Unknown `git` version');
+
+		let num = semiver(version, '2.26.0');
+		sparse = num !== -1; // -1~>lesser; 0~>equal; 1~>greater
+
 		target = join(tmpdir(), rand() + '-' + rand());
+
+		// @see https://stackoverflow.com/a/52269934/3577474
+		if (sparse) args.push('--filter=blob:none --sparse');
 	}
 
 	let idx = remote.lastIndexOf('#');
@@ -38,13 +52,17 @@ export async function clone(remote: string, dest: string, subdir?: string) {
 		args.push(remote.substring(0, idx));
 	}
 
-	args.push(target);
-	await git(...args);
+	try {
+		args.push(target);
+		await git(...args);
+	} catch (err) {
+		throw new Error(`Error cloning "${remote}" repository`);
+	}
 
 	if (subdir) {
 		// sparse keeps the {subdir} structure, so w/o
 		// the tmpdir() juggle, we would have {target}/{subdir} result
-		await run(`git sparse-checkout set "${subdir}"`, { cwd: target });
+		if (sparse) await run(`git sparse-checkout set "${subdir}"`, { cwd: target });
 
 		// effectively `$ mv {tmp/subdir} {dest}
 		await fs.promises.rename(join(target, subdir), dest);
