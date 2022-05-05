@@ -8,6 +8,11 @@ import type { Argv } from 'create-cloudflare';
 
 export async function setup(dir: string, src: string, argv: Argv) {
 	let cwd = process.cwd();
+
+	if (utils.isRemote(dir)) {
+		[dir, src] = [src, dir];
+	}
+
 	let target = utils.join(cwd, dir);
 
 	if (utils.exists(target)) {
@@ -23,8 +28,8 @@ export async function setup(dir: string, src: string, argv: Argv) {
 	}
 
 	let source = '', filter = '';
-	if (/^(https?|ftps?|file|git|ssh):\/\//.test(src) || src.includes(':')) {
-		source = src; // allows [user@]host.xz:path/to/repo.git/
+	if (utils.isRemote(src)) {
+		source = src;
 	} else {
 		// TODO: change me post-release
 		source = 'https://github.com/cloudflare/worker-examples.git';

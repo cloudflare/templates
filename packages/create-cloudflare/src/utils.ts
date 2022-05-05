@@ -20,6 +20,9 @@ export const git = (...args: string[]) => run(`git ${args.join(' ')}`);
 
 export const rand = () => Math.random().toString(16).substring(2);
 
+// allows [user@]host.xz:path/to/repo.git/
+export const isRemote = (str: string) => /^(https?|ftps?|file|git|ssh):\/\//.test(str) || str.includes(':');
+
 export interface Remote {
 	source: string;
 	filter?: string;
