@@ -31,13 +31,7 @@ export async function setup(dir: string, src: string, argv: Argv) {
 		filter = src;
 	}
 
-	try {
-		await utils.clone(source, target, filter);
-	} catch (err) {
-		if (argv.debug) console.error((err as Error).toString());
-		throw new Error(`Error cloning "${source}" repository`);
-	}
+	await utils.clone({ source, filter }, target, argv);
 
-	await utils.cleanup(target, !!argv.init);
 	console.log('Done~!'); // todo
 }
