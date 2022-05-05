@@ -18,12 +18,12 @@ export async function setup(dir: string, src: string, argv: Argv) {
 	if (utils.exists(target)) {
 		if (argv.force) {
 			if (target.startsWith(cwd)) await utils.rmdir(target);
-			else throw new Error('Refusing to manipulate the file system outside the PWD location.\nPlease specify a different target directory.');
+			else 'Refusing to manipulate the file system outside the PWD location.\nPlease specify a different target directory.';
 		} else {
 			let pretty = utils.relative(cwd, target);
 			let msg = `Refusing to overwrite existing "${pretty}" directory.\n`;
 			msg += 'Please specify a different directory or use the `--force` flag.';
-			throw new Error(msg);
+			throw msg;
 		}
 	}
 
