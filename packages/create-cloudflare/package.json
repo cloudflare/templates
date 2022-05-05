@@ -3,6 +3,7 @@
   "name": "create-cloudflare",
   "repository": "lukeed/create-cloudflare",
   "description": "TODO",
+  "types": "index.d.ts",
   "license": "MIT",
   "bin": "bin.js",
   "author": {
@@ -13,7 +14,8 @@
   "exports": "./index.js",
   "files": [
     "bin.js",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">=12"

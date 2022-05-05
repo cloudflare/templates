@@ -17,6 +17,9 @@
     "module": "esnext",
     "checkJs": true,
     "noEmit": true,
+    "paths": {
+      "create-cloudflare": ["./src/index.d.ts"]
+    }
   },
   "include": [
     "bin.js",

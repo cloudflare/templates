@@ -5,11 +5,7 @@ import * as utils from './utils';
 // yarn create cloudflare foobar workers-airtable
 // yarn create cloudflare foobar https://.../user/repo
 
-export interface Argv {
-	init?: boolean;
-	force?: boolean;
-	debug?: boolean;
-}
+import type { Argv } from 'create-cloudflare';
 
 export async function setup(dir: string, src: string, argv: Argv) {
 	let cwd = process.cwd();
