@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "strict": true,
-    "allowJs": true,
     "lib": ["esnext"],
     "target": "esnext",
     "skipLibCheck": true,
@@ -15,14 +14,13 @@
     "noImplicitAny": true,
     "alwaysStrict": true,
     "module": "esnext",
-    "checkJs": true,
+    "allowJs": false,
     "noEmit": true,
     "paths": {
       "create-cloudflare": ["./src/index.d.ts"]
     }
   },
   "include": [
-    "bin.js",
     "src"
   ],
   "exclude": [

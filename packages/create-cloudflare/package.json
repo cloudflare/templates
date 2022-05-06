@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "17.0.31",
-    "bundt": "2.0.0-next.2",
+    "bundt": "2.0.0-next.5",
     "typescript": "4.6.4"
   }
 }

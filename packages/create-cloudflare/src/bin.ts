@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+
+import type { Argv } from 'create-cloudflare';
+
 const argv = require('mri')(process.argv.slice(2), {
 	alias: {
 		v: 'version',
@@ -9,13 +12,13 @@ const argv = require('mri')(process.argv.slice(2), {
 		force: false,
 		debug: false
 	}
-});
+}) as Argv & {
+	_: string[];
+	help?: boolean;
+	version?: boolean;
+};
 
-/**
- * @param {string} msg
- * @returns {never}
- */
-function exit(msg, code = 1) {
+function exit(msg: string, code = 1): never {
 	if (code) process.stderr.write(msg + '\n');
 	else process.stdout.write(msg + '\n');
 	process.exit(code);
@@ -68,6 +71,6 @@ if (argv.version) {
 		if (!source) return exit('Missing <source> argument', 1);
 		await require('.').setup(dir, source, argv);
 	} catch (err) {
-		exit(err && err.stack || err, 1);
+		exit(err instanceof Error ? err.stack || err.message : err as string, 1);
 	}
 })();
