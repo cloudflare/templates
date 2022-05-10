@@ -14,7 +14,7 @@ $ yarn create cloudflare my-project worker-mysql
 $ pnpm create cloudflare my-project worker-mysql
 ```
 
-> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
+> **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.
 
 ## Usage
 

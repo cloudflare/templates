@@ -16,7 +16,7 @@ $ yarn create cloudflare my-project worker-aws
 $ pnpm create cloudflare my-project worker-aws
 ```
 
-> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
+> **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.
 
 [`index.js`](https://github.com/cloudflare/workers-aws-template/blob/master/index.js) is the content of the Workers script. In `handleRequest`, uncomment the example for the service you want to try out.
 

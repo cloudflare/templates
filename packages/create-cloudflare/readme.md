@@ -1,4 +1,4 @@
-# create-cloudflare [![CI](https://github.com/lukeed/create-cloudflare/workflows/CI/badge.svg)](https://github.com/lukeed/clsx/actions?query=workflow%3ACI)
+# create-cloudflare
 
 > Create new Cloudflare projects with one command
 

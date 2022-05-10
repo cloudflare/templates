@@ -1,11 +1,15 @@
 {
   "version": "1.0.0",
   "name": "create-cloudflare",
-  "repository": "lukeed/create-cloudflare",
   "description": "Create new Cloudflare projects with one command",
   "types": "index.d.ts",
   "license": "MIT",
   "bin": "bin.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cloudflare/templates",
+    "directory": "packages/create-cloudflare"
+  },
   "author": {
     "name": "Luke Edwards",
     "email": "luke.edwards05@gmail.com",
