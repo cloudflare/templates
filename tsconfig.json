@@ -21,6 +21,7 @@
     "noEmit": true
   },
   "include": [
+    "packages",
     "worker/**/*",
     "worker-*/**/*"
   ],
