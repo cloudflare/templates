@@ -7,7 +7,7 @@
 You may use `yarn`, `pnpm`, or `npm` to invoke the [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) package:
 
 
-```sh
+```
 $ npm init cloudflare <directory> <source> -- [options]
 # or
 $ pnpm create cloudflare <directory> <source> [options]
@@ -45,7 +45,7 @@ $ yarn create cloudflare my-project worker-typescript
 $ pnpm create cloudflare my-project worker-typescript
 ```
 
-Other examples include
+Other examples include:
 
 ```sh
 $ yarn create cloudflare my-project worker --force
