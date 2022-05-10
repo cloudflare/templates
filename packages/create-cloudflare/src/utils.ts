@@ -28,7 +28,6 @@ export interface Remote {
 	filter?: string;
 }
 
-// TODO: if debug, add err.stack information
 export async function clone(remote: Remote, dest: string, argv: Argv) {
 	let args = ['clone --depth 1'];
 	let { source, filter } = remote;
@@ -64,9 +63,6 @@ export async function clone(remote: Remote, dest: string, argv: Argv) {
 	let idx = source.lastIndexOf('#');
 
 	if (idx === -1) {
-		if (source.includes('worker-examples')) {
-			args.push('-b dev'); // TODO remove me
-		}
 		args.push(source);
 	} else {
 		args.push(`-b ${source.substring(idx + 1)}`);
