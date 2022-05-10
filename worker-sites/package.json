@@ -9,6 +9,6 @@
     "@cloudflare/kv-asset-handler": "~0.1.2"
   },
   "devDependencies": {
-    "wrangler": "2.0.1"
+    "wrangler": "^2.0.0"
   }
 }
