@@ -11,6 +11,8 @@ Questions about Workers? Please join the [Cloudflare Developers Discord](https:/
 
 There are a few ways to quickly jumpstart your next project using one of the templates found within this repository:
 
+<!-- todo(eidam): is workers.new/<name> still hardcoded or ready for all? -->
+<!-- 2. In-browser development, via `workers.new` -->
 
 1. **Local development, via CLI quickstart utility**
 
@@ -29,9 +31,6 @@ There are a few ways to quickly jumpstart your next project using one of the tem
     # or
     $ pnpm create cloudflare my-project worker-typescript
     ```
-
-<!-- todo(eidam): is workers.new/<name> still hardcoded or ready for all? -->
-<!-- 1. In-browser development, via `workers.new` -->
 
 1. **Local development, via full repository clone**
 
