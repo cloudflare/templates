@@ -6,8 +6,7 @@ addEventListener('fetch', event => {
 // Keep this value secret.
 let SLACK_TOKEN = 'PUTYOURTOKENHERE';
 let BOT_NAME = 'Crypto-bot 🤖';
-let REPO_URL =
-  'https://github.com/cloudflare/worker-examples/tree/master/examples/cryptocurrency-slack-bot';
+let REPO_URL = 'https://github.com/cloudflare/templates';
 
 let jsonHeaders = new Headers([['Content-Type', 'application/json']]);
 

@@ -1,33 +1,37 @@
-// Make multiple requests, aggregate the responses and
-// send it back as a single response.
+// Make multiple requests, aggregate the responses
+// and send them back as a single response.
+export default {
+  /**
+   * @returns {Promise<Response>}
+   */
+  async fetch() {
+    const init = {
+      method: 'GET',
+      headers: {
+        'Authorization': 'XXXXXX',
+        'Content-Type': 'text/plain',
+      },
+    };
 
-addEventListener('fetch', event => {
-  event.respondWith(fetchAndLog(event.request));
-});
+    const [btcResp, ethResp, ltcResp] = await Promise.all([
+      fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot', init),
+      fetch('https://api.coinbase.com/v2/prices/ETH-USD/spot', init),
+      fetch('https://api.coinbase.com/v2/prices/LTC-USD/spot', init),
+    ]);
 
-async function fetchAndLog(request) {
-  const init = {
-    method: 'GET',
-    headers: { 'Authorization': 'XXXXXX', 'Content-Type': 'text/plain' },
-  };
-  const [btcResp, ethResp, ltcResp] = await Promise.all([
-    fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot', init),
-    fetch('https://api.coinbase.com/v2/prices/ETH-USD/spot', init),
-    fetch('https://api.coinbase.com/v2/prices/LTC-USD/spot', init),
-  ]);
+    const [btc, eth, ltc] = await Promise.all([btcResp.json(), ethResp.json(), ltcResp.json()]);
 
-  const btc = await btcResp.json();
-  const eth = await ethResp.json();
-  const ltc = await ltcResp.json();
+    const combined = {
+      btc: btc['data'].amount,
+      ltc: ltc['data'].amount,
+      eth: eth['data'].amount,
+    };
 
-  let combined = {};
-  combined['btc'] = btc['data'].amount;
-  combined['ltc'] = ltc['data'].amount;
-  combined['eth'] = eth['data'].amount;
-
-  const responseInit = {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  };
-  return new Response(JSON.stringify(combined), responseInit);
-}
+    return new Response(JSON.stringify(combined), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  },
+};
