@@ -31,8 +31,7 @@ export async function setup(dir: string, src: string, argv: Argv) {
 	if (utils.isRemote(src)) {
 		source = src;
 	} else {
-		// TODO: change me post-release
-		source = 'https://github.com/cloudflare/worker-examples.git';
+		source = 'https://github.com/cloudflare/templates.git';
 		filter = src;
 	}
 
