@@ -15,14 +15,8 @@
     "removeComments": true,
     "sourceMap": false,
     "checkJs": true,
-    "noEmit": true,
+    "noEmit": true
   },
-  "include": [
-    "@types",
-    "src"
-  ],
-  "exclude": [
-    "build",
-    "node_modules"
-  ]
+  "include": ["@types", "src"],
+  "exclude": ["build", "node_modules"]
 }

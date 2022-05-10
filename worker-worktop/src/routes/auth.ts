@@ -34,5 +34,5 @@ Auth.add('POST', '/login', async (req, context) => {
   }
 
   let authorization = `bearer ${token}`;
-  return reply(200, { token }, { authorization })
+  return reply(200, { token }, { authorization });
 });

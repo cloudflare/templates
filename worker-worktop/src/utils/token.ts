@@ -6,9 +6,9 @@ import * as Models from '../utils/models';
 import type { Context, Handler } from '../context';
 
 export function setup(context: Context) {
-  return context.$token ||= HS256({
-    key: context.bindings.JWT_SECRET
-  });
+  return (context.$token ||= HS256({
+    key: context.bindings.JWT_SECRET,
+  }));
 }
 
 /**
@@ -30,12 +30,12 @@ export const load: Handler = async function (req, context) {
 
   try {
     var token = await context.$token.verify(jwt);
-    if (!token.uid) throw new Error;
+    if (!token.uid) throw new Error();
     context.token = token;
   } catch (err) {
     return reply(401, 'Invalid "Authorization" token');
   }
-}
+};
 
 /**
  * Exchange a verified JWT for a `User` document, if any.
@@ -52,4 +52,4 @@ export const identify: Handler = async function (req, context) {
 
   if (user) context.user = user;
   else return reply(401, 'Invalid "Authorization" token');
-}
+};

@@ -19,17 +19,13 @@ const isOwner: Handler = async function (req, context) {
   }
 
   context.todo = item;
-}
+};
 
 export const Todos = new Router<Context>();
 
-Todos.prepare = compose(
-  Token.load,
-  Token.identify,
-  function (req, context) {
-    context.$todo ||= new Models.Todo(context.bindings.DATABASE);
-  }
-);
+Todos.prepare = compose(Token.load, Token.identify, function (req, context) {
+  context.$todo ||= new Models.Todo(context.bindings.DATABASE);
+});
 
 /**
  * GET /todos
@@ -47,10 +43,14 @@ Todos.add('GET', '/', async (req, context) => {
 /**
  * GET /todos/:uid
  */
-Todos.add('GET', '/:uid', compose(isOwner, (req, context) => {
-  // Exists via `isOwner`
-  return reply(200, context.todo!);
-}));
+Todos.add(
+  'GET',
+  '/:uid',
+  compose(isOwner, (req, context) => {
+    // Exists via `isOwner`
+    return reply(200, context.todo!);
+  })
+);
 
 /**
  * POST /todos
@@ -87,32 +87,40 @@ Todos.add('POST', '/', async (req, context) => {
 /**
  * PATCH /todos/:uid
  */
-Todos.add('PATCH', '/:uid', compose(isOwner, async (req, context) => {
-  try {
-    var input = await utils.body<Todo>(req);
-  } catch (err) {
-    return reply(400, 'Error parsing request body');
-  }
+Todos.add(
+  'PATCH',
+  '/:uid',
+  compose(isOwner, async (req, context) => {
+    try {
+      var input = await utils.body<Todo>(req);
+    } catch (err) {
+      return reply(400, 'Error parsing request body');
+    }
 
-  let { text, done } = input || {};
-  if (!text && done == null) return reply(204);
+    let { text, done } = input || {};
+    if (!text && done == null) return reply(204);
 
-  // Exists via `isOwner`
-  let todo = context.todo!;
-  todo.text = text && text.trim() || todo.text;
-  todo.done = done != null ? !!done : todo.done;
+    // Exists via `isOwner`
+    let todo = context.todo!;
+    todo.text = (text && text.trim()) || todo.text;
+    todo.done = done != null ? !!done : todo.done;
 
-  let isOK = await context.$todo!.put(todo.uid, todo)
-  if (!isOK) return reply(400, 'Error updating item');
-  else return reply(200, todo);
-}));
+    let isOK = await context.$todo!.put(todo.uid, todo);
+    if (!isOK) return reply(400, 'Error updating item');
+    else return reply(200, todo);
+  })
+);
 
 /**
  * DELETE /todos/:uid
  */
-Todos.add('DELETE', '/:uid', compose(isOwner, async (req, context) => {
-  // Exists via `isOwner` middleware
-  let isOK = await context.$todo!.delete(context.todo!.uid);
-  if (!isOK) return reply(400, 'Error deleting item');
-  else return reply(204);
-}));
+Todos.add(
+  'DELETE',
+  '/:uid',
+  compose(isOwner, async (req, context) => {
+    // Exists via `isOwner` middleware
+    let isOK = await context.$todo!.delete(context.todo!.uid);
+    if (!isOK) return reply(400, 'Error deleting item');
+    else return reply(204);
+  })
+);

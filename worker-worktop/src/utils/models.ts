@@ -22,11 +22,11 @@ export class Todo extends Entity<types.Todo> {
     await this.ns.delete(key);
   }
 
-  put(key: string, value: types.Todo|null): Promise<boolean> {
+  put(key: string, value: types.Todo | null): Promise<boolean> {
     if (value) {
       let { done } = value;
       // default `done` to false
-      value.done = done == null ? false : /true|1/i.test(''+done);
+      value.done = done == null ? false : /true|1/i.test('' + done);
     }
     return super.put(key, value);
   }
@@ -41,7 +41,7 @@ export class User extends Entity<types.User> {
     const keys = await super.list({ prefix, limit });
 
     // keep the last 26 characters only (ULID length)
-    for (let i=0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i++) {
       keys[i] = keys[i].slice(-26);
     }
 

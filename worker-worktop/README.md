@@ -2,11 +2,11 @@
 
 This template utilizes the [`worktop`](https://github.com/lukeed/worktop) framework to construct an API endpoint to serve user-specific TODO lists. The endpoint includes:
 
-* TypeScript, strict mode
-* CORS, with preflight checks
-* Routing, with subrouter organization
-* JWT (`HS256`) token verification and signing
-* KV Namespace as the data storage layer for `todos` and `users` resource types
+- TypeScript, strict mode
+- CORS, with preflight checks
+- Routing, with subrouter organization
+- JWT (`HS256`) token verification and signing
+- KV Namespace as the data storage layer for `todos` and `users` resource types
 
 ## Setup
 

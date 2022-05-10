@@ -34,7 +34,7 @@ export interface Context extends worktop.Context {
   };
 }
 
-export type Handler<
-  C extends worktop.Context = Context,
-  P = worktop.Params,
-> = worktop.Handler<C, P>;
+export type Handler<C extends worktop.Context = Context, P = worktop.Params> = worktop.Handler<
+  C,
+  P
+>;

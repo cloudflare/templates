@@ -16,8 +16,8 @@ API.prepare = compose(
   Cache.sync(),
   CORS.preflight({
     maxage: 3600,
-    credentials: true
-  }),
+    credentials: true,
+  })
 );
 
 API.mount('/auth/', Auth);
