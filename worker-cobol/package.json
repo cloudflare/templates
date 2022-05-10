@@ -12,6 +12,6 @@
     "text-encoding": "^0.7.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^4.9.0",
-    "wrangler": "2.0.1"
+    "wrangler": "^2.0.0"
   }
 }
