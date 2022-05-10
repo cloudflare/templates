@@ -3,9 +3,9 @@
 export default {
   /**
    * @param {Request} request
-   * @returns {Response}
+   * @returns {Promise<Response>}
    */
-  fetch(request) {
+  async fetch(request) {
     const name = 'experiment-0';
     let group; // 'control' or 'test', set below
     let isNew = false; // is the group newly-assigned?
@@ -48,5 +48,5 @@ export default {
       // Return response unmodified.
       return response;
     }
-  }
-}
+  },
+};

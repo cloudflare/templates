@@ -26,6 +26,8 @@
     "worker-*/**/*"
   ],
   "exclude": [
+    "worker-mysql/src/driver",
+    "worker-postgres/src/driver",
     "worker-speedtest/src/test.js",
     "worker-typescript/test"
   ]
