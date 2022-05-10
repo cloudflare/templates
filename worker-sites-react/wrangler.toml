@@ -1,5 +1,5 @@
-name = "<< todo >>"
-account_id = "<< todo >>"
+name = ""
+account_id = ""
 workers_dev = true
 
 main = "./worker/index.js"
