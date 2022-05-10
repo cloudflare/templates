@@ -6,7 +6,6 @@
 
 You may use `yarn`, `pnpm`, or `npm` to invoke the [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) package:
 
-
 ```
 $ npm init cloudflare <directory> <source> -- [options]
 # or
@@ -16,7 +15,6 @@ $ yarn create cloudflare <directory> <source> [options]
 ```
 
 > **Note:** All recent versions of `npm`, `yarn`, and `pnpm` support this feature!
-
 
 ### Sources
 
@@ -31,7 +29,6 @@ You may also use any valid git repository address; for example:
 - `ssh://[user@]host.xz[:port]/path/to/repo.git[#branch]`
 - `http[s]://host.xz[:port]/path/to/repo.git[#branch]`
 - `ftp[s]://host.xz[:port]/path/to/repo.git[#branch]`
-
 
 ### Examples
 
@@ -53,19 +50,17 @@ $ npm init cloudflare my-project worker-router -- --debug
 $ pnpm create cloudflare my-project https://github.com/user/repo.git#branch
 ```
 
-
 ### Options
 
-* `--force` — Allow target directory overwrite
-* `--no-init` — Do not initialize a git repository
-* `--debug` — Print additional error details
-* `--version` or `-v` — Displays current version
-* `--help` or `-h — Displays help text
+- `--force` — Allow target directory overwrite
+- `--no-init` — Do not initialize a git repository
+- `--debug` — Print additional error details
+- `--version` or `-v` — Displays current version
+- `--help` or `-h — Displays help text
 
 ## Related
 
 - [`cloudflare/templates`](https://github.com/cloudflare/templates) - A collection of stater templates and examples for Cloudflare Workers and Pages
-
 
 ## License
 
