@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on: [push, pull_request]
 
@@ -6,27 +6,18 @@ jobs:
   test:
     name: Node.js v16
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
         node-version: 16
 
-    - name: (env) pnpm
-      run: npm install -g pnpm
-
-    - name: (env) cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-node16-${{ hashFiles('**/package.json') }}
-        restore-keys: ${{ runner.os }}-node16-
-
     - name: Install
-      run: pnpm install
+      run: npm install
 
     - name: TypeCheck
-      run: pnpm run types
+      run: npm run types
 
-    - name: Compile
-      run: pnpm run build
+    - name: Compiles
+      run: npm run build
