@@ -16,7 +16,7 @@ $ yarn create cloudflare my-project worker
 $ pnpm create cloudflare my-project worker
 ```
 
-> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
+> **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.
 
 Before publishing your code you need to edit `wrangler.toml` file and add your Cloudflare `account_id` - more information about configuring and publishing your code can be found [in the documentation](https://developers.cloudflare.com/workers/learning/getting-started).
 

@@ -16,4 +16,4 @@ $ yarn create cloudflare my-project worker-cobol
 $ pnpm create cloudflare my-project worker-cobol
 ```
 
-> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
+> **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.

@@ -16,7 +16,7 @@ $ yarn create cloudflare my-project worker-rust
 $ pnpm create cloudflare my-project worker-rust
 ```
 
-> **Note:** Each command invokes [`create-cloudflare`](https://github.com/lukeed/create-cloudflare) for project creation.
+> **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.
 
 ## Usage
 
