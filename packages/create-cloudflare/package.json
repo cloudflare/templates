@@ -2,7 +2,7 @@
   "version": "0.0.3",
   "name": "create-cloudflare",
   "repository": "lukeed/create-cloudflare",
-  "description": "TODO",
+  "description": "Create new Cloudflare projects with one command",
   "types": "index.d.ts",
   "license": "MIT",
   "bin": "bin.js",
