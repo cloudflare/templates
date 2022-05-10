@@ -37,5 +37,6 @@ export async function setup(dir: string, src: string, argv: Argv) {
 
 	await utils.clone({ source, filter }, target, argv);
 
-	console.log('Done~!'); // todo
+	target = utils.relative(cwd, target);
+	console.log(`\n    Success 🎉\n    Your "${target}" directory is ready for you~!\n`);
 }
