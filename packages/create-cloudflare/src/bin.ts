@@ -19,8 +19,8 @@ const argv = require('mri')(process.argv.slice(2), {
 };
 
 function exit(msg: string, code = 1): never {
-	if (code) process.stderr.write(msg + '\n');
-	else process.stdout.write(msg + '\n');
+	if (code) console.error('\n' + msg + '\n');
+	else console.log('\n' + msg + '\n');
 	process.exit(code);
 }
 
