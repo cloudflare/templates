@@ -6,6 +6,6 @@
     "dev": "wrangler dev src/lib.rs --local"
   },
   "devDependencies": {
-    "wrangler": "0.0.27"
+    "wrangler": "2.0.1"
   }
 }
