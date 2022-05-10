@@ -13,22 +13,12 @@ jobs:
         with:
           node-version: 16
 
-      - name: (env) pnpm
-        run: curl -L https://pnpm.js.org/pnpm.js | node - add --global pnpm
-
-      - name: (env) cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ubuntu-latest-node16-${{ hashFiles('**/package.json') }}
-          restore-keys: ubuntu-latest-node16-
-
       - name: Install
-        run: pnpm install
+        run: npm install
 
       - name: Code Style
-        run: pnpm run pretest
+        run: npm run pretest
 
       # TODO(future): fix errors to uncomment
       # - name: TypeCheck
-      #   run: pnpm run test
+      #   run: npm run test --ignore-scripts
