@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/create-cloudflare
+        working-directory: packages/workers.new
 
     steps:
       - uses: actions/checkout@v2
