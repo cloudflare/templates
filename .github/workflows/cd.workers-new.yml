@@ -1,15 +1,14 @@
-name: (CI) create-cloudflare
+name: (CD) workers.new
 
 on:
   push:
+    branches:
+      - 'main'
     paths:
-      - 'packages/create-cloudflare/**'
-  pull_request:
-    paths:
-      - 'packages/create-cloudflare/**'
+      - 'packages/workers.new/**'
 
 jobs:
-  test:
+  deploy:
     name: Node.js v16
     runs-on: ubuntu-latest
     defaults:
