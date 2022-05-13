@@ -24,7 +24,7 @@ const worker: ExportedHandler = {
       return Response.redirect(target, 302);
     }
 
-    return Response.redirect('https://dash.cloudflare.com/?to=/:account/workers/services/new', 301);
+    return Response.redirect('https://dash.cloudflare.com/?to=/:account/workers/services/new', 302);
   },
 };
 
