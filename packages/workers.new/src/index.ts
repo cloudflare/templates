@@ -6,10 +6,11 @@
 const source = 'github/cloudflare/templates/tree/main';
 
 const redirects: Record<string, [string, string]> = {
+  "/durable-objects": ["worker-durable-objects", "index.js"],
   "/router": ["worker-router", "index.js"],
   "/typescript": ["worker-typescript", "src/index.ts"],
-  "/durable-objects": ["worker-durable-objects", "index.js"],
   "/websocket": ["worker-websocket", "index.js"],
+  "/worktop": ["worker-worktop", "src/index.ts"],
 };
 
 const worker: ExportedHandler = {
