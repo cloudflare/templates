@@ -12,6 +12,9 @@ jobs:
   test:
     name: Node.js v16
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/create-cloudflare
 
     steps:
       - uses: actions/checkout@v2
