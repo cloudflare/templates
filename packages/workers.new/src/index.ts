@@ -24,8 +24,6 @@ const worker: ExportedHandler = {
       return Response.redirect(target, 302);
     }
 
-    // See the wiki below for a description of this URL works.
-    // https://wiki.cfops.it/display/ONB/How+to+use+Dashboard+Deep+Links
     return Response.redirect('https://dash.cloudflare.com/?to=/:account/workers/services/new', 301);
   },
 };
