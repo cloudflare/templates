@@ -23,5 +23,9 @@ API.prepare = compose(
 API.mount('/auth/', Auth);
 API.mount('/todos/', Todos);
 
+API.add('GET', '/', (req, context) => {
+  return new Response('OK');
+});
+
 // Initialize: Module Worker
 export default start(API.run);
