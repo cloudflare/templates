@@ -9,7 +9,7 @@
     "module": "esnext",
     "target": "es2020",
     "lib": ["es2020"],
-    "noEmit": true,
+    "noEmit": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
