@@ -5,22 +5,22 @@
 // stackblitz repository source
 const source = 'github/cloudflare/templates/tree/main';
 
-const redirects: Record<string, [string, string]> = {
-  '/durable-objects': ['worker-durable-objects', 'index.js'],
-  '/router': ['worker-router', 'index.js'],
-  '/typescript': ['worker-typescript', 'src/index.ts'],
-  '/websocket': ['worker-websocket', 'index.js'],
-  '/worktop': ['worker-worktop', 'src/index.ts'],
+const redirects: Record<string, [string, string, string]> = {
+  '/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
+  '/router': ['worker-router', 'index.js', 'Workers router'],
+  '/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
+  '/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
+  '/worktop': ['worker-worktop', 'src/index.ts', 'Workers worktop'],
 };
 
 const worker: ExportedHandler = {
   fetch(request) {
     const { pathname } = new URL(request.url);
-    const [subdir, file] = redirects[pathname] || [];
+    const [subdir, file, title] = redirects[pathname] || [];
 
     if (subdir) {
       const focus = encodeURIComponent(file);
-      const target = `https://stackblitz.com/fork/${source}/${subdir}?file=${focus}`;
+      const target = `https://stackblitz.com/fork/${source}/${subdir}?file=${focus}&title=${title}`;
       return Response.redirect(target, 302);
     }
 
