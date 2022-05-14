@@ -49,10 +49,7 @@ export class WebSocketDurableObject {
     return new Response(null, { status: 101, webSocket: client });
   }
 
-  async handleWebSocketSession(
-    webSocket: WebSocket,
-    metadata: IncomingRequestCfProperties
-  ) {
+  async handleWebSocketSession(webSocket: WebSocket, metadata: IncomingRequestCfProperties) {
     // Accept our end of the WebSocket. This tells the runtime that we'll be terminating the
     // WebSocket in JavaScript, not sending it elsewhere.
     // @ts-ignore
@@ -67,7 +64,7 @@ export class WebSocketDurableObject {
       websocket: webSocket,
     });
 
-    webSocket.addEventListener('message', async (msg) => {
+    webSocket.addEventListener('message', async msg => {
       try {
         // Parse the incoming message
         let incomingMessage = <Message & MessageData>JSON.parse(msg.data);
@@ -80,12 +77,9 @@ export class WebSocketDurableObject {
                 id: incomingMessage.data.id,
                 time: Date.now(),
                 dolocation: this.dolocation,
-                users: Array.from(this.users.values()).map((x) => {
+                users: Array.from(this.users.values()).map(x => {
                   // update user's ping
-                  if (
-                    incomingMessage.data.lastPingMs &&
-                    x.websocket === webSocket
-                  ) {
+                  if (incomingMessage.data.lastPingMs && x.websocket === webSocket) {
                     this.pings.set(x.id, incomingMessage.data.lastPingMs);
                   }
 
@@ -138,16 +132,14 @@ export class WebSocketDurableObject {
     try {
       storage.setAlarm(Date.now() + healthCheckInterval);
     } catch {
-      console.log(
-        'Durable Objects Alarms not supported in Miniflare (--local mode) yet.'
-      );
+      console.log('Durable Objects Alarms not supported in Miniflare (--local mode) yet.');
     }
   }
 
   alarm() {
     const msg = { type: 'healthcheck' };
     this.broadcast(JSON.stringify([msg]));
-    
+
     if (this.users.size) this.scheduleNextAlarm(this.storage);
   }
 }

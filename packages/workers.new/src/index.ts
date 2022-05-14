@@ -10,7 +10,11 @@ const redirects: Record<string, [string, string, string]> = {
   '/router': ['worker-router', 'index.js', 'Workers router'],
   '/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
   '/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
-  '/websocket-durable-objects': ['worker-websocket-durable-objects', 'src/index.ts', 'Workers WebSocket Durable Objects'],
+  '/websocket-durable-objects': [
+    'worker-websocket-durable-objects',
+    'src/index.ts',
+    'Workers WebSocket Durable Objects',
+  ],
   '/worktop': ['worker-worktop', 'src/index.ts', 'Workers worktop'],
 };
 

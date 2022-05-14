@@ -94,9 +94,7 @@
 
       // connect to a WebSocket endpoint (same URL, just different protocol)
       function join() {
-        let ws = new WebSocket(
-          `${location.origin.replace(/^http/, 'ws')}${location.pathname}`
-        );
+        let ws = new WebSocket(`${location.origin.replace(/^http/, 'ws')}${location.pathname}`);
         let rejoined = false;
         let startTime = Date.now();
 
@@ -110,9 +108,7 @@
             let timeSinceLastJoin = Date.now() - startTime;
             if (timeSinceLastJoin < 1000) {
               // Less than 1 second elapsed since last join. Pause a bit.
-              await new Promise((resolve) =>
-                setTimeout(resolve, 1000 - timeSinceLastJoin)
-              );
+              await new Promise(resolve => setTimeout(resolve, 1000 - timeSinceLastJoin));
             }
 
             // OK, reconnect now!
@@ -120,14 +116,14 @@
           }
         };
 
-        ws.addEventListener('open', (event) => {
+        ws.addEventListener('open', event => {
           currentWebSocket = ws;
         });
 
-        ws.addEventListener('message', (event) => {
+        ws.addEventListener('message', event => {
           const messages = JSON.parse(event.data);
 
-          messages.forEach((message) => {
+          messages.forEach(message => {
             switch (message.type) {
               case 'pong':
                 const ping = lru.get(message.data.id);
@@ -154,16 +150,12 @@
           });
         });
 
-        ws.addEventListener('close', (event) => {
-          console.log(
-            'WebSocket closed, reconnecting:',
-            event.code,
-            event.reason
-          );
+        ws.addEventListener('close', event => {
+          console.log('WebSocket closed, reconnecting:', event.code, event.reason);
           rejoin();
         });
 
-        ws.addEventListener('error', (event) => {
+        ws.addEventListener('error', event => {
           console.log('WebSocket error, reconnecting:', event);
           rejoin();
         });
