@@ -6,8 +6,6 @@ export const onRequest: PagesFunction = staticFormsPlugin({
     const email = formData.get('email');
 
     // TODO: process the form data, for example save to KV or send an email
-    return new Response(
-      `Hello, ${email}! Thank you for submitting the ${name} form.`
-    );
+    return new Response(`Hello, ${email}! Thank you for submitting the ${name} form.`);
   },
 });
