@@ -2,7 +2,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "wrangler pages dev public/ --local"
+    "dev": "wrangler pages dev public"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.0.0",

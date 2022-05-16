@@ -1,16 +1,8 @@
 {
   "compilerOptions": {
-    "noEmit": true,
-    "module": "esnext",
-    "target": "es2020",
-    "lib": ["es2020"],
-    "strict": true,
-    "alwaysStrict": true,
-    "preserveConstEnums": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "types": ["@cloudflare/workers-types", "@types/jest", "@types/service-worker-mock"]
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "test"]
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020"],
+    "types": ["@cloudflare/workers-types"]
+  }
 }
