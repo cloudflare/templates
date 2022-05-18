@@ -83,7 +83,7 @@ export class WebSocketDurableObject {
     webSocket.addEventListener('message', async msg => {
       try {
         // Parse the incoming message
-        let incomingMessage = <Message & MessageData>JSON.parse(msg.data);
+        let incomingMessage = JSON.parse(msg.data) as Message;
 
         switch (incomingMessage.type) {
           case 'ping':
