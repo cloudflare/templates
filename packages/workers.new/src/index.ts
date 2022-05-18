@@ -7,6 +7,7 @@ const source = 'github/cloudflare/templates/tree/main';
 
 const redirects: Record<string, [string, string, string]> = {
   '/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
+  '/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
   '/router': ['worker-router', 'index.js', 'Workers router'],
   '/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
   '/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
