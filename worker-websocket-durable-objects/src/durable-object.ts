@@ -3,7 +3,7 @@ interface User {
   id: string;
   city: string | undefined;
   country: string;
-};
+}
 
 type Message = Message.Ping | Message.Pong;
 
@@ -48,7 +48,7 @@ export class WebSocketDurableObject {
   }
 
   async fetch(request: Request) {
-    const requestMetadata = request.cf as IncomingRequestCfProperties;
+    const requestMetadata = request.cf;
 
     // To accept the WebSocket request, we create a WebSocketPair (which is like a socketpair,
     // i.e. two WebSockets that talk to each other), we return one end of the pair in the
@@ -68,7 +68,6 @@ export class WebSocketDurableObject {
   async handleWebSocketSession(webSocket: WebSocket, metadata: IncomingRequestCfProperties) {
     // Accept our end of the WebSocket. This tells the runtime that we'll be terminating the
     // WebSocket in JavaScript, not sending it elsewhere.
-    // @ts-ignore
     webSocket.accept();
 
     // Create our session and add it to the users map.
@@ -83,7 +82,7 @@ export class WebSocketDurableObject {
     webSocket.addEventListener('message', async msg => {
       try {
         // Parse the incoming message
-        let incomingMessage = JSON.parse(msg.data) as Message;
+        let incomingMessage = JSON.parse(msg.data) as Message.Ping;
 
         switch (incomingMessage.type) {
           case 'ping':
@@ -139,14 +138,15 @@ export class WebSocketDurableObject {
   }
 
   async getDurableObjectLocation() {
-    const res = await fetch('https://request.eidam.cf');
-    const json = await res.json();
-    this.dolocation = `${json.cf?.city} (${json.cf?.country})`;
+    const res = await fetch('https://workers.cloudflare.com/cf.json');
+    const json = (await res.json()) as IncomingRequestCfProperties;
+    this.dolocation = `${json.city} (${json.country})`;
   }
 
   scheduleNextAlarm(storage: DurableObjectStorage) {
     try {
-      storage.setAlarm(Date.now() + healthCheckInterval);
+      const alarmTime = Date.now() + healthCheckInterval;
+      storage.setAlarm(alarmTime);
     } catch {
       console.log('Durable Objects Alarms not supported in Miniflare (--local mode) yet.');
     }
