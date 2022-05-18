@@ -1,4 +1,4 @@
-# Template: worker-websocket-wordle
+# Template: worker-example-wordle
 
 A template for kickstarting a multiplayer clone of the [Wordle](https://www.nytimes.com/games/wordle/index.html) game.
 
