@@ -7,8 +7,8 @@ type Environment = {
 
 export { WebSocketDurableObject } from './durable-object';
 
-export default {
-  async fetch(request: Request, env: Environment): Promise<Response> {
+const worker: ExportedHandler<Environment> = {
+  async fetch(request, env) {
     const url = new URL(request.url);
 
     // pass the request to Durable Object for any WebSocket connection
