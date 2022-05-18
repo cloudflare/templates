@@ -87,7 +87,7 @@ export class WebSocketDurableObject {
 
         switch (incomingMessage.type) {
           case 'ping':
-            const msg = {
+            const msg: Message.Pong = {
               type: 'pong',
               data: {
                 id: incomingMessage.data.id,
