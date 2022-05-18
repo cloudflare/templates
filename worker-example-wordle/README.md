@@ -1,17 +1,17 @@
 # Template: worker-websocket-wordle
 
-A template for kick starting a multiplayer clone of Wordle (word guess) game.
+A template for kickstarting a multiplayer clone of the [Wordle](https://www.nytimes.com/games/wordle/index.html) game.
 
 ## Setup
 
 To create a `my-project` directory using this template, run:
 
 ```sh
-$ npm init cloudflare my-project worker-websocket-wordle
+$ npm init cloudflare my-project worker-example-wordle
 # or
-$ yarn create cloudflare my-project worker-websocket-wordle
+$ yarn create cloudflare my-project worker-example-wordle
 # or
-$ pnpm create cloudflare my-project worker-websocket-wordle
+$ pnpm create cloudflare my-project worker-example-wordle
 ```
 
 > **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.

@@ -1,37 +1,16 @@
 import { words } from './words';
+import type { Message, Guess } from './types';
 
-type Controller = {
+interface Controller {
   storage: DurableObjectStorage;
-};
-
-type Message = {
-  type: string;
-};
-
-type MessageData =
-  | { type: 'refresh' }
-  | { type: 'guess'; data: { letters: string[] } }
-  | { type: 'ping'; data: { id: string } };
-
-type LetterCheck = {
-  letter: string;
-  color: string;
-};
-
-type GuessResult = {
-  success: boolean;
-};
-
-type GuessResultData =
-  | { success: true; word: string; letters: LetterCheck[] }
-  | { success: false; error: string };
+}
 
 export class WordleDurableObject {
   storage: DurableObjectStorage;
   webSockets: WebSocket[];
 
-  currentWord: string = '';
-  currentGuessResults: LetterCheck[][] = [];
+  currentWord = '';
+  currentGuessResults: Guess.Check[][] = [];
 
   constructor(controller: Controller) {
     // `controller.storage` provides access to our durable storage. It provides a simple KV
@@ -42,7 +21,11 @@ export class WordleDurableObject {
     this.webSockets = [];
   }
 
-  async fetch(request: Request) {
+  async getScore(): Promise<number> {
+    return (await this.storage.get<number>('score')) || 0;
+  }
+
+  async fetch() {
     // To accept the WebSocket request, we create a WebSocketPair (which is like a socketpair,
     // i.e. two WebSockets that talk to each other), we return one end of the pair in the
     // response, and we operate on the other end. Note that this API is not part of the
@@ -71,28 +54,32 @@ export class WordleDurableObject {
     webSocket.addEventListener('message', async msg => {
       try {
         // Parse the incoming message
-        let message = <Message & MessageData>JSON.parse(msg.data);
+        const message = JSON.parse(
+          typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data)
+        ) as Message.Incoming;
 
         //console.log('incoming message', message);
 
-        let messagesToSend = [];
-        let messagesToBroadcast = [];
+        const replies: Message.Outgoing[] = [];
+        const broadcasts: Message.Outgoing[] = [];
 
         switch (message.type) {
           case 'refresh':
-            messagesToSend.push({
+            replies.push({
               type: 'refresh',
-              data: { guesses: this.currentGuessResults },
+              data: {
+                guesses: this.currentGuessResults,
+              },
             });
             break;
           case 'ping':
-            messagesToSend.push({
+            replies.push({
               type: 'pong',
               data: {
                 time: Date.now(),
                 id: message.data.id,
                 players: this.webSockets.length,
-                score: await this.storage.get('score'),
+                score: await this.getScore(),
               },
             });
             break;
@@ -103,56 +90,62 @@ export class WordleDurableObject {
 
             // clear player's boards when word was rotated
             if (!this.currentGuessResults.length) {
-              messagesToBroadcast.push({
+              broadcasts.push({
                 type: 'refresh',
-                data: { guesses: [[], [], [], [], [], []] },
+                data: {
+                  guesses: Array.from({ length: 6 }, () => [] as Guess.Check[]),
+                },
               });
-              messagesToBroadcast.push({
+
+              broadcasts.push({
                 type: 'clear-buttons',
               });
             }
 
             const guessResults = this.checkGuess(message.data.letters);
+
             if (guessResults.success) {
               this.currentGuessResults.push(guessResults.letters);
 
-              messagesToSend.push({
+              replies.push({
                 type: 'clear-keyboard',
               });
 
               // refresh all player's boards
-              messagesToBroadcast.push({
+              broadcasts.push({
                 type: 'refresh',
-                data: { guesses: this.currentGuessResults },
+                data: {
+                  guesses: this.currentGuessResults,
+                },
               });
 
               // celebrate match
               const fullMatch = this.currentWord === guessResults.word;
               if (fullMatch) {
-                messagesToBroadcast.push({
-                  type: 'celebrate',
-                });
-                let score = ((await this.storage.get('score')) || 0) as number;
+                let score = await this.getScore();
                 this.storage.put('score', ++score);
+                broadcasts.push({ type: 'celebrate' });
               } else if (this.currentGuessResults.length >= 6) {
-                let score = ((await this.storage.get('score')) || 0) as number;
+                let score = await this.getScore();
                 this.storage.put('score', --score);
               }
 
               if (this.currentGuessResults.length >= 6 || fullMatch) {
-                messagesToBroadcast.push({
+                broadcasts.push({
                   type: 'clear-buttons',
                 });
-                messagesToBroadcast.push({
+
+                broadcasts.push({
                   type: 'announce',
                   data: {
                     style: fullMatch ? 'success' : 'error',
                     message: `The word was ${this.currentWord.toLocaleUpperCase()}`,
                   },
                 });
+
                 this.rotateWord();
               } else {
-                messagesToBroadcast.push({
+                broadcasts.push({
                   type: 'announce',
                   data: {
                     style: '',
@@ -161,10 +154,11 @@ export class WordleDurableObject {
                 });
               }
             } else {
-              messagesToSend.push({
+              replies.push({
                 type: 'shake-input',
               });
-              messagesToSend.push({
+
+              replies.push({
                 type: 'announce',
                 data: {
                   style: 'error',
@@ -174,9 +168,9 @@ export class WordleDurableObject {
             }
             break;
         }
-        if (messagesToSend.length) webSocket.send(JSON.stringify(messagesToSend));
 
-        if (messagesToBroadcast.length) this.broadcast(JSON.stringify(messagesToBroadcast));
+        if (replies.length) webSocket.send(JSON.stringify(replies));
+        if (broadcasts.length) this.broadcast(JSON.stringify(broadcasts));
       } catch (err) {
         // Report any exceptions directly back to the client. As with our handleErrors() this
         // probably isn't what you'd want to do in production, but it's convenient when testing.
@@ -205,16 +199,16 @@ export class WordleDurableObject {
     });
   }
 
-  checkGuess(guessLetters: string[]): GuessResult & GuessResultData {
+  checkGuess(guessLetters: string[]): Guess.Response {
     let rightGuess = Array.from(this.currentWord);
+    let checkedLetters: Guess.Check[] = [];
     let guessWord = '';
-    let checkedLetters = [];
 
     for (const val of guessLetters) {
       guessWord += val;
     }
 
-    if (guessWord.length != 5) {
+    if (guessWord.length !== 5) {
       return {
         success: false,
         error: 'Not enough letters!',
@@ -247,10 +241,18 @@ export class WordleDurableObject {
           color = 'yellow';
         }
       }
-      checkedLetters.push({ letter: guessLetters[i], color });
+
+      checkedLetters.push({
+        letter: guessLetters[i],
+        color,
+      });
     }
 
-    return { success: true, word: guessWord, letters: checkedLetters };
+    return {
+      success: true,
+      word: guessWord,
+      letters: checkedLetters,
+    };
   }
 
   rotateWord() {
