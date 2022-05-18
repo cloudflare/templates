@@ -1,15 +1,31 @@
-type User = {
+interface User {
   websocket: WebSocket;
   id: string;
   city: string | undefined;
   country: string;
 };
 
-type Message = {
-  type: string;
-};
+type Message = Message.Ping | Message.Pong;
 
-type MessageData = { type: 'ping'; data: { id: string; lastPingMs: number } };
+namespace Message {
+  export type Ping = {
+    type: 'ping';
+    data: {
+      id: string;
+      lastPingMs: number;
+    };
+  };
+
+  export type Pong = {
+    type: 'pong';
+    data: {
+      id: string;
+      time: number;
+      dolocation: string;
+      users: Array<User & { ping: number; websocket: undefined }>;
+    };
+  };
+}
 
 // every 10 seconds
 const healthCheckInterval = 10e3;
