@@ -24,3 +24,5 @@ const worker: ExportedHandler<Environment> = {
     });
   },
 };
+
+export default worker;
