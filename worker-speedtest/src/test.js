@@ -5,5 +5,5 @@ const Response = fetch.Response;
 const handleRequest = require('./index');
 
 beforeAll(async () => {
-  Object.assign(global, { Response });
+	Object.assign(global, { Response });
 });
