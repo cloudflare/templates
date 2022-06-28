@@ -6,8 +6,8 @@
 		"test": "tsc --noEmit --skipLibCheck"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "3.8.0",
-		"prettier": "2.6.2",
+		"@cloudflare/workers-types": "3.13.0",
+		"prettier": "2.7.1",
 		"typescript": "4.6.4"
 	}
 }
