@@ -12,9 +12,11 @@ npx wrangler@d1 init -y
 
 Then copy the `src` and the `data` directory from this template into your project.
 
-Alternatively, clone this repo directly:
+Alternatively:
 
 ```sh
+git clone https://github.com/cloudflare/templates.git
+cd templates
 npm init cloudflare northwind-demo worker-d1
 ```
 
@@ -32,7 +34,7 @@ npx wrangler d1 create northwind-demo
 # Add config to wrangler.toml as instructed
 
 # Fill the DB with seed data from an SQL file:
-npx wrangler d1 execute northwind-demo --file ./Northwind.Sqlite3.create.sql
+npx wrangler d1 execute northwind-demo --file ./data/Northwind.Sqlite3.create.sql
 
 # If you're creating a new project, you'll need to install some dependencies:
 npm install --save-dev itty-router @cloudflare/d1
@@ -55,7 +57,7 @@ npx wrangler d1 backup create northwind-demo
 mkdir -p wrangler-local-state/d1
 
 # Copy the `id` of the backup, and download the backup into that directory
-npx wrangler d1 backup download northwind-demo <backup-id> --output /wrangler-local-state/d1/DB.sqlite3
+npx wrangler d1 backup download northwind-demo <backup-id> --output ./wrangler-local-state/d1/DB.sqlite3
 
 # Then run wrangler dev --local with persistence
 npx wrangler dev --local --experimental-enable-local-persistence
