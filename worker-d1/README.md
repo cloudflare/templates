@@ -44,7 +44,7 @@ npm install --save-dev itty-router @cloudflare/d1
 npx wrangler publish
 ```
 
-Then test out your new Worker!🔥
+Then test out your new Worker!
 
 ### Developing locally
 
