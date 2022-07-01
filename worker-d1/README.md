@@ -2,23 +2,24 @@
 
 > **Note: requires D1 Beta Access**
 
-This project is based off the Default Typescript Worker starter. To create a new project like this, run the following:
+This repo contains example code for setting up and deploying a D1 database.
+
+This project is based off the Default Typescript Worker starter. 
+
+## Setup 
+
+To create a "northwind-demo" directory using this template, run the following:
 
 ```sh
-npx wrangler@d1 init -y
+# To initialise your D1 project
+npm init cloudflare northwind-demo worker-d1
+
+# To install the prerelease version of Wrangler for d1
+npm install wrangler@d1
 ```
 
 > **Note the "@d1"**—we're using a prerelease version of Wrangler under the `d1` tag. You can install this into an existing Wrangler project using `npm install wrangler@d1`
 
-Then copy the `src` and the `data` directory from this template into your project.
-
-Alternatively:
-
-```sh
-git clone https://github.com/cloudflare/templates.git
-cd templates
-npm init cloudflare northwind-demo worker-d1
-```
 
 ### Getting started
 
@@ -36,14 +37,14 @@ npx wrangler d1 create northwind-demo
 # Fill the DB with seed data from an SQL file:
 npx wrangler d1 execute northwind-demo --file ./data/Northwind.Sqlite3.create.sql
 
-# If you're creating a new project, you'll need to install some dependencies:
+# If you're creating a new project, you'll need to install some dependencies if not skip this step:
 npm install --save-dev itty-router @cloudflare/d1
 
 # Deploy the worker
 npx wrangler publish
 ```
 
-Then test out your new Worker!
+Then test out your new Worker!🔥
 
 ### Developing locally
 
