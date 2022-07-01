@@ -4,9 +4,9 @@
 
 This repo contains example code for setting up and deploying a D1 database.
 
-This project is based off the Default Typescript Worker starter. 
+This project is based off the Default Typescript Worker starter.
 
-## Setup 
+## Setup
 
 To create a "northwind-demo" directory using this template, run the following:
 
@@ -19,7 +19,6 @@ npm install wrangler@d1
 ```
 
 > **Note the "@d1"**—we're using a prerelease version of Wrangler under the `d1` tag. You can install this into an existing Wrangler project using `npm install wrangler@d1`
-
 
 ### Getting started
 
