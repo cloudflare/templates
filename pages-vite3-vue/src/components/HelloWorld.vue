@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+  import { ref } from 'vue';
 
-defineProps({
-  msg: String
-})
+  defineProps({
+    msg: String,
+  });
 
-const count = ref(0)
+  const count = ref(0);
 </script>
 
 <template>
@@ -21,14 +21,17 @@ const count = ref(0)
 
   <p>
     <strong>
-      Check out the <a href="https://github.com/cloudflare/templates/tree/main/pages-vite3-vue">source for this project
-        on GitHub</a></strong>
+      Check out the
+      <a href="https://github.com/cloudflare/templates/tree/main/pages-vite3-vue"
+        >source for this project on GitHub</a
+      ></strong
+    >
   </p>
 
   <p>
     Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the official Vue + Vite
-    starter
+    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the
+    official Vue + Vite starter
   </p>
   <p>
     Install
@@ -39,11 +42,11 @@ const count = ref(0)
 </template>
 
 <style scoped>
-.read-the-docs {
-  color: #888;
-}
+  .read-the-docs {
+    color: #888;
+  }
 
-a {
-  font-weight: inherit;
-}
+  a {
+    font-weight: inherit;
+  }
 </style>
