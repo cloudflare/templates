@@ -22,13 +22,13 @@ Before you start, please refer to the **[official tutorial](https://developers.c
 
 ```ts
 const client = new Client({
-  user: '<DATABASE_USER>',
-  database: '<DATABASE_NAME>',
-  // hostname is the full URL to your pre-created Cloudflare Tunnel, see documentation here:
-  // https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/create-tunnel
-  hostname: env.TUNNEL_HOST || 'https://dev.example.com',
-  password: env.DATABASE_PASSWORD, // use a secret to store passwords
-  port: '<DATABASE_PORT>',
+	user: '<DATABASE_USER>',
+	database: '<DATABASE_NAME>',
+	// hostname is the full URL to your pre-created Cloudflare Tunnel, see documentation here:
+	// https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/create-tunnel
+	hostname: env.TUNNEL_HOST || 'https://dev.example.com',
+	password: env.DATABASE_PASSWORD, // use a secret to store passwords
+	port: '<DATABASE_PORT>',
 });
 
 await client.connect();

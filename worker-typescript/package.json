@@ -1,17 +1,17 @@
 {
-  "private": true,
-  "version": "0.0.0",
-  "scripts": {
-    "deploy": "wrangler publish src/index.ts",
-    "dev": "wrangler dev src/index.ts --local",
-    "test": "uvu -r tsm test"
-  },
-  "devDependencies": {
-    "@cloudflare/workers-types": "^3.0.0",
-    "@types/service-worker-mock": "^2.0.1",
-    "service-worker-mock": "^2.0.5",
-    "tsm": "^2.2.1",
-    "uvu": "^0.5.3",
-    "wrangler": "^2.0.0"
-  }
+	"private": true,
+	"version": "0.0.0",
+	"scripts": {
+		"deploy": "wrangler publish src/index.ts",
+		"dev": "wrangler dev src/index.ts --local",
+		"test": "uvu -r tsm test"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^3.0.0",
+		"@types/service-worker-mock": "^2.0.1",
+		"service-worker-mock": "^2.0.5",
+		"tsm": "^2.2.1",
+		"uvu": "^0.5.3",
+		"wrangler": "^2.0.0"
+	}
 }

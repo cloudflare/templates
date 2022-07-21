@@ -88,9 +88,9 @@ const html = `
 `;
 
 export default () => {
-  return new Response(html, {
-    headers: {
-      'Content-type': 'text/html; charset=utf-8',
-    },
-  });
+	return new Response(html, {
+		headers: {
+			'Content-type': 'text/html; charset=utf-8',
+		},
+	});
 };

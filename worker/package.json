@@ -1,11 +1,11 @@
 {
-  "private": true,
-  "version": "0.0.0",
-  "scripts": {
-    "deploy": "wrangler publish index.js",
-    "dev": "wrangler dev index.js --local"
-  },
-  "devDependencies": {
-    "wrangler": "^2.0.0"
-  }
+	"private": true,
+	"version": "0.0.0",
+	"scripts": {
+		"deploy": "wrangler publish index.js",
+		"dev": "wrangler dev index.js --local"
+	},
+	"devDependencies": {
+		"wrangler": "^2.0.0"
+	}
 }
