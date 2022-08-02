@@ -5,7 +5,7 @@
 // stackblitz repository source
 const source = 'github/cloudflare/templates/tree/main';
 
-const redirects: Record<string, [string, string, string]> = {
+const redirects: Record<string, [string, string, string, string?]> = {
 	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/router': ['worker-router', 'index.js', 'Workers router'],
@@ -22,11 +22,11 @@ const redirects: Record<string, [string, string, string]> = {
 const worker: ExportedHandler = {
 	fetch(request) {
 		const { pathname } = new URL(request.url);
-		const [subdir, file, title] = redirects[pathname] || [];
+		const [subdir, file, title, terminal] = redirects[pathname] || [];
 
 		if (subdir) {
 			const focus = encodeURIComponent(file);
-			const target = `https://stackblitz.com/fork/${source}/${subdir}?file=${focus}&title=${title}`;
+			const target = `https://stackblitz.com/fork/${source}/${subdir}?file=${focus}&title=${title}&terminal=${terminal || "start-stackblitz"}`;
 			return Response.redirect(target, 302);
 		}
 
