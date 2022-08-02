@@ -26,7 +26,9 @@ const worker: ExportedHandler = {
 
 		if (subdir) {
 			const focus = encodeURIComponent(file);
-			const target = `https://stackblitz.com/fork/${source}/${subdir}?file=${focus}&title=${title}&terminal=${terminal || "start-stackblitz"}`;
+			const target = `https://stackblitz.com/fork/${source}/${subdir}?file=${focus}&title=${title}&terminal=${
+				terminal || 'start-stackblitz'
+			}`;
 			return Response.redirect(target, 302);
 		}
 
