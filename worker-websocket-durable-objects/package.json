@@ -9,6 +9,6 @@
 	"scripts": {
 		"start": "wrangler dev src/index.ts --local",
 		"deploy": "wrangler publish src/index.ts",
-		"start-stackblitz": "WRANGLER_SEND_METRICS=false wrangler dev --local"
+		"start-stackblitz": "WRANGLER_SEND_METRICS=false wrangler dev src/index.ts --local"
 	}
 }
