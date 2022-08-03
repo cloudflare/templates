@@ -105,6 +105,7 @@ function getListHTML(redirects: Redirects) {
 
 	a {
 		color: inherit; 
+		text-decoration: inherit;
 	}
 
 li {
