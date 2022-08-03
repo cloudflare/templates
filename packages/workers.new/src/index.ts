@@ -1,3 +1,4 @@
+import { promisify } from 'util';
 // Redirect https://workers.new/<known> requests to IDE.
 // Redirect https://workers.new/*? requests to dashboard.
 // Similar to the concept of https://docs.new.
@@ -65,14 +66,94 @@ function getListHTML(redirects: Redirects) {
 	return `
 <html>
 <head></head>
+<style>
+	body {
+		border: 20px solid #003682;
+		margin: 0px;
+	}
+
+	h1{
+		text-align: center;
+		margin: 20px 0;
+		font-size: 5rem;
+	}
+
+	.title-accent {
+		color: #003682;
+		font-weight: 600;
+		text-decoration: underline;
+	}
+
+	.subtitle {
+		text-align: center;
+		margin-top: 20px;
+		font-size: 2rem;
+	}
+
+	ul {
+		text-decoration: none;
+		list-style: none;
+		display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    min-height: 170px;
+		font-size: 24px;
+		text-align: center;
+		padding-top: 30px;
+	}
+
+	a {
+		color: inherit; 
+	}
+
+li {
+  border: 2px solid #003682;
+  box-sizing: border-box;
+  color: #00132C;
+  font-size: 24px;
+  font-weight: 900;
+  padding: 50px 30px;
+  position: relative;
+}
+
+li:before {
+  background-color: #D5EDF6;
+  content: "";
+  height: calc(100% + 3px);
+  position: absolute;
+  right: -7px;
+  top: -9px;
+  transition: background-color 300ms ease-in;
+  width: 100%;
+  z-index: -1;
+}
+
+li:hover:before {
+  background-color: #C2E3FB;
+}
+
+.title {
+	font-size: 20px;
+	font-weight: 400;
+}
+
+</style>
 <body>
-	<h1>List of workers.new redirects</h1>
+	<h1>List of <span class="title-accent">workers.new</span> Redirects</h1>
+	<p class="subtitle">A collection of Stackblitz templates ready for you to use!</p>
 	<ul>
-		<li><a href="/">workers.new</a> - Cloudflare Dashboard shortcut</li>
+		<li>
+			<a href="/">workers.new</a>
+			<p class="title"> Cloudflare Dashboard shortcut </p>
+		</li>
 		${Object.keys(redirects)
 			.map(pathname => {
 				const [subdir, file, title, terminal] = redirects[pathname] || [];
-				return `<li><a href="${pathname}">workers.new${pathname}</a> - ${title}</li>`;
+				return `<li>
+					<a href="${pathname}">workers.new${pathname}</a> 
+					<p class="title">${title}</p>
+				</li>`;
 			})
 			.join('\n')}
 	</ul>
