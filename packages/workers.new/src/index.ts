@@ -19,6 +19,18 @@ const redirects: Redirects = {
 		'Workers WebSocket Durable Objects',
 	],
 	'/worktop': ['worker-worktop', 'src/index.ts', 'Workers worktop'],
+	'/pages-functions-cors': [
+		'pages-functions-cors',
+		'functions/api/_middleware.ts',
+		'Pages Functions CORS',
+		'dev',
+	],
+	'/pages-plugin-static-forms': [
+		'pages-plugin-static-forms',
+		'functions/_middleware.ts',
+		'Pages Plugin static forms',
+		'dev',
+	],
 };
 
 const worker: ExportedHandler = {
