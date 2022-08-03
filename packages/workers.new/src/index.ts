@@ -68,19 +68,19 @@ function getListHTML(redirects: Redirects) {
 <head></head>
 <style>
 	body {
-		border: 20px solid #003682;
 		margin: 0px;
+		font-family:  Arial, Helvetica, sans-serif;
 	}
 
 	h1{
 		text-align: center;
 		margin: 20px 0;
-		font-size: 5rem;
+		font-size: 4rem;
 	}
 
 	.title-accent {
-		color: #003682;
-		font-weight: 600;
+		color: #F6821F;
+		font-weight: 700;
 		text-decoration: underline;
 	}
 
@@ -108,29 +108,13 @@ function getListHTML(redirects: Redirects) {
 	}
 
 li {
-  border: 2px solid #003682;
-  box-sizing: border-box;
-  color: #00132C;
+	border-radius: 5px;
   font-size: 24px;
-  font-weight: 900;
-  padding: 50px 30px;
-  position: relative;
-}
-
-li:before {
-  background-color: #D5EDF6;
-  content: "";
-  height: calc(100% + 3px);
-  position: absolute;
-  right: -7px;
-  top: -9px;
-  transition: background-color 300ms ease-in;
-  width: 100%;
-  z-index: -1;
-}
-
-li:hover:before {
-  background-color: #C2E3FB;
+  font-weight: 700;
+	border: 1px solid #f6821f;
+  padding: 30px 20px;
+	box-shadow: rgba(246, 130, 31, 0.4) 5px 5px;
+	margin: 10px;
 }
 
 .title {
