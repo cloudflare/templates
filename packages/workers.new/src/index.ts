@@ -11,6 +11,11 @@ const source = 'github/cloudflare/templates/tree/main';
 const redirects: Redirects = {
 	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
+	'/example-request-scheduler': [
+		'worker-example-request-scheduler',
+		'src/index.ts',
+		'Workers Request Scheduler',
+	],
 	'/router': ['worker-router', 'index.js', 'Workers router'],
 	'/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
 	'/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
