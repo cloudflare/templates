@@ -68,5 +68,4 @@ async function formatUserResponse(user: any) {
 
 async function encodeJWT(user: any, secret: string) {
 	return jwt.sign(user, secret);
-	// return token; // Can't use JsonWebToken because it's not available in workers
 }
