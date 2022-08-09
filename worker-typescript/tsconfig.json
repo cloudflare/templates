@@ -9,7 +9,7 @@
 		"preserveConstEnums": true,
 		"moduleResolution": "node",
 		"sourceMap": true,
-		"types": ["@cloudflare/workers-types", "@types/jest", "@types/service-worker-mock"]
+		"types": ["@cloudflare/workers-types", "@types/jest"]
 	},
 	"include": ["src"],
 	"exclude": ["node_modules", "dist", "test"]

@@ -1,28 +1,10 @@
-import { test } from 'uvu';
-import * as assert from 'uvu/assert';
-import mock from 'service-worker-mock';
-import Worker from '../src/index';
-
-test.before(() => {
-	Object.assign(globalThis, mock());
-});
+import { worker } from '../src/index';
 
 test('GET /', async () => {
-	let req = new Request('/', { method: 'GET' });
-	let result = await Worker.fetch(req);
-	assert.is(result.status, 200);
+	const req = new Request('http://falcon', { method: 'GET' });
+	const result = await worker.fetch(req);
+	expect(result.status).toBe(200);
 
-	let text = await result.text();
-	assert.is(text, 'request method: GET');
+	const text = await result.text();
+	expect(text).toBe('request method: GET');
 });
-
-test('POST /', async () => {
-	let req = new Request('/', { method: 'POST' });
-	let result = await Worker.fetch(req);
-	assert.is(result.status, 200);
-
-	let text = await result.text();
-	assert.is(text, 'request method: POST');
-});
-
-test.run();
