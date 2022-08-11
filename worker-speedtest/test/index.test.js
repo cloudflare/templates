@@ -1,4 +1,4 @@
-import worker  from '../src/index';
+import worker from '../src/index';
 
 test('GET / :: 404', async () => {
 	const req = new Request('http://falcon', { method: 'GET' });

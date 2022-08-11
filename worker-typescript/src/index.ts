@@ -3,4 +3,3 @@ export const worker = {
 		return new Response(`request method: ${request.method}`);
 	},
 };
-
