@@ -1,46 +1,28 @@
-import { test } from 'uvu';
-import * as assert from 'uvu/assert';
-import mock from 'service-worker-mock';
-import Worker from '../src/index.js';
+import worker from '../src/index';
 
-test.before(() => {
-	Object.assign(globalThis, mock());
-});
+test('GET / :: 404', async () => {
+	const req = new Request('http://falcon', { method: 'GET' });
+	const result = await worker.fetch(req);
+	expect(result.status).toBe(404);
 
-test('GET /up :: 200', async () => {
-	let req = new Request('/up');
-	let res = await Worker.fetch(req);
-	assert.is(res.status, 200);
+	const text = await result.text();
+	expect(text).toBe('Not found');
 });
 
 test('GET /up/ :: 200', async () => {
-	let req = new Request('/up/');
-	let res = await Worker.fetch(req);
-	assert.is(res.status, 200);
-});
-
-test('GET /down :: 200', async () => {
-	let req = new Request('/down');
-	let res = await Worker.fetch(req);
-	assert.is(res.status, 200);
+	let req = new Request('http://falcon/up/');
+	let res = await worker.fetch(req);
+	expect(res.status).toBe(200);
 });
 
 test('GET /down/ :: 200', async () => {
-	let req = new Request('/down/');
-	let res = await Worker.fetch(req);
-	assert.is(res.status, 200);
-});
-
-test('GET / :: 404', async () => {
-	let req = new Request('/');
-	let res = await Worker.fetch(req);
-	assert.is(res.status, 404);
+	let req = new Request('http://falcon/down/');
+	let res = await worker.fetch(req);
+	expect(res.status).toBe(200);
 });
 
 test('POST /foobar :: 404', async () => {
-	let req = new Request('/foobar', { method: 'POST' });
-	let res = await Worker.fetch(req);
-	assert.is(res.status, 404);
+	let req = new Request('http://falcon/foobar/');
+	let res = await worker.fetch(req);
+	expect(res.status).toBe(404);
 });
-
-test.run();
