@@ -38,6 +38,8 @@ const redirects: Redirects = {
 		'dev',
 	],
 	'/stream/video-js': ['stream/playback/video-js', 'index.html', 'Cloudflare Stream + Video.js'],
+	'/stream/vidstack': ['stream/playback/vidstack', 'index.html', 'Cloudflare Stream + Vidstack'],
+	'/stream/hls-js': ['stream/playback/hls-js', 'index.html', 'Cloudflare Stream + hls.js'],
 };
 
 const worker: ExportedHandler = {
