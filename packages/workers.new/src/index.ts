@@ -37,6 +37,7 @@ const redirects: Redirects = {
 		'Pages Plugin static forms',
 		'dev',
 	],
+	'/stream/video-js': ['stream/playback/video-js', 'index.html', 'Cloudflare Stream + Video.js'],
 };
 
 const worker: ExportedHandler = {

@@ -1,0 +1,4 @@
+name = "" # todo
+workers_dev = true
+
+compatibility_date = "2022-05-03"
