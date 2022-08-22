@@ -37,9 +37,9 @@ const redirects: Redirects = {
 		'Pages Plugin static forms',
 		'dev',
 	],
-	'/stream/video-js': ['stream/playback/video-js', 'index.html', 'Cloudflare Stream + Video.js'],
-	'/stream/vidstack': ['stream/playback/vidstack', 'index.html', 'Cloudflare Stream + Vidstack'],
-	'/stream/hls-js': ['stream/playback/hls-js', 'index.html', 'Cloudflare Stream + hls.js'],
+	'/stream/video-js': ['stream/playback/video-js', 'src/index.html', 'Cloudflare Stream playback with Video.js'],
+	'/stream/vidstack': ['stream/playback/vidstack', 'src/index.html', 'Cloudflare Stream playback with Vidstack'],
+	'/stream/hls-js': ['stream/playback/hls-js', 'src/index.html', 'Cloudflare Stream playback with hls.js'],
 };
 
 const worker: ExportedHandler = {
