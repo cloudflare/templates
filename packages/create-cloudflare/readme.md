@@ -2,6 +2,9 @@
 
 > Create new Cloudflare projects with one command
 
+> **Note**
+> This package has now been sunsetted! We recommend using the `wrangler generate [name] [template]` command to create new projects with templates.
+
 ## Usage
 
 You may use `yarn`, `pnpm`, or `npm` to invoke the [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) package:

@@ -23,7 +23,6 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 }
 
 async fn handle_slash(text: String) -> Result<Response> {
-    // let renderer = TextRenderer::default();
 
     let renderer = TextRenderer::try_new_with_ttf_font_data(include_bytes!("../assets/Inter-Bold.ttf"))
     .expect("Example font is definitely loadable");
