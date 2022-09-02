@@ -1,0 +1,14 @@
+{
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"start-stackblitz": "node index.js"
+	},
+	"dependencies": {
+		"tus-js-client": "^3.0.0"
+	},
+	"devDependencies": {
+		"dotenv": "^16.0.2"
+	}
+}
