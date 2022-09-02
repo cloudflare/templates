@@ -9,6 +9,7 @@ export async function onRequest(context) {
 			'Authorization': `bearer ${CLOUDFLARE_API_TOKEN}`,
 			'Tus-Resumable': '1.0.0',
 			'Upload-Length': request.headers.get('Upload-Length'),
+			'Upload-Metadata': request.headers.get('Upload-Metadata'),
 		},
 	});
 
