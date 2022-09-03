@@ -10,7 +10,7 @@ export async function onRequest(context) {
 
 	const response = await fetch(endpoint, { method: 'POST', headers, body });
 	if (!response.ok) {
-      throw new Error(await response.json());
+		throw new Error(await response.json());
 	}
 	const responseBody = await response.json();
 	const destination = responseBody.result.uploadURL;
