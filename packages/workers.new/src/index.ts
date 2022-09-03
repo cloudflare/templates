@@ -54,6 +54,11 @@ const redirects: Redirects = {
 	],
 	'/stream/hls-js': ['stream/playback/hls-js', 'src/index.html', 'Cloudflare Stream + hls.js'],
 	'/stream/dash-js': ['stream/playback/dash-js', 'src/index.html', 'Cloudflare Stream + dash.js'],
+	'/stream/direct-creator-uploads': [
+		'stream/upload/direct-creator-uploads',
+		'src/index.html',
+		'Direct Creator Uploads to Cloudflare Stream',
+	],
 	'/stream/direct-creator-uploads-tus': [
 		'stream/upload/direct-creator-uploads-tus',
 		'src/index.html',

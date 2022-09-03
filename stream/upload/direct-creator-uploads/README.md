@@ -1,6 +1,6 @@
-# Template: Direct Creator Uploads to Cloudflare Stream, using TUS
+# Template: Direct Creator Uploads to Cloudflare Stream
 
-Example of (Direct Creator Uploads)[https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/] to Cloudflare Stream, using the TUS protocol.
+Example of (Direct Creator Uploads)[https://developers.cloudflare.com/stream/uploading-videos/direct-creator-uploads/] to Cloudflare Stream
 
 ### Setup
 
