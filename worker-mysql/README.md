@@ -23,12 +23,12 @@ Before you start, please refer to the **[official tutorial](https://developers.c
 ```ts
 const mysql = new Client();
 const mysqlClient = await mysql.connect({
-  username: '<DATABASE_USER>',
-  db: '<DATABASE_NAME>',
-  // hostname is the full URL to your pre-created Cloudflare Tunnel, see documentation here:
-  // https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/create-tunnel
-  hostname: env.TUNNEL_HOST || 'https://dev.example.com',
-  password: env.DATABASE_PASSWORD, // use a secret to store passwords
+	username: '<DATABASE_USER>',
+	db: '<DATABASE_NAME>',
+	// hostname is the full URL to your pre-created Cloudflare Tunnel, see documentation here:
+	// https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/create-tunnel
+	hostname: env.TUNNEL_HOST || 'https://dev.example.com',
+	password: env.DATABASE_PASSWORD, // use a secret to store passwords
 });
 ```
 

@@ -13,18 +13,18 @@ import type { Context } from './context';
 const API = new Router<Context>();
 
 API.prepare = compose(
-  Cache.sync(),
-  CORS.preflight({
-    maxage: 3600,
-    credentials: true,
-  })
+	Cache.sync(),
+	CORS.preflight({
+		maxage: 3600,
+		credentials: true,
+	})
 );
 
 API.mount('/auth/', Auth);
 API.mount('/todos/', Todos);
 
 API.add('GET', '/', (req, context) => {
-  return new Response('OK');
+	return new Response('OK');
 });
 
 // Initialize: Module Worker
