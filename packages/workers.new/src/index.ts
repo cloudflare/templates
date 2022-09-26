@@ -70,12 +70,12 @@ const redirects: Redirects = {
 		'Stream live video (using WHIP) and playback (using WHEP) over WebRTC with Cloudflare Stream',
 	],
 	'/stream/webrtc-whip': [
-		'stream/upload/direct-creator-uploads-tus',
+		'stream/webrtc-whip',
 		'src/whip.html',
 		'Stream live video (using WHIP) over WebRTC with Cloudflare Stream',
 	],
 	'/stream/webrtc-whep': [
-		'stream/upload/direct-creator-uploads-tus',
+		'stream/webrtc-whep',
 		'src/whep.html',
 		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
 	],
