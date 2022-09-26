@@ -1,19 +1,19 @@
 <html>
-  <head>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <h4>Playing video using WHEP</h4>
-    <h5>(remote content)</h5>
-    <video id="remote-video" controls autoplay></video>
+	<head>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<h4>Playing video using WHEP</h4>
+		<h5>(remote content)</h5>
+		<video id="remote-video" controls autoplay></video>
 
-    <script type="module">
-      import WHEPClient from "./WHEPClient.js";
+		<script type="module">
+			import WHEPClient from './WHEPClient.js';
 
-      const url = "<WEBRTC_PLAYBACK_URL_FROM_YOUR_LIVE_INPUT>";
-      const videoElement = document.getElementById("remote-video");
+			const url = '<WEBRTC_PLAYBACK_URL_FROM_YOUR_LIVE_INPUT>';
+			const videoElement = document.getElementById('remote-video');
 
-      const client = new WHEPClient(url, videoElement);
-    </script>
-  </body>
+			const client = new WHEPClient(url, videoElement);
+		</script>
+	</body>
 </html>
