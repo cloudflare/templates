@@ -64,6 +64,21 @@ const redirects: Redirects = {
 		'src/index.html',
 		'Direct Creator Uploads to Cloudflare Stream, using TUS',
 	],
+	'/stream/webrtc': [
+		'stream/webrtc',
+		'src/index.html',
+		'Stream live video (using WHIP) and playback (using WHEP) over WebRTC with Cloudflare Stream',
+	],
+	'/stream/webrtc-whip': [
+		'stream/upload/direct-creator-uploads-tus',
+		'src/whip.html',
+		'Stream live video (using WHIP) over WebRTC with Cloudflare Stream',
+	],
+	'/stream/webrtc-whep': [
+		'stream/upload/direct-creator-uploads-tus',
+		'src/whep.html',
+		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
+	],
 };
 
 const worker: ExportedHandler = {

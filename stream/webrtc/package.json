@@ -1,0 +1,13 @@
+{
+	"private": true,
+	"version": "0.0.0",
+	"scripts": {
+		"dev": "WRANGLER_SEND_METRICS=false wrangler pages dev --local ./src",
+		"build-ts": "tsc && cp dist/WHIPClient.js src/WHIPClient.js && cp dist/WHEPClient.js src/WHEPClient.js && cp dist/negotiateConnectionWithClientOffer.js src/negotiateConnectionWithClientOffer.js",
+		"start-stackblitz": "WRANGLER_SEND_METRICS=false wrangler pages dev --local ./src"
+	},
+	"devDependencies": {
+		"wrangler": "2.1.3",
+		"typescript": "^4.5.4"
+	}
+}
