@@ -54,6 +54,11 @@ const redirects: Redirects = {
 	],
 	'/stream/hls-js': ['stream/playback/hls-js', 'src/index.html', 'Cloudflare Stream + hls.js'],
 	'/stream/dash-js': ['stream/playback/dash-js', 'src/index.html', 'Cloudflare Stream + dash.js'],
+	'/stream/shaka-player': [
+		'stream/playback/shaka-player',
+		'src/index.js',
+		'Cloudflare Stream + Shaka Player',
+	],
 	'/stream/direct-creator-uploads': [
 		'stream/upload/direct-creator-uploads',
 		'src/index.html',
