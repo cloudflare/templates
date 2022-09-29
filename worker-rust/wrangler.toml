@@ -1,6 +1,4 @@
 name = "" # todo
-workers_dev = true
-
 main = "build/worker/shim.mjs"
 compatibility_date = "2022-01-20"
 
