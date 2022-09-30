@@ -1,4 +1,3 @@
 name = "" # todo
-workers_dev = true
-
+main = "./index.js" 
 compatibility_date = "2022-05-03"
