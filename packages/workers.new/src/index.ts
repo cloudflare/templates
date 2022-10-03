@@ -37,6 +37,12 @@ const redirects: Redirects = {
 		'Pages Plugin static forms',
 		'dev',
 	],
+	'/pages-example-forum-app': [
+		'pages-example-forum-app',
+		'functions/api/code.ts',
+		'Pages Example Forum app',
+		'dev',
+	],
 	'/stream/stream-player': [
 		'stream/playback/stream-player',
 		'src/index.html',
