@@ -41,7 +41,7 @@ const redirects: Redirects = {
 		'pages-example-forum-app',
 		'functions/api/code.ts',
 		'Pages Example Forum app',
-		'dev'
+		'dev',
 	],
 	'/stream/stream-player': [
 		'stream/playback/stream-player',
