@@ -35,6 +35,9 @@ To run this locally, ensure you have `Wrangler` version `>=16.7.0` then run
 ```sh
 npm install && npm run start
 ```
+# Environment variables
+
+Create a `.env` file and copy to contents of `.env.example` into the file. Then replace the credentials accordingly. 
 
 # React Component structure.
 
