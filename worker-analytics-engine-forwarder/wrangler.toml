@@ -1,0 +1,13 @@
+name = "workers-analytics-engine-template"
+main = "src/index.js"
+compatibility_date = "2022-10-21"
+
+
+[[unsafe.bindings]]
+name = "ANALYTICS"
+type = "analytics_engine"
+dataset = "change_me"
+
+
+# secrets:
+# use "wrangler secret put BEARER_TOKEN" to set a bearer token.
