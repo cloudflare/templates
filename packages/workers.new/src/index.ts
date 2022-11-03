@@ -8,6 +8,10 @@ type Redirects = Record<string, [string, string, string, string?]>;
 // stackblitz repository source
 const source = 'github/cloudflare/templates/tree/main';
 
+// deploy with cloudflare source
+
+const src = 'https://github.com/cloudflare/templates/tree/main';
+
 const redirects: Redirects = {
 	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
@@ -205,7 +209,6 @@ function getListHTML(redirects: Redirects) {
 	.link {
 		padding: 10px;
 		border: 1px dotted #f1740a;
-		background: #fef1e6;
 		border-radius: 5px;
 	}
 
@@ -257,8 +260,8 @@ function getListHTML(redirects: Redirects) {
 				return `<li>
 				<p class="card-title">${subdir}</p>
 				<p class="title"> ${title} </p>
-				<span class="link"><a href="https://workers.new${pathname}">Open with Stackblitz</a></span>
-				<span class="link"><a href="/">Deploy with Workers</a></span>
+				<span class="link"><a target="_blank" href="https://workers.new${pathname}">Open with Stackblitz</a></span>
+				<span class="link"><a target="_blank" href="https://deploy.workers.cloudflare.com/?url=${src}/${subdir}">Deploy with Workers</a></span>
 				</li>`;
 			})
 			.join('\n')}
