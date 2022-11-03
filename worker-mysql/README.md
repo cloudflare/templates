@@ -1,5 +1,7 @@
 # Template: worker-mysql
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-mysql)
+
 This repo contains example code and a MySQL driver that can be used in any Workers project. If you are interested in using the driver _outside_ of this template, copy the `driver/mysql` module into your project's `node_modules` or directly alongside your source.
 
 ## Setup
