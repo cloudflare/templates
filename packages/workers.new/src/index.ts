@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 // Redirect https://workers.new/<known> requests to IDE.
 // Redirect https://workers.new/*? requests to dashboard.
 // Similar to the concept of https://docs.new.
@@ -8,8 +7,7 @@ type Redirects = Record<string, [string, string, string, string?]>;
 // stackblitz repository source
 const source = 'github/cloudflare/templates/tree/main';
 
-// deploy with cloudflare source
-
+// deploy with cloudflare src
 const src = 'https://github.com/cloudflare/templates/tree/main';
 
 const redirects: Redirects = {
