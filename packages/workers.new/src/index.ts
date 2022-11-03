@@ -7,7 +7,8 @@ type Redirects = Record<string, [string, string, string, string?]>;
 // stackblitz repository source
 const source = 'github/cloudflare/templates/tree/main';
 
-// deploy with cloudflare src
+// deploy with cloudflare source
+
 const src = 'https://github.com/cloudflare/templates/tree/main';
 
 const redirects: Redirects = {
@@ -234,32 +235,32 @@ function getListHTML(redirects: Redirects) {
 			<p class="heading">workers.new</p>
 			<p class="title"> Cloudflare Dashboard Shortcut </p>
 
-			<span class="btn"><a href="https://workers.new/" target="_blank>Open with Stackblitz</a></span>
-			<span class="btn"><a href="/" target="_blank>Deploy with Workers</a></span>
+			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
+			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
 		<li class="featured">
 			<p class="heading">Stream + Stripe </p>
 			<p class="title"> Cloudflare Dashboard Shortcut </p>
 
-			<span class="btn"><a href="https://workers.new/" target="_blank>Open with Stackblitz</a></span>
-			<span class="btn"><a href="/" target="_blank>Deploy with Workers</a></span>
+			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
+			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
 		<li class="featured">
 			<p class="heading">Paste.video</p>
 			<p class="title"> Made with Stream, Workers, D1 & R2 </p>
 
-			<span class="btn"><a href="https://workers.new/" target="_blank>Open with Stackblitz</a></span>
-			<span class="btn"><a href="/" target="_blank>Deploy with Workers</a></span>
+			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
+			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
 		
 		${Object.keys(redirects)
 			.map(pathname => {
-				const [subdir, title] = redirects[pathname] || [];
+				const [subdir, file, title, terminal] = redirects[pathname] || [];
 				return `<li>
 				<p class="card-title">${subdir}</p>
 				<p class="title"> ${title} </p>
-				<span class="link"><a href="https://workers.new${pathname}" target="_blank>Open with Stackblitz</a></span>
-				<span class="link"><a href="https://deploy.workers.cloudflare.com/?url=${src}/${subdir}" target="_blank>Deploy with Workers</a></span>
+				<span class="link"><a target="_blank" href="https://workers.new${pathname}">Open with Stackblitz</a></span>
+				<span class="link"><a target="_blank" href="https://deploy.workers.cloudflare.com/?url=${src}/${subdir}">Deploy with Workers</a></span>
 				</li>`;
 			})
 			.join('\n')}
