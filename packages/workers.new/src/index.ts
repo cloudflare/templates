@@ -240,8 +240,7 @@ function getListHTML(redirects: Redirects) {
 		</li>
 		<li class="featured">
 			<p class="heading">Stream + Stripe </p>
-			<p class="title"> Cloudflare Dashboard Shortcut </p>
-
+			<p class="title"> Host paid live event with Stream and Stripe</p>
 			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
 			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
