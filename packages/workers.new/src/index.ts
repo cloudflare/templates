@@ -19,6 +19,7 @@ const redirects: Redirects = {
 		'src/index.ts',
 		'Workers Request Scheduler',
 	],
+	'/d1': ['worker-d1', 'src/index.ts', 'Workers D1'],
 	'/router': ['worker-router', 'index.js', 'Workers router'],
 	'/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
 	'/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
