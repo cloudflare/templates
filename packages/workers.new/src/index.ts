@@ -236,20 +236,20 @@ function getListHTML(redirects: Redirects) {
 			<p class="heading">workers.new</p>
 			<p class="title"> Cloudflare Dashboard Shortcut </p>
 
-			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
+			<span class="btn"><a href="https://workers.new/">Open with StackBlitz</a></span>
 			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
 		<li class="featured">
 			<p class="heading">Stream + Stripe </p>
 			<p class="title"> Host paid live event with Stream and Stripe</p>
-			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
+			<span class="btn"><a href="https://workers.new/">Open with StackBlitz</a></span>
 			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
 		<li class="featured">
 			<p class="heading">Paste.video</p>
 			<p class="title"> Made with Stream, Workers, D1 & R2 </p>
 
-			<span class="btn"><a href="https://workers.new/">Open with Stackblitz</a></span>
+			<span class="btn"><a href="https://workers.new/">Open with StackBlitz</a></span>
 			<span class="btn"><a href="/">Deploy with Workers</a></span>
 		</li>
 		
@@ -259,7 +259,7 @@ function getListHTML(redirects: Redirects) {
 				return `<li>
 				<p class="card-title">${subdir}</p>
 				<p class="title"> ${title} </p>
-				<span class="link"><a target="_blank" href="https://workers.new${pathname}">Open with Stackblitz</a></span>
+				<span class="link"><a target="_blank" href="https://workers.new${pathname}">Open with StackBlitz</a></span>
 				<span class="link"><a target="_blank" href="https://deploy.workers.cloudflare.com/?url=${src}/${subdir}">Deploy with Workers</a></span>
 				</li>`;
 			})
