@@ -1,5 +1,7 @@
 # Template: pages-functions-cors
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/pages-functions-cors)
+
 A template for Pages Functions appending CORS headers.
 
 ## Setup

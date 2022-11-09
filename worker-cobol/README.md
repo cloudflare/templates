@@ -1,5 +1,7 @@
 # Template: worker-cobol
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-cobol)
+
 A Cloudflare worker that runs COBOL.
 
 `src/index.js` is the content of the Workers script.

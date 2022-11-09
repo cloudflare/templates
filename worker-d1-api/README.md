@@ -1,6 +1,6 @@
-# Template: worker-d1
+# Template: worker-d1-api
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-d1)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/worker-d1-api)
 
 > **Note: requires D1 Beta Access**
 
@@ -19,7 +19,7 @@ Alternatively:
 ```sh
 git clone https://github.com/cloudflare/templates.git
 cd templates
-npm init cloudflare northwind-demo worker-d1
+npm init cloudflare northwind-demo worker-d1-api
 ```
 
 ### Getting started
