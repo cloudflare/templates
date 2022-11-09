@@ -13,16 +13,17 @@ const src = 'https://github.com/cloudflare/templates/tree/main';
 
 const redirects: Redirects = {
 	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
+	'/pages-image-sharing': [
+		'pages-image-sharing',
+		'functions/api/images.ts',
+		'Image Sharing with Pages Functions',
+	],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
 		'worker-example-request-scheduler',
 		'src/index.ts',
 		'Workers Request Scheduler',
 	],
-	'/d1': ['worker-d1', 'src/index.ts', 'Workers D1'],
-	'/router': ['worker-router', 'index.js', 'Workers router'],
-	'/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
-	'/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
 	'/websocket-durable-objects': [
 		'worker-websocket-durable-objects',
 		'src/index.ts',
@@ -221,6 +222,11 @@ function getListHTML(redirects: Redirects) {
 		font-weight: 600;
 	}
 
+	.url {
+		color: #f1740a;
+		font-weight: 700;
+	}
+
 </style>
 <body>
 	<nav class="nav">
@@ -265,6 +271,7 @@ function getListHTML(redirects: Redirects) {
 			})
 			.join('\n')}
 	</ul>
+	<p class="subheading">Want to contribute a template? <a class="url" href="https://github.com/cloudflare/templates"> Send a PR</a> to the templates repository.</p>
 </body>
 </html>
 `;
