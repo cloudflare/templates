@@ -23,12 +23,12 @@ function processLogEntry(ANALYTICS, data) {
 			data.ClientIP || '',
 			data.ClientRequestMethod || '',
 			data.ClientRequestURI || '',
-			data.EdgeStartTimestamp || '',
-			data.EdgeEndTimestamp || '',
-			data.EdgeResponseStatus || '',
 		],
 		doubles: [
 			// Supply a maximum of 20 doubles
+			data.EdgeStartTimestamp || 0,
+			data.EdgeEndTimestamp || 0,
+			data.EdgeResponseStatus || 0,
 			data.EdgeResponseBytes || 0,
 		],
 	});
