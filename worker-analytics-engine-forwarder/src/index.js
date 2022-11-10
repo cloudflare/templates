@@ -94,7 +94,7 @@ function isAuthd(request, env) {
 }
 
 // readStream decompresses the incoming stream if needed then slices the stream into lines separated by \n
-async function *readStream(body, compressed) {
+async function* readStream(body, compressed) {
 	// Decompress the strem if needed
 	var uncompressedStream;
 	if (compressed) {
@@ -108,7 +108,7 @@ async function *readStream(body, compressed) {
 	const reader = uncompressedStream.getReader();
 	var remainder = '';
 	while (true) {
-		const {done, value} = await reader.read();
+		const { done, value } = await reader.read();
 		if (done) {
 			if (remainder != '') {
 				yield remainder;
@@ -124,7 +124,7 @@ async function *readStream(body, compressed) {
 		if (chunks.length > 0) {
 			remainder = chunks.pop();
 		}
-		yield *chunks;
+		yield* chunks;
 	}
 }
 
