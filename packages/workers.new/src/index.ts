@@ -89,7 +89,7 @@ const redirects: Redirects = {
 		'stream/webrtc',
 		'src/index.html',
 		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
-	]
+	],
 };
 
 const worker: ExportedHandler = {
