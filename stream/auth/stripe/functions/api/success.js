@@ -28,8 +28,8 @@ export async function onRequestGet(context) {
 			},
 			body: JSON.stringify({
 				exp: Math.floor(Date.now() / 1000) + 12 * 60 * 60,
-				downloadable: true,
-				accessRules: [{ type: 'ip.geoip.country', country: ['US', 'MX'], action: 'allow' }],
+				downloadable: false,
+				accessRules: [{ type: 'ip.geoip.country', country: ['SM'], action: 'block' }],
 			}),
 		}
 	);
