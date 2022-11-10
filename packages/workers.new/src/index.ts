@@ -13,11 +13,6 @@ const src = 'https://github.com/cloudflare/templates/tree/main';
 
 const redirects: Redirects = {
 	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
-	'/pages-image-sharing': [
-		'pages-image-sharing',
-		'functions/api/images.ts',
-		'Image Sharing with Pages Functions',
-	],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
 		'worker-example-request-scheduler',
@@ -94,12 +89,7 @@ const redirects: Redirects = {
 		'stream/webrtc',
 		'src/index.html',
 		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
-	],
-	'/stream/stripe-checkout': [
-		'stream/auth/stripe',
-		'functions/api/success.js',
-		'Example of using Cloudflare Stream and Stripe Checkout to paywall content',
-	],
+	]
 };
 
 const worker: ExportedHandler = {
@@ -239,24 +229,24 @@ function getListHTML(redirects: Redirects) {
 	<p class="subheading">Ready to use templates to start building applications on Cloudflare Workers.</p>
 	<ul>
 		<li class="featured">
-			<p class="heading">workers.new</p>
-			<p class="title"> Cloudflare Dashboard Shortcut </p>
+			<p class="heading">Image Sharing Website</p>
+			<p class="title"> Image sharing with Pages Functions </p>
 
-			<span class="btn"><a href="https://workers.new/">Open with StackBlitz</a></span>
-			<span class="btn"><a href="/">Deploy with Workers</a></span>
+			<span class="btn"><a href="https://workers.new/pages-image-sharing">Open with StackBlitz</a></span>
+			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/pages-image-sharing">Deploy with Workers</a></span>
 		</li>
 		<li class="featured">
-			<p class="heading">Stream + Stripe </p>
+			<p class="heading">Stream + Stripe Checkout </p>
 			<p class="title"> Host paid live event with Stream and Stripe</p>
-			<span class="btn"><a href="https://workers.new/">Open with StackBlitz</a></span>
-			<span class="btn"><a href="/">Deploy with Workers</a></span>
+			<span class="btn"><a href="https://workers.new/stream/auth/stripe">Open with StackBlitz</a></span>
+			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/stream/paste-video">Deploy with Workers</a></span>
 		</li>
 		<li class="featured">
 			<p class="heading">Paste.video</p>
 			<p class="title"> Made with Stream, Workers, D1 & R2 </p>
 
-			<span class="btn"><a href="https://workers.new/">Open with StackBlitz</a></span>
-			<span class="btn"><a href="/">Deploy with Workers</a></span>
+			<span class="btn"><a href="https://workers.new/stream/paste-video">Open with StackBlitz</a></span>
+			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/stream/auth/stripe">Deploy with Workers</a></span>
 		</li>
 		
 		${Object.keys(redirects)
@@ -271,7 +261,7 @@ function getListHTML(redirects: Redirects) {
 			})
 			.join('\n')}
 	</ul>
-	<p class="subheading">Want to contribute a template? <a class="url" href="https://github.com/cloudflare/templates"> Send a PR</a> to the templates repository.</p>
+	<p class="subheading">Want to contribute a template? <a class="url" href="https://github.com/cloudflare/templates"> Send a PR to the templates repository.</a></p>
 </body>
 </html>
 `;

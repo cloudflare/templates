@@ -1,5 +1,7 @@
 # Forum application built with Pages Functions, Workers KV and Durable Objects
 
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/pages-example-forum-app)
+
 ## Overview
 
 This example application showcases a forum application that allows authenticated users to leave comments, like comments and reply on other user’s comments using Pages Functions to handle server-side logic such as Authentication and posting comments to Workers KV. We will also use Workers KV for storage of our comment entries and Durable Objects to keep the count of likes consistent.
