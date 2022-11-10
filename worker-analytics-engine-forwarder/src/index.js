@@ -49,16 +49,18 @@ export default {
 		var lines;
 		try {
 			const compressed = request.headers.get('Content-Encoding') == 'gzip';
-			lines = await readStream(request.body, compressed);
+			lines = readStream(request.body, compressed);
 		} catch (e) {
 			return makeResponse('Unable to decode input.', 400);
 		}
-		if (lines.length > MAX_ANALYTICS_CALLS) {
-			return makeResponse(`At most ${MAX_ANALYTICS_CALLS} log lines can be supplied.`, 400);
-		}
 
 		// Parse each line and write the data to Analytics Engine
-		for (const line of lines) {
+		var dataPointsWritten = 0;
+		for await (const line of lines) {
+			if (dataPointsWritten >= MAX_ANALYTICS_CALLS) {
+				return makeResponse(`At most ${MAX_ANALYTICS_CALLS} log lines can be supplied.`, 400);
+			}
+
 			var data;
 			try {
 				data = JSON.parse(line);
@@ -66,6 +68,7 @@ export default {
 				return makeResponse('Unable to parse JSON.', 400);
 			}
 			processLogEntry(env.ANALYTICS, data);
+			dataPointsWritten++;
 		}
 
 		return makeResponse('Success', 200);
@@ -91,7 +94,7 @@ function isAuthd(request, env) {
 }
 
 // readStream decompresses the incoming stream if needed then slices the stream into lines separated by \n
-async function readStream(body, compressed) {
+async function *readStream(body, compressed) {
 	// Decompress the strem if needed
 	var uncompressedStream;
 	if (compressed) {
@@ -103,31 +106,26 @@ async function readStream(body, compressed) {
 
 	// Split the stream into an array of lines
 	const reader = uncompressedStream.getReader();
-	var lines = [];
-	var eof = false;
 	var remainder = '';
-	while (!eof) {
-		await reader.read().then(function readChunk({ done, value }) {
-			if (done) {
-				if (remainder != '') {
-					lines.push(remainder);
-				}
-				eof = true;
-				return;
+	while (true) {
+		const {done, value} = await reader.read();
+		if (done) {
+			if (remainder != '') {
+				yield remainder;
 			}
-			const stringData = new TextDecoder().decode(value);
-			const chunks = stringData.split('\n');
-			if (chunks.length > 1) {
-				chunks[0] = remainder + chunks[0];
-				remainder = '';
-			}
-			if (chunks.length > 0) {
-				remainder = chunks.pop();
-			}
-			lines.push(...chunks);
-		});
+			break;
+		}
+		const stringData = new TextDecoder().decode(value);
+		const chunks = stringData.split('\n');
+		if (chunks.length > 1) {
+			chunks[0] = remainder + chunks[0];
+			remainder = '';
+		}
+		if (chunks.length > 0) {
+			remainder = chunks.pop();
+		}
+		yield *chunks;
 	}
-	return lines;
 }
 
 // makeResponse builds a JSON response with the supplied status code.
