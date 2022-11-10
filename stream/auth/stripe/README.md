@@ -28,4 +28,4 @@ Inspired by Stripe Checkout's [examples](https://github.com/stripe-samples/check
 
 ## Test locally
 
-Test the checkout flow by adding payment details (using the [Stripe test cards](https://stripe.com/docs/testing), while in development) — once payment succeeds, you will be redirected to `/watch`. This page is authenticated — only those who have paid are granted an access token to view the video.
+Test the checkout flow by adding payment details (using the [Stripe test cards](https://stripe.com/docs/testing), while in development) — once payment succeeds, you will be redirected to `/watch`. This page is authenticated — only those who have paid are granted an access token ([signed URL](https://developers.cloudflare.com/stream/viewing-videos/securing-your-stream/)) to view the video.
