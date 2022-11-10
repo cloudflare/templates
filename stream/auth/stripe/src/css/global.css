@@ -210,7 +210,7 @@ a:active {
 }
 
 :root {
-	--accent-color: #F48120;
+	--accent-color: #f48120;
 	--headline-color: var(--accent-color);
 }
 

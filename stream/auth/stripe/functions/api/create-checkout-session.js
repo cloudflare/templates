@@ -1,7 +1,7 @@
-import createStripeClient from "../createStripeClient";
+import createStripeClient from '../createStripeClient';
 
 export async function onRequestPost(context) {
-    const { STRIPE_SECRET_KEY, PRICE, HOST } = context.env;
+	const { STRIPE_SECRET_KEY, PRICE, HOST } = context.env;
 	const stripe = createStripeClient(STRIPE_SECRET_KEY);
 
 	const session = await stripe.checkout.sessions.create({
