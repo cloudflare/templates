@@ -90,6 +90,11 @@ const redirects: Redirects = {
 		'src/index.html',
 		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
 	],
+	'/stream/stripe-checkout': [
+		'stream/auth/stripe',
+		'functions/api/success.js',
+		'Example of using Cloudflare Stream and Stripe Checkout to paywall content',
+	],
 };
 
 const worker: ExportedHandler = {
