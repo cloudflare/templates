@@ -3,29 +3,16 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-		<title>Cloudflare Stream + Stripe — Homepage</title>
-
-		<link rel="icon" href="favicon.ico" type="image/x-icon" />
+		<title>Cloudflare Stream + Stripe Checkout Example — Homepage</title>
 		<link rel="stylesheet" href="css/global.css" />
 		<script src="https://js.stripe.com/v3/"></script>
 		<!-- 	TODO: Check session cookie, redirect to watch page if present -->
 	</head>
-
 	<body>
 		<div class="sr-root">
 			<div class="sr-main">
 				<section class="container">
-					<div>
-						<h1>My Live Event</h1>
-						<h4>Purchase a ticket</h4>
-
-						<div class="pasha-image">
-							<img src="https://picsum.photos/280/320?random=4" width="140" height="160" />
-						</div>
-					</div>
-
-					<form action="http://localhost:8789/api/create-checkout-session" method="POST">
+					<form action="/api/create-checkout-session" method="POST">
 						<button type="submit" id="submit">Purchase Ticket</button>
 					</form>
 				</section>

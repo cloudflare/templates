@@ -2,6 +2,7 @@
 	"private": true,
 	"version": "0.0.0",
 	"scripts": {
+		"dev": "wrangler pages dev --local --node-compat ./src",
 		"dev-frontend": "wrangler pages dev --local ./src --port 8788",
 		"dev-api": "wrangler dev --local ./index.js --node-compat --port 8789",
 		"start-stackblitz": "WRANGLER_SEND_METRICS=false npm run dev-api && WRANGLER_SEND_METRICS=false npm run dev-frontend"
@@ -10,8 +11,6 @@
 		"wrangler": "^2.1.13"
 	},
 	"dependencies": {
-		"itty-router": "^2.6.6",
-		"itty-router-extras": "^0.4.2",
 		"stripe": "^10.15.0"
 	}
 }
