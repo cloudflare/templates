@@ -17,11 +17,7 @@ const redirects: Redirects = {
 		'src/index.tsx',
 		'Image Sharing Website with Pages Functions',
 	],
-	'/stream/auth/stripe': [
-		'stream/auth/stripe',
-		'src/index.html',
-		'Stream + Stripe Checkout',
-	],
+	'/stream/auth/stripe': ['stream/auth/stripe', 'src/index.html', 'Stream + Stripe Checkout'],
 	'/durable-objects': ['durable-objects', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
