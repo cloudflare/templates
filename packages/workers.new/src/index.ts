@@ -15,14 +15,18 @@ const redirects: Redirects = {
 	'/pages-image-sharing': [
 		'Image Sharing Website',
 		'src/index.tsx',
-		'Image Sharing with Pages Functions'
+		'Image Sharing with Pages Functions',
 	],
 	'/stream/auth/stripe': [
 		'Stream + Stripe Checkout',
 		'src/index.html',
 		'Host paid event with Stream and Stripe',
 	],
-	'/durable-objects': ['Workers Durable Object Counter', 'index.js', 'Workers Durable Objects counter'],
+	'/durable-objects': [
+		'Workers Durable Object Counter',
+		'index.js',
+		'Workers Durable Objects counter',
+	],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
 		'worker-example-request-scheduler',
