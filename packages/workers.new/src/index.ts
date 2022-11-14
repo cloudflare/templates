@@ -12,7 +12,17 @@ const source = 'github/cloudflare/templates/tree/main';
 const src = 'https://github.com/cloudflare/templates/tree/main';
 
 const redirects: Redirects = {
-	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
+	'/pages-image-sharing': [
+		'Image Sharing Website',
+		'src/index.tsx',
+		'Image Sharing with Pages Functions'
+	],
+	'/stream/auth/stripe': [
+		'Stream + Stripe Checkout',
+		'src/index.html',
+		'Host paid event with Stream and Stripe',
+	],
+	'/durable-objects': ['Workers Durable Object Counter', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
 		'worker-example-request-scheduler',
@@ -185,7 +195,7 @@ function getListHTML(redirects: Redirects) {
 		border-radius: 10px;
 	}
 
-	.featured {
+	li:nth-child(-n+3) {
 		padding: 20px 20px;
 		border: 4px solid #f1740a;
 		border-radius: 10px;
@@ -227,28 +237,7 @@ function getListHTML(redirects: Redirects) {
 	</nav>
 	<p class="heading">Cloudflare Workers Templates</p>
 	<p class="subheading">Ready to use templates to start building applications on Cloudflare Workers.</p>
-	<ul>
-		<li class="featured">
-			<p class="heading">Image Sharing Website</p>
-			<p class="title"> Image sharing with Pages Functions </p>
-
-			<span class="btn"><a href="https://workers.new/pages-image-sharing">Open with StackBlitz</a></span>
-			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/pages-image-sharing">Deploy with Workers</a></span>
-		</li>
-		<li class="featured">
-			<p class="heading">Stream + Stripe Checkout </p>
-			<p class="title"> Host paid live event with Stream and Stripe</p>
-			<span class="btn"><a href="https://workers.new/stream/auth/stripe">Open with StackBlitz</a></span>
-			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/stream/paste-video">Deploy with Workers</a></span>
-		</li>
-		<li class="featured">
-			<p class="heading">Paste.video</p>
-			<p class="title"> Made with Stream, Workers, D1 & R2 </p>
-
-			<span class="btn"><a href="https://workers.new/stream/paste-video">Open with StackBlitz</a></span>
-			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/stream/auth/stripe">Deploy with Workers</a></span>
-		</li>
-		
+	<ul>		
 		${Object.keys(redirects)
 			.map(pathname => {
 				const [subdir, file, title, terminal] = redirects[pathname] || [];
