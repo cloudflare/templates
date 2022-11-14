@@ -13,20 +13,16 @@ const src = 'https://github.com/cloudflare/templates/tree/main';
 
 const redirects: Redirects = {
 	'/pages-image-sharing': [
-		'Image Sharing Website',
+		'pages-image-sharing',
 		'src/index.tsx',
-		'Image Sharing with Pages Functions',
+		'Image Sharing Website with Pages Functions',
 	],
 	'/stream/auth/stripe': [
-		'Stream + Stripe Checkout',
+		'stream/auth/stripe',
 		'src/index.html',
-		'Host paid event with Stream and Stripe',
+		'Stream + Stripe Checkout',
 	],
-	'/durable-objects': [
-		'Workers Durable Object Counter',
-		'index.js',
-		'Workers Durable Objects counter',
-	],
+	'/durable-objects': ['durable-objects', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
 		'worker-example-request-scheduler',
@@ -38,7 +34,7 @@ const redirects: Redirects = {
 		'src/index.ts',
 		'Workers WebSocket Durable Objects',
 	],
-	'/worktop': ['worker-worktop', 'src/index.ts', 'Workers worktop'],
+	'/worktop': ['worker-worktop', 'src/index.ts', 'Workers Worktop'],
 	'/pages-functions-cors': [
 		'pages-functions-cors',
 		'functions/api/_middleware.ts',
@@ -223,6 +219,7 @@ function getListHTML(redirects: Redirects) {
 	}
 
 	.card-title {
+		font-size: 18px;
 		font-weight: 600;
 	}
 
@@ -246,8 +243,8 @@ function getListHTML(redirects: Redirects) {
 			.map(pathname => {
 				const [subdir, file, title, terminal] = redirects[pathname] || [];
 				return `<li>
-				<p class="card-title">${subdir}</p>
-				<p class="title"> ${title} </p>
+				<p class="card-title"> ${title} </p>
+				<p class="title">${subdir}</p>
 				<span class="link"><a target="_blank" href="https://workers.new${pathname}">Open with StackBlitz</a></span>
 				<span class="link"><a target="_blank" href="https://deploy.workers.cloudflare.com/?url=${src}/${subdir}">Deploy with Workers</a></span>
 				</li>`;
