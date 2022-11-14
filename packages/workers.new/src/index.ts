@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 // Redirect https://workers.new/<known> requests to IDE.
 // Redirect https://workers.new/*? requests to dashboard.
 // Similar to the concept of https://docs.new.
@@ -8,6 +7,10 @@ type Redirects = Record<string, [string, string, string, string?]>;
 // stackblitz repository source
 const source = 'github/cloudflare/templates/tree/main';
 
+// deploy with cloudflare source
+
+const src = 'https://github.com/cloudflare/templates/tree/main';
+
 const redirects: Redirects = {
 	'/durable-objects': ['worker-durable-objects', 'index.js', 'Workers Durable Objects counter'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
@@ -16,9 +19,6 @@ const redirects: Redirects = {
 		'src/index.ts',
 		'Workers Request Scheduler',
 	],
-	'/router': ['worker-router', 'index.js', 'Workers router'],
-	'/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
-	'/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
 	'/websocket-durable-objects': [
 		'worker-websocket-durable-objects',
 		'src/index.ts',
@@ -90,18 +90,13 @@ const redirects: Redirects = {
 		'src/index.html',
 		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
 	],
-	'/stream/stripe-checkout': [
-		'stream/auth/stripe',
-		'functions/api/success.js',
-		'Example of using Cloudflare Stream and Stripe Checkout to paywall content',
-	],
 };
 
 const worker: ExportedHandler = {
 	fetch(request) {
 		const { pathname } = new URL(request.url);
 
-		if (pathname === '/list') {
+		if (pathname === '/templates') {
 			return new Response(getListHTML(redirects), { headers: { 'content-type': 'text/html' } });
 		}
 
@@ -128,98 +123,145 @@ function getRedirectUrlForPathname(pathname: string): string | undefined {
 function getListHTML(redirects: Redirects) {
 	return `
 <html>
-<head></head>
+<head>
+	<link href='https://fonts.googleapis.com/css2?family=Inter:wght@200;300;500;700&display=swap' rel='stylesheet'>
+</head>
 <style>
 	body {
-		border: 20px solid #003682;
-		margin: 0px;
+		margin: 2rem 10rem;
+		font-family: "Inter", sans-serif;
 	}
-
 	h1{
 		text-align: center;
 		margin: 20px 0;
 		font-size: 5rem;
 	}
 
-	.title-accent {
-		color: #003682;
-		font-weight: 600;
-		text-decoration: underline;
-	}
-
-	.subtitle {
-		text-align: center;
-		margin-top: 20px;
-		font-size: 2rem;
-	}
-
-	ul {
-		text-decoration: none;
-		list-style: none;
+	.nav {
 		display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    min-height: 170px;
-		font-size: 24px;
-		text-align: center;
-		padding-top: 30px;
+		justify-content: space-between;
+		font-size: 18px;
+	}
+	
+	a {
+		text-decoration: none;
 	}
 
 	a {
 		color: inherit; 
 	}
 
-li {
-  border: 2px solid #003682;
-  box-sizing: border-box;
-  color: #00132C;
-  font-size: 24px;
-  font-weight: 900;
-  padding: 50px 30px;
-  position: relative;
-}
+	.heading {
+		font-size: 25px;
+		text-align: center;
+		margin: 0;
+		font-weight: 700;
+	}
 
-li:before {
-  background-color: #D5EDF6;
-  content: "";
-  height: calc(100% + 3px);
-  position: absolute;
-  right: -7px;
-  top: -9px;
-  transition: background-color 300ms ease-in;
-  width: 100%;
-  z-index: -1;
-}
+	.subheading {
+		text-align: center;
+		font-size: 18px;
+		font-weight: 300;
+	}
 
-li:hover:before {
-  background-color: #C2E3FB;
-}
+	.title {
+		font-weight: 400;
+		margin-bottom: 50px;
+	}
 
-.title {
-	font-size: 20px;
-	font-weight: 400;
-}
+	ul {
+		list-style: none;
+		display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+		text-align: center;
+		padding-top: 30px;
+	}
+
+	li {
+		padding: 20px 20px;
+		border: 1px solid #d5d7d8;
+		border-radius: 10px;
+	}
+
+	.featured {
+		padding: 20px 20px;
+		border: 4px solid #f1740a;
+		border-radius: 10px;
+		background: #fef1e6;
+	}
+
+	.btn {
+		margin: 0 10px;
+		text-decoration: underline;
+	}
+
+	.link {
+		padding: 10px;
+		border: 1px dotted #f1740a;
+		border-radius: 5px;
+	}
+
+	.link:hover {
+		background: #f1740a;
+		color: #fff;
+	}
+
+	.card-title {
+		font-weight: 600;
+	}
+
+	.url {
+		color: #f1740a;
+		font-weight: 700;
+	}
 
 </style>
 <body>
-	<h1>List of <span class="title-accent">workers.new</span> Redirects</h1>
-	<p class="subtitle">A collection of Stackblitz templates ready for you to use!</p>
+	<nav class="nav">
+		<a href="https://workers.cloudflare.com">
+			<img src="https://imagedelivery.net/T24Zz2DP7HaLOEAdMToO-g/70363224-4bee-4f48-a775-06ffdfbc6d00/public" height="50" alt="Cloudflare Workers" />
+		</a>
+		<a href="https://developers.cloudflare.com/workers">Documentation</a>
+	</nav>
+	<p class="heading">Cloudflare Workers Templates</p>
+	<p class="subheading">Ready to use templates to start building applications on Cloudflare Workers.</p>
 	<ul>
-		<li>
-			<a href="/">workers.new</a>
-			<p class="title"> Cloudflare Dashboard shortcut </p>
+		<li class="featured">
+			<p class="heading">Image Sharing Website</p>
+			<p class="title"> Image sharing with Pages Functions </p>
+
+			<span class="btn"><a href="https://workers.new/pages-image-sharing">Open with StackBlitz</a></span>
+			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/pages-image-sharing">Deploy with Workers</a></span>
 		</li>
+		<li class="featured">
+			<p class="heading">Stream + Stripe Checkout </p>
+			<p class="title"> Host paid live event with Stream and Stripe</p>
+			<span class="btn"><a href="https://workers.new/stream/auth/stripe">Open with StackBlitz</a></span>
+			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/stream/paste-video">Deploy with Workers</a></span>
+		</li>
+		<li class="featured">
+			<p class="heading">Paste.video</p>
+			<p class="title"> Made with Stream, Workers, D1 & R2 </p>
+
+			<span class="btn"><a href="https://workers.new/stream/paste-video">Open with StackBlitz</a></span>
+			<span class="btn"><a href="https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/stream/auth/stripe">Deploy with Workers</a></span>
+		</li>
+		
 		${Object.keys(redirects)
 			.map(pathname => {
 				const [subdir, file, title, terminal] = redirects[pathname] || [];
 				return `<li>
-					<a href="${pathname}">workers.new${pathname}</a> 
-					<p class="title">${title}</p>
+				<p class="card-title">${subdir}</p>
+				<p class="title"> ${title} </p>
+				<span class="link"><a target="_blank" href="https://workers.new${pathname}">Open with StackBlitz</a></span>
+				<span class="link"><a target="_blank" href="https://deploy.workers.cloudflare.com/?url=${src}/${subdir}">Deploy with Workers</a></span>
 				</li>`;
 			})
 			.join('\n')}
 	</ul>
+	<p class="subheading">Want to contribute a template? <a class="url" href="https://github.com/cloudflare/templates"> Send a PR to the templates repository.</a></p>
 </body>
 </html>
 `;
