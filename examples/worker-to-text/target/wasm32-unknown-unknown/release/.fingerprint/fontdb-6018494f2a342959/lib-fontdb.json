@@ -1,0 +1,23 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"fs\", \"memmap\", \"memmap2\"]",
+  "target": 4033802854461663490,
+  "profile": 12164079446139359250,
+  "path": 4313935871229562044,
+  "deps": [
+    [1957885600054402732, "ttf_parser", false, 6258555744126820265],
+    [2421278278125917078, "log", false, 3351928491372563483],
+    [15833193255603315999, "memmap2", false, 6030809476051779959]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/fontdb-6018494f2a342959/dep-lib-fontdb"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 17621732421374443520,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

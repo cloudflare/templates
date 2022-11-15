@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 889060539261521769,
+  "profile": 17504242664759948721,
+  "path": 8943185938368122511,
+  "deps": [[8091686793815316739, "build_script_build", false, 13386582169288597529]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/wasm-bindgen-shared-9cdcf534d01c56af/dep-lib-wasm-bindgen-shared"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 4905702609766663142,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

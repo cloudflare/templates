@@ -1,0 +1,20 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"clone-impls\", \"default\", \"derive\", \"full\", \"parsing\", \"printing\", \"proc-macro\", \"quote\", \"visit\", \"visit-mut\"]",
+  "target": 12020202395954228905,
+  "profile": 8344124108420085910,
+  "path": 5405775453732241768,
+  "deps": [
+    [1312708988025287797, "quote", false, 5420714071302515483],
+    [14346354111552627698, "unicode_xid", false, 10920679009935444503],
+    [17973288314978297721, "proc_macro2", false, 9421661903598129449],
+    [18212381790889901754, "build_script_build", false, 7942752550245616085]
+  ],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/syn-b41f279efee71db5/dep-lib-syn" } }
+  ],
+  "rustflags": [],
+  "metadata": 6886477143387768027,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

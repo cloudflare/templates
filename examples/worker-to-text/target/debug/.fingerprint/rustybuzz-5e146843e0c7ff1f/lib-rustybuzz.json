@@ -1,0 +1,28 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 6850223077516578869,
+  "profile": 8344124108420085910,
+  "path": 8677177279258599317,
+  "deps": [
+    [1957885600054402732, "ttf_parser", false, 3048291684099790047],
+    [4272610306878712653, "unicode_general_category", false, 9730937072361503292],
+    [4588265088805944298, "unicode_script", false, 11961308582546565062],
+    [8960651733452807776, "unicode_ccc", false, 12448899517012312544],
+    [10195677463337315232, "bytemuck", false, 12566214767922023990],
+    [14051957667571541382, "bitflags", false, 5654310313205010364],
+    [14408672950887868211, "smallvec", false, 14395444420427901248],
+    [16191663593204181838, "unicode_bidi_mirroring", false, 4540791307090024331]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/rustybuzz-5e146843e0c7ff1f/dep-lib-rustybuzz"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 15183758976718505769,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

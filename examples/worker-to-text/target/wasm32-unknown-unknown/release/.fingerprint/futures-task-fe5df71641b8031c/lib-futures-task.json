@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"alloc\", \"std\"]",
+  "target": 8655490260169621057,
+  "profile": 12164079446139359250,
+  "path": 14119434381306474430,
+  "deps": [[17386038036829680923, "build_script_build", false, 6342933648098296190]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/futures-task-fe5df71641b8031c/dep-lib-futures-task"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 8141544154866689520,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

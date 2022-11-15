@@ -1,0 +1,15 @@
+/Users/gift/Code/demos/worker-to-text/target/debug/deps/chrono_tz-65cc6f345977fb70.rmeta: /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/lib.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/binary_search.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/directory.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezone_impl.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezones.rs /Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/directory.rs /Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/timezones.rs
+
+/Users/gift/Code/demos/worker-to-text/target/debug/deps/libchrono_tz-65cc6f345977fb70.rlib: /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/lib.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/binary_search.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/directory.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezone_impl.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezones.rs /Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/directory.rs /Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/timezones.rs
+
+/Users/gift/Code/demos/worker-to-text/target/debug/deps/chrono_tz-65cc6f345977fb70.d: /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/lib.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/binary_search.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/directory.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezone_impl.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezones.rs /Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/directory.rs /Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/timezones.rs
+
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/lib.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/binary_search.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/directory.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezone_impl.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/chrono-tz-0.6.1/src/timezones.rs:
+/Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/directory.rs:
+/Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out/timezones.rs:
+
+# env-dep:OUT_DIR=/Users/gift/Code/demos/worker-to-text/target/debug/build/chrono-tz-93c5ded36c686bb2/out

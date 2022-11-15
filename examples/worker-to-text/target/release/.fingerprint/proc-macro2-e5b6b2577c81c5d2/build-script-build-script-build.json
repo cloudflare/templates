@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"proc-macro\"]",
+  "target": 13294766831966498538,
+  "profile": 17504242664759948721,
+  "path": 2178317782370432621,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/proc-macro2-e5b6b2577c81c5d2/dep-build-script-build-script-build"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 14399165043509735265,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

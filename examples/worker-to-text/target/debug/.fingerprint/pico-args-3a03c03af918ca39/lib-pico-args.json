@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"eq-separator\"]",
+  "target": 437268360690481844,
+  "profile": 8344124108420085910,
+  "path": 11180005453514002574,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/pico-args-3a03c03af918ca39/dep-lib-pico-args"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 8754344190989392329,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 13426356062507971772,
+  "profile": 12164079446139359250,
+  "path": 2562273806447410879,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/jpeg-decoder-60f5872778875d3f/dep-lib-jpeg-decoder"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 11222538340481966606,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

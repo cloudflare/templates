@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"as-bytes\", \"bytemuck\", \"default\"]",
+  "target": 615107085545517516,
+  "profile": 12164079446139359250,
+  "path": 3399069213559252012,
+  "deps": [[10195677463337315232, "bytemuck", false, 13148810212313314361]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/rgb-18ec6e417251a7e1/dep-lib-rgb"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 7245843437156235531,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

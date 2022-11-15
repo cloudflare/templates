@@ -1,0 +1,24 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 7898274425466113371,
+  "profile": 8344124108420085910,
+  "path": 13055917024218200983,
+  "deps": [
+    [1312708988025287797, "quote", false, 5420714071302515483],
+    [8749722391287098499, "build_script_build", false, 14835240314507276818],
+    [17973288314978297721, "proc_macro2", false, 9421661903598129449],
+    [18212381790889901754, "syn", false, 13666611156625312921]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/async-trait-49723bd8c195e6dc/dep-lib-async-trait"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 2009543531008976451,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

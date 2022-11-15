@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 6588941501141252215,
+  "profile": 17504242664759948721,
+  "path": 5853907771198227381,
+  "deps": [[17070786555368778272, "regex", false, 3326320448272168634]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/parse-zoneinfo-aa9ccdaddf69dc7a/dep-lib-parse-zoneinfo"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 3114244485673399964,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

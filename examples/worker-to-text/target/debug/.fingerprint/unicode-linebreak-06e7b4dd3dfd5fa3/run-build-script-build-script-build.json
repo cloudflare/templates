@@ -1,0 +1,20 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "",
+  "target": 0,
+  "profile": 0,
+  "path": 0,
+  "deps": [[9853336309227637581, "build_script_build", false, 748994944916496820]],
+  "local": [
+    {
+      "RerunIfChanged": {
+        "output": "debug/build/unicode-linebreak-06e7b4dd3dfd5fa3/output",
+        "paths": ["LineBreak.txt"]
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 0,
+  "config": 0,
+  "compile_kind": 0
+}

@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 8772470761031067052,
+  "profile": 12164079446139359250,
+  "path": 1424411141131312114,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/smallvec-3238d3a68821457b/dep-lib-smallvec"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 15767570753543272391,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

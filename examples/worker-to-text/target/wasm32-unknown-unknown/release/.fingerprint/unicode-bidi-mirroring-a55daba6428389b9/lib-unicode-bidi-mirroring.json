@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 16679787552471239095,
+  "profile": 12164079446139359250,
+  "path": 10760562968502280240,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/unicode-bidi-mirroring-a55daba6428389b9/dep-lib-unicode-bidi-mirroring"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 12273555878329151866,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

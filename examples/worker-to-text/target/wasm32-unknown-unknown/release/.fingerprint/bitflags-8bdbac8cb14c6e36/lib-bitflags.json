@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\"]",
+  "target": 7112745982619283648,
+  "profile": 12164079446139359250,
+  "path": 2521635377038928775,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/bitflags-8bdbac8cb14c6e36/dep-lib-bitflags"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 14564035643000669268,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

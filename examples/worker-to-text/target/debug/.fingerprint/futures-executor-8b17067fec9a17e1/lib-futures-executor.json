@@ -1,0 +1,23 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"std\"]",
+  "target": 15161543389561387486,
+  "profile": 8344124108420085910,
+  "path": 13384211311727484429,
+  "deps": [
+    [7221048923797276665, "futures_util", false, 13922132115774318572],
+    [14537088555872569972, "futures_core", false, 7474476269319871060],
+    [17386038036829680923, "futures_task", false, 6448145021981200467]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/futures-executor-8b17067fec9a17e1/dep-lib-futures-executor"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 10776255259553714831,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

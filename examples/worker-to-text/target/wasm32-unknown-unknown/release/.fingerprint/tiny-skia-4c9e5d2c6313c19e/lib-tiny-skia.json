@@ -1,0 +1,26 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"png\", \"png-format\", \"safe_arch\", \"simd\", \"std\"]",
+  "target": 835224782330868712,
+  "profile": 12164079446139359250,
+  "path": 3971186617474077893,
+  "deps": [
+    [1585318356256652523, "png", false, 1600081164356203774],
+    [2452538001284770427, "cfg_if", false, 263743584555597731],
+    [4174244234723058678, "arrayref", false, 17990629485388986219],
+    [7566133065188403962, "safe_arch", false, 8360588363987194672],
+    [10195677463337315232, "bytemuck", false, 13148810212313314361],
+    [13133975285667102737, "arrayvec", false, 6437585412614991635]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/tiny-skia-4c9e5d2c6313c19e/dep-lib-tiny-skia"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 17992800966245212416,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

@@ -1,0 +1,15 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"std\"]",
+  "target": 7306939354831100121,
+  "profile": 8344124108420085910,
+  "path": 17189355819794217588,
+  "deps": [],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/slab-d4861d3d92352d66/dep-lib-slab" } }
+  ],
+  "rustflags": [],
+  "metadata": 11890855678498732385,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

@@ -1,0 +1,23 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 16781828376605951459,
+  "profile": 8344124108420085910,
+  "path": 4249200519290949720,
+  "deps": [
+    [3655239040002717732, "phf", false, 9207282764100856942],
+    [5186719777720235276, "chrono", false, 1626566329680504992],
+    [17195189396594323351, "build_script_build", false, 8262466802211305232]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/chrono-tz-65cc6f345977fb70/dep-lib-chrono-tz"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 4287198085835573651,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

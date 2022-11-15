@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"alloc\", \"getrandom\", \"std\"]",
+  "target": 14554634924080965175,
+  "profile": 8344124108420085910,
+  "path": 18101303927279301523,
+  "deps": [[13417499805903997058, "getrandom", false, 16753418243393266312]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/rand_core-fdbc5283eea7e7e4/dep-lib-rand_core"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 3275543247315060703,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

@@ -1,0 +1,1 @@
+/Users/gift/Code/demos/worker-to-text/target/debug/libtestwasm2.dylib: /Users/gift/Code/demos/worker-to-text/assets/Inter-Bold.ttf /Users/gift/Code/demos/worker-to-text/src/lib.rs /Users/gift/Code/demos/worker-to-text/src/utils.rs

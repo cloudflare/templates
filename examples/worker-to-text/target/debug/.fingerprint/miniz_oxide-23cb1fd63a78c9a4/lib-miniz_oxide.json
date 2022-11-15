@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\"]",
+  "target": 11473214759003546206,
+  "profile": 8344124108420085910,
+  "path": 14406345596246566925,
+  "deps": [[18214773122388295386, "adler", false, 13936029832183248015]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/miniz_oxide-23cb1fd63a78c9a4/dep-lib-miniz_oxide"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 16625842183394340697,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

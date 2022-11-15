@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 13294766831966498538,
+  "profile": 17504242664759948721,
+  "path": 5589159310066415694,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/ryu-d10c8a762b251c2f/dep-build-script-build-script-build"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 10387617312689919117,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

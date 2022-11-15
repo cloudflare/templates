@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 2709041430195671023,
+  "profile": 17504242664759948721,
+  "path": 12953950241453002588,
+  "deps": [[12718412902330781859, "autocfg", false, 17898192793414751253]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/num-traits-87811a4279968944/dep-build-script-build-script-build"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 14621636500951049976,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

@@ -1,0 +1,11 @@
+/Users/gift/Code/demos/worker-to-text/target/release/deps/parse_zoneinfo-aa9ccdaddf69dc7a.rmeta: /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/lib.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/line.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/structure.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/table.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/transitions.rs
+
+/Users/gift/Code/demos/worker-to-text/target/release/deps/libparse_zoneinfo-aa9ccdaddf69dc7a.rlib: /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/lib.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/line.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/structure.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/table.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/transitions.rs
+
+/Users/gift/Code/demos/worker-to-text/target/release/deps/parse_zoneinfo-aa9ccdaddf69dc7a.d: /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/lib.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/line.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/structure.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/table.rs /Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/transitions.rs
+
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/lib.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/line.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/structure.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/table.rs:
+/Users/gift/.cargo/registry/src/github.com-1ecc6299db9ec823/parse-zoneinfo-0.3.0/src/transitions.rs:

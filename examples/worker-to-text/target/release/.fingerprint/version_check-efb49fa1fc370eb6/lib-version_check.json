@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 2726911228026723764,
+  "profile": 17504242664759948721,
+  "path": 9039491254750250123,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/version_check-efb49fa1fc370eb6/dep-lib-version_check"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 14847206692933921638,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

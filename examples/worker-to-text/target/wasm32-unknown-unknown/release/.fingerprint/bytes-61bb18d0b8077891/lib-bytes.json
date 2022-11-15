@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"std\"]",
+  "target": 1494108863131118983,
+  "profile": 12164079446139359250,
+  "path": 3446541043962479366,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/bytes-61bb18d0b8077891/dep-lib-bytes"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 11501112221997671841,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

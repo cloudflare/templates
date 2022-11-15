@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"std\"]",
+  "target": 9507435563443411525,
+  "profile": 17504242664759948721,
+  "path": 8936335849130147116,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/siphasher-dd13d8afca5b5bdb/dep-lib-siphasher"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 3476056102545690687,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

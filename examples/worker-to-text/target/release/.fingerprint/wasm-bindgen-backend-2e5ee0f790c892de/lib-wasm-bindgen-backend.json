@@ -1,0 +1,27 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"spans\"]",
+  "target": 10572435472496279984,
+  "profile": 17504242664759948721,
+  "path": 9826338023604223718,
+  "deps": [
+    [1312708988025287797, "quote", false, 3473888863237967833],
+    [2421278278125917078, "log", false, 16531853959911693062],
+    [6685014296130524576, "lazy_static", false, 8735923156428835386],
+    [8091686793815316739, "wasm_bindgen_shared", false, 6456229413526474286],
+    [9593338892574864844, "bumpalo", false, 13779067404194722755],
+    [17973288314978297721, "proc_macro2", false, 11481147915573873998],
+    [18212381790889901754, "syn", false, 9282352911216656165]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release/.fingerprint/wasm-bindgen-backend-2e5ee0f790c892de/dep-lib-wasm-bindgen-backend"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 8274807435695899353,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

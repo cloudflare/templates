@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\"]",
+  "target": 17418858882456802873,
+  "profile": 12164079446139359250,
+  "path": 6944106001208095221,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/unicode-width-b6ef4f5797bbf037/dep-lib-unicode-width"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 2060532119256820226,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

@@ -1,0 +1,33 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"alloc\", \"async-await\", \"async-await-macro\", \"channel\", \"futures-channel\", \"futures-io\", \"futures-macro\", \"futures-sink\", \"io\", \"memchr\", \"proc-macro-hack\", \"proc-macro-nested\", \"sink\", \"slab\", \"std\"]",
+  "target": 7230828587975656966,
+  "profile": 12164079446139359250,
+  "path": 17583493704057359333,
+  "deps": [
+    [1305116173434595512, "futures_io", false, 17056298029192287452],
+    [1764082122676407310, "futures_sink", false, 3163766461139517913],
+    [4609455345274762065, "proc_macro_hack", false, 9743523009757732470],
+    [4761952582670444189, "pin_utils", false, 10915758062768549946],
+    [7221048923797276665, "build_script_build", false, 8173503355347634715],
+    [7951330290398665950, "futures_macro", false, 17437719038708829400],
+    [12718808823970648948, "memchr", false, 14746393288752570209],
+    [13377642373985545187, "pin_project_lite", false, 4636498465488864026],
+    [13615574660276729047, "proc_macro_nested", false, 18364438788162003296],
+    [13828172854481945133, "futures_channel", false, 5103435855925152931],
+    [14537088555872569972, "futures_core", false, 15994417972528212946],
+    [14920525033855894131, "slab", false, 8437248388293225191],
+    [17386038036829680923, "futures_task", false, 7586899863659747507]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/futures-util-b084e7dab9637280/dep-lib-futures-util"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 14495333575905477590,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 12547058545030619677,
+  "profile": 8344124108420085910,
+  "path": 7329581858726361415,
+  "deps": [[13615574660276729047, "build_script_build", false, 3270416920079159273]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/proc-macro-nested-e0174903383449aa/dep-lib-proc-macro-nested"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 13146914622308387279,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

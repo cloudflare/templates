@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 17636168236552629245,
+  "profile": 12164079446139359250,
+  "path": 10387382342157858417,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/unicode-vo-fa893e4ab079fbb2/dep-lib-unicode-vo"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 14304823815390429496,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

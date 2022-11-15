@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 17946092562950227216,
+  "profile": 12164079446139359250,
+  "path": 2898018633195591074,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/adler-2ee8fdbb957ffe4c/dep-lib-adler"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 10673633425720882208,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

@@ -1,0 +1,15 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 8615349495337650605,
+  "profile": 8344124108420085910,
+  "path": 12991656591004643816,
+  "deps": [[16275816352225621963, "wasm_bindgen", false, 7191946483568217682]],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/js-sys-b914a71c352f9d08/dep-lib-js-sys" } }
+  ],
+  "rustflags": [],
+  "metadata": 1700232890120119260,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

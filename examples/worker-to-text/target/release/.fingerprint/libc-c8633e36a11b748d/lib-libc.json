@@ -1,0 +1,15 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"std\"]",
+  "target": 15721753382687865320,
+  "profile": 17504242664759948721,
+  "path": 9616986776132126863,
+  "deps": [[13743578918048164545, "build_script_build", false, 7974291254150501930]],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "release/.fingerprint/libc-c8633e36a11b748d/dep-lib-libc" } }
+  ],
+  "rustflags": [],
+  "metadata": 14998826085014762512,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

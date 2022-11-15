@@ -1,0 +1,22 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 12350198661432049892,
+  "profile": 8344124108420085910,
+  "path": 14960436426975563730,
+  "deps": [
+    [11311719388751911026, "cfg_if", false, 15556375028885193123],
+    [16275816352225621963, "wasm_bindgen", false, 7191946483568217682]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/console_error_panic_hook-eb84687d13f25b11/dep-lib-console_error_panic_hook"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 1919638720116900959,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

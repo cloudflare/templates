@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"bytemuck\", \"default\"]",
+  "target": 5376328396008919466,
+  "profile": 8344124108420085910,
+  "path": 3188751376371547824,
+  "deps": [[10195677463337315232, "bytemuck", false, 12566214767922023990]],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/safe_arch-e24ca330e21e64a7/dep-lib-safe_arch"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 13578083434032894905,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

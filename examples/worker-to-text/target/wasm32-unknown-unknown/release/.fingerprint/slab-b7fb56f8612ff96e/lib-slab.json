@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"default\", \"std\"]",
+  "target": 7306939354831100121,
+  "profile": 12164079446139359250,
+  "path": 17189355819794217588,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/slab-b7fb56f8612ff96e/dep-lib-slab"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 11890855678498732385,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

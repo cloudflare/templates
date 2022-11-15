@@ -1,0 +1,15 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 3259755942441354697,
+  "profile": 8344124108420085910,
+  "path": 14370689869442883268,
+  "deps": [],
+  "local": [
+    { "CheckDepInfo": { "dep_info": "debug/.fingerprint/smawk-c4b0cbdf8aa62b19/dep-lib-smawk" } }
+  ],
+  "rustflags": [],
+  "metadata": 15482040437908898039,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

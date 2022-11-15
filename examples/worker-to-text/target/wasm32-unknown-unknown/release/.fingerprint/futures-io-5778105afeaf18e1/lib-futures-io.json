@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"std\"]",
+  "target": 6374391724335717931,
+  "profile": 12164079446139359250,
+  "path": 5777701064891535456,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "wasm32-unknown-unknown/release/.fingerprint/futures-io-5778105afeaf18e1/dep-lib-futures-io"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 6274769968791134284,
+  "config": 2202906307356721367,
+  "compile_kind": 8104632896995515128
+}

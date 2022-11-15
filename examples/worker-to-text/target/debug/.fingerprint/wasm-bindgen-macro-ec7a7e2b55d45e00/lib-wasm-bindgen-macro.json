@@ -1,0 +1,22 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[\"spans\"]",
+  "target": 3012761008131016033,
+  "profile": 8344124108420085910,
+  "path": 4687810932074612930,
+  "deps": [
+    [1312708988025287797, "quote", false, 5420714071302515483],
+    [3426788493749621227, "wasm_bindgen_macro_support", false, 7910537002634307246]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/wasm-bindgen-macro-ec7a7e2b55d45e00/dep-lib-wasm-bindgen-macro"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 17576434215897489395,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}

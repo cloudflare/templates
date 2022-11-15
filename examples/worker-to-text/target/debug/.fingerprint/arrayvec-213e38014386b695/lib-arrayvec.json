@@ -1,0 +1,19 @@
+{
+  "rustc": 1963664527410474588,
+  "features": "[]",
+  "target": 15141271784968785197,
+  "profile": 8344124108420085910,
+  "path": 12007682014291540387,
+  "deps": [],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug/.fingerprint/arrayvec-213e38014386b695/dep-lib-arrayvec"
+      }
+    }
+  ],
+  "rustflags": [],
+  "metadata": 5019420986621020735,
+  "config": 2202906307356721367,
+  "compile_kind": 0
+}
