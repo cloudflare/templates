@@ -15,7 +15,7 @@ To create a "northwind-demo" directory using this template, run the following:
 npm init cloudflare northwind-demo worker-d1
 
 # To install the prerelease version of Wrangler for d1 and other dependencies
-npm install
+npm install 
 ```
 
 > **Note the "@d1"**—we're using a prerelease version of Wrangler under the `d1` tag. You can install this into an existing Wrangler project using `npm install wrangler@d1`
