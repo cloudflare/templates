@@ -1,6 +1,5 @@
-name = "" # todo
-workers_dev = true
-
+name = "worker-aws"
+main="index.js" 
 compatibility_date = "2022-05-03"
 
 [build]
