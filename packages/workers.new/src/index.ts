@@ -18,7 +18,15 @@ const redirects: Redirects = {
 		'Image Sharing Website with Pages Functions',
 	],
 	'/stream/auth/stripe': ['stream/auth/stripe', 'src/index.html', 'Stream + Stripe Checkout'],
-	'/durable-objects': ['durable-objects', 'index.js', 'Workers Durable Objects counter'],
+	'/worker-durable-objects': [
+		'worker-durable-objects',
+		'index.js',
+		'Workers Durable Objects counter',
+	],
+	'/d1': ['worker-d1', 'src/index.ts', 'Workers D1'],
+	'/router': ['worker-router', 'index.js', 'Workers Router'],
+	'/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
+	'/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
 	'/example-wordle': ['worker-example-wordle', 'src/index.ts', 'Workers Wordle example'],
 	'/example-request-scheduler': [
 		'worker-example-request-scheduler',
