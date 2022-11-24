@@ -3,9 +3,9 @@
 	"version": "0.0.0",
 	"devDependencies": {
 		"@cloudflare/d1": "^1.4.1",
-		"@cloudflare/workers-types": "^3.14.1",
-		"typescript": "^4.7.4",
-		"wrangler": "^0.0.0-d35c69f"
+		"@cloudflare/workers-types": "^4.20221111.1",
+		"typescript": "^4.9.3",
+		"wrangler": "^0.0.0-b7e5510d"
 	},
 	"private": true,
 	"scripts": {
@@ -13,6 +13,6 @@
 		"deploy": "wrangler publish"
 	},
 	"dependencies": {
-		"hono": "^2.0.2"
+		"hono": "^2.5.5"
 	}
 }

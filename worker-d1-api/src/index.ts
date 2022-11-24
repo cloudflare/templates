@@ -5,7 +5,7 @@ interface Comment {
 	author: string;
 	body: string;
 }
-const app = new Hono();
+const app = new Hono<{ Bindings: Env }>();
 app.use('/api/*', cors());
 
 app.get('/api/posts/:slug/comments', async c => {

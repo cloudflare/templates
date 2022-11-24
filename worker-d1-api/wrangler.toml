@@ -1,6 +1,6 @@
 name = "d1-example"
 main = "src/index.ts"
-compatibility_date = "2022-07-15"
+compatibility_date = "2022-11-23"
 
 [[ d1_databases ]]
 binding = "DB" # i.e. available in your Worker on env.DB
