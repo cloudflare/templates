@@ -24,7 +24,6 @@ Run `wrangler dev` and head to `/docs` our `/redocs` with your browser.
 
 You'll be greeted with an OpenAPI page that you can use to test and call your endpoints.
 
-
 ## Deploy
 
 Once you are ready, you can publish your code by running the following command:
