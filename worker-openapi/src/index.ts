@@ -1,7 +1,15 @@
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi';
 import { TaskCreate, TaskDelete, TaskFetch, TaskList } from './tasks';
 
-const router = OpenAPIRouter();
+const router = OpenAPIRouter({
+  schema: {
+    info: {
+      title: 'Worker OpenAPI Example',
+      version: '1.0',
+    }
+  }
+});
+
 router.get('/api/tasks/', TaskList);
 router.post('/api/tasks/', TaskCreate);
 router.get('/api/tasks/:taskSlug/', TaskFetch);
