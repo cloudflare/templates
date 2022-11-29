@@ -7,6 +7,9 @@ router.post('/api/tasks/', TaskCreate);
 router.get('/api/tasks/:taskSlug/', TaskFetch);
 router.delete('/api/tasks/:taskSlug/', TaskDelete);
 
+// Redirect root request to the /docs page
+router.original.get('/', (request) => Response.redirect(`${request.url}docs`, 302))
+
 // 404 for everything else
 router.all('*', () => new Response('Not Found.', { status: 404 }));
 
