@@ -9,24 +9,6 @@ This repo contains example code and a MySQL driver that can be used in any Worke
 
 Before you start, please refer to the **[official tutorial](https://developers.cloudflare.com/workers/tutorials/query-postgres-from-workers-using-database-connectors)**.
 
-```ts
-const tidb = new Client();
-const connect = await tidb.connect({
-	username: '<DATABASE_USER>',
-	db: '<DATABASE_NAME>',
-	// hostname is the full URL to your pre-created Cloudflare Tunnel, see documentation here:
-	// https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/create-tunnel
-	hostname: env.TUNNEL_HOST || 'https://dev.example.com',
-	password: env.DATABASE_PASSWORD, // use a secret to store passwords
-});
-```
-
-**Please Note:**
-
-- you must use this config object format vs. a database connection string
-- the `hostname` property must be the URL to your Cloudflare Tunnel, _NOT_ your database host
-		- your Tunnel will be configured to connect to your database host
-
 ## Quick Start
 
 ### Prerequisites
@@ -42,13 +24,13 @@ const connect = await tidb.connect({
 
 Using TiUP to build your TiDB locally, you can find the detail in [TiDB documentation](https://docs.pingcap.com/tidb/stable/quick-start-with-tidb).
 
-1. Download and install TiUP
+1. Download and install TiUP:
 
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh | sh
 ```
 
-2. Start the cluster
+2. Start the cluster:
 ```
 tiup playground
 ```
@@ -63,28 +45,29 @@ Here, I will introduce how to create a tunnel locally in my environment. You can
 
 1. Add a website to Cloudflare using your domain.
 
-2. Download and install cloudflared in mac
+2. Download and install cloudflared in mac:
 
 ```
 brew install cloudflare/cloudflare/cloudflared
 ```
-3. Authenticate cloudflared
+3. Authenticate cloudflared:
 
 ```
 cloudflared tunnel login
 ```
 
-4. Create a tunnel and give it a name
+4. Create a tunnel and give it a name:
 
 ```
 cloudflared tunnel create <NAME>
 ```
 
-5. Create a configuration file
+5. Create a configuration file:
 
-Create a configuration file in your .cloudflared directory:
+Create a configuration file in your .cloudflared directory.
 
-You can find the `Tunnel-UUID` with `cloudflared tunnel list`
+- `url` is your TiDB address, make sure use the tcp protocol.
+- You can find the `Tunnel-UUID` with `cloudflared tunnel list` command.
 
 ```
 url: tcp://127.0.0.1:4000
@@ -93,18 +76,18 @@ credentials-file: /root/.cloudflared/<Tunnel-UUID>.json
 ```
 
 
-6. Start routing traffic
+6. Start routing traffic:
 
 This step will assign a CNAME record that points traffic to your tunnel subdomain.
 
-- `UUID or NAME` is your tunnel's UUID or name
+- `UUID or NAME` is your tunnel's UUID or name.
 - hostname must be a subdomain of your website. For example, my domain is `example.com`. So I can use `tidb.example.com` as my hostname.
 
 ```
 cloudflared tunnel route dns <UUID or NAME> <hostname>
 ```
 
-7.Run the tunnel
+7.Run the tunnel:
 
 ```
 cloudflared tunnel run <UUID or NAME>
@@ -112,16 +95,19 @@ cloudflared tunnel run <UUID or NAME>
 
 ### Step 3: Deploy worker by template
 
-1. Get the template
+1. Get the template:
 
 ```
 git clone git@github.com:cloudflare/templates.git
 cd worker-tidb
 ```
 
-2. Database connection settings
+2. Database connection settings:
 
 Edit the `src/index.ts` likes below:
+
+- the `hostname` property must be the URL to your Cloudflare Tunnel, _NOT_ your database host.
+	- your Tunnel will be configured to connect to your database host.
 
 ```ts
 const tidb = new Client();
@@ -133,7 +119,7 @@ const connect = await tidb.connect({
 });
 ```
 
-3. Query TiDB settings
+3. Query TiDB settings:
 
 The template always use `SELECT 42` to query the TiDB. You can edit the `src/index.ts` to change the query as you wish. Here is an example:
 
@@ -142,7 +128,7 @@ The template always use `SELECT 42` to query the TiDB. You can edit the `src/ind
 
 // Parse the URL, and get the 'table' query parameter (which may not exist)
 const url = new URL(request.url);
-const project = url.searchParams.get('project');
+const projection = url.searchParams.get('projection');
 const filter = url.searchParams.get('filter');
 const table = url.searchParams.get('table');
 
@@ -154,7 +140,7 @@ if (!table){
 
 let query = ''
 if (project){
-	query += `SELECT ${project} FROM ${table}`
+	query += `SELECT ${projection} FROM ${table}`
 }else{
 	query += `SELECT * FROM ${table}`
 }
@@ -169,19 +155,19 @@ return new Response(JSON.stringify({ result }));
 
 4. Deploy worker
 
-Edit the wrangler.toml file with to fill in your worker name
+Edit the wrangler.toml file with to fill in your worker name:
 
 ```
 name = "tidb-test"
 ```
 
-Build the template needs `esbuild`. So you need to install `esbuild`
+Build the template needs `esbuild`. So you need to install `esbuild`:
 
 ```
 npm install esbuild
 ```
 
-Use wrangler to deploy your worker
+Use wrangler to deploy your worker:
 
 ```
 npm install -g wrangler
@@ -229,5 +215,8 @@ visit https://tidb.1136742008.workers.dev/?table=t&projection=id&filter=name='te
 {"result":[{"id":2},{"id":3}]}
 ```
 
+## Limitation
+
+- You can use worker-tidb to connect to remote TiDB too. For example, the TiDB Cloud dedicated tier. But worker-tidb can not work with TLS now, So serverless can not work with worker-tidb now.
 
 
