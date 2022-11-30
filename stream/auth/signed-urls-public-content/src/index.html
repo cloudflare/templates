@@ -8,7 +8,7 @@
 	<body>
 		<div id="stream-player"></div>
 		<script type="module">
-			const response = await fetch("/api/video/big-buck-bunny");
+			const response = await fetch('/api/video/big-buck-bunny');
 			const json = await response.json();
 			// Render the Stream Player, using the signed URL
 			// You can use Cloudflare Stream with any video player that supports HLS or DASH playback.

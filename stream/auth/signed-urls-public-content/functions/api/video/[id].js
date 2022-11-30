@@ -1,7 +1,7 @@
 export async function onRequestGet(context) {
 	// ID of the video being requested.
 	// In practice, you might maintain your own identifier for a given video,
-    // and use this to lookup the corresponding Stream Video UID in your database.
+	// and use this to lookup the corresponding Stream Video UID in your database.
 	const { CLOUDFLARE_STREAM_VIDEO_UID } = context.env;
 
 	const { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN, CLOUDFLARE_STREAM_SUBDOMAIN } = context.env;
@@ -24,7 +24,7 @@ export async function onRequestGet(context) {
 						type: 'ip.src',
 						ip: [clientIP],
 						action: 'allow',
-					}
+					},
 				],
 			}),
 		}
