@@ -15,6 +15,6 @@
 		"wrangler": "^2.4.4"
 	},
 	"dependencies": {
-		"@cloudflare/itty-router-openapi": "^0.0.8"
+		"@cloudflare/itty-router-openapi": "^0.0.10"
 	}
 }

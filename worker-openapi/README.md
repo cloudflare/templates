@@ -4,6 +4,8 @@
 
 This template demonstrates using the [`itty-router-openapi`](https://github.com/cloudflare/itty-router-openapi) package to add openapi 3 schema generation and validation.
 
+You can try this template in your browser [here](https://worker-openapi-example.radar.cloudflare.com/docs)!
+
 ## Setup
 
 To create a `my-project` directory using this template, run:
