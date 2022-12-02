@@ -104,6 +104,11 @@ const redirects: Redirects = {
 		'src/index.html',
 		'Play live video (using WHEP) over WebRTC with Cloudflare Stream',
 	],
+	'/stream/signed-urls-public-content': [
+		'stream/auth/signed-urls-public-content',
+		'src/index.html',
+		'Example of using Cloudflare Stream Signed URLs with public content',
+	],
 };
 
 const worker: ExportedHandler = {
