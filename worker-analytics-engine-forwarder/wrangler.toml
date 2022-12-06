@@ -3,10 +3,9 @@ main = "src/index.js"
 compatibility_date = "2022-10-21"
 
 
-[[unsafe.bindings]]
-name = "ANALYTICS"
-type = "analytics_engine"
-dataset = "change_me"
+analytics_engine_datasets = [
+    { binding = "ANALYTICS", dataset = "change_me" }
+]
 
 
 # secrets:
