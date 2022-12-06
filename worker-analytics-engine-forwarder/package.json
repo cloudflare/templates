@@ -2,7 +2,7 @@
 	"name": "workers-analytics-engine-template",
 	"version": "0.0.0",
 	"devDependencies": {
-		"wrangler": "^2.1.13"
+		"wrangler": "^2.6.0"
 	},
 	"private": true,
 	"scripts": {
