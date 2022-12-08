@@ -6,6 +6,7 @@ on:
       - 'main'
     paths:
       - 'packages/workers.new/**'
+  repository_dispatch:
 
 jobs:
   deploy:
