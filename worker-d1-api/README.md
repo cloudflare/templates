@@ -22,7 +22,7 @@ npx wrangler d1 create d1-api
 # Add config to wrangler.toml as instructed
 
 # Fill the DB with seed data from an SQL file:
-npx wrangler d1 execute d1-api --file ./src/schema.sql
+npx wrangler d1 execute d1-api --file ./schemas/schema.sql
 
 # Deploy the worker
 npx wrangler publish
