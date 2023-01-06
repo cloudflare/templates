@@ -24,6 +24,7 @@ const redirects: Redirects = {
 		'Workers Durable Objects counter',
 	],
 	'/d1': ['worker-d1', 'src/index.ts', 'Workers D1'],
+	'/r2': ['worker-r2', 'src/index.ts', 'Workers + R2'],
 	'/router': ['worker-router', 'index.js', 'Workers Router'],
 	'/typescript': ['worker-typescript', 'src/index.ts', 'Workers TypeScript'],
 	'/websocket': ['worker-websocket', 'index.js', 'Workers WebSocket'],
