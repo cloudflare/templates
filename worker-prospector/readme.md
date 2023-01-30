@@ -6,10 +6,14 @@ An open-source template built for internal use by Cloudflare's SEO experts to pa
 
 ## Deployment
 
-Clone the repository from the cloudflare/templates repository:
+Clone the repository from the `cloudflare/tmemplates` repository:
 
 ```bash
-$ git clone $URL
+$ npm init cloudflare my-project prospector
+# or
+$ yarn create cloudflare my-project prospector
+# or
+$ pnpm create cloudflare my-project prospector
 ```
 
 Install Wrangler if not already installed.
@@ -32,9 +36,9 @@ $ wrangler d1 create $DATABASE_NAME
 $ wrangler queues create $QUEUE_NAME
 ```
 
-Update wrangler.toml with the appropriate bindings. See [configuration](#configuration) for more information.
+Update `wrangler.toml` with the appropriate bindings. See [configuration](#configuration) for more information.
 
-Run the bin/migrate script to create the tables in the database.
+Run the `bin/migrate script` to create the tables in the database.
 
 ```bash
 $ bin/migrate
