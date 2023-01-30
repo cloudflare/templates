@@ -42,7 +42,7 @@ $ bin/migrate
 
 Deploy the application to your account.
 
-```bash 
+```bash
 $ npm run deploy
 ```
 
