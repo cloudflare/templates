@@ -35,9 +35,20 @@ export default async function negotiateConnectionWithClientOffer(peerConnection,
 			await peerConnection.setRemoteDescription(
 				new RTCSessionDescription({ type: 'answer', sdp: answerSDP })
 			);
-			return response.headers.get('Location');
+			const loc = response.headers.get('Location');
+			if (loc) {
+				if (loc.startsWith('http')) {
+					// absolute path
+					return loc;
+				} else {
+					// relative path
+					const parsed = new URL(endpoint);
+					parsed.pathname = loc;
+					return parsed.toString();
+				}
+			}
 		} else if (response.status === 405) {
-			console.error('Update the URL passed into the WHIP or WHEP client');
+			console.log('Remember to update the URL passed into the WHIP or WHEP client');
 		} else {
 			const errorMessage = await response.text();
 			console.error(errorMessage);

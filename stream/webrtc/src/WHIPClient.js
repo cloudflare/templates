@@ -29,7 +29,10 @@ export default class WHIPClient {
 		 */
 		this.peerConnection.addEventListener('negotiationneeded', async ev => {
 			console.log('Connection negotiation starting');
-			await negotiateConnectionWithClientOffer(this.peerConnection, this.endpoint);
+			this.resourceURL = await negotiateConnectionWithClientOffer(
+				this.peerConnection,
+				this.endpoint
+			);
 			console.log('Connection negotiation ended');
 		});
 		/**
@@ -76,7 +79,10 @@ export default class WHIPClient {
 	 */
 	async disconnectStream() {
 		var _a;
-		const response = await fetch(this.endpoint, {
+		if (!this.resourceURL) {
+			return;
+		}
+		await fetch(this.resourceURL, {
 			method: 'DELETE',
 			mode: 'cors',
 		});

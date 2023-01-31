@@ -13,7 +13,7 @@
 export default async function negotiateConnectionWithClientOffer(
 	peerConnection: RTCPeerConnection,
 	endpoint: string
-) {
+): Promise<string | undefined> {
 	/** https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/createOffer */
 	const offer = await peerConnection.createOffer();
 	/** https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/setLocalDescription */
@@ -40,7 +40,18 @@ export default async function negotiateConnectionWithClientOffer(
 			await peerConnection.setRemoteDescription(
 				new RTCSessionDescription({ type: 'answer', sdp: answerSDP })
 			);
-			return response.headers.get('Location');
+			const loc = response.headers.get('Location');
+			if (loc) {
+				if (loc.startsWith('http')) {
+					// absolute path
+					return loc;
+				} else {
+					// relative path
+					const parsed = new URL(endpoint);
+					parsed.pathname = loc;
+					return parsed.toString();
+				}
+			}
 		} else if (response.status === 405) {
 			console.log('Remember to update the URL passed into the WHIP or WHEP client');
 		} else {
