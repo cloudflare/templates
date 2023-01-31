@@ -8,6 +8,7 @@ import negotiateConnectionWithClientOffer from './negotiateConnectionWithClientO
 export default class WHIPClient {
 	private peerConnection: RTCPeerConnection;
 	private localStream?: MediaStream;
+	private resourceURL?: string;
 
 	constructor(private endpoint: string, private videoElement: HTMLVideoElement) {
 		/**
@@ -32,7 +33,10 @@ export default class WHIPClient {
 		 */
 		this.peerConnection.addEventListener('negotiationneeded', async ev => {
 			console.log('Connection negotiation starting');
-			await negotiateConnectionWithClientOffer(this.peerConnection, this.endpoint);
+			this.resourceURL = await negotiateConnectionWithClientOffer(
+				this.peerConnection,
+				this.endpoint
+			);
 			console.log('Connection negotiation ended');
 		});
 
@@ -81,7 +85,10 @@ export default class WHIPClient {
 	 * Note that once you call this method, this instance of this WHIPClient cannot be reused.
 	 */
 	public async disconnectStream() {
-		const response = await fetch(this.endpoint, {
+		if (!this.resourceURL) {
+			return;
+		}
+		await fetch(this.resourceURL, {
 			method: 'DELETE',
 			mode: 'cors',
 		});
