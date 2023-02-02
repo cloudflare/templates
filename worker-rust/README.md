@@ -28,7 +28,7 @@ With `wrangler`, you can build, test, and deploy your Worker with the following 
 
 ```sh
 # compiles your project to WebAssembly and will warn of any issues
-$ npm run build
+$ cargo build
 
 # run your Worker in an ideal development workflow (with a local server, file watcher & more)
 $ npm run dev
