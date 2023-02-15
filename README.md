@@ -1,6 +1,6 @@
 # Cloudflare Workers – Templates & Examples
 
-:stop_sign: This repository is the old home for Cloudflare Workers templates and examples. This repo is archived and is no longer maintained. 
+:stop_sign: This repository is the old home for Cloudflare Workers templates and examples. This repo is archived and is no longer maintained.
 
 Templates and examples for Cloudflare Workers are now maintained in the [Workers SDK repository](https://github.com/cloudflare/workers-sdk).
 
