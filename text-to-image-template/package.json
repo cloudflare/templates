@@ -1,0 +1,14 @@
+{
+  "name": "text-to-image-template",
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20241112.0",
+    "typescript": "5.6.3",
+    "wrangler": "3.87.0"
+  },
+  "scripts": {
+    "check": "tsc && wrangler --experimental-json-config deploy --dry-run",
+    "deploy": "wrangler --experimental-json-config deploy",
+    "dev": "wrangler --experimental-json-config dev",
+    "types": "wrangler --experimental-json-config types"
+  }
+}

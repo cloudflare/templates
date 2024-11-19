@@ -1,4 +1,0 @@
-name = "workers-dot-new"
-compatibility_date = "2022-05-03"
-main = "src/index.ts"
-workers_dev = false

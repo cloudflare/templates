@@ -1,0 +1,11 @@
+{
+  "dependencyTypes": ["dev", "prod"],
+  "semverGroups": [
+    {
+      "label": "pin all deps",
+      "dependencies": ["**"],
+      "packages": ["**"],
+      "range": ""
+    }
+  ]
+}
