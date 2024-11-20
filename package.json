@@ -9,7 +9,7 @@
   "scripts": {
     "check:ci": "prettier . --check && syncpack lint && turbo run check types && git diff --exit-code",
     "deploy": "turbo run deploy",
-    "fix:ci": "prettier . --write && syncpack fix-mismatches && turbo run types"
+    "fix:ci": "prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types"
   },
   "workspaces": [
     "./*-template"
