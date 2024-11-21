@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import subprocess from "node:child_process";
-
-const TEMPLATE_DIRECTORY_SUFFIX = "-template";
+import { getTemplatePaths } from "./util";
 
 export type UploadConfig = {
   templateDirectory: string;
@@ -10,14 +9,7 @@ export type UploadConfig = {
 };
 
 export async function upload(config: UploadConfig) {
-  const templatePaths = fs
-    .readdirSync(config.templateDirectory)
-    .filter(
-      (file) =>
-        file.endsWith(TEMPLATE_DIRECTORY_SUFFIX) &&
-        fs.statSync(file).isDirectory(),
-    )
-    .map((template) => path.join(config.templateDirectory, template));
+  const templatePaths = getTemplatePaths(config.templateDirectory);
   const results = await Promise.allSettled(
     templatePaths.map((templatePath) => uploadTemplate(templatePath, config)),
   );
