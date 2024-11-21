@@ -1,17 +1,21 @@
 {
   "name": "templates",
   "devDependencies": {
+    "cli": "workspace:*",
     "prettier": "3.3.3",
     "syncpack": "13.0.0",
     "turbo": "2.3.0"
   },
   "packageManager": "npm@10.2.0",
   "scripts": {
-    "check:ci": "prettier . --check && syncpack lint && turbo run check types && git diff --exit-code",
+    "check:ci": "prettier . --check && syncpack lint && turbo run build check types && git diff --exit-code",
     "deploy": "turbo run deploy",
-    "fix:ci": "prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types"
+    "fix:ci": "prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types",
+    "preupload": "turbo run build --filter=cli",
+    "upload": "cli upload ."
   },
   "workspaces": [
-    "./*-template"
+    "./*-template",
+    "./cli"
   ]
 }
