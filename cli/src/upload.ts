@@ -13,11 +13,14 @@ export async function upload(config: UploadConfig) {
   const results = await Promise.allSettled(
     templatePaths.map((templatePath) => uploadTemplate(templatePath, config)),
   );
-  results.forEach((result, i) => {
-    if (result.status === "rejected") {
-      console.error(`Upload ${templatePaths[i]} failed: ${result.reason}`);
-    }
-  });
+  if (results.some((result) => result.status === "rejected")) {
+    results.forEach((result, i) => {
+      if (result.status === "rejected") {
+        console.error(`Upload ${templatePaths[i]} failed: ${result.reason}`);
+      }
+    });
+    process.exit(1);
+  }
 }
 
 async function uploadTemplate(templatePath: string, config: UploadConfig) {
