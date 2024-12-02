@@ -3,7 +3,8 @@
   "description": "A handy CLI for developing templates.",
   "bin": "out/cli.js",
   "dependencies": {
-    "commander": "12.1.0"
+    "commander": "12.1.0",
+    "toml": "3.0.0"
   },
   "devDependencies": {
     "@types/node": "22.9.1",
