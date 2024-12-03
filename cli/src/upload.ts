@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import subprocess from "node:child_process";
-import { getTemplatePaths } from "./util";
+import { getTemplates } from "./util";
 
 export type UploadConfig = {
   templateDirectory: string;
@@ -13,13 +13,13 @@ export type UploadConfig = {
 };
 
 export async function upload(config: UploadConfig) {
-  const templatePaths = getTemplatePaths(config.templateDirectory);
+  const templates = getTemplates(config.templateDirectory);
   const errors = [];
-  for (const templatePath of templatePaths) {
+  for (const { path } of templates) {
     try {
-      await uploadTemplate(templatePath, config);
+      await uploadTemplate(path, config);
     } catch (e) {
-      errors.push(`Upload ${templatePath} failed: ${e}`);
+      errors.push(`Upload ${path} failed: ${e}`);
     }
   }
   if (errors.length > 0) {
