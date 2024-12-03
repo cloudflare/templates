@@ -1,5 +1,5 @@
 {
-  "compatibility_date": "2024-11-15",
+  "compatibility_date": "2024-11-01",
   "main": "src/index.ts",
   "name": "d1-template",
   "upload_source_maps": true,
