@@ -18,8 +18,4 @@ jobs:
         with:
           node-version: "20.x"
       - run: npm ci
-      - run: npm run build:cli
-      # Need to install a second time to get the CLI build linked up in the
-      # right place.
-      - run: npm ci
       - run: npm run check:ci

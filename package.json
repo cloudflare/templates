@@ -6,16 +6,16 @@
     "eslint": "9.15.0",
     "prettier": "3.3.3",
     "syncpack": "13.0.0",
+    "tsx": "4.19.2",
     "turbo": "2.3.0",
     "typescript-eslint": "8.15.0"
   },
   "packageManager": "npm@10.2.0",
   "scripts": {
-    "build:cli": "turbo run build --filter=cli",
-    "check:ci": "cli lint . && eslint . && prettier . --check && syncpack lint && turbo run build check types && git diff --exit-code",
+    "check:ci": "tsx cli/src/index.ts lint . && eslint . && prettier . --check && syncpack lint && turbo run build check types && git diff --exit-code",
     "deploy": "turbo run deploy",
-    "fix:ci": "cli lint . --fix && eslint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types",
-    "upload": "cli upload ."
+    "fix:ci": "tsx cli/src/index.ts lint . --fix && eslint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types",
+    "upload": "tsx cli/src/index.ts upload ."
   },
   "workspaces": [
     "./*-template",
