@@ -14,7 +14,8 @@ program
     "path to directory containing templates",
     ".",
   )
-  .action((templateDirectory: string) => {
+  .option("--staging", "use the staging API endpoint")
+  .action((templateDirectory: string, options: { staging: boolean }) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
     const clientSecret = process.env.TEMPLATES_API_CLIENT_SECRET;
     if (!clientId || !clientSecret) {
@@ -22,10 +23,13 @@ program
         `Missing TEMPLATES_API_CLIENT_ID or TEMPLATES_API_CLIENT_SECRET`,
       );
     }
+    const subdomain = options.staging
+      ? "integrations-platform-staging"
+      : "integrations-platform";
     return upload({
       templateDirectory,
       api: {
-        endpoint: "https://integrations-platform.cfdata.org/api/v1/templates",
+        endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
         clientId,
         clientSecret,
       },
