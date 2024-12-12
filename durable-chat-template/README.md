@@ -2,6 +2,8 @@
 
 Chat with an AI assistant backed by a Durable Object.
 
+![Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/da00d330-9a3b-40a2-e6df-b08813fb7200/public)
+
 ## Develop Locally
 
 Use this template with [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
