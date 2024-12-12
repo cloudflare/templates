@@ -2,6 +2,8 @@
 
 Display website visitor locations in real-time using [Durable Objects](https://developers.cloudflare.com/durable-objects/) and [PartyKit](https://www.partykit.io/).
 
+![Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/43100bd9-8e11-4c20-cc00-3bec86253f00/public)
+
 <!-- dash-content-start -->
 
 ## How it Works
