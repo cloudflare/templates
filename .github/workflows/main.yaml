@@ -24,4 +24,7 @@ jobs:
       - run: npm ci
       - run: npm run check:ci
       - run: npm run deploy
+      # Upload to both staging and production, so our staging catalog stays up
+      # to date with production.
+      - run: npm run upload -- --staging
       - run: npm run upload
