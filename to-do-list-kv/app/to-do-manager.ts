@@ -6,8 +6,7 @@ interface Todo {
 }
 
 export class TodoManager {
-  private todosKey = "todos";
-  constructor(private kv: KVNamespace) {}
+  constructor(private kv: KVNamespace, private todosKey: string = 'todos') {}
 
   async list(): Promise<Todo[]> {
     const todos = await this.kv.get(this.todosKey, "json");

@@ -13,6 +13,8 @@ jobs:
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      TEMPLATES_API_CLIENT_ID: ${{ secrets.TEMPLATES_API_CLIENT_ID }}
+      TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
@@ -22,3 +24,7 @@ jobs:
       - run: npm ci
       - run: npm run check:ci
       - run: npm run deploy
+      # Upload to both staging and production, so our staging catalog stays up
+      # to date with production.
+      - run: npm run upload -- --staging
+      - run: npm run upload
