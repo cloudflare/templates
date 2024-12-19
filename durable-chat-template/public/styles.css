@@ -1,0 +1,51 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat {
+  padding-top: 40px;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow-y: auto;
+  height: 100%;
+  /* padding: 10px; */
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.message .user {
+  font-weight: bold;
+  text-align: right;
+}
+
+.message .remove {
+  position: absolute;
+  width: 22px;
+  height: 20px;
+  left: -60px;
+  /* display: "block", */
+  display: none;
+  padding: 0;
+  line-height: 18px;
+  border: "none";
+}
+
+.send-message {
+  padding: 0;
+}
+
+.my-input-text::placeholder {
+  color: #ccc;
+}
