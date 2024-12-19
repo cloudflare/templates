@@ -1,0 +1,69 @@
+{
+  "name": "to-do-list-kv",
+  "description": "A simple to do list app built with Cloudflare Workers Assets and Remix",
+  "cloudflare": {
+    "label": "To Do List App",
+    "products": [
+      "Workers",
+      "KV"
+    ],
+    "categories": [
+      "storage"
+    ],
+    "icon_urls": [
+      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public",
+      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/42c025ab-20bc-4bfe-2e7c-8660fba01600/public"
+    ],
+    "docs_url": "https://developers.cloudflare.com/kv/",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
+  },
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "build": "remix vite:build",
+    "deploy": "npm run build && wrangler deploy",
+    "dev": "remix vite:dev",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "start": "wrangler dev",
+    "typecheck": "tsc",
+    "typegen": "wrangler types",
+    "preview": "npm run build && wrangler dev",
+    "cf-typegen": "wrangler types",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@remix-run/cloudflare": "^2.15.1",
+    "@remix-run/react": "^2.15.1",
+    "@remix-run/server-runtime": "^2.15.1",
+    "isbot": "^4.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.38",
+    "@cloudflare/workers-types": "^4.20241216.0",
+    "@remix-run/dev": "^2.15.1",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
+    "@typescript-eslint/parser": "^6.7.4",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.38.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.1.6",
+    "vite": "^5.1.0",
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "2.1.8",
+    "wrangler": "^3.97.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
