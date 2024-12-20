@@ -18,9 +18,9 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20241112.0",
+    "@cloudflare/workers-types": "4.20241216.0",
     "typescript": "5.6.3",
-    "wrangler": "3.87.0"
+    "wrangler": "3.97.0"
   },
   "scripts": {
     "check": "tsc && wrangler --experimental-json-config deploy --dry-run",
