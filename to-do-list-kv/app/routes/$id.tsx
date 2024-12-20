@@ -6,13 +6,19 @@ import { useLoaderData, Form } from "@remix-run/react";
 import { TodoManager } from "~/to-do-manager";
 
 export const loader = async ({ params, context }: LoaderFunctionArgs) => {
-  const todoManager = new TodoManager(context.cloudflare.env.TO_DO_LIST, params.id);
+  const todoManager = new TodoManager(
+    context.cloudflare.env.TO_DO_LIST,
+    params.id,
+  );
   const todos = await todoManager.list();
   return { todos };
 };
 
 export async function action({ request, context, params }: ActionFunctionArgs) {
-  const todoManager = new TodoManager(context.cloudflare.env.TO_DO_LIST, params.id);
+  const todoManager = new TodoManager(
+    context.cloudflare.env.TO_DO_LIST,
+    params.id,
+  );
   const formData = await request.formData();
   const intent = formData.get("intent");
 
@@ -42,7 +48,7 @@ export async function action({ request, context, params }: ActionFunctionArgs) {
   }
 }
 
-export default function() {
+export default function () {
   const { todos } = useLoaderData<typeof loader>();
 
   return (
@@ -84,9 +90,9 @@ export default function() {
                   className="text-gray-500 hover:text-blue-500"
                 >
                   <span
-                    className={`${
+                    className={
                       todo.completed ? "line-through text-gray-400" : ""
-                    }`}
+                    }
                   >
                     {todo.text}
                   </span>

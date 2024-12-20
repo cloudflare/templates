@@ -6,14 +6,17 @@ interface Todo {
 }
 
 export class TodoManager {
-  constructor(private kv: KVNamespace, private todosKey: string = 'todos') {}
+  constructor(
+    private kv: KVNamespace,
+    private todosKey: string = "todos",
+  ) {}
 
   async list(): Promise<Todo[]> {
     const todos = await this.kv.get(this.todosKey, "json");
     if (Array.isArray(todos)) {
-      todos.sort((a, b) => b.createdAt - a.createdAt);
+      todos.sort((a: Todo, b: Todo) => b.createdAt - a.createdAt);
     }
-    return (todos as Todo[]) || [];
+    return todos as Todo[];
   }
 
   async create(text: string): Promise<Todo> {

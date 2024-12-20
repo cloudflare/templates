@@ -5,7 +5,7 @@
  */
 
 /** @type {import('eslint').Linter.Config} */
-module.exports = {
+export default {
   root: true,
   parserOptions: {
     ecmaVersion: "latest",
@@ -72,14 +72,7 @@ module.exports = {
       ],
       rules: {
         "import/no-unresolved": ["error", { ignore: ["cloudflare:test"] }],
-      },
-    },
-
-    // Node
-    {
-      files: [".eslintrc.cjs"],
-      env: {
-        node: true,
+        "@typescript-eslint/no-empty-interface": "off",
       },
     },
   ],
