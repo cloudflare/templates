@@ -16,6 +16,7 @@ export default defineConfig({
   plugins: [
     cloudflareDevProxyVitePlugin({
       getLoadContext,
+      configPath: "./wrangler.json",
     }),
     remix({
       future: {

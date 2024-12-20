@@ -8,7 +8,7 @@
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
-    ".eslintrc.cjs"
+    ".eslintrc.js"
   ],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],

@@ -44,7 +44,7 @@ export default async function handleRequest(
     },
   );
 
-  void body.allReady.then(() => {
+  body.allReady.then(() => {
     clearTimeout(timeoutId);
   });
 

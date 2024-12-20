@@ -16,7 +16,7 @@ export class TodoManager {
     if (Array.isArray(todos)) {
       todos.sort((a: Todo, b: Todo) => b.createdAt - a.createdAt);
     }
-    return todos as Todo[];
+    return (todos || []) as Todo[];
   }
 
   async create(text: string): Promise<Todo> {

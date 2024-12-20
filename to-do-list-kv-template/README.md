@@ -22,4 +22,4 @@ npm create cloudflare@latest -- --template=cloudflare/templates/to-do-list-kv
 
 ## Preview Deployment
 
-A live public deployment of this template is available at [https://to-do-list-kv.templates.workers.dev/](https://to-do-list-kv.templates.workers.dev/)
+A live public deployment of this template is available at [https://to-do-list-kv-template.templates.workers.dev](https://to-do-list-kv-template.templates.workers.dev)
