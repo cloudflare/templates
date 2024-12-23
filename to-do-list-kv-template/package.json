@@ -1,8 +1,8 @@
 {
   "name": "to-do-list-kv-template",
-  "description": "A simple to do list app built with Cloudflare Workers Assets and Remix",
+  "description": "A simple to-do list app built with Cloudflare Workers Assets and Remix.",
   "cloudflare": {
-    "label": "To Do List App",
+    "label": "To-Do List App",
     "products": [
       "Workers",
       "KV"
@@ -11,11 +11,11 @@
       "storage"
     ],
     "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public",
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/42c025ab-20bc-4bfe-2e7c-8660fba01600/public"
+      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/42c025ab-20bc-4bfe-2e7c-8660fba01600/public",
+      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
     ],
     "docs_url": "https://developers.cloudflare.com/kv/",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/923473bc-a285-487c-93db-e0ddea3d3700/public"
   },
   "dependencies": {
     "@remix-run/cloudflare": "2.15.1",
