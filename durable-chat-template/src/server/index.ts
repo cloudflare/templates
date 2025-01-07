@@ -4,8 +4,6 @@ import {
   type WSMessage,
   routePartykitRequest,
 } from "partyserver";
-import { nanoid } from "nanoid";
-import { EventSourceParserStream } from "eventsource-parser/stream";
 
 import type { ChatMessage, Message } from "../shared";
 
@@ -67,80 +65,13 @@ export class Chat extends Server<Env> {
     );
   }
 
-  async onMessage(connection: Connection, message: WSMessage) {
+  onMessage(connection: Connection, message: WSMessage) {
     // let's broadcast the raw message to everyone else
     this.broadcast(message);
 
     // let's update our local messages store
     const parsed = JSON.parse(message as string) as Message;
-
-    if (parsed.type === "add") {
-      // add the message to the local store
-      this.saveMessage(parsed);
-      // let's ask AI to respond as well for fun
-      const aiMessage = {
-        id: nanoid(8),
-        content: "...",
-        user: "AI",
-        role: "assistant",
-      } as const;
-
-      this.broadcastMessage({
-        type: "add",
-        ...aiMessage,
-      });
-
-      const aiMessageStream = (await this.env.AI.run(
-        "@cf/meta/llama-2-7b-chat-int8",
-        {
-          stream: true,
-          messages: this.messages.map((m) => ({
-            content: m.content,
-            role: m.role,
-          })),
-        },
-      )) as ReadableStream;
-
-      this.saveMessage(aiMessage);
-
-      const eventStream = aiMessageStream
-        .pipeThrough(new TextDecoderStream())
-        .pipeThrough(new EventSourceParserStream());
-
-      // We want the AI to respond to the message in real-time
-      // so we're going to stream every chunk as an "update" message
-
-      let buffer = "";
-
-      for await (const event of eventStream) {
-        if (event.data !== "[DONE]") {
-          // let's append the response to the buffer
-          const data = JSON.parse(event.data) as { response: string };
-          buffer += data.response;
-          // and broadcast the buffer as an update
-          this.broadcastMessage({
-            type: "update",
-            ...aiMessage,
-            content: buffer + "...", // let's add an ellipsis to show it's still typing
-          });
-        } else {
-          // the AI is done responding
-          // we update our local messages store with the final response
-          this.saveMessage({
-            ...aiMessage,
-            content: buffer,
-          });
-
-          // let's update the message with the final response
-          this.broadcastMessage({
-            type: "update",
-            ...aiMessage,
-            content: buffer,
-          });
-        }
-      }
-    } else if (parsed.type === "update") {
-      // update the message in the local store
+    if (parsed.type === "add" || parsed.type === "update") {
       this.saveMessage(parsed);
     }
   }
