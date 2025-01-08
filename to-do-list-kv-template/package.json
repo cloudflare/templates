@@ -46,7 +46,6 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "private": true,
   "scripts": {
     "build": "remix vite:build",
     "cf-typegen": "wrangler types",

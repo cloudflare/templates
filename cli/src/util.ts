@@ -9,10 +9,12 @@ export type Template = { name: string; path: string };
 export function getTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
     // If the specified path is a template directory, just return that.
-    return [{
-      name: path.basename(templateDirectory),
-      path: templateDirectory,
-    }]
+    return [
+      {
+        name: path.basename(templateDirectory),
+        path: templateDirectory,
+      },
+    ];
   }
   // Otherwise, we expect the specified path to be a directory containing many
   // templates (e.g. the repository root).
