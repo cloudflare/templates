@@ -18,17 +18,17 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/923473bc-a285-487c-93db-e0ddea3d3700/public"
   },
   "dependencies": {
-    "@remix-run/cloudflare": "2.15.1",
-    "@remix-run/react": "2.15.1",
-    "@remix-run/server-runtime": "2.15.1",
+    "@remix-run/cloudflare": "2.15.2",
+    "@remix-run/react": "2.15.2",
+    "@remix-run/server-runtime": "2.15.2",
     "isbot": "4.1.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.5.38",
-    "@cloudflare/workers-types": "4.20241216.0",
-    "@remix-run/dev": "2.15.1",
+    "@cloudflare/workers-types": "4.20241230.0",
+    "@remix-run/dev": "2.15.2",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@typescript-eslint/eslint-plugin": "8.18.1",
@@ -41,12 +41,11 @@
     "vite": "5.1.0",
     "vite-tsconfig-paths": "4.2.1",
     "vitest": "2.1.8",
-    "wrangler": "3.97.0"
+    "wrangler": "3.100.0"
   },
   "engines": {
     "node": ">=20.0.0"
   },
-  "private": true,
   "scripts": {
     "build": "remix vite:build",
     "cf-typegen": "wrangler types",

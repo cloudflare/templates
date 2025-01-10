@@ -19,6 +19,7 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["**/*.js", "**/*.mjs"],
+    // Don't lint auto-generated framework starter templates.
+    ignores: ["**/*.js", "**/*.mjs", "*-starter-template"],
   },
 );

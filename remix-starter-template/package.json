@@ -1,0 +1,61 @@
+{
+  "name": "remix-starter-template",
+  "description": "Build a full-stack web application with Remix.",
+  "cloudflare": {
+    "label": "Remix Framework Starter",
+    "products": [
+      "Workers"
+    ],
+    "categories": [],
+    "icon_urls": [
+      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
+    ],
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/74d5936b-f317-436e-f329-e4360b70df00/public"
+  },
+  "dependencies": {
+    "@remix-run/cloudflare": "2.15.2",
+    "@remix-run/react": "2.15.2",
+    "@remix-run/server-runtime": "2.15.2",
+    "isbot": "4.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20241230.0",
+    "@remix-run/dev": "2.15.2",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@typescript-eslint/eslint-plugin": "8.18.1",
+    "@typescript-eslint/parser": "8.18.1",
+    "autoprefixer": "10.4.19",
+    "eslint": "9.17.0",
+    "eslint-import-resolver-typescript": "3.6.1",
+    "eslint-plugin-import": "2.28.1",
+    "eslint-plugin-jsx-a11y": "6.7.1",
+    "eslint-plugin-react": "7.33.2",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "postcss": "8.4.38",
+    "tailwindcss": "3.4.4",
+    "typescript": "5.6.3",
+    "vite": "5.1.0",
+    "vite-tsconfig-paths": "4.2.1",
+    "wrangler": "3.100.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "private": true,
+  "scripts": {
+    "build": "remix vite:build",
+    "cf-typegen": "wrangler types",
+    "deploy": "npm run build && wrangler deploy",
+    "dev": "remix vite:dev",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "preview": "npm run build && wrangler dev",
+    "start": "wrangler dev",
+    "typecheck": "tsc",
+    "typegen": "wrangler types"
+  },
+  "sideEffects": false,
+  "type": "module"
+}

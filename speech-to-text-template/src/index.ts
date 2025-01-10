@@ -8,6 +8,7 @@ export default {
     const inputs = {
       audio: [...new Uint8Array(blob)],
     };
+    // @ts-expect-error Types for Workers AI are currently broken
     const response = await env.AI.run("@cf/openai/whisper", inputs);
 
     return Response.json({ inputs, response });

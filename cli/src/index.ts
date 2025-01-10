@@ -10,8 +10,8 @@ program
   .command("upload")
   .description("upload templates to the templates API")
   .argument(
-    "[path-to-templates]",
-    "path to directory containing templates",
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
     ".",
   )
   .option("--staging", "use the staging API endpoint")
@@ -40,8 +40,8 @@ program
   .command("lint")
   .description("find and fix template style problems")
   .argument(
-    "[path-to-templates]",
-    "path to directory containing templates",
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
     ".",
   )
   .option("--fix", "fix problems that can be automatically fixed")

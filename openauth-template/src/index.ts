@@ -1,7 +1,8 @@
-import { authorizer, createSubjects } from "@openauthjs/openauth";
+import { issuer } from "@openauthjs/openauth";
 import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare";
-import { PasswordAdapter } from "@openauthjs/openauth/adapter/password";
+import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
+import { createSubjects } from "@openauthjs/openauth/subject";
 import { object, string } from "valibot";
 
 // This value should be shared between the OpenAuth server Worker and other
@@ -14,7 +15,7 @@ const subjects = createSubjects({
 });
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext) {
+  fetch(request: Request, env: Env, ctx: ExecutionContext) {
     // This top section is just for demo purposes. In a real setup another
     // application would redirect the user to this Worker to be authenticated,
     // and after signing in or registering the user would be redirected back to
@@ -36,13 +37,13 @@ export default {
     }
 
     // The real OpenAuth server code starts here:
-    return authorizer({
+    return issuer({
       storage: CloudflareStorage({
         namespace: env.AUTH_STORAGE,
       }),
       subjects,
       providers: {
-        password: PasswordAdapter(
+        password: PasswordProvider(
           PasswordUI({
             // eslint-disable-next-line @typescript-eslint/require-await
             sendCode: async (email, code) => {
