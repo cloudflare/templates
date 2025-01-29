@@ -1,20 +1,17 @@
 {
   "name": "templates",
   "devDependencies": {
-    "@eslint/js": "9.17.0",
     "cli": "workspace:*",
-    "eslint": "9.17.0",
     "prettier": "3.3.3",
     "syncpack": "13.0.0",
     "tsx": "4.19.2",
-    "turbo": "2.3.0",
-    "typescript-eslint": "8.18.1"
+    "turbo": "2.3.0"
   },
   "packageManager": "npm@10.2.0",
   "scripts": {
-    "check:ci": "tsx cli/src/index.ts lint . && eslint . && prettier . --check && syncpack lint && turbo run check types && git diff --exit-code",
+    "check:ci": "tsx cli/src/index.ts lint . && prettier . --check && syncpack lint && turbo run check types && git diff --exit-code",
     "deploy": "turbo run deploy",
-    "fix:ci": "tsx cli/src/index.ts lint . --fix && eslint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types",
+    "fix:ci": "tsx cli/src/index.ts lint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types",
     "upload": "tsx cli/src/index.ts upload ."
   },
   "workspaces": [
