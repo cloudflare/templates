@@ -20,14 +20,23 @@ For this example, Durable Objects are used for synchronizing but not storing sta
 
 <!-- dash-content-end -->
 
-## Develop Locally
+## Getting Started
 
-Use this template with [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
 
 ```
 npm create cloudflare@latest -- --template=cloudflare/templates/multiplayer-globe-template
 ```
 
-## Preview Deployment
-
 A live public deployment of this template is available at [https://multiplayer-globe-template.templates.workers.dev](https://multiplayer-globe-template.templates.workers.dev)
+
+## Setup Steps
+
+1. Install the project dependencies with a package manager of your choice:
+   ```bash
+   npm install
+   ```
+2. Deploy the project!
+   ```bash
+   npx wrangler deploy
+   ```
