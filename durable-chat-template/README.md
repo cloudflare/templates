@@ -1,10 +1,10 @@
 # Durable Chat App
 
-Chat with other users in real-time using [Durable Objects](https://developers.cloudflare.com/durable-objects/) and [PartyKit](https://www.partykit.io/).
-
 ![Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/da00d330-9a3b-40a2-e6df-b08813fb7200/public)
 
 <!-- dash-content-start -->
+
+With this template, you can deploy your own chat app to converse with other users in real-time. Going to the [demo website](https://durable-chat-template.templates.workers.dev) puts you into a unique chat room based on the ID in the url. Share that ID with others to chat with them! This is powered by [Durable Objects](https://developers.cloudflare.com/durable-objects/) and [PartyKit](https://www.partykit.io/).
 
 ## How It Works
 
