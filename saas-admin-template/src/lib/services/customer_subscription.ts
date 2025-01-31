@@ -27,13 +27,13 @@ export const CUSTOMER_SUBSCRIPTION_QUERIES = {
     UPDATE customer_subscriptions 
     SET subscription_ends_at = ? 
     WHERE id = ?
-  `
+  `,
 };
 
 const processCustomerSubscriptionResults = (rows) => {
   const subscriptionsMap = new Map();
 
-  rows.forEach(row => {
+  rows.forEach((row) => {
     if (!subscriptionsMap.has(row.id)) {
       const customerSubscription = {
         id: row.id,
@@ -42,14 +42,14 @@ const processCustomerSubscriptionResults = (rows) => {
         customer: {
           id: row.customer_id,
           name: row.customer_name,
-          email: row.customer_email
+          email: row.customer_email,
         },
         subscription: {
           id: row.subscription_id,
           name: row.subscription_name,
           description: row.subscription_description,
-          price: row.subscription_price
-        }
+          price: row.subscription_price,
+        },
       };
 
       subscriptionsMap.set(row.id, customerSubscription);
@@ -69,7 +69,9 @@ export class CustomerSubscriptionService {
     const response = await this.DB.prepare(query).bind(id).all();
 
     if (response.success) {
-      const [customerSubscription] = processCustomerSubscriptionResults(response.results);
+      const [customerSubscription] = processCustomerSubscriptionResults(
+        response.results,
+      );
       return customerSubscription;
     }
     return null;
@@ -99,12 +101,13 @@ export class CustomerSubscriptionService {
     const {
       customer_id,
       subscription_id,
-      status = 'active',
-      subscription_ends_at = Date.now() + (60 * 60 * 24 * 30) // 30 days from now by default
+      status = "active",
+      subscription_ends_at = Date.now() + 60 * 60 * 24 * 30, // 30 days from now by default
     } = customerSubscriptionData;
 
-    const response = await this.DB
-      .prepare(CUSTOMER_SUBSCRIPTION_QUERIES.INSERT_CUSTOMER_SUBSCRIPTION)
+    const response = await this.DB.prepare(
+      CUSTOMER_SUBSCRIPTION_QUERIES.INSERT_CUSTOMER_SUBSCRIPTION,
+    )
       .bind(customer_id, subscription_id, status, subscription_ends_at)
       .run();
 
@@ -114,13 +117,14 @@ export class CustomerSubscriptionService {
 
     return {
       success: true,
-      customerSubscriptionId: response.meta.last_row_id
+      customerSubscriptionId: response.meta.last_row_id,
     };
   }
 
   async updateStatus(id, status) {
-    const response = await this.DB
-      .prepare(CUSTOMER_SUBSCRIPTION_QUERIES.UPDATE_STATUS)
+    const response = await this.DB.prepare(
+      CUSTOMER_SUBSCRIPTION_QUERIES.UPDATE_STATUS,
+    )
       .bind(status, id)
       .run();
 
@@ -132,8 +136,9 @@ export class CustomerSubscriptionService {
   }
 
   async updateSubscriptionEndsAt(id, subscriptionEndsAt) {
-    const response = await this.DB
-      .prepare(CUSTOMER_SUBSCRIPTION_QUERIES.UPDATE_SUBSCRIPTION_ENDS_AT)
+    const response = await this.DB.prepare(
+      CUSTOMER_SUBSCRIPTION_QUERIES.UPDATE_SUBSCRIPTION_ENDS_AT,
+    )
       .bind(subscriptionEndsAt, id)
       .run();
 

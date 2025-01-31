@@ -4,10 +4,8 @@
   "assets": {
     "directory": "./dist"
   },
-  "compatibility_date": "2024-12-18",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_date": "2024-11-01",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },
@@ -19,7 +17,7 @@
     {
       "binding": "DB",
       "database_name": "admin-db",
-      "database_id": "b33ea9ff-6aef-4b5c-b3fd-94f25295b08a"
+      "database_id": "111f5fe0-40ae-4a9f-8c09-9d6f75c8ceee"
     }
   ],
   "workflows": [
@@ -30,4 +28,3 @@
     }
   ]
 }
-

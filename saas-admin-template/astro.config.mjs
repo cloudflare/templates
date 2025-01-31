@@ -1,27 +1,24 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import cloudflare from '@astrojs/cloudflare';
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
+import cloudflare from "@astrojs/cloudflare";
+import react from "@astrojs/react";
+import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
-      configPath: 'wrangler.json',
+      configPath: "wrangler.json",
       experimentalJsonConfig: true,
       persist: {
-        path: './.cache/wrangler/v3'
+        path: "./.cache/wrangler/v3",
       },
     },
   }),
-  integrations: [
-    react(), 
-    tailwind({ applyBaseStyles: true })
-  ],
-  output: 'server',
+  integrations: [react(), tailwind({ applyBaseStyles: true })],
+  output: "server",
   vite: {
     resolve: {
       // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
