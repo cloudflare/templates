@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -13,37 +13,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus, X } from "lucide-react"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { createSubscription } from "@/lib/api"
-import * as z from "zod"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, X } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { createSubscription } from "@/lib/api";
+import * as z from "zod";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   price: z.number().min(0, "Price must be a positive number"),
-  features: z.array(z.object({
-    name: z.string().min(2, "Feature name must be at least 2 characters"),
-    description: z.string().optional(),
-  })),
-})
+  features: z.array(
+    z.object({
+      name: z.string().min(2, "Feature name must be at least 2 characters"),
+      description: z.string().optional(),
+    }),
+  ),
+});
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof formSchema>;
 
 type Feature = {
   name: string;
   description?: string;
-}
+};
 
 export function CreateSubscriptionButton({ apiToken }: { apiToken: string }) {
-  const [open, setOpen] = useState(false)
-  const [features, setFeatures] = useState<Feature[]>([])
-  const [newFeature, setNewFeature] = useState<Feature>({ name: '', description: '' })
+  const [open, setOpen] = useState(false);
+  const [features, setFeatures] = useState<Feature[]>([]);
+  const [newFeature, setNewFeature] = useState<Feature>({
+    name: "",
+    description: "",
+  });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -53,28 +58,28 @@ export function CreateSubscriptionButton({ apiToken }: { apiToken: string }) {
       price: 0,
       features: [],
     },
-  })
+  });
 
   const removeFeature = (index: number) => {
-    const updatedFeatures = features.filter((_, i) => i !== index)
-    setFeatures(updatedFeatures)
-    form.setValue('features', updatedFeatures)
-  }
+    const updatedFeatures = features.filter((_, i) => i !== index);
+    setFeatures(updatedFeatures);
+    form.setValue("features", updatedFeatures);
+  };
 
   const addFeature = async () => {
     if (newFeature.name.trim()) {
-      return new Promise<Feature[]>(resolve => {
-        setFeatures(prevFeatures => {
+      return new Promise<Feature[]>((resolve) => {
+        setFeatures((prevFeatures) => {
           const updatedFeatures = [...prevFeatures, newFeature];
-          form.setValue('features', updatedFeatures);
+          form.setValue("features", updatedFeatures);
           resolve(updatedFeatures);
           return updatedFeatures;
         });
-        setNewFeature({ name: '', description: '' });
+        setNewFeature({ name: "", description: "" });
       });
     }
     return features;
-  }
+  };
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -97,7 +102,7 @@ export function CreateSubscriptionButton({ apiToken }: { apiToken: string }) {
     } catch (error) {
       console.error("Error creating subscription:", error);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -168,11 +173,16 @@ export function CreateSubscriptionButton({ apiToken }: { apiToken: string }) {
 
               <div className="space-y-2">
                 {features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 border rounded-md">
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 p-2 border rounded-md"
+                  >
                     <div className="flex-1">
                       <div className="font-medium">{feature.name}</div>
                       {feature.description && (
-                        <div className="text-sm text-gray-500">{feature.description}</div>
+                        <div className="text-sm text-gray-500">
+                          {feature.description}
+                        </div>
                       )}
                     </div>
                     <Button
@@ -192,12 +202,19 @@ export function CreateSubscriptionButton({ apiToken }: { apiToken: string }) {
                   <Input
                     placeholder="Feature name"
                     value={newFeature.name}
-                    onChange={(e) => setNewFeature({ ...newFeature, name: e.target.value })}
+                    onChange={(e) =>
+                      setNewFeature({ ...newFeature, name: e.target.value })
+                    }
                   />
                   <Input
                     placeholder="Feature description (optional)"
                     value={newFeature.description}
-                    onChange={(e) => setNewFeature({ ...newFeature, description: e.target.value })}
+                    onChange={(e) =>
+                      setNewFeature({
+                        ...newFeature,
+                        description: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <Button
@@ -217,5 +234,5 @@ export function CreateSubscriptionButton({ apiToken }: { apiToken: string }) {
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

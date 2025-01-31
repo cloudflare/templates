@@ -4,7 +4,10 @@ import { CustomerSubscriptionService } from "@/lib/services/customer_subscriptio
 export async function GET({ locals, params, request }) {
   const { API_TOKEN, DB } = locals.runtime.env;
 
-  const invalidTokenResponse = await validateApiTokenResponse(request, API_TOKEN);
+  const invalidTokenResponse = await validateApiTokenResponse(
+    request,
+    API_TOKEN,
+  );
   if (invalidTokenResponse) return invalidTokenResponse;
 
   const customerSubscriptionService = new CustomerSubscriptionService(DB);
@@ -12,17 +15,23 @@ export async function GET({ locals, params, request }) {
 
   if (customerSubscriptions.length) {
     return Response.json({
-      customer_subscriptions: customerSubscriptions
+      customer_subscriptions: customerSubscriptions,
     });
   } else {
-    return Response.json({ message: "Couldn't load customer subscriptions" }, { status: 500 });
+    return Response.json(
+      { message: "Couldn't load customer subscriptions" },
+      { status: 500 },
+    );
   }
 }
 
 export async function POST({ locals, request }) {
   const { API_TOKEN, DB } = locals.runtime.env;
 
-  const invalidTokenResponse = await validateApiTokenResponse(request, API_TOKEN);
+  const invalidTokenResponse = await validateApiTokenResponse(
+    request,
+    API_TOKEN,
+  );
   if (invalidTokenResponse) return invalidTokenResponse;
 
   const body = await request.json();
@@ -31,8 +40,14 @@ export async function POST({ locals, request }) {
   const response = await customerSubscriptionService.create(body);
 
   if (response.success) {
-    return Response.json({ message: "Customer subscription created successfully", success: true }, { status: 201 });
+    return Response.json(
+      { message: "Customer subscription created successfully", success: true },
+      { status: 201 },
+    );
   } else {
-    return Response.json({ message: "Couldn't create customer subscription", success: false }, { status: 500 });
+    return Response.json(
+      { message: "Couldn't create customer subscription", success: false },
+      { status: 500 },
+    );
   }
 }

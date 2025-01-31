@@ -19,13 +19,13 @@ export const CUSTOMER_QUERIES = {
     VALUES (?, ?, ?)
   `,
   GET_BY_ID: `WHERE customers.id = ?`,
-  GET_BY_EMAIL: `WHERE customers.email = ?`
+  GET_BY_EMAIL: `WHERE customers.email = ?`,
 };
 
 const processCustomerResults = (rows: any[]) => {
   const customersMap = new Map();
 
-  rows.forEach(row => {
+  rows.forEach((row) => {
     if (!customersMap.has(row.id)) {
       const customer = { ...row };
       if (row.subscription_id) {
@@ -34,7 +34,7 @@ const processCustomerResults = (rows: any[]) => {
           status: row.subscription_status,
           name: row.subscription_name,
           description: row.subscription_description,
-          price: row.subscription_price
+          price: row.subscription_price,
         };
       }
       // Clean up raw join fields
@@ -101,7 +101,9 @@ export class CustomerService {
   }) {
     const { name, email, notes, subscription } = customerData;
 
-    const customerResponse = await this.DB.prepare(CUSTOMER_QUERIES.INSERT_CUSTOMER)
+    const customerResponse = await this.DB.prepare(
+      CUSTOMER_QUERIES.INSERT_CUSTOMER,
+    )
       .bind(name, email, notes || null)
       .run();
 
@@ -112,8 +114,9 @@ export class CustomerService {
     const customerId = customerResponse.meta.last_row_id;
 
     if (subscription) {
-      const subscriptionResponse = await this.DB
-        .prepare(CUSTOMER_QUERIES.INSERT_CUSTOMER_SUBSCRIPTION)
+      const subscriptionResponse = await this.DB.prepare(
+        CUSTOMER_QUERIES.INSERT_CUSTOMER_SUBSCRIPTION,
+      )
         .bind(customerId, subscription.id, subscription.status)
         .run();
 
