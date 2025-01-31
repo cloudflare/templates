@@ -1,6 +1,10 @@
 # Astro Starter Kit: Blog
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+
+<!-- dash-content-start -->
+
+Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
 
 Features:
 
@@ -11,24 +15,19 @@ Features:
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
 
-<!-- dash-content-start -->
+<!-- dash-content-end -->
+
+## Getting Started
+
+Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+
+```bash
+npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+```
+
+A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
 
 ## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
-```
 
 Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
@@ -37,8 +36,6 @@ There's nothing special about `src/components/`, but that's where we like to put
 The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
 
 Any static assets, like images, can be placed in the `public/` directory.
-
-<!-- dash-content-end -->
 
 ## 🧞 Commands
 
@@ -52,6 +49,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm run deploy`          | Deploy your production site to Cloudflare        |
 
 ## 👀 Want to learn more?
 
