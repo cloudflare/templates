@@ -2,6 +2,8 @@
 
 ![SaaS Admin Template](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/52b88668-0144-489c-dd02-fe620270ba00/public)
 
+<!-- dash-content-start -->
+
 A complete admin dashboard template built with Astro, Shadcn UI, and Cloudflare's developer stack. Quickly deploy a fully functional admin interface with customer and subscription management capabilities.
 
 ## Features
@@ -25,6 +27,8 @@ A complete admin dashboard template built with Astro, Shadcn UI, and Cloudflare'
 
 > [!IMPORTANT]
 > When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/d1-template#setup-steps) before deploying.
+
+<!-- dash-content-end -->
 
 ## Setup Steps
 
