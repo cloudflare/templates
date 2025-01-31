@@ -1,0 +1,50 @@
+---
+import { buttonVariants } from '@/components/ui/button';
+import { Github, LayoutDashboard } from 'lucide-react';
+import '@/styles/globals.css'
+
+const repoLink = 'https://github.com/cloudflare/templates/tree/main/saas-admin-template';
+---
+
+<script is:inline>
+  const getThemePreference = () => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+  const isDark = getThemePreference() === 'dark';
+  document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
+ 
+  if (typeof localStorage !== 'undefined') {
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  }
+</script>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>SaaS Admin Template</title>
+  </head>
+  <body>
+    <div class="flex flex-col items-center justify-center gap-4 py-20 px-8">
+      <h1 class="text-5xl font-bold">SaaS Admin Template</h1>
+      <p class="text-xl text-muted-foreground">Manage a SaaS application - customers, subscriptions - using Cloudflare Workers and D1.</p>
+      <div class="flex flex gap-4 mt-4">
+        <a class={buttonVariants()} href="/admin">
+          <LayoutDashboard /> Go to admin
+        </a>
+        <a class={buttonVariants({ variant: 'outline' })} href={repoLink}>
+          <Github /> View on GitHub
+        </a>
+    </div>
+  </body>
+</html>
