@@ -1,0 +1,68 @@
+---
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Layout from '@/layouts/Layout.astro';
+import { SubscriptionService } from '@/lib/services/subscription';
+
+const { API_TOKEN, DB } = Astro.locals.runtime.env;
+const { id } = Astro.params;
+const subscriptionService = new SubscriptionService(DB);
+const subscription = await subscriptionService.getById(id);
+---
+
+<Layout title={subscription.name}>
+  <div class="flex flex-col gap-8">
+    <div>
+      <h2 class="text-xl font-bold tracking-tight">Subscription Details</h2>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Price</TableHead>
+            <TableHead>Created At</TableHead>
+            <TableHead>Updated At</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell>{subscription.name}</TableCell>
+            <TableCell>{subscription.description}</TableCell>
+            <TableCell>{subscription.price}</TableCell>
+            <TableCell>{subscription.created_at}</TableCell>
+            <TableCell>{subscription.updated_at}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
+
+    <div>
+      <h2 class="text-xl font-bold tracking-tight">Features</h2>
+
+      {!subscription.features || subscription.features.length === 0 ? (
+        <p class="font-medium text-muted-foreground">
+          No features added for this subscription.
+        </p>
+      ) : (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Description</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {subscription?.features?.map((feature, index) => (
+              <TableRow key={index}>
+                <TableCell>{feature.name}</TableCell>
+                <TableCell>{feature.description}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </div>
+  </div>
+
+  <div slot="actions">
+  </div>
+</Layout>

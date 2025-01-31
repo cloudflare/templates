@@ -1,0 +1,84 @@
+---
+import { BadgeDollarSign, CalendarSync, User } from 'lucide-react';
+import Layout from '@/layouts/Layout.astro';
+import { APIDocumentation } from '@/components/admin/api-documentation';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+
+import { CustomerService } from '@/lib/services/customer';
+import { SubscriptionService } from '@/lib/services/subscription';
+import { CustomerSubscriptionService } from '@/lib/services/customer_subscription';
+
+const { DB } = Astro.locals.runtime.env;
+
+const customerService = new CustomerService(DB);
+const subscriptionService = new SubscriptionService(DB);
+const customerSubscriptionService = new CustomerSubscriptionService(DB);
+
+const customers = await customerService.getAll();
+const subscriptions = await subscriptionService.getAll();
+const customerSubscriptions = await customerSubscriptionService.getAll();
+
+const data = [
+  {
+    name: 'Customers',
+    value: customers.length,
+    icon: User,
+    href: '/admin/customers'
+  },
+  {
+    name: 'Subscriptions',
+    value: subscriptions.length,
+    icon: BadgeDollarSign,
+    href: '/admin/subscriptions'
+  },
+  {
+    name: 'Customer Subscriptions',
+    value: customerSubscriptions.length,
+    icon: CalendarSync
+  }
+]
+---
+
+<Layout title="Admin">
+  <div class="space-y-8">
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
+      {data.map((item) => (
+        item.href ? (
+          <div class="rounded-xl border bg-card text-card-foreground hover:bg-muted shadow transition-colors">
+            <a href={item.href}>
+              <div class="p-6">
+                <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <div class="tracking-tight text-sm font-medium">{item.name}</div>
+                  <item.icon />
+                </div>
+                <div class="pt-0">
+                  <div class="text-2xl font-bold">{item.value}</div>
+                </div>
+              </div>
+            </a>
+          </div>
+        ) : (
+          <div class="rounded-xl border bg-card text-card-foreground shadow">
+            <div class="p-6">
+              <div class="flex flex-row items-center justify-between space-y-0 pb-2">
+                <div class="tracking-tight text-sm font-medium">{item.name}</div>
+                <item.icon />
+              </div>
+              <div class="pt-0">
+                <div class="text-2xl font-bold">{item.value}</div>
+              </div>
+            </div>
+          </div>
+        )
+      ))}
+    </div>
+
+    <section class="space-y-4">
+      <h2 class="text-3xl font-bold tracking-tight">API</h2>
+      <div>
+        <APIDocumentation client:only="react" />
+      </div>
+    </section>
+  </div>
+</Layout>
