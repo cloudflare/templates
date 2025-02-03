@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "react-router-starter-template",
   "compatibility_date": "2024-11-01",
+  "account_id": "2e6386d59e393e0eaec7753cb017cdd7",
   "main": "./server.ts",
   "assets": {
     "directory": "./dist/client"

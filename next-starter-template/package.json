@@ -28,7 +28,7 @@
     "postcss": "8.4.49",
     "tailwindcss": "3.4.17",
     "typescript": "5.7.2",
-    "wrangler": "3.100.0"
+    "wrangler": "3.107.2"
   },
   "scripts": {
     "build": "next build",
