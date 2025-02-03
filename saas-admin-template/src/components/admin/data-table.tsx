@@ -5,10 +5,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
-import type { Table } from '@tanstack/react-table'
-import { flexRender } from "@tanstack/react-table"
+import type { Table } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 
 export function DataTable({ table }: { table: Table }) {
   return (
@@ -22,7 +22,7 @@ export function DataTable({ table }: { table: Table }) {
                   ? null
                   : flexRender(
                       header.column.columnDef.header,
-                      header.getContext()
+                      header.getContext(),
                     )}
               </TableHead>
             ))}
@@ -52,5 +52,5 @@ export function DataTable({ table }: { table: Table }) {
         )}
       </TableBody>
     </Table>
-  )
+  );
 }

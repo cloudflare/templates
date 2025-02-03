@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const links = [
-  { href: '/admin', label: 'Admin' },
-  { href: '/admin/customers', label: 'Customers' },
-  { href: '/admin/subscriptions', label: 'Subscriptions' },
+  { href: "/admin", label: "Admin" },
+  { href: "/admin/customers", label: "Customers" },
+  { href: "/admin/subscriptions", label: "Subscriptions" },
 ];
 
 export function Header({ currentPath }: { currentPath: string }) {
@@ -15,15 +15,17 @@ export function Header({ currentPath }: { currentPath: string }) {
       {links.map((link) => (
         <a
           className={cn(
-            'text-sm font-medium leading-none text-foreground',
-            currentPath === link.href ? 'text-foreground' : 'text-muted-foreground',
+            "text-sm font-medium leading-none text-foreground",
+            currentPath === link.href
+              ? "text-foreground"
+              : "text-muted-foreground",
           )}
           href={link.href}
-          aria-current={currentPath === link.href ? 'page' : undefined}
+          aria-current={currentPath === link.href ? "page" : undefined}
         >
           {link.label}
         </a>
       ))}
     </nav>
-  )
+  );
 }

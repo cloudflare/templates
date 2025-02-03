@@ -5,7 +5,10 @@ export async function GET({ locals, params, request }) {
   const { id } = params;
   const { API_TOKEN, DB } = locals.runtime.env;
 
-  const invalidTokenResponse = await validateApiTokenResponse(request, API_TOKEN);
+  const invalidTokenResponse = await validateApiTokenResponse(
+    request,
+    API_TOKEN,
+  );
   if (invalidTokenResponse) return invalidTokenResponse;
 
   const customerService = new CustomerService(DB);
