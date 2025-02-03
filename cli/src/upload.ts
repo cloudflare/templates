@@ -62,7 +62,9 @@ function collectTemplateFiles(templatePath: string): File[] {
     }))
     .filter(
       ({ filePath }) =>
-        !fs.statSync(filePath).isDirectory() && !gitIgnored(filePath),
+        !filePath.includes("node_modules") &&
+        !fs.statSync(filePath).isDirectory() &&
+        !gitIgnored(filePath),
     )
     .map(({ name, filePath }) => new File([fs.readFileSync(filePath)], name));
 }
