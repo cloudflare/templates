@@ -275,6 +275,9 @@ importers:
       vite-tsconfig-paths:
         specifier: 5.1.4
         version: 5.1.4(typescript@5.7.2)(vite@6.0.11(@types/node@22.9.1)(jiti@1.21.7)(terser@5.16.9)(tsx@4.19.2)(yaml@2.7.0))
+      wrangler:
+        specifier: 3.107.2
+        version: 3.107.2(@cloudflare/workers-types@4.20250129.0)
 
   remix-starter-template:
     dependencies:
