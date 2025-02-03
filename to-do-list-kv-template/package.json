@@ -22,6 +22,7 @@
     "@remix-run/react": "2.15.2",
     "@remix-run/server-runtime": "2.15.2",
     "isbot": "5.1.17",
+    "nanoid": "5.0.8",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
