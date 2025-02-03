@@ -58,6 +58,7 @@ _An API token is required to authenticate requests to the API. You should genera
 ```bash
 npx wrangler d1 create admin-db
 ```
+
 ...and update the `database_id` field in `wrangler.json` with the new database ID.
 
 4. Run the database migrations locally:

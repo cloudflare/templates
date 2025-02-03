@@ -1,5 +1,5 @@
-import { WorkflowEntrypoint, WorkflowStep } from 'cloudflare:workers';
-import type { WorkflowEvent } from 'cloudflare:workers';
+import { WorkflowEntrypoint, WorkflowStep } from "cloudflare:workers";
+import type { WorkflowEvent } from "cloudflare:workers";
 
 type Env = {
   CUSTOMER_WORKFLOW: WorkflowEntrypoint<Env, Params>;
@@ -15,7 +15,7 @@ export class CustomerWorkflow extends WorkflowEntrypoint<Env, Params> {
     const { DB } = this.env;
     const { id } = event.payload;
 
-    const customer = await step.do('fetch customer', async () => {
+    const customer = await step.do("fetch customer", async () => {
       const resp = await DB.prepare(`SELECT * FROM customers WHERE id = ?`)
         .bind(id)
         .run();
@@ -24,14 +24,18 @@ export class CustomerWorkflow extends WorkflowEntrypoint<Env, Params> {
     });
 
     if (customer) {
-      await step.do('conditional customer step', async () => {
-        console.log('A customer was found! This step only runs if a customer is found.');
+      await step.do("conditional customer step", async () => {
+        console.log(
+          "A customer was found! This step only runs if a customer is found.",
+        );
         console.log(customer);
       });
     }
 
-    await step.do('example step', async () => {
-      console.log('This step always runs, and is the last step in the workflow.');
+    await step.do("example step", async () => {
+      console.log(
+        "This step always runs, and is the last step in the workflow.",
+      );
     });
   }
 }
