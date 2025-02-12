@@ -20,7 +20,7 @@
     "astro": "5.1.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20250129.0",
+    "@cloudflare/workers-types": "4.20250204.0",
     "wrangler": "3.107.2"
   },
   "scripts": {
