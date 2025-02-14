@@ -18,7 +18,7 @@
     "valibot": "^1.0.0-beta.9"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20250129.0",
+    "@cloudflare/workers-types": "4.20250204.0",
     "typescript": "5.7.2",
     "wrangler": "3.107.2"
   },

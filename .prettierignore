@@ -5,3 +5,5 @@ env.d.ts
 # Framework build output
 .open-next
 .astro
+
+pnpm-lock.yaml

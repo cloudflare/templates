@@ -18,7 +18,7 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20250129.0",
+    "@cloudflare/workers-types": "4.20250204.0",
     "typescript": "5.7.2",
     "wrangler": "3.107.2"
   },
