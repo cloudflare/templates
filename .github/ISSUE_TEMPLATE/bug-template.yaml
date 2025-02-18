@@ -1,0 +1,48 @@
+name: "\U0001F41B Bug Report"
+description: Report an issue or possible bug
+title: "\U0001F41B BUG:"
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Quick Bug Form
+        Thank you for taking the time to file a bug report! Please fill out this form as completely as possible.
+  - type: input
+    id: products
+    attributes:
+      label: Which template does this pertain to?
+      placeholder: astro-blog-starter-template, d1-template, durable-chat-template, etc.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What versions are you using?
+      placeholder: 0.0.0 [Wrangler], 0.0.0 [C3], 0.0.0 [Node.js], etc.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: What operating system and version are you using?
+      placeholder: Mac Sonoma 14.2.1, Windows 11, Linux (or WSL) Debian Bookworm, etc.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Please provide a link to a minimal reproduction (optional)
+      placeholder: https://github.com/foobar-user/minimal-repro
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Describe the Bug
+      description: Please describe the bug in as much detail as possible, including steps to reproduce, the behaviour you're seeing, and the behaviour you expect.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Please provide any relevant error logs
+      description: Although not required, we often request logs to help troubleshoot the issue, so providing this up-front streamlines the process towards resolution. Please be careful to hide any sensitive information.
+    validations:
+      required: false
