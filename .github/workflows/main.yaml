@@ -29,5 +29,5 @@ jobs:
       - run: pnpm run deploy
       # Upload to both staging and production, so our staging catalog stays up
       # to date with production.
-      - run: pnpm run upload -- --staging
+      - run: pnpm run upload --staging
       - run: pnpm run upload
