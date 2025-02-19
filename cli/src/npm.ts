@@ -8,6 +8,11 @@ async function getTemplates(): Promise<string[]> {
   return (await glob("./*-template/package.json")).map((t) => path.dirname(t));
 }
 
+/**
+ * Generates npm lockfiles for all templates in the repository.
+ * Updates template hashes and regenerates package-lock.json files when necessary.
+ * @throws {Error} If template operations fail
+ */
 export async function generateNpmLockfiles(): Promise<void> {
   const config = await new TemplatesConfig().load();
   const templates = await getTemplates();
@@ -30,17 +35,17 @@ export async function generateNpmLockfiles(): Promise<void> {
     await $({
       verbose: true,
       stdio: "inherit",
-    })`npm install --no-audit --progress=false`;
-
-    await fs.rm("./node_modules", { force: true, recursive: true });
+    })`npm install --no-audit --progress=false --package-lock-only`;
   }
 
   await config.save();
-
-  // Restore dependencies with pnpm
-  await $`pnpm install --child-concurrency=10`.verbose();
 }
 
+/**
+ * Validates that all template package-lock.json files are up to date
+ * with their respective package.json files.
+ * @throws {Error} If any template's lockfile is out of date
+ */
 export async function lintNpmLockfiles(): Promise<void> {
   const config = await new TemplatesConfig().load();
   const templates = await getTemplates();

@@ -7,3 +7,4 @@ env.d.ts
 .astro
 
 pnpm-lock.yaml
+templates.json

@@ -42,18 +42,18 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "4.20250204.0",
-    "wrangler": "3.107.2"
+    "wrangler": "3.107.3"
   },
   "scripts": {
     "astro": "astro",
     "build": "astro build",
     "cf-typegen": "wrangler types",
-    "db:migrate": "wrangler d1 migrations apply DB",
+    "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "deploy": "astro build && npm run wrangler:wrapper && wrangler deploy",
     "dev": "astro build && npm run wrangler:wrapper && npx wrangler dev",
     "predeploy": "npm run db:migrate:remote",
-    "preview": "astro build && wrangler dev",
+    "preview": "astro build && npm run wrangler:wrapper && wrangler dev",
     "wrangler:wrapper": "cp src/workflows/wrapper.js dist/index.js"
   }
 }

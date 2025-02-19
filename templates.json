@@ -1,37 +1,37 @@
 {
   "templates": {
     "d1-template": {
-      "package_json_hash": "b200b908a3b72011e79695ea21937c040e66189a"
+      "package_json_hash": "f0be268ee56f4e05cc9e67e4eca3a6c13219da30"
     },
     "multiplayer-globe-template": {
-      "package_json_hash": "3e424a0b9bf5314f20c08209798a32f2e0ac7c98"
+      "package_json_hash": "8469febb399b6b17acc63c3cdf16290945b2770a"
     },
     "next-starter-template": {
-      "package_json_hash": "2e119c4b49a88f19f8622a0f1af231082fb2b92d"
+      "package_json_hash": "60336ddae91c182f025794f86cbb5613167afd74"
     },
     "openauth-template": {
-      "package_json_hash": "770cf022000e13c689a0156ce58bda82a3d41cf9"
+      "package_json_hash": "c579e563572484824e2b4bd59a1a4fa165506fc7"
     },
     "react-router-starter-template": {
-      "package_json_hash": "47200cb8b4b63fc51d16763be5c23c5030ccfe97"
+      "package_json_hash": "64fcb65f3cb5ae5d3f2db670bc0ed85ab6c9179e"
     },
     "astro-blog-starter-template": {
-      "package_json_hash": "eee08f221228ddc2df18ba531977dae51ed25735"
+      "package_json_hash": "f879735a6685995beacdad2e77f7a56fff05bf6f"
     },
     "durable-chat-template": {
-      "package_json_hash": "5fb084d082770ab905123ac28dc1310a00fde756"
+      "package_json_hash": "c6866b77cfb73209600cfae77f6adede8bf14d6e"
     },
     "remix-starter-template": {
-      "package_json_hash": "bc2f568a592963fe4af435800dde9313de4cdffd"
+      "package_json_hash": "f36d4323e0abcccd9c47c1c89633c1b480628d93"
     },
     "text-to-image-template": {
-      "package_json_hash": "105bf12042247d02fb5f905e70ec736142bba875"
+      "package_json_hash": "6917d78fd0cf1211395791f61c791345cde4830e"
     },
     "saas-admin-template": {
-      "package_json_hash": "913cdf5a0c483bcea3d96055a4867bf6ef6b0f06"
+      "package_json_hash": "0adf378c06f0095f82ed4620c0ea081d8c72d2e2"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "0d6f9838f8a3636d2d8185bf6dd877c9d5c7ad9a"
+      "package_json_hash": "7ddf38103d3833ee9790d639958525cc045251e3"
     }
   }
 }
