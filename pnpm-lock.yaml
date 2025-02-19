@@ -51,6 +51,9 @@ importers:
 
   cli:
     dependencies:
+      '@commander-js/extra-typings':
+        specifier: 12.1.0
+        version: 12.1.0(commander@12.1.0)
       commander:
         specifier: 12.1.0
         version: 12.1.0
@@ -1022,6 +1025,11 @@ packages:
 
   '@cloudflare/workers-types@4.20250204.0':
     resolution: {integrity: sha512-mWoQbYaP+nYztx9I7q9sgaiNlT54Cypszz0RfzMxYnT5W3NXDuwGcjGB+5B5H5VB8tEC2dYnBRpa70lX94ueaQ==}
+
+  '@commander-js/extra-typings@12.1.0':
+    resolution: {integrity: sha512-wf/lwQvWAA0goIghcb91dQYpkLBcyhOhQNqG/VgWhnKzgt+UOMvra7EX/2fv70arm5RW+PUHoQHHDa6/p77Eqg==}
+    peerDependencies:
+      commander: ~12.1.0
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -8804,6 +8812,10 @@ snapshots:
     optional: true
 
   '@cloudflare/workers-types@4.20250204.0': {}
+
+  '@commander-js/extra-typings@12.1.0(commander@12.1.0)':
+    dependencies:
+      commander: 12.1.0
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:

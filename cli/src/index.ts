@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { Command } from "@commander-js/extra-typings";
 import { upload } from "./upload";
 import { lint } from "./lint";
 
@@ -15,7 +15,7 @@ program
     ".",
   )
   .option("--staging", "use the staging API endpoint")
-  .action((templateDirectory: string, options: { staging: boolean }) => {
+  .action((templateDirectory, options) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
     const clientSecret = process.env.TEMPLATES_API_CLIENT_SECRET;
     if (!clientId || !clientSecret) {
@@ -45,8 +45,8 @@ program
     ".",
   )
   .option("--fix", "fix problems that can be automatically fixed")
-  .action((templateDirectory: string, options: { fix: boolean }) => {
-    lint({ templateDirectory, fix: options.fix });
+  .action((templateDirectory, options) => {
+    lint({ templateDirectory, fix: options.fix ?? false });
   });
 
 program.parse();

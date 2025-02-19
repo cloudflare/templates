@@ -2,6 +2,7 @@
   "name": "cli",
   "description": "A handy CLI for developing templates.",
   "dependencies": {
+    "@commander-js/extra-typings": "12.1.0",
     "commander": "12.1.0",
     "toml": "3.0.0"
   },
