@@ -30,12 +30,15 @@ export async function generateNpmLockfiles(): Promise<void> {
     }
 
     await fs.rm("./package-lock.json", { force: true });
-    await fs.rm("./node_modules", { force: true, recursive: true });
+    // Rename node_modules to prevent npm from using it's contents in the lockfile
+    await fs.move("./node_modules", "./._node_modules");
 
     await $({
       verbose: true,
       stdio: "inherit",
     })`npm install --no-audit --progress=false --package-lock-only`;
+
+    await fs.move("./._node_modules", "./node_modules");
   }
 
   await config.save();
