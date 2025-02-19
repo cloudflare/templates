@@ -4,7 +4,9 @@
   "dependencies": {
     "@commander-js/extra-typings": "12.1.0",
     "commander": "12.1.0",
-    "toml": "3.0.0"
+    "toml": "3.0.0",
+    "zod": "3.24.1",
+    "zx": "8.3.2"
   },
   "devDependencies": {
     "@types/node": "22.9.1",

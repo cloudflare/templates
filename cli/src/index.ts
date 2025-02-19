@@ -1,6 +1,7 @@
 import { Command } from "@commander-js/extra-typings";
 import { upload } from "./upload";
 import { lint } from "./lint";
+import { generateNpmLockfiles, lintNpmLockfiles } from "./npm";
 
 const program = new Command();
 
@@ -49,4 +50,18 @@ program
     lint({ templateDirectory, fix: options.fix ?? false });
   });
 
-program.parse();
+program
+  .command("generate-npm-lockfiles")
+  .description("Generate npm lockfiles to improve install time of templates")
+  .action(async () => {
+    await generateNpmLockfiles();
+  });
+
+program
+  .command("lint-npm-lockfiles")
+  .description("Lint all templates to ensure npm lockfiles are up to date")
+  .action(async () => {
+    await lintNpmLockfiles();
+  });
+
+program.parseAsync();
