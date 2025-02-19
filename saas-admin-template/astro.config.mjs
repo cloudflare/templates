@@ -11,7 +11,6 @@ export default defineConfig({
     platformProxy: {
       enabled: true,
       configPath: "wrangler.json",
-      experimentalJsonConfig: true,
       persist: {
         path: "./.cache/wrangler/v3",
       },

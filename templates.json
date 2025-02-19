@@ -1,0 +1,37 @@
+{
+  "templates": {
+    "d1-template": {
+      "package_json_hash": "f0be268ee56f4e05cc9e67e4eca3a6c13219da30"
+    },
+    "multiplayer-globe-template": {
+      "package_json_hash": "8469febb399b6b17acc63c3cdf16290945b2770a"
+    },
+    "next-starter-template": {
+      "package_json_hash": "60336ddae91c182f025794f86cbb5613167afd74"
+    },
+    "openauth-template": {
+      "package_json_hash": "c579e563572484824e2b4bd59a1a4fa165506fc7"
+    },
+    "react-router-starter-template": {
+      "package_json_hash": "64fcb65f3cb5ae5d3f2db670bc0ed85ab6c9179e"
+    },
+    "astro-blog-starter-template": {
+      "package_json_hash": "f879735a6685995beacdad2e77f7a56fff05bf6f"
+    },
+    "durable-chat-template": {
+      "package_json_hash": "c6866b77cfb73209600cfae77f6adede8bf14d6e"
+    },
+    "remix-starter-template": {
+      "package_json_hash": "f36d4323e0abcccd9c47c1c89633c1b480628d93"
+    },
+    "text-to-image-template": {
+      "package_json_hash": "6917d78fd0cf1211395791f61c791345cde4830e"
+    },
+    "saas-admin-template": {
+      "package_json_hash": "0adf378c06f0095f82ed4620c0ea081d8c72d2e2"
+    },
+    "to-do-list-kv-template": {
+      "package_json_hash": "7ddf38103d3833ee9790d639958525cc045251e3"
+    }
+  }
+}
