@@ -2,7 +2,7 @@ name: Main
 
 on:
   push:
-    branches: ["main"]
+    branches: ["staging"]
 
 jobs:
   check-and-deploy:
@@ -26,5 +26,4 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm -w check:ci
-      - run: pnpm run deploy
-      - run: pnpm run upload
+      - run: pnpm run upload --staging
