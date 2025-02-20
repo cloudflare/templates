@@ -8,5 +8,6 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directories:
       - "**/*"
+    target-branch: "staging"
     schedule:
       interval: "weekly"
