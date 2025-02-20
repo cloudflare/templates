@@ -13,7 +13,7 @@
       "package_json_hash": "c579e563572484824e2b4bd59a1a4fa165506fc7"
     },
     "react-router-starter-template": {
-      "package_json_hash": "64fcb65f3cb5ae5d3f2db670bc0ed85ab6c9179e"
+      "package_json_hash": "6d76cb58b217ab86d278bde549a9b225ea56a90c"
     },
     "astro-blog-starter-template": {
       "package_json_hash": "f879735a6685995beacdad2e77f7a56fff05bf6f"
@@ -28,10 +28,13 @@
       "package_json_hash": "6917d78fd0cf1211395791f61c791345cde4830e"
     },
     "saas-admin-template": {
-      "package_json_hash": "0adf378c06f0095f82ed4620c0ea081d8c72d2e2"
+      "package_json_hash": "d3dee949dd964723b2d6f6fa213121f055d0b61a"
     },
     "to-do-list-kv-template": {
       "package_json_hash": "7ddf38103d3833ee9790d639958525cc045251e3"
+    },
+    "vite-react-template": {
+      "package_json_hash": "b54da71f57f765e9bc78c2d023c0380bec6a9e84"
     }
   }
 }
