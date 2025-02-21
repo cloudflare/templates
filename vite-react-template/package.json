@@ -36,6 +36,7 @@
   },
   "scripts": {
     "build": "tsc -b && vite build",
+    "deploy": "npm run build && wrangler deploy",
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",

@@ -10,7 +10,7 @@
       "package_json_hash": "60336ddae91c182f025794f86cbb5613167afd74"
     },
     "openauth-template": {
-      "package_json_hash": "c579e563572484824e2b4bd59a1a4fa165506fc7"
+      "package_json_hash": "203f2448e457117f20d50628520e38946c9184bf"
     },
     "react-router-starter-template": {
       "package_json_hash": "6d76cb58b217ab86d278bde549a9b225ea56a90c"
@@ -34,7 +34,7 @@
       "package_json_hash": "7ddf38103d3833ee9790d639958525cc045251e3"
     },
     "vite-react-template": {
-      "package_json_hash": "b54da71f57f765e9bc78c2d023c0380bec6a9e84"
+      "package_json_hash": "cbe6857375c9c7ca884434f76fad89a2ef24c0de"
     }
   }
 }

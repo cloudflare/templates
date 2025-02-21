@@ -13,6 +13,7 @@ The following selections do not need to be completed if this PR only contains ch
   - [ ] "cloudflare" section of package.json is populated
   - [ ] template preview image uploaded to Images
   - [ ] README is populated and uses `<!-- dash-content-start -->` and `<!-- dash-content-end -->` to designate the Dash readme preview
+  - [ ] package.json contains a `deploy` command
 
 ## Example package.json
 
