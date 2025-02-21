@@ -15,35 +15,30 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/bfdc2f85-e5c9-4c92-128b-3a6711249800/public"
   },
   "dependencies": {
-    "@react-router/serve": "7.1.3",
+    "@react-router/node": "7.2.0",
+    "@react-router/serve": "7.2.0",
     "isbot": "5.1.17",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-router": "7.1.3"
+    "react-router": "7.2.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "0.1.1",
     "@cloudflare/workers-types": "4.20250204.0",
-    "@react-router/dev": "7.1.3",
+    "@react-router/dev": "7.2.0",
+    "@tailwindcss/vite": "4.0.0",
     "@types/node": "22.9.1",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.1",
-    "autoprefixer": "10.4.20",
-    "postcss": "8.4.49",
-    "react-router-dom": "7.1.3",
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "4.0.0",
     "typescript": "5.7.2",
     "vite": "6.1.0",
     "vite-tsconfig-paths": "5.1.4",
     "wrangler": "3.107.3"
   },
-  "private": true,
   "scripts": {
     "build": "react-router build",
-    "cf-typegen": "wrangler types",
-    "deploy": "react-router build && wrangler deploy",
+    "deploy": "npm run build && wrangler deploy",
     "dev": "react-router dev",
-    "preview": "react-router build && wrangler dev",
     "start": "wrangler dev",
     "typecheck": "wrangler types && react-router typegen && tsc",
     "typegen": "wrangler types && react-router typegen"

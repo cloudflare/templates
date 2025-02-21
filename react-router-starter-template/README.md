@@ -48,7 +48,7 @@ Your application will be available at `http://localhost:5173`.
 
 ## Typegen
 
-Generate types for your Cloudflare bindings in `wrangler.toml`:
+Generate types for your Cloudflare bindings in `wrangler.json`:
 
 ```sh
 npm run typegen
@@ -70,6 +70,18 @@ Once that's done, you can deploy your app:
 
 ```sh
 npm run deploy
+```
+
+To deploy a preview URL:
+
+```sh
+npx wrangler versions upload
+```
+
+You can then promote a version to production after verification or roll it out progressively.
+
+```sh
+npx wrangler versions deploy
 ```
 
 ## Styling

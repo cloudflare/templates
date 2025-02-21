@@ -51,6 +51,17 @@
         "@types/react-dom"
       ],
       "range": "^18.0.0"
+    },
+    {
+      "label": "Allow tailwind 3.x for some templates",
+      "packages": [
+        "saas-admin-template",
+        "to-do-list-kv-template",
+        "next-starter-template",
+        "remix-starter-template"
+      ],
+      "dependencies": ["tailwindcss"],
+      "range": "^3.4.0"
     }
   ]
 }
