@@ -16,7 +16,7 @@
   "dependencies": {
     "cobe": "0.6.3",
     "partyserver": "0.0.57",
-    "partysocket": "1.0.2",
+    "partysocket": "1.0.3",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
