@@ -84,6 +84,13 @@ function lintWranglerJson(
     upload_source_maps?: boolean;
     name?: string;
   };
+
+  // Read package.json to compare names
+  const packageJsonPath = path.join(path.dirname(filePath), "package.json");
+  const packageJson = fs.existsSync(packageJsonPath)
+    ? (readJson(packageJsonPath) as { name?: string })
+    : null;
+
   if (fix) {
     wrangler.compatibility_date = TARGET_COMPATIBILITY_DATE;
     wrangler.observability = { enabled: true };
@@ -106,6 +113,13 @@ function lintWranglerJson(
   }
   if (wrangler.name !== template.name) {
     problems.push(`"name" should be set to "${template.name}"`);
+  }
+
+  // Check for name matching between wrangler.json and package.json
+  if (wrangler.name !== packageJson?.name) {
+    problems.push(
+      `"name" in wrangler.json (${wrangler.name}) should match package.json name (${packageJson?.name})`,
+    );
   }
   return problems;
 }
