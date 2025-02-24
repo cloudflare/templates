@@ -2,7 +2,7 @@ name: Branches
 
 on:
   push:
-    branches-ignore: ["main"]
+    branches-ignore: ["main", "staging"]
 
 jobs:
   check:

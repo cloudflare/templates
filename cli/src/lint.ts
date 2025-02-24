@@ -26,6 +26,7 @@ const CHECKS = {
   "wrangler.toml": [lintWranglerToml],
   "wrangler.json": [lintWranglerJson],
   "README.md": [lintReadme],
+  "package.json": [lintPackageJson],
 };
 const TARGET_COMPATIBILITY_DATE = "2024-11-01";
 const DASH_CONTENT_START_MARKER = "<!-- dash-content-start -->";
@@ -174,4 +175,55 @@ npm create cloudflare@latest -- --template=cloudflare/templates/${template.name}
 
 A live public deployment of this template is available at [https://${template.name}.templates.workers.dev](https://${template.name}.templates.workers.dev)
 `;
+}
+
+function lintPackageJson(
+  template: Template,
+  filePath: string,
+  fix: boolean,
+): string[] {
+  if (!fs.existsSync(filePath)) {
+    return [`Expected ${filePath} to exist.`];
+  }
+
+  const pkg = readJson(filePath) as {
+    scripts?: { deploy?: string };
+    cloudflare?: {
+      label?: string;
+      products?: string[];
+      categories?: string[];
+      icon_urls?: string[];
+      preview_image_url?: string;
+    };
+  };
+
+  const problems: string[] = [];
+
+  // Check deploy script
+  if (!pkg.scripts?.deploy) {
+    problems.push('"scripts.deploy" must be defined');
+  }
+
+  // Check cloudflare object and its required fields
+  if (!pkg.cloudflare) {
+    problems.push('"cloudflare" object must be defined');
+  } else {
+    if (!pkg.cloudflare.label) {
+      problems.push('"cloudflare.label" must be defined');
+    }
+    if (!Array.isArray(pkg.cloudflare.products)) {
+      problems.push('"cloudflare.products" must be an array');
+    }
+    if (!Array.isArray(pkg.cloudflare.categories)) {
+      problems.push('"cloudflare.categories" must be an array');
+    }
+    if (!Array.isArray(pkg.cloudflare.icon_urls)) {
+      problems.push('"cloudflare.icon_urls" must be an array');
+    }
+    if (!pkg.cloudflare.preview_image_url) {
+      problems.push('"cloudflare.preview_image_url" must be defined');
+    }
+  }
+
+  return problems;
 }

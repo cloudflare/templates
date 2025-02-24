@@ -1,35 +1,43 @@
+import type { AppLoadContext, EntryContext } from "react-router";
+import { ServerRouter } from "react-router";
 import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
-import { ServerRouter } from "react-router";
-import type { AppLoadContext, EntryContext } from "react-router";
 
 export default async function handleRequest(
   request: Request,
-  status: number,
-  headers: Headers,
+  responseStatusCode: number,
+  responseHeaders: Headers,
   routerContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
-  let userAgent = request.headers.get("user-agent");
-  let stream = await renderToReadableStream(
+  let shellRendered = false;
+  const userAgent = request.headers.get("user-agent");
+
+  const body = await renderToReadableStream(
     <ServerRouter context={routerContext} url={request.url} />,
     {
-      signal: request.signal,
       onError(error: unknown) {
-        if (!request.signal.aborted) {
-          // Log streaming rendering errors from inside the shell
+        responseStatusCode = 500;
+        // Log streaming rendering errors from inside the shell.  Don't log
+        // errors encountered during initial shell rendering since they'll
+        // reject and get logged in handleDocumentRequest.
+        if (shellRendered) {
           console.error(error);
         }
-        // biome-ignore lint/style/noParameterAssign: It's ok
-        status = 500;
       },
     },
   );
+  shellRendered = true;
 
-  if (isbot(userAgent)) await stream.allReady;
+  // Ensure requests from bots and SPA Mode renders wait for all content to load before responding
+  // https://react.dev/reference/react-dom/server/renderToPipeableStream#waiting-for-all-content-to-load-for-crawlers-and-static-generation
+  if ((userAgent && isbot(userAgent)) || routerContext.isSpaMode) {
+    await body.allReady;
+  }
 
-  headers.set("Content-Type", "text/html; charset=utf-8");
-  headers.set("Transfer-Encoding", "chunked");
-
-  return new Response(stream, { status, headers });
+  responseHeaders.set("Content-Type", "text/html");
+  return new Response(body, {
+    headers: responseHeaders,
+    status: responseStatusCode,
+  });
 }
