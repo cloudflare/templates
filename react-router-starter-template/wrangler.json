@@ -1,13 +1,17 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "react-router-starter-template",
+  "main": "./build/server/index.js",
   "compatibility_date": "2024-11-01",
-  "main": "./server.ts",
-  "assets": {
-    "directory": "./dist/client"
-  },
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },
-  "upload_source_maps": true
+  "upload_source_maps": true,
+  "assets": {
+    "directory": "./build/client"
+  },
+  "vars": {
+    "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
+  }
 }
