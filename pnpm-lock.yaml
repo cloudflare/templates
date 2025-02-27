@@ -46,7 +46,7 @@ importers:
         version: 5.7.2
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       wrangler:
         specifier: 3.107.3
@@ -80,7 +80,7 @@ importers:
   d1-template:
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       typescript:
         specifier: 5.7.2
@@ -111,7 +111,7 @@ importers:
         version: 7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@types/react':
         specifier: 18.3.12
@@ -148,7 +148,7 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@types/react':
         specifier: 18.3.12
@@ -179,7 +179,7 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@opennextjs/cloudflare':
         specifier: 0.5.3
@@ -222,7 +222,7 @@ importers:
         version: 1.0.0-beta.14(typescript@5.7.2)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       typescript:
         specifier: 5.7.2
@@ -253,7 +253,7 @@ importers:
         version: 7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@react-router/dev':
         specifier: 7.2.0
@@ -308,7 +308,7 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@remix-run/dev':
         specifier: 2.15.2
@@ -438,7 +438,7 @@ importers:
         version: 3.24.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       wrangler:
         specifier: 3.107.3
@@ -447,7 +447,7 @@ importers:
   text-to-image-template:
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       typescript:
         specifier: 5.7.2
@@ -484,7 +484,7 @@ importers:
         specifier: 0.5.38
         version: 0.5.38(@cloudflare/workers-types@4.20250204.0)(@vitest/runner@2.1.8)(@vitest/snapshot@2.1.8)(vitest@2.1.8(@types/node@22.9.1)(lightningcss@1.29.1)(terser@5.16.9))
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@remix-run/dev':
         specifier: 2.15.2
@@ -545,7 +545,7 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(vite@6.1.0(@types/node@22.9.1)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.16.9)(tsx@4.19.2)(yaml@2.7.0))(workerd@1.20250204.0)(wrangler@3.107.3(@cloudflare/workers-types@4.20250204.0))
       '@cloudflare/workers-types':
-        specifier: 4.20250204.0
+        specifier: ^4.20250204.0
         version: 4.20250204.0
       '@eslint/js':
         specifier: 9.19.0
