@@ -1,0 +1,13 @@
+name = "withered-dew-2fdd"  # Replace with the name of your worker
+compatibility_date = "2025-03-06"  # Replace with the date of your deployment
+
+account_id = "d345e0bd342c77a21c5fc651e69f6d52"  # Your Cloudflare account ID, found in the dashboard
+
+[build]
+command = "npm install"  # If using npm, make sure dependencies are installed
+upload = { dir = "dist" }  # Directory where your build files are located
+
+# Optional: If using environments, you can specify them here
+[env.production]
+name = "withered-dew-2fdd"  # Again, replace with your worker name
+main = "index.js"  # The entry point file for your worker
