@@ -27,7 +27,7 @@
     "@types/react-dom": "18.3.1",
     "esbuild": "0.24.0",
     "typescript": "5.7.2",
-    "wrangler": "3.107.3"
+    "wrangler": "4.0.0"
   },
   "scripts": {
     "check": "tsc --project src/client && tsc --project src/server && wrangler --experimental-json-config deploy --dry-run",
