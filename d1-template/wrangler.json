@@ -6,7 +6,6 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_id": "151f7d9b-365f-41d7-83ed-0bf4eeef5086",
       "database_name": "d1-template-database"
     }
   ],
