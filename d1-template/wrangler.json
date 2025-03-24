@@ -6,7 +6,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "d1-template-database"
+      "database_name": "d1-template-database",
+      "database_id": "placeholder"
     }
   ],
   "observability": {
