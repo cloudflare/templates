@@ -16,8 +16,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "admin-db",
-      "database_id": "3009feae-2321-421c-97e8-181886710aa0"
+      "database_name": "admin-db-d1",
+      "database_id": "paceholder"
     }
   ],
   "workflows": [
