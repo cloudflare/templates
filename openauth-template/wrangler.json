@@ -12,7 +12,7 @@
   "d1_databases": [
     {
       "binding": "AUTH_DB",
-      "database_name": "openauth-template-d1",
+      "database_name": "openauth-template-db",
       "database_id": "placeholder"
     }
   ],
