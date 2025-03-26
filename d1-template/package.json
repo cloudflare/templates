@@ -26,8 +26,8 @@
     "check": "tsc && wrangler --experimental-json-config deploy --dry-run",
     "deploy": "wrangler --experimental-json-config deploy",
     "dev": "wrangler --experimental-json-config dev",
-    "predeploy": "wrangler --experimental-json-config d1 migrations apply d1-template-database --remote",
-    "seedLocalD1": "wrangler --experimental-json-config d1 migrations apply d1-template-database --local",
+    "predeploy": "wrangler --experimental-json-config d1 migrations apply DB --remote",
+    "seedLocalD1": "wrangler --experimental-json-config d1 migrations apply DB --local",
     "types": "wrangler --experimental-json-config types"
   }
 }
