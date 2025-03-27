@@ -1,7 +1,7 @@
 {
   "templates": {
     "d1-template": {
-      "package_json_hash": "bc4864e1dd49dc0d59e816d15b49b7ae3aad1335"
+      "package_json_hash": "c4957aa6520b82fd404c272c97c14cf036ff67ec"
     },
     "multiplayer-globe-template": {
       "package_json_hash": "57546f07ca8e3f451fbcac173a39c2a5d992914d"
@@ -10,7 +10,7 @@
       "package_json_hash": "5025812b9c0560b912db09b3de3bcd228364f3f7"
     },
     "openauth-template": {
-      "package_json_hash": "b3426391e9e676b6687cac9c47b59829e9810f5f"
+      "package_json_hash": "4e6389a58ea4a662f6d11f329f899e3c749e26fd"
     },
     "react-router-starter-template": {
       "package_json_hash": "3506e8286f9a2e1365c0c2b93afc59dca1320cdc"
