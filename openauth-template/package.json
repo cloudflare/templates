@@ -27,7 +27,7 @@
     "check": "tsc && wrangler --experimental-json-config deploy --dry-run",
     "deploy": "wrangler --experimental-json-config deploy",
     "dev": "wrangler --experimental-json-config dev",
-    "predeploy": "wrangler --experimental-json-config d1 migrations apply openauth-template-auth-db --remote",
+    "predeploy": "wrangler --experimental-json-config d1 migrations apply AUTH_DB --remote",
     "types": "wrangler --experimental-json-config types"
   }
 }
