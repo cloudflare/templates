@@ -1,5 +1,7 @@
 # d1-starter-sessions-api
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/staging/d1-starter-sessions-api)
+
 <!-- dash-content-start -->
 
 Starter repository using Cloudflare Workers with D1 database and the new [D1 Sessions API for read replication](https://developers.cloudflare.com/d1/best-practices/read-replication/#use-sessions-api).
