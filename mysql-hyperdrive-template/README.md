@@ -11,7 +11,7 @@ SHOW TABLES;
 ```
 
 > [!IMPORTANT]
-> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/d1-template#setup-steps) before deploying.
+> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/mysql-hyperdrive-template#setup-steps) before deploying.
 
 ## Getting Started
 
