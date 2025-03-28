@@ -1,0 +1,34 @@
+{
+	"name": "d1-starter-sessions-api",
+	"description": "D1 starter template using the Sessions API for read replication.",
+	"version": "0.0.0",
+	"cloudflare": {
+		"label": "Worker + D1 Database",
+		"products": [
+			"Workers",
+			"D1"
+		],
+		"categories": [
+			"storage"
+		],
+		"icon_urls": [
+			"https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c6fc5da3-1e0a-4608-b2f1-9628577ec800/public",
+			"https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
+		],
+		"docs_url": "https://developers.cloudflare.com/d1/"
+	},
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest",
+		"cf-typegen": "wrangler types"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.8.6",
+		"durable-utils": "^0.3.4",
+		"typescript": "^5.5.2",
+		"vitest": "~3.0.9",
+		"wrangler": "^4.5.0"
+	}
+}
