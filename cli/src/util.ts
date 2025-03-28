@@ -4,18 +4,32 @@ import toml from "toml";
 
 const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
+type PackageJson = {
+  cloudflare?: {
+    dash?: boolean;
+  };
+};
+
 export type Template = { name: string; path: string };
 
 export function getTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
     // If the specified path is a template directory, just return that.
+    const templatePath = templateDirectory;
+    const packageJsonPath = path.join(templatePath, "package.json");
+
+    if (!isDashTemplate(packageJsonPath)) {
+      return [];
+    }
+
     return [
       {
-        name: path.basename(templateDirectory),
-        path: templateDirectory,
+        name: path.basename(templatePath),
+        path: templatePath,
       },
     ];
   }
+
   // Otherwise, we expect the specified path to be a directory containing many
   // templates (e.g. the repository root).
   return fs
@@ -23,12 +37,32 @@ export function getTemplates(templateDirectory: string): Template[] {
     .filter(
       (file) =>
         file.endsWith(TEMPLATE_DIRECTORY_SUFFIX) &&
-        fs.statSync(file).isDirectory(),
+        fs.statSync(path.join(templateDirectory, file)).isDirectory(),
     )
+    .filter((name) => {
+      const packageJsonPath = path.join(
+        templateDirectory,
+        name,
+        "package.json",
+      );
+      return isDashTemplate(packageJsonPath);
+    })
     .map((name) => ({
       name,
       path: path.join(templateDirectory, name),
     }));
+}
+
+function isDashTemplate(packageJsonPath: string): boolean {
+  try {
+    if (!fs.existsSync(packageJsonPath)) {
+      return false;
+    }
+    const pkg = readJson(packageJsonPath) as PackageJson;
+    return pkg.cloudflare?.dash === true;
+  } catch {
+    return false;
+  }
 }
 
 export function readToml(filePath: string): unknown {

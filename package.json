@@ -5,7 +5,8 @@
     "prettier": "3.3.3",
     "syncpack": "13.0.0",
     "tsx": "4.19.2",
-    "turbo": "2.3.0"
+    "turbo": "2.3.0",
+    "vitest": "2.1.8"
   },
   "packageManager": "pnpm@10.2.0",
   "scripts": {
@@ -14,6 +15,7 @@
     "fix:ci": "tsx cli/src/index.ts lint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types && pnpm generate-npm-lockfiles",
     "generate-npm-lockfiles": "tsx cli/src/index.ts generate-npm-lockfiles",
     "lint-npm-lockfiles": "tsx cli/src/index.ts lint-npm-lockfiles",
-    "upload": "tsx cli/src/index.ts upload ."
+    "upload": "tsx cli/src/index.ts upload .",
+    "test": "vitest"
   }
 }
