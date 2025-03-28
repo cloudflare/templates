@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -24,12 +24,12 @@
       const fetchWorker = async (method, url, body, bookmark) => {
         const now = Date.now();
         return fetch(url, {
-            method,
-            body: body ? JSON.stringify(body) : undefined,
-            headers: {
-              "Content-Type": "application/json",
-              "x-d1-bookmark": bookmark,
-            }
+          method,
+          body: body ? JSON.stringify(body) : undefined,
+          headers: {
+            "Content-Type": "application/json",
+            "x-d1-bookmark": bookmark,
+          },
         }).then((resp) => {
           return resp.json().then((json) => {
             if (!resp.ok) {
@@ -49,8 +49,18 @@
         border: "2px solid #D93526", // pico-color-red-500
       };
 
-      const Latencies = ({ d1Latency, browserLatency, servedByRegion, servedByPrimary }) => {
-        console.log({ d1Latency, browserLatency, servedByRegion, servedByPrimary });
+      const Latencies = ({
+        d1Latency,
+        browserLatency,
+        servedByRegion,
+        servedByPrimary,
+      }) => {
+        console.log({
+          d1Latency,
+          browserLatency,
+          servedByRegion,
+          servedByPrimary,
+        });
         if (!d1Latency || !browserLatency) {
           return null;
         }
@@ -68,12 +78,17 @@
                 <dd>${Number(browserLatency).toFixed(0)}ms</dd>
               </div>
 
-              ${servedByRegion ? html`
-              <div>
-                <dt>Served by Region</dt>
-                <dd>${servedByRegion.toUpperCase()} (${servedByPrimary ? "primary" : "replica"})</dd>
-              </div>
-              ` : null}
+              ${servedByRegion
+                ? html`
+                    <div>
+                      <dt>Served by Region</dt>
+                      <dd>
+                        ${servedByRegion.toUpperCase()}
+                        (${servedByPrimary ? "primary" : "replica"})
+                      </dd>
+                    </div>
+                  `
+                : null}
             </dl>
           </section>
         `;
@@ -86,9 +101,13 @@
         const [result, setResult] = useState(null);
 
         const listOrders = () => {
-          const bookmark = result ? result.sessionBookmark : "first-unconstrained";
-          fetchWorker("GET", "/api/orders", null, bookmark).then(json => {
-            if ((mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0) {
+          const bookmark = result
+            ? result.sessionBookmark
+            : "first-unconstrained";
+          fetchWorker("GET", "/api/orders", null, bookmark).then((json) => {
+            if (
+              (mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0
+            ) {
               // Skip any update since it's an older bookmark than the current one.
               return;
             }
@@ -99,12 +118,21 @@
 
         const createOrder = () => {
           const bookmark = mutRef.bookmark ?? "first-unconstrained";
-          fetchWorker("POST", "/api/orders", {
-            customerId: containerRef.current.querySelector("input[name='customerId']").value,
-            orderId: crypto.randomUUID(),
-            quantity: Math.ceil(Math.random() * 100),
-          }, bookmark).then(json => {
-            if ((mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0) {
+          fetchWorker(
+            "POST",
+            "/api/orders",
+            {
+              customerId: containerRef.current.querySelector(
+                "input[name='customerId']",
+              ).value,
+              orderId: crypto.randomUUID(),
+              quantity: Math.ceil(Math.random() * 100),
+            },
+            bookmark,
+          ).then((json) => {
+            if (
+              (mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0
+            ) {
               // Skip any update since it's an older bookmark than the current one.
               return;
             }
@@ -115,13 +143,18 @@
 
         const resetTables = () => {
           const bookmark = mutRef.bookmark ?? "first-unconstrained";
-          fetchWorker("POST", "/api/reset", null, bookmark).then(json => {
+          fetchWorker("POST", "/api/reset", null, bookmark).then((json) => {
             setResult(json);
           });
         };
 
         useEffect(async () => {
-          const json = await fetchWorker("GET", "/api/orders", null, "first-primary");
+          const json = await fetchWorker(
+            "GET",
+            "/api/orders",
+            null,
+            "first-primary",
+          );
           setPrimaryRegion(json.servedByRegion);
           if ((mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0) {
             // Skip any update since it's an older bookmark than the current one.
@@ -136,35 +169,40 @@
         return html`
           <div ref=${containerRef}>
             <section>
-                <h4>Actions</h4>
-                <div class="grid">
-                  <input
-                    name="customerId"
-                    value="customer-id-1"
-                    type="text"
-                  />
-                  <input
-                    type="button"
-                    onClick=${(e) => createOrder()}
-                    value="Create order & List"
-                  />
-                  <input
-                    type="button"
-                    onClick=${(e) => listOrders()}
-                    value="List orders"
-                  />
-                  <input
-                    type="button"
-                    onClick=${(e) => resetTables()}
-                    value="Reset"
-                  />
-                </div>
-                <ul style="font-size: 0.8em">
-                  <li><strong>Create order & List:</strong> 1 write query to the primary followed by 1 read query to a replica.</li>
-                  <li><strong>List orders:</strong> 1 read query to a replica.</li>
-                  <li><strong>Reset:</strong> 1 write query to the primary.</li>
-                  ${primaryRegion ? html`<li><strong>Primary database region:</strong> ${primaryRegion}</li>` : null}
-                </ul>
+              <h4>Actions</h4>
+              <div class="grid">
+                <input name="customerId" value="customer-id-1" type="text" />
+                <input
+                  type="button"
+                  onClick=${(e) => createOrder()}
+                  value="Create order & List"
+                />
+                <input
+                  type="button"
+                  onClick=${(e) => listOrders()}
+                  value="List orders"
+                />
+                <input
+                  type="button"
+                  onClick=${(e) => resetTables()}
+                  value="Reset"
+                />
+              </div>
+              <ul style="font-size: 0.8em">
+                <li>
+                  <strong>Create order & List:</strong> 1 write query to the
+                  primary followed by 1 read query to a replica.
+                </li>
+                <li>
+                  <strong>List orders:</strong> 1 read query to a replica.
+                </li>
+                <li><strong>Reset:</strong> 1 write query to the primary.</li>
+                ${primaryRegion
+                  ? html`<li>
+                      <strong>Primary database region:</strong> ${primaryRegion}
+                    </li>`
+                  : null}
+              </ul>
             </section>
 
             <${Latencies} ...${result} />
@@ -175,31 +213,30 @@
                 <table class="striped">
                   <thead>
                     <tr>
-                      <th scope="col">
-                        Customer ID
-                      </th>
-                      <th scope="col">
-                        Order ID
-                      </th>
+                      <th scope="col">Customer ID</th>
+                      <th scope="col">Order ID</th>
                       <th>Quantity</th>
                     </tr>
                   </thead>
                   <tbody>
-                    ${!Array.isArray(result?.results) 
-                      ? html`<tr><td colspan="3">Use the buttons above to load existing orders or create new ones.</td></tr>`
+                    ${!Array.isArray(result?.results)
+                      ? html`<tr>
+                          <td colspan="3">
+                            Use the buttons above to load existing orders or
+                            create new ones.
+                          </td>
+                        </tr>`
                       : result.results.length > 0
                         ? result.results.reverse().map((row, idx) => {
-                          return html`<tr
-                            key=${`${row.now}`}
-                          >
-                            <td>
-                              ${row.customerId}
-                            </td>
-                            <td>${row.orderId}</td>
-                            <td>${row.quantity}</td>
-                          </tr>`;
-                        })
-                        : html`<tr><td colspan="3">No orders yet.</td></tr>`}
+                            return html`<tr key=${`${row.now}`}>
+                              <td>${row.customerId}</td>
+                              <td>${row.orderId}</td>
+                              <td>${row.quantity}</td>
+                            </tr>`;
+                          })
+                        : html`<tr>
+                            <td colspan="3">No orders yet.</td>
+                          </tr>`}
                   </tbody>
                 </table>
               </div>
