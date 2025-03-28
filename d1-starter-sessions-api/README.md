@@ -17,14 +17,14 @@ There are two main actions you can do.
 The UI when visiting the deployed Worker project shows 3 buttons.
 
 - **Create order & List**
-    - Creates a new order using the provided customer ID with a random order ID and quantity.
-    - Does a `POST /api/orders` request to the Worker, and its handler uses the Sessions API to do an `INSERT` first for the new order that will be forwarded to the primary database instance, followed by a `SELECT` query to list all orders that will be executed by nearest replica database.
+  - Creates a new order using the provided customer ID with a random order ID and quantity.
+  - Does a `POST /api/orders` request to the Worker, and its handler uses the Sessions API to do an `INSERT` first for the new order that will be forwarded to the primary database instance, followed by a `SELECT` query to list all orders that will be executed by nearest replica database.
 - **List orders**
-    - Lists every order recorded in the database.
-    - Does a `GET /api/orders` request to the Worker, and its handler uses the Sessions API to do a `SELECT` query to list the orders that will be executed by the nearest replica database.
+  - Lists every order recorded in the database.
+  - Does a `GET /api/orders` request to the Worker, and its handler uses the Sessions API to do a `SELECT` query to list the orders that will be executed by the nearest replica database.
 - **Reset**
-    - Drops and recreates the orders table.
-    - Gets executed by the primary database.
+  - Drops and recreates the orders table.
+  - Gets executed by the primary database.
 
 The UI JavaScript code maintains the latest `bookmark` returned by the API and sends it along every subsequent request.
 This ensures that we have sequential consistency in our observed database results and all our actions are properly ordered.
