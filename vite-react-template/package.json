@@ -20,7 +20,7 @@
     "react-dom": "19.0.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "0.1.1",
+    "@cloudflare/vite-plugin": "0.1.19",
     "@cloudflare/workers-types": "^4.20250204.0",
     "@eslint/js": "9.19.0",
     "@types/react": "19.0.8",
