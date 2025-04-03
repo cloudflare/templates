@@ -2,12 +2,6 @@
   "dependencyTypes": ["dev", "prod"],
   "semverGroups": [
     {
-      "label": "don't pin @cloudflare/workers-types",
-      "dependencies": ["@cloudflare/workers-types"],
-      "packages": ["**"],
-      "range": "^"
-    },
-    {
       "label": "pin all deps",
       "dependencies": ["**"],
       "packages": ["**"],
