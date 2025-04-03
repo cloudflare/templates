@@ -4,22 +4,27 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "postgres-hyperdrive-template",
+  "name": "mysql-hyperdrive-template",
   "main": "src/index.ts",
-  "compatibility_date": "2025-02-04",
+  "compatibility_date": "2025-03-07",
   "compatibility_flags": [
     "nodejs_compat"
   ],
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "head_sampling_rate": 1
   },
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "<YOUR_HYPERDRIVE_ID>",
+      "id": "09f05ae3c14d47eebff77160d8a38d19",
       "localConnectionString": "<ENTER_LOCAL_CONNECTION_STRING_FOR_LOCAL_DEVELOPMENT>"
     }
-  ]
+  ],
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS"
+  }
   /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
