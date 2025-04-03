@@ -38,6 +38,9 @@
     },
     "d1-starter-sessions-api-template": {
       "package_json_hash": "e0bc429eaceb170fa738255f5a683f241d342926"
+    },
+    "react-postgres-fullstack-template": {
+      "package_json_hash": "14b78b0cbeef8cff860a891dae39616a4c136437"
     }
   }
 }
