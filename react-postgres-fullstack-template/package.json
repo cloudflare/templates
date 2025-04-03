@@ -3,6 +3,22 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "cloudflare": {
+    "label": "React + Workers + Static Assets + Vite + Postgres + Hyperdrive + Smart Placement",
+    "products": [
+      "Workers",
+      "Hyperdrive",
+      "Cloudflare Vite plugin",
+      "Workers Static Assets",
+      "Smart Placement"
+    ],
+    "categories": [
+      "fullstack",
+      "database"
+    ],
+    "docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
+    "preview_image_url": "preview-image.png"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

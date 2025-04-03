@@ -1,8 +1,10 @@
 # React + Vite + PostgreSQL + Hyperdrive on Cloudflare Workers
 
+<!-- dash-content-start -->
 This project demonstrates a full-stack application with a React single-page application frontend, served as [static assets through Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/). The backend
 consists of API routes built with Hono, running on Cloudflare Workers, connecting to a PostgreSQL database through [Hyperdrive](https://developers.cloudflare.com/hyperdrive/). [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) is enabled to
 automatically position your Worker closer to your database for reduced latency.
+<!-- dash-content-end -->
 
 ## Architecture Overview & Key Files
 
