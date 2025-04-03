@@ -3,6 +3,8 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
+import cloudflareLogo from './assets/Cloudflare_Logo.svg'
+import honoLogo from './assets/hono.svg'
 import "./App.css";
 
 function App() {
@@ -18,8 +20,14 @@ function App() {
         <a href="https://react.dev" target="_blank">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
+        <a href='https://hono.dev/' target='_blank'>
+          <img src={honoLogo} className='logo cloudflare' alt='Hono logo' />
+        </a>
+        <a href='https://workers.cloudflare.com/' target='_blank'>
+          <img src={cloudflareLogo} className='logo cloudflare' alt='Cloudflare logo' />
+        </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Vite + React + Hono + Cloudflare</h1>
       <div className="card">
         <button
           onClick={() => setCount((count) => count + 1)}
@@ -28,13 +36,13 @@ function App() {
           count is {count}
         </button>
         <p>
-          Testing Edit <code>src/App.tsx</code> and save to test HMR
+          Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
       <div className="card">
         <button
           onClick={() => {
-            fetch("/api/")
+            fetch("/message/")
               .then((res) => res.json() as Promise<{ name: string }>)
               .then((data) => setName(data.name));
           }}
@@ -47,7 +55,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+        Click on the logos to learn more
       </p>
     </>
   );
