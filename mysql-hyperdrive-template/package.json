@@ -14,7 +14,7 @@
 		"@cloudflare/workers-types": "^4.20250204.0",
 		"typescript": "^5.5.2",
 		"vitest": "~2.1.9",
-		"wrangler": "^3.108.1"
+		"wrangler": "^4.6.0"
 	},
 	"dependencies": {
 		"mysql2": "^3.14.0"
