@@ -19,7 +19,11 @@
       "id": "<YOUR_HYPERDRIVE_ID>",
       "localConnectionString": "<ENTER_LOCAL_CONNECTION_STRING_FOR_LOCAL_DEVELOPMENT>"
     }
-  ]
+  ],
+  "assets": {
+    "directory": "public",
+    "binding": "ASSETS"
+  }
   /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
