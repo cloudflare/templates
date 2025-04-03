@@ -39,7 +39,7 @@
     "deploy": "npm run build && wrangler deploy",
     "dev": "vite",
     "lint": "eslint .",
-    "preview": "vite preview",
+    "preview": "npm run build && vite preview",
     "types": "wrangler types"
   },
   "type": "module"
