@@ -1,40 +1,43 @@
 {
   "templates": {
     "d1-template": {
-      "package_json_hash": "86be6f6aeac6902cab5896dd29c2a4065387bd84"
+      "package_json_hash": "2c97a0d623c54f1ac39f6ee219070144d539d973"
     },
     "multiplayer-globe-template": {
-      "package_json_hash": "6a2c2424c37b39337d29d25e5d1c7e517eedd5a0"
+      "package_json_hash": "0c5987561c0540e7feae7730d3a935e3e39fb714"
     },
     "next-starter-template": {
-      "package_json_hash": "5ca339b3524fd8760c74a2a7b7d1a6fe5198f182"
+      "package_json_hash": "fe76cbee3d0745adc6b430a4a9287ad68d68f9ee"
     },
     "openauth-template": {
-      "package_json_hash": "3a1f9719ed7e6d1bb002614b5bf26afd5d01ef60"
+      "package_json_hash": "6d3086e9dc59199b7e93122854e35c9363028fcb"
     },
     "react-router-starter-template": {
-      "package_json_hash": "3412c01983023f4bf06533ea3be75810acffdd80"
+      "package_json_hash": "6137bad169d1b48bf855d2dc5e37199a8ce64171"
     },
     "astro-blog-starter-template": {
-      "package_json_hash": "983e80902dd85792091fe0a731c56adf006583b0"
+      "package_json_hash": "f8e0b7fc89422b57f723a44202fba632985c7a37"
     },
     "durable-chat-template": {
-      "package_json_hash": "ea56d6b4bfe7dec69235849110fd36f6c83f4418"
+      "package_json_hash": "a3670519a2bb24bab9aa29f568a82c809ca50bc2"
     },
     "remix-starter-template": {
-      "package_json_hash": "75e8834a84c433a1593f4b3a67e0a1e8459c2f5d"
+      "package_json_hash": "723605fcd9c421e34b9b2549a1817534466c6a32"
     },
     "text-to-image-template": {
-      "package_json_hash": "cce3be28eee879f4d18aef7d76147a9682e0eafb"
+      "package_json_hash": "865b80caef117b66a047ccd9e5e37c5b4183827a"
     },
     "saas-admin-template": {
-      "package_json_hash": "a1421fd0b1a2c2c3955c1795c2bf3d26cf3dedae"
+      "package_json_hash": "bca37d8683a8d0311182f9bac0caf9634fd541b9"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "9045137a1451c0eed6af9bd91a6ea40d51308575"
+      "package_json_hash": "4b5e213394d753c6f6f4abab0e77f8d984f7b789"
     },
     "vite-react-template": {
-      "package_json_hash": "64446e07b95a7cb3a509e24c42a83df8b0ec6198"
+      "package_json_hash": "91bafe7ee0de4466c9f1fef77ba2e13a38b7f5e7"
+    },
+    "d1-starter-sessions-api-template": {
+      "package_json_hash": "e0bc429eaceb170fa738255f5a683f241d342926"
     }
   }
 }

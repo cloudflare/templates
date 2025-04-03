@@ -14,33 +14,32 @@
     "dash": true
   },
   "dependencies": {
-    "@remix-run/cloudflare": "2.15.2",
-    "@remix-run/react": "2.15.2",
-    "@remix-run/server-runtime": "2.15.2",
-    "isbot": "5.1.17",
+    "@remix-run/cloudflare": "2.16.4",
+    "@remix-run/react": "2.16.4",
+    "@remix-run/server-runtime": "2.16.4",
+    "isbot": "5.1.25",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250204.0",
-    "@remix-run/dev": "2.15.2",
+    "@remix-run/dev": "2.16.4",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
-    "@typescript-eslint/eslint-plugin": "8.18.1",
-    "@typescript-eslint/parser": "8.18.1",
-    "autoprefixer": "10.4.20",
-    "eslint": "9.19.0",
+    "@typescript-eslint/eslint-plugin": "8.29.0",
+    "@typescript-eslint/parser": "8.29.0",
+    "autoprefixer": "10.4.21",
+    "eslint": "9.23.0",
     "eslint-import-resolver-typescript": "3.7.0",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.4",
-    "eslint-plugin-react-hooks": "5.1.0",
-    "postcss": "8.4.49",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "postcss": "8.5.3",
     "tailwindcss": "3.4.17",
-    "typescript": "5.7.2",
+    "typescript": "5.8.2",
     "vite": "5.4.14",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "3.107.3"
+    "wrangler": "3.114.4"
   },
   "engines": {
     "node": ">=20.0.0"

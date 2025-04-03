@@ -76,7 +76,9 @@ class TemplatesConfig {
   async load(): Promise<TemplatesConfig> {
     const cfg = await fs
       .readFile(this.configPath)
-      .then((c) => Config.parse(JSON.parse(c.toString())))
+      .then((c: Buffer<ArrayBufferLike>) =>
+        Config.parse(JSON.parse(c.toString())),
+      )
       .catch(
         () =>
           ({
