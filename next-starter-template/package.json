@@ -19,25 +19,24 @@
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250204.0",
-    "@opennextjs/cloudflare": "0.5.3",
-    "@types/node": "22.9.1",
+    "@opennextjs/cloudflare": "0.6.6",
+    "@types/node": "22.14.0",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "eslint": "8.56.0",
     "eslint-config-next": "14.2.5",
-    "postcss": "8.4.49",
+    "postcss": "8.5.3",
     "tailwindcss": "3.4.17",
-    "typescript": "5.7.2",
-    "wrangler": "3.107.3"
+    "typescript": "5.8.2",
+    "wrangler": "4.7.0"
   },
   "scripts": {
     "build": "next build",
-    "check": "opennextjs-cloudflare && tsc && wrangler deploy --dry-run",
-    "deploy": "opennextjs-cloudflare && wrangler deploy",
+    "check": "opennextjs-cloudflare build && tsc && wrangler deploy --dry-run",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy",
     "dev": "next dev",
     "lint": "next lint",
-    "preview": "opennextjs-cloudflare && wrangler dev",
+    "preview": "opennextjs-cloudflare build && wrangler dev",
     "start": "next start",
     "types": "wrangler types --env-interface CloudflareEnv env.d.ts"
   }
