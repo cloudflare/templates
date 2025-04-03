@@ -13,7 +13,9 @@
   --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --spacing: 20px;
   --border-radius: 4px;
-  --font-main: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-main:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Base styles */
@@ -38,7 +40,12 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-bottom: 0.5rem;
   font-weight: 600;
   line-height: 1.2;
@@ -217,7 +224,9 @@ header {
   box-shadow: var(--box-shadow);
   margin-bottom: var(--spacing);
   padding: var(--spacing);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   cursor: pointer;
   display: block;
 }
@@ -248,7 +257,8 @@ table {
   border-collapse: collapse;
 }
 
-th, td {
+th,
+td {
   padding: 0.75rem;
   text-align: left;
   border-bottom: 1px solid var(--cf-gray-light);
@@ -321,8 +331,14 @@ tr:hover {
 }
 
 @keyframes modalFadeIn {
-  from { opacity: 0; transform: translateY(-50px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .modal-header {
@@ -384,7 +400,9 @@ select {
   background-clip: padding-box;
   border: 1px solid var(--cf-gray);
   border-radius: var(--border-radius);
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 input[type="text"]:focus,
@@ -498,8 +516,14 @@ input[readonly] {
 }
 
 @keyframes toastFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .toast-content {
@@ -538,49 +562,49 @@ input[readonly] {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   header .btn {
     margin-top: 1rem;
     align-self: flex-start;
   }
-  
+
   .detail-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .detail-header .actions {
     margin-top: 0.5rem;
   }
-  
+
   .modal-content {
     margin: 20% auto;
     width: 90%;
   }
-  
+
   .column-row {
     flex-direction: column;
   }
-  
+
   .column-row > div {
     width: 100%;
     margin-bottom: 0.5rem;
   }
-  
+
   .tabs {
     width: 100%;
   }
-  
+
   .tab-btn {
     flex: 1;
     text-align: center;
   }
-  
+
   .action-bar {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .filter-container {
     width: 100%;
   }

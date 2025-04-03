@@ -8,3 +8,5 @@ env.d.ts
 
 pnpm-lock.yaml
 templates.json
+package-lock.json
+yarn.lock
