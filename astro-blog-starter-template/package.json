@@ -22,7 +22,7 @@
     "typescript": "5.8.2"
   },
   "devDependencies": {
-    "wrangler": "4.7.0"
+    "wrangler": "4.7.2"
   },
   "scripts": {
     "astro": "astro",
