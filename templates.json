@@ -1,7 +1,16 @@
 {
   "templates": {
+    "astro-blog-starter-template": {
+      "package_json_hash": "f8e0b7fc89422b57f723a44202fba632985c7a37"
+    },
     "d1-template": {
       "package_json_hash": "2c97a0d623c54f1ac39f6ee219070144d539d973"
+    },
+    "d1-starter-sessions-api-template": {
+      "package_json_hash": "e0bc429eaceb170fa738255f5a683f241d342926"
+    },
+    "mysql-hyperdrive-template": {
+      "package_json_hash": "f11c26bf9229b274ed38cd3450f931004a9a82ad"
     },
     "multiplayer-globe-template": {
       "package_json_hash": "0c5987561c0540e7feae7730d3a935e3e39fb714"
@@ -12,38 +21,29 @@
     "openauth-template": {
       "package_json_hash": "6d3086e9dc59199b7e93122854e35c9363028fcb"
     },
-    "react-router-starter-template": {
-      "package_json_hash": "6137bad169d1b48bf855d2dc5e37199a8ce64171"
-    },
-    "astro-blog-starter-template": {
-      "package_json_hash": "f8e0b7fc89422b57f723a44202fba632985c7a37"
-    },
     "durable-chat-template": {
       "package_json_hash": "a3670519a2bb24bab9aa29f568a82c809ca50bc2"
     },
-    "remix-starter-template": {
-      "package_json_hash": "723605fcd9c421e34b9b2549a1817534466c6a32"
+    "postgres-hyperdrive-template": {
+      "package_json_hash": "0dd9d46af27f1c414e329de027508e883f116d11"
     },
-    "text-to-image-template": {
-      "package_json_hash": "865b80caef117b66a047ccd9e5e37c5b4183827a"
+    "remix-starter-template": {
+      "package_json_hash": "b04fe799e946e68202b40b0f1c2ee56524746b03"
+    },
+    "react-router-starter-template": {
+      "package_json_hash": "13cb60d1b9a5829db07b7f734ad6a80cdf77c85d"
     },
     "saas-admin-template": {
       "package_json_hash": "bca37d8683a8d0311182f9bac0caf9634fd541b9"
     },
+    "text-to-image-template": {
+      "package_json_hash": "865b80caef117b66a047ccd9e5e37c5b4183827a"
+    },
     "to-do-list-kv-template": {
-      "package_json_hash": "4b5e213394d753c6f6f4abab0e77f8d984f7b789"
+      "package_json_hash": "fca3abc453f8711365d9ec7598ecd121c8603a06"
     },
     "vite-react-template": {
       "package_json_hash": "175ed4eb448884cd4e06655b8b69d490d529281d"
-    },
-    "d1-starter-sessions-api-template": {
-      "package_json_hash": "e0bc429eaceb170fa738255f5a683f241d342926"
-    },
-    "mysql-hyperdrive-template": {
-      "package_json_hash": "f11c26bf9229b274ed38cd3450f931004a9a82ad"
-    },
-    "postgres-hyperdrive-template": {
-      "package_json_hash": "0dd9d46af27f1c414e329de027508e883f116d11"
     }
   }
 }
