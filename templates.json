@@ -22,7 +22,7 @@
       "package_json_hash": "6d3086e9dc59199b7e93122854e35c9363028fcb"
     },
     "durable-chat-template": {
-      "package_json_hash": "a3670519a2bb24bab9aa29f568a82c809ca50bc2"
+      "package_json_hash": "eefd983499fdcfcf1542c2b1d41ff9ac6afeb1ae"
     },
     "postgres-hyperdrive-template": {
       "package_json_hash": "0dd9d46af27f1c414e329de027508e883f116d11"
@@ -31,7 +31,7 @@
       "package_json_hash": "b04fe799e946e68202b40b0f1c2ee56524746b03"
     },
     "react-router-starter-template": {
-      "package_json_hash": "13cb60d1b9a5829db07b7f734ad6a80cdf77c85d"
+      "package_json_hash": "f896f54da22063947cba0d970a74e60b49daef32"
     },
     "saas-admin-template": {
       "package_json_hash": "bca37d8683a8d0311182f9bac0caf9634fd541b9"
@@ -43,7 +43,7 @@
       "package_json_hash": "fca3abc453f8711365d9ec7598ecd121c8603a06"
     },
     "vite-react-template": {
-      "package_json_hash": "175ed4eb448884cd4e06655b8b69d490d529281d"
+      "package_json_hash": "c45dff0402ed52ce6bbee3323a325f1e0c67eca3"
     },
     "hello-world-do-template": {
       "package_json_hash": "bb887f2b248739a425023bcd9527544c79c695fc"

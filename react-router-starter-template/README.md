@@ -6,7 +6,7 @@
 
 <!-- dash-content-start -->
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A modern, production-ready template for building full-stack React applications using [React Router](https://reactrouter.com/) and the [Cloudflare Vite plugin](https://developers.cloudflare.com/workers/vite-plugin/).
 
 ## Features
 
@@ -62,6 +62,14 @@ Create a production build:
 
 ```bash
 npm run build
+```
+
+## Previewing the Production Build
+
+Preview the production build locally:
+
+```bash
+npm run preview
 ```
 
 ## Deployment
