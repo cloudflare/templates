@@ -256,6 +256,28 @@ importers:
         specifier: 4.7.0
         version: 4.7.0(@cloudflare/workers-types@4.20250403.0)
 
+  postgres-hyperdrive-template:
+    dependencies:
+      postgres:
+        specifier: 3.4.5
+        version: 3.4.5
+    devDependencies:
+      '@cloudflare/vitest-pool-workers':
+        specifier: 0.8.9
+        version: 0.8.9(@cloudflare/workers-types@4.20250403.0)(@vitest/runner@3.1.1)(@vitest/snapshot@3.1.1)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))
+      '@types/node':
+        specifier: 22.14.0
+        version: 22.14.0
+      typescript:
+        specifier: 5.8.2
+        version: 5.8.2
+      vitest:
+        specifier: 3.0.9
+        version: 3.0.9(@types/debug@4.1.12)(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0)
+      wrangler:
+        specifier: 4.7.0
+        version: 4.7.0(@cloudflare/workers-types@4.20250403.0)
+
   react-router-starter-template:
     dependencies:
       '@react-router/node':
@@ -6653,6 +6675,10 @@ packages:
   postcss@8.5.3:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
+
+  postgres@3.4.5:
+    resolution: {integrity: sha512-cDWgoah1Gez9rN3H4165peY9qfpEo+SA61oQv65O3cRUE1pOEoJWwddwcqKE8XZYjbblOJlYDlLV4h67HrEVDg==}
+    engines: {node: '>=12'}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -16142,6 +16168,8 @@ snapshots:
       nanoid: 3.3.8
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  postgres@3.4.5: {}
 
   prelude-ls@1.2.1: {}
 

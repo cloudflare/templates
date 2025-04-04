@@ -41,6 +41,9 @@
     },
     "mysql-hyperdrive-template": {
       "package_json_hash": "f11c26bf9229b274ed38cd3450f931004a9a82ad"
+    },
+    "postgres-hyperdrive-template": {
+      "package_json_hash": "0dd9d46af27f1c414e329de027508e883f116d11"
     }
   }
 }
