@@ -14,7 +14,7 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "<YOUR_HYPERDRIVE_ID>",
+      "id": "5bbc3c9c39ec4641b7f94344675acd2d",
       "localConnectionString": "<ENTER_LOCAL_CONNECTION_STRING_FOR_LOCAL_DEVELOPMENT>",
     },
   ],

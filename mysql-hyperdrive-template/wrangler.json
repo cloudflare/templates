@@ -10,7 +10,7 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "09f05ae3c14d47eebff77160d8a38d19",
+      "id": "7668c461af3c47969772c19cbd988391",
       "localConnectionString": "<ENTER_LOCAL_CONNECTION_STRING_FOR_LOCAL_DEVELOPMENT>"
     }
   ],

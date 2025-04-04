@@ -44,6 +44,9 @@
     },
     "vite-react-template": {
       "package_json_hash": "175ed4eb448884cd4e06655b8b69d490d529281d"
+    },
+    "hello-world-do-template": {
+      "package_json_hash": "b9afa1d23e97b7edc74c8307b572e3b6051e9437"
     }
   }
 }
