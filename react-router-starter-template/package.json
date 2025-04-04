@@ -33,14 +33,14 @@
     "typescript": "5.8.2",
     "vite": "6.2.5",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "4.7.2"
+    "wrangler": "4.7.0"
   },
   "scripts": {
-    "dev": "react-router dev",
     "build": "react-router build",
-    "preview": "npm run build && vite preview",
-    "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types",
+    "deploy": "npm run build && wrangler deploy",
+    "dev": "react-router dev",
+    "preview": "npm run build && vite preview",
     "typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
   },
   "type": "module"
