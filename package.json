@@ -2,11 +2,11 @@
   "name": "templates",
   "devDependencies": {
     "cli": "workspace:*",
-    "prettier": "3.3.3",
-    "syncpack": "13.0.0",
-    "tsx": "4.19.2",
-    "turbo": "2.3.0",
-    "vitest": "2.1.8"
+    "prettier": "3.5.3",
+    "syncpack": "13.0.3",
+    "tsx": "4.19.3",
+    "turbo": "2.4.4",
+    "vitest": "3.0.9"
   },
   "packageManager": "pnpm@10.2.0",
   "scripts": {

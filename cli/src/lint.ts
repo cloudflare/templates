@@ -28,7 +28,7 @@ const CHECKS = {
   "README.md": [lintReadme],
   "package.json": [lintPackageJson],
 };
-const TARGET_COMPATIBILITY_DATE = "2024-11-01";
+const TARGET_COMPATIBILITY_DATE = "2025-04-01";
 const DASH_CONTENT_START_MARKER = "<!-- dash-content-start -->";
 const DASH_CONTENT_END_MARKER = "<!-- dash-content-end -->";
 
