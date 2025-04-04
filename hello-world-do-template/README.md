@@ -1,6 +1,6 @@
 # Durable Objects Starter
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/hello-world-do)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/hello-world-do-template)
 
 <!-- dash-content-start -->
 
@@ -11,7 +11,7 @@ This is a [Durable Object](https://developers.cloudflare.com/durable-objects/) s
 Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/hello-world-do
+npm create cloudflare@latest -- --template=cloudflare/templates/hello-world-do-template
 ```
 
 ## Getting Started
@@ -40,9 +40,9 @@ You can start editing the project by modifying `src/index.ts`.
 
 ## Deploying To Production
 
-| Command           | Action                                       |
-| :---------------- | :------------------------------------------- |
-| `npm run deploy`  | Deploy your application to Cloudflare    |
+| Command          | Action                                |
+| :--------------- | :------------------------------------ |
+| `npm run deploy` | Deploy your application to Cloudflare |
 
 ## Learn More
 
