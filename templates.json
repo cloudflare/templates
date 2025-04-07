@@ -35,6 +35,9 @@
     },
     "vite-react-template": {
       "package_json_hash": "c472c9a936df94be020f8b51f03dba80493c2444"
+    },
+    "react-router-postgres-ssr-template": {
+      "package_json_hash": "f72dbde321cb239bc4f80f38058aab0cefb9b03f"
     }
   }
 }
