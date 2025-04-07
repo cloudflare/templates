@@ -7,9 +7,27 @@ function MockDataBanner() {
           You're viewing this app with mock data. To connect to a real database:
         </p>
         <ol>
-          <li>Set up a PostgreSQL database (any provider will work)</li>
-          <li>Create a Hyperdrive binding in your wrangler.jsonc file</li>
-          <li>See the README.md for complete instructions</li>
+          <li>
+            <a 
+              href="https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Set up a PostgreSQL database
+            </a>
+          </li>
+          <li>Create a Hyperdrive binding in your wrangler.jsonc file.</li>
+          <li>
+            See the{" "}
+            <a
+              href="https://github.com/cloudflare/templates/tree/main/react-postgres-fullstack-template"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              project README.md
+            </a>{" "}
+            for complete instructions.
+          </li>
         </ol>
       </div>
     </div>
