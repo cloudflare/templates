@@ -14,7 +14,8 @@
       "database",
       "SSR"
     ],
-    "docs_url": "https://developers.cloudflare.com/workers/frameworks/framework-guides/react-router/"
+    "docs_url": "https://developers.cloudflare.com/workers/frameworks/framework-guides/react-router/",
+    "dash": true
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.1.1",
