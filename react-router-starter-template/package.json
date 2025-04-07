@@ -16,7 +16,7 @@
     "dash": true
   },
   "dependencies": {
-    "@react-router/node": "7.4.1",
+    "@react-router/node": "7.5.0",
     "@react-router/serve": "7.4.1",
     "isbot": "5.1.25",
     "react": "19.0.0",
