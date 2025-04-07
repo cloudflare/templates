@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hyperdrive PostgreSQL Manager</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="logo-container">
+          <h1 class="logo">
+            <a href="https://developers.cloudflare.com/hyperdrive/"
+              >HYPERDRIVE</a
+            >
+          </h1>
+          <span class="subtitle">PostgreSQL Manager</span>
+        </div>
+      </header>
+      <div class="description">
+        <a href="https://developers.cloudflare.com/hyperdrive">Hyperdrive</a>
+        accelerates the queries you make to your PostgreSQL or MySQL databases,
+        making it faster to access your data from across the planet, no matter
+        where your users are. Learn more about
+        <a
+          href="https://developers.cloudflare.com/hyperdrive/configuration/how-hyperdrive-works/"
+          >how Hyperdrive works</a
+        >
+        and check out the performance
+        <a href="https://hyperdrive-demo.pages.dev/">demo</a>.
+
+        <br />
+        <br />
+
+        If your values aren't updating when you make changes, you likely have
+        caching enabled on your Hyperdrive configuration. Hyperdrive's
+        <a href="disable caching">built-in caching</a> allows you to serve high
+        throughput of requests with low latency for requests that don't need
+        updated values. You can
+        <a
+          href="https://developers.cloudflare.com/hyperdrive/configuration/query-caching/"
+          >disable caching</a
+        >
+        in your Hyperdrive configuration from the dashboard or using the
+        Wrangler CLI to get most up-to-date values.
+      </div>
+      <main>
+        <!-- Loading View -->
+        <div id="loadingView">
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Connecting to database...</p>
+          </div>
+        </div>
+
+        <!-- Initialize View -->
+        <div id="initializeView" class="hidden">
+          <div class="empty-state">
+            <div class="empty-icon">☁️</div>
+            <h2>Welcome to PostgreSQL Hyperdrive Manager</h2>
+            <p>
+              No tables found. Click the button below to initialize the database
+              with Users and Organizations tables.
+            </p>
+            <button id="initializeTablesBtn" class="btn primary">
+              Initialize Tables
+            </button>
+          </div>
+        </div>
+
+        <!-- Tables Dashboard View -->
+        <div id="dashboardView" class="hidden">
+          <div class="tabs">
+            <button class="tab-btn active" id="usersTabBtn">Users</button>
+            <button class="tab-btn" id="orgsTabBtn">Organizations</button>
+          </div>
+
+          <!-- Users Tab -->
+          <div class="tab-content" id="usersTab">
+            <div class="action-bar">
+              <div class="filter-container">
+                <label for="orgFilter">Filter by Organization:</label>
+                <select id="orgFilter">
+                  <option value="">All Organizations</option>
+                  <!-- Organizations will be added here -->
+                </select>
+              </div>
+              <button class="btn primary" id="addUserBtn">+ Add User</button>
+            </div>
+
+            <div class="card">
+              <div class="table-container">
+                <table id="usersTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Username</th>
+                      <th>Organization</th>
+                      <th>Created At</th>
+                      <th>Updated At</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="usersTableBody">
+                    <!-- User rows will be inserted here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Organizations Tab -->
+          <div class="tab-content hidden" id="orgsTab">
+            <div class="action-bar">
+              <button class="btn primary" id="addOrgBtn">
+                + Add Organization
+              </button>
+            </div>
+
+            <div class="card">
+              <div class="table-container">
+                <table id="orgsTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Created At</th>
+                      <th>Updated At</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="orgsTableBody">
+                    <!-- Organization rows will be inserted here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Add/Edit Organization Modal -->
+    <div id="orgModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orgModalTitle">Add Organization</h5>
+          <button type="button" class="close-btn" data-dismiss="orgModal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="orgForm">
+            <div class="form-group">
+              <label for="orgName">Organization Name</label>
+              <input type="text" id="orgName" required />
+              <div class="error-message" id="orgNameError"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" data-dismiss="orgModal">
+            Cancel
+          </button>
+          <button type="button" class="btn primary" id="saveOrgBtn">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="userModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="userModalTitle">Add User</h5>
+          <button type="button" class="close-btn" data-dismiss="userModal">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="userForm">
+            <input type="hidden" id="userId" />
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" required />
+              <div class="error-message" id="usernameError"></div>
+            </div>
+            <div class="form-group">
+              <label for="userOrg">Organization</label>
+              <select id="userOrg">
+                <option value="">None</option>
+                <!-- Organizations will be added here -->
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" data-dismiss="userModal">
+            Cancel
+          </button>
+          <button type="button" class="btn primary" id="saveUserBtn">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirmDeleteModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Delete</h5>
+          <button
+            type="button"
+            class="close-btn"
+            data-dismiss="confirmDeleteModal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="confirmDeleteMessage">
+            Are you sure you want to delete this item?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn secondary"
+            data-dismiss="confirmDeleteModal"
+          >
+            Cancel
+          </button>
+          <button type="button" class="btn danger" id="confirmDeleteBtn">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container">
+      <div id="toastNotification" class="toast">
+        <div class="toast-content">
+          <div id="toastMessage"></div>
+          <button type="button" class="close-btn" data-dismiss="toast">
+            &times;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

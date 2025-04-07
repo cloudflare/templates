@@ -16,15 +16,15 @@
     "dash": true
   },
   "dependencies": {
-    "@react-router/node": "7.4.1",
-    "@react-router/serve": "7.4.1",
     "isbot": "5.1.25",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-router": "7.4.1"
+    "react-router": "7.5.0"
   },
   "devDependencies": {
-    "@react-router/dev": "7.4.1",
+    "@cloudflare/vite-plugin": "1.0.0",
+    "@cloudflare/workers-types": "^4.20250404.0",
+    "@react-router/dev": "7.5.0",
     "@tailwindcss/vite": "4.1.1",
     "@types/node": "22.14.0",
     "@types/react": "19.0.1",
@@ -33,15 +33,15 @@
     "typescript": "5.8.2",
     "vite": "6.2.5",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "3.114.4"
+    "wrangler": "4.7.0"
   },
   "scripts": {
     "build": "react-router build",
     "deploy": "npm run build && wrangler deploy",
     "dev": "react-router dev",
-    "start": "wrangler dev",
-    "typecheck": "wrangler types && react-router typegen && tsc",
-    "typegen": "wrangler types && react-router typegen"
+    "preview": "npm run build && vite preview",
+    "typecheck": "npm run typegen && tsc -b",
+    "typegen": "wrangler types && react-router-typegen"
   },
   "type": "module"
 }

@@ -1,6 +1,6 @@
 {
   "name": "remix-starter-template",
-  "compatibility_date": "2024-11-01",
+  "compatibility_date": "2025-04-01",
   "main": "./server.ts",
   "assets": {
     "directory": "./build/client"
