@@ -122,8 +122,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-router:
-        specifier: 7.4.1
-        version: 7.4.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 7.5.0
+        version: 7.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
       '@types/react':
         specifier: 18.3.12
@@ -307,7 +307,7 @@ importers:
     devDependencies:
       '@cloudflare/vite-plugin':
         specifier: 1.0.0
-        version: 1.0.0(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250321.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))
+        version: 1.0.0(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250404.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))
       '@cloudflare/workers-types':
         specifier: ^4.20250404.0
         version: 4.20250404.0
@@ -592,8 +592,8 @@ importers:
         version: 19.0.0(react@19.0.0)
     devDependencies:
       '@cloudflare/vite-plugin':
-        specifier: 0.1.20
-        version: 0.1.20(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250404.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))
+        specifier: 1.0.0
+        version: 1.0.0(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250404.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))
       '@eslint/js':
         specifier: 9.23.0
         version: 9.23.0
@@ -1207,12 +1207,6 @@ packages:
     peerDependenciesMeta:
       workerd:
         optional: true
-
-  '@cloudflare/vite-plugin@0.1.20':
-    resolution: {integrity: sha512-MWeKp2Wpzn2nZiuSO++hT0tya4tl+O+zRs7dJEAnXzlfwhw1coFDrz3WZ+5AhSnYTdYePEt05Wj65MYfpFUK6g==}
-    peerDependencies:
-      vite: ^6.1.0
-      wrangler: ^3.101.0 || ^4.0.0
 
   '@cloudflare/vite-plugin@1.0.0':
     resolution: {integrity: sha512-OSSRfJX+EEnkyxWdmx5J90BhFNcVms/v4+RvCwVc+5LtYe91XHoRvr39MIAsmnrpWe/s4d17l9KGXADhfUO3gw==}
@@ -6852,16 +6846,6 @@ packages:
     peerDependencies:
       react: '>=16.8'
 
-  react-router@7.4.1:
-    resolution: {integrity: sha512-Vmizn9ZNzxfh3cumddqv3kLOKvc7AskUT0dC1prTabhiEi0U4A33LmkDOJ79tXaeSqCqMBXBU/ySX88W85+EUg==}
-    engines: {node: '>=20.0.0'}
-    peerDependencies:
-      react: '>=18'
-      react-dom: '>=18'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-
   react-router@7.5.0:
     resolution: {integrity: sha512-estOHrRlDMKdlQa6Mj32gIks4J+AxNsYoE0DbTTxiMy2mPzZuWSDU+N85/r1IlNR7kGfznF3VCUlvc5IUO+B9g==}
     engines: {node: '>=20.0.0'}
@@ -9629,26 +9613,9 @@ snapshots:
     optionalDependencies:
       workerd: 1.20250404.0
 
-  '@cloudflare/vite-plugin@0.1.20(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250404.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))':
+  '@cloudflare/vite-plugin@1.0.0(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250404.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))':
     dependencies:
       '@cloudflare/unenv-preset': 2.3.1(unenv@2.0.0-rc.15)(workerd@1.20250404.0)
-      '@hattip/adapter-node': 0.0.49
-      get-port: 7.1.0
-      miniflare: 4.20250321.1
-      picocolors: 1.1.1
-      tinyglobby: 0.2.12
-      unenv: 2.0.0-rc.15
-      vite: 6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0)
-      wrangler: 4.7.0(@cloudflare/workers-types@4.20250404.0)
-      ws: 8.18.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-      - workerd
-
-  '@cloudflare/vite-plugin@1.0.0(vite@6.2.5(@types/node@22.14.0)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(workerd@1.20250321.0)(wrangler@4.7.0(@cloudflare/workers-types@4.20250404.0))':
-    dependencies:
-      '@cloudflare/unenv-preset': 2.3.1(unenv@2.0.0-rc.15)(workerd@1.20250321.0)
       '@hattip/adapter-node': 0.0.49
       get-port: 7.1.0
       miniflare: 4.20250404.0
@@ -16335,7 +16302,7 @@ snapshots:
       '@remix-run/router': 1.23.0
       react: 18.3.1
 
-  react-router@7.4.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-router@7.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@types/cookie': 0.6.0
       cookie: 1.0.2
