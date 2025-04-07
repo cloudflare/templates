@@ -47,6 +47,9 @@
     },
     "hello-world-do-template": {
       "package_json_hash": "bb887f2b248739a425023bcd9527544c79c695fc"
+    },
+    "react-postgres-fullstack-template": {
+      "package_json_hash": "14b78b0cbeef8cff860a891dae39616a4c136437"
     }
   }
 }
