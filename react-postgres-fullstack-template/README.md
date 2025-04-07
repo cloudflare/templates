@@ -14,7 +14,7 @@ This application demonstrates a full-stack architecture using Cloudflare Workers
 
 - **Frontend**: React SPA with React Router for client-side navigation ([using declarative routing](https://reactrouter.com/en/main/start/overview))
   - Built with Vite and deployed as static assets via Workers
-  - single-page application (SPA) mode enabled in `wrangler.jsonc` for client-side navigation
+  - Single-page application (SPA) mode enabled in `wrangler.jsonc` for client-side navigation
   - Key files:
     - `src/App.jsx` - Main application component and routing setup
     - `src/components/` - React components for UI elements
