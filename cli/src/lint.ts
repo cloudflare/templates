@@ -46,13 +46,28 @@ type FileDiagnostic = {
 };
 
 function lintTemplate(template: Template, fix: boolean): FileDiagnostic[] {
-  return Object.entries(CHECKS).flatMap(([file, linters]) => {
+  let allProblems = Object.entries(CHECKS).flatMap(([file, linters]) => {
     const filePath = path.join(template.path, file);
     const problems = linters.flatMap((linter) =>
       linter(template, filePath, fix),
     );
     return problems.length > 0 ? [{ filePath, problems }] : [];
   });
+
+  if (
+    !fs.existsSync(path.join(template.path, "wrangler.json")) &&
+    !fs.existsSync(path.join(template.path, "wrangler.jsonc"))
+  ) {
+    console.log(`Template ${template.name}`);
+    allProblems.push({
+      filePath: "General template",
+      problems: [
+        "Expected wrangler.json or wrangler.jsonc to exist. Use one of those instead of wrangler.toml!",
+      ],
+    });
+  }
+
+  return allProblems;
 }
 function lintWranglerToml(
   template: Template,
@@ -82,20 +97,54 @@ function lintWranglerJsonC(
   fix: boolean,
 ): string[] {
   if (!fs.existsSync(filePath)) {
-    // wrangler.jsonc shouldn't exist, since we use wrangler.json instead.
     return [];
   }
-  const jsonPath = filePath.replace(/\.jsonc$/, ".json");
-  if (fix && !fs.existsSync(jsonPath)) {
-    // Convert wrangler.jsonc to wrangler.json if wrangler.json does not already
-    // exist.
-    writeJson(jsonPath, readJsonC(filePath));
-    fs.unlinkSync(filePath);
+  const wrangler = readJsonC(filePath) as {
+    compatibility_date?: string;
+    observability?: { enabled?: boolean };
+    upload_source_maps?: boolean;
+    name?: string;
+  };
+
+  // Read package.json to compare names
+  const packageJsonPath = path.join(path.dirname(filePath), "package.json");
+  const packageJson = fs.existsSync(packageJsonPath)
+    ? (readJson(packageJsonPath) as { name?: string })
+    : null;
+
+  if (fix) {
+    wrangler.compatibility_date = TARGET_COMPATIBILITY_DATE;
+    wrangler.observability = { enabled: true };
+    wrangler.upload_source_maps = true;
+    wrangler.name = template.name;
+    writeJson(filePath, wrangler);
     return [];
   }
-  return [
-    `Found ${filePath}. Use --fix to convert wrangler.jsonc to wrangler.json.`,
-  ];
+  const problems = [];
+  if (wrangler.compatibility_date !== TARGET_COMPATIBILITY_DATE) {
+    problems.push(
+      `"compatibility_date" should be set to "${TARGET_COMPATIBILITY_DATE}"`,
+    );
+  }
+  if (wrangler.observability?.enabled !== true) {
+    problems.push(`"observability" should be set to { "enabled": true }`);
+  }
+  if (wrangler.upload_source_maps !== true) {
+    problems.push(`"upload_source_maps" should be set to true`);
+  }
+  if (wrangler.name !== template.name) {
+    problems.push(`"name" should be set to "${template.name}"`);
+  }
+
+  // Check for name matching between wrangler.json and package.json
+  if (wrangler.name !== packageJson?.name) {
+    console.log(`Wrangler name is ${wrangler.name}`);
+    console.log(`Packagejsonc name is ${packageJson?.name}`);
+    problems.push(
+      `"name" in wrangler.json (${wrangler.name}) should match package.json name (${packageJson?.name})`,
+    );
+  }
+  return problems;
 }
 
 function lintWranglerJson(
@@ -104,9 +153,7 @@ function lintWranglerJson(
   fix: boolean,
 ): string[] {
   if (!fs.existsSync(filePath)) {
-    return [
-      `Expected ${filePath} to exist. Use wrangler.json instead of wrangler.toml!`,
-    ];
+    return [];
   }
   const wrangler = readJson(filePath) as {
     compatibility_date?: string;

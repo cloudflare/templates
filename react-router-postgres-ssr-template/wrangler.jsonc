@@ -5,11 +5,18 @@
   "main": "./api/index.js",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {},
+  // "hyperdrive": [
+  //   {
+  //     "binding": "HYPERDRIVE",
+  //     "id": "YOUR_HYPERDRIVE_ID",
+  //     "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
+  //   }
+  // ],
   "placement": {
-    "mode": "smart"
+    "mode": "smart",
   },
   "observability": {
-    "enabled": true
+    "enabled": true,
   },
-  "upload_source_maps": true
+  "upload_source_maps": true,
 }
