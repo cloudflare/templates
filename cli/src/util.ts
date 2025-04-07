@@ -1,3 +1,4 @@
+import { parse } from "jsonc-parser";
 import fs from "node:fs";
 import path from "node:path";
 import toml from "toml";
@@ -67,6 +68,10 @@ function isDashTemplate(packageJsonPath: string): boolean {
 
 export function readToml(filePath: string): unknown {
   return toml.parse(fs.readFileSync(filePath, { encoding: "utf-8" }));
+}
+
+export function readJsonC(filePath: string): unknown {
+  return parse(fs.readFileSync(filePath, { encoding: "utf-8" }));
 }
 
 export function readJson(filePath: string): unknown {

@@ -15,7 +15,9 @@
       "database"
     ],
     "docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
-    "preview_image_url": "https://github.com/cloudflare/templates/blob/staging/react-postgres-fullstack-template/preview-image.png"
+    "preview_image_url": "https://github.com/cloudflare/templates/blob/staging/react-postgres-fullstack-template/preview-image.png",
+    "icon_urls": [],
+    "dash": true
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.1.1",

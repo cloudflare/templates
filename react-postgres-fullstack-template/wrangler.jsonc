@@ -19,15 +19,16 @@
   // Hyperdrive binding is optional - if not provided, app will use mock data
   // To enable Hyperdrive, uncomment and configure properly:
   /*
-  "hyperdrive": [
-    {
-      "binding": "HYPERDRIVE",
-      "id": "YOUR_HYPERDRIVE_ID",
-      "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
-    }
-  ],
-  */
+    "hyperdrive": [
+      {
+        "binding": "HYPERDRIVE",
+        "id": "YOUR_HYPERDRIVE_ID",
+        "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
+      }
+    ],
+    */
   "placement": {
     "mode": "smart",
   },
+  "upload_source_maps": true,
 }
