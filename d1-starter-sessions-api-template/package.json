@@ -23,7 +23,7 @@
     "durable-utils": "0.3.4",
     "typescript": "5.8.2",
     "vitest": "3.0.9",
-    "wrangler": "4.7.0"
+    "wrangler": "4.8.0"
   },
   "scripts": {
     "cf-typegen": "wrangler types",
