@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "cloudflare": {
-    "label": "React + Workers + Static Assets + Vite + Postgres + Hyperdrive + Smart Placement",
+    "label": "React + Postgres Fullstack App",
     "products": [
       "Workers",
       "Hyperdrive",
