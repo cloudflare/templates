@@ -1,8 +1,6 @@
 {
   "name": "react-postgres-fullstack-template",
-  "private": true,
   "version": "0.0.0",
-  "type": "module",
   "cloudflare": {
     "label": "React + Postgres Fullstack App",
     "products": [
@@ -19,38 +17,40 @@
     "docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
     "preview_image_url": "https://github.com/cloudflare/templates/blob/staging/react-postgres-fullstack-template/preview-image.png"
   },
+  "dependencies": {
+    "@tailwindcss/postcss": "4.1.1",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-router": "7.5.0",
+    "react-router-dom": "7.4.0",
+    "tailwindcss": "4.1.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.0.0",
+    "@eslint/js": "9.23.0",
+    "@neondatabase/serverless": "0.10.4",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "@vitejs/plugin-react": "4.3.4",
+    "autoprefixer": "10.4.21",
+    "eslint": "9.23.0",
+    "eslint-plugin-react": "7.37.4",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-refresh": "0.4.19",
+    "globals": "15.15.0",
+    "hono": "4.7.5",
+    "postcss": "8.5.3",
+    "postgres": "3.4.5",
+    "vite": "6.2.5",
+    "wrangler": "4.7.0"
+  },
+  "private": true,
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
     "deploy": "vite build && wrangler deploy",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "@tailwindcss/postcss": "^4.0.14",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router": "^7.4.0",
-    "react-router-dom": "^7.4.0",
-    "tailwindcss": "^4.0.0"
-  },
-  "devDependencies": {
-    "@cloudflare/vite-plugin": "0.1.13",
-    "@eslint/js": "^9.21.0",
-    "@neondatabase/serverless": "^0.10.4",
-    "@types/react": "^19.0.10",
-    "@types/react-dom": "^19.0.4",
-    "@vitejs/plugin-react": "^4.3.4",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^9.21.0",
-    "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
-    "globals": "^15.15.0",
-    "hono": "^4.7.2",
-    "postcss": "^8.5.3",
-    "postgres": "^3.4.5",
-    "vite": "^6.2.5",
-    "wrangler": "4.2.0"
-  }
+  "type": "module"
 }
