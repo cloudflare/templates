@@ -15,7 +15,8 @@
       "fullstack",
       "database",
       "SSR"
-    ]
+    ],
+    "docs_url": "https://developers.cloudflare.com/workers/frameworks/framework-guides/react-router/"
   },
   "scripts": {
     "build": "react-router build",

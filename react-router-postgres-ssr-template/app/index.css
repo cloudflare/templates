@@ -220,7 +220,7 @@ p {
 }
 
 .banner-content {
-  @apply text-blue-900;
+  @apply text-black;
 }
 
 .banner-content h2 {
@@ -237,4 +237,8 @@ p {
 
 .banner-content li {
   @apply mb-1;
+}
+
+.banner-content a {
+  @apply text-blue-600 underline hover:text-blue-800;
 }
