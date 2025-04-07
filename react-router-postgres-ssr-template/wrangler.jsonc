@@ -13,6 +13,6 @@
   //   }
   // ],
   "placement": {
-    "mode": "smart"
-  }
+    "mode": "smart",
+  },
 }
