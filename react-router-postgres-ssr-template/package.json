@@ -41,7 +41,7 @@
     "autoprefixer": "^10.4.21",
     "hono": "^4.7.5",
     "postgres": "^3.4.5",
-    "vite": "^6.2.2",
+    "vite": "^6.2.5",
     "wrangler": "^4.2.0"
   },
   "overrides": {
