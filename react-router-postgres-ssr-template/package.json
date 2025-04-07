@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "cloudflare": {
-    "label": "React Router + SSR + Workers + Static Assets + Vite + Postgres + Hyperdrive + Smart Placement",
+    "label": "React Router SSR template",
     "products": [
       "Workers",
       "Hyperdrive",
