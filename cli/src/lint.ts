@@ -1,6 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getTemplates, readJson, readToml, Template, writeJson } from "./util";
+import {
+  getTemplates,
+  readJson,
+  readJsonC,
+  readToml,
+  Template,
+  writeJson,
+} from "./util";
 
 export type LintConfig = {
   templateDirectory: string;
@@ -24,6 +31,7 @@ export function lint(config: LintConfig) {
 }
 const CHECKS = {
   "wrangler.toml": [lintWranglerToml],
+  "wrangler.jsonc": [lintWranglerJsonC],
   "wrangler.json": [lintWranglerJson],
   "README.md": [lintReadme],
   "package.json": [lintPackageJson],
@@ -65,6 +73,28 @@ function lintWranglerToml(
   }
   return [
     `Found ${filePath}. Use --fix to convert wrangler.toml to wrangler.json.`,
+  ];
+}
+
+function lintWranglerJsonC(
+  template: Template,
+  filePath: string,
+  fix: boolean,
+): string[] {
+  if (!fs.existsSync(filePath)) {
+    // wrangler.jsonc shouldn't exist, since we use wrangler.json instead.
+    return [];
+  }
+  const jsonPath = filePath.replace(/\.jsonc$/, ".json");
+  if (fix && !fs.existsSync(jsonPath)) {
+    // Convert wrangler.jsonc to wrangler.json if wrangler.json does not already
+    // exist.
+    writeJson(jsonPath, readJsonC(filePath));
+    fs.unlinkSync(filePath);
+    return [];
+  }
+  return [
+    `Found ${filePath}. Use --fix to convert wrangler.jsonc to wrangler.json.`,
   ];
 }
 
@@ -234,7 +264,11 @@ function lintPackageJson(
     if (!Array.isArray(pkg.cloudflare.icon_urls)) {
       problems.push('"cloudflare.icon_urls" must be an array');
     }
-    if (!pkg.cloudflare.preview_image_url) {
+    //Ensure either a preview image url is set OR one is intentionally not set by forcing an empty string specification
+    if (
+      !pkg.cloudflare.preview_image_url &&
+      pkg.cloudflare.preview_image_url !== ""
+    ) {
       problems.push('"cloudflare.preview_image_url" must be defined');
     }
   }
