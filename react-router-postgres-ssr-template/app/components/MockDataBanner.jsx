@@ -8,9 +8,9 @@ function MockDataBanner() {
         </p>
         <ol>
           <li>
-            <a 
-              href="https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/" 
-              target="_blank" 
+            <a
+              href="https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/"
+              target="_blank"
               rel="noopener noreferrer"
             >
               Set up a PostgreSQL database

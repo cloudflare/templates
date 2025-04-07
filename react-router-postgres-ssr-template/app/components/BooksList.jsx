@@ -5,29 +5,29 @@ import BookCard from "./BookCard";
 function useBooks(initialBooks = [], filter, sortBy) {
   const [books, setBooks] = useState(initialBooks);
   const [loading, setLoading] = useState(!initialBooks.length);
-  
+
   useEffect(() => {
     // If we have initial books and there's no sorting/filtering needed, don't fetch
     if (initialBooks.length && !filter && !sortBy) {
       setLoading(false);
       return;
     }
-    
+
     const fetchBooks = async () => {
       try {
         const params = new URLSearchParams();
-        if (filter) params.append('genre', filter);
-        if (sortBy) params.append('sort', sortBy);
-        
-        const url = `/api/books${params.toString() ? `?${params.toString()}` : ''}`;
+        if (filter) params.append("genre", filter);
+        if (sortBy) params.append("sort", sortBy);
+
+        const url = `/api/books${params.toString() ? `?${params.toString()}` : ""}`;
         const response = await fetch(url);
-        
+
         if (!response.ok) {
           throw new Error(`API returned status: ${response.status}`);
         }
-        
+
         const data = await response.json();
-        
+
         if (!data.books?.length) {
           console.error("No books data found:", data);
           setBooks([]);
@@ -40,18 +40,18 @@ function useBooks(initialBooks = [], filter, sortBy) {
         setLoading(false);
       }
     };
-    
+
     fetchBooks();
   }, [filter, sortBy, initialBooks.length]);
-  
+
   return { books, loading };
 }
 
 function BooksList({ initialBooks = [], filter, onSelectBook }) {
   const navigate = useNavigate();
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState("");
   const { books, loading } = useBooks(initialBooks, filter, sortBy);
-  
+
   const handleBookSelect = (bookId) => {
     onSelectBook ? onSelectBook(bookId) : navigate(`/book/${bookId}`);
   };
@@ -70,7 +70,7 @@ function BooksList({ initialBooks = [], filter, onSelectBook }) {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <select 
+        <select
           className="py-2 px-4 border border-gray-300 rounded-md bg-white"
           value={sortBy}
           onChange={handleSortChange}
@@ -82,12 +82,12 @@ function BooksList({ initialBooks = [], filter, onSelectBook }) {
           <option value="author_desc">Author (Z-A)</option>
         </select>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {books.map(book => (
-          <BookCard 
-            key={book.id} 
-            book={book} 
+        {books.map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
             onClick={() => handleBookSelect(book.id)}
           />
         ))}

@@ -15,10 +15,10 @@ export async function selectDataSource(c, dbLogic, mockLogic) {
     // Use database if available
     return await dbLogic(c);
   } catch (e) {
-    console.error('API Error:', e);
+    console.error("API Error:", e);
     return Response.json(
       { error: e instanceof Error ? e.message : e },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -38,20 +38,20 @@ export const bookRelatedMockUtils = {
     const book = c.env.MOCK_DATA.find((book) => book.id === bookIdNum);
 
     if (!book) {
-      return Response.json({ error: 'Book not found' }, { status: 404 });
+      return Response.json({ error: "Book not found" }, { status: 404 });
     }
 
     const bookGenre = book.genre;
 
     // Generate mock related data
     const relatedBooks = c.env.MOCK_DATA.filter(
-      (b) => b.genre === bookGenre && b.id !== bookIdNum
+      (b) => b.genre === bookGenre && b.id !== bookIdNum,
     ).slice(0, 3);
 
     // Generate mock recent books
     const recentBooks = c.env.MOCK_DATA.filter((b) => b.id !== bookIdNum).slice(
       0,
-      2
+      2,
     );
 
     // Generate mock genre counts
@@ -73,7 +73,7 @@ export const bookRelatedMockUtils = {
       relatedBooks,
       recentRecommendations: recentBooks,
       genreStats: genreCounts,
-      source: 'mock',
+      source: "mock",
     });
   },
 };
@@ -100,16 +100,16 @@ export const booksMockUtils = {
     // Apply sorting if provided
     if (sort) {
       switch (sort) {
-        case 'title_asc':
+        case "title_asc":
           results.sort((a, b) => a.title.localeCompare(b.title));
           break;
-        case 'title_desc':
+        case "title_desc":
           results.sort((a, b) => b.title.localeCompare(a.title));
           break;
-        case 'author_asc':
+        case "author_asc":
           results.sort((a, b) => a.author.localeCompare(b.author));
           break;
-        case 'author_desc':
+        case "author_desc":
           results.sort((a, b) => b.author.localeCompare(a.author));
           break;
         default:
@@ -120,7 +120,7 @@ export const booksMockUtils = {
 
     return Response.json({
       books: results,
-      source: 'mock',
+      source: "mock",
     });
   },
 
@@ -135,12 +135,12 @@ export const booksMockUtils = {
     const book = c.env.MOCK_DATA.find((book) => book.id === bookIdNum);
 
     if (!book) {
-      return Response.json({ error: 'Book not found' }, { status: 404 });
+      return Response.json({ error: "Book not found" }, { status: 404 });
     }
 
     return Response.json({
       book,
-      source: 'mock',
+      source: "mock",
     });
   },
 };

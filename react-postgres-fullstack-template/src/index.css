@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
 
 @import "tailwindcss";
 
@@ -7,14 +7,14 @@
   /* Define fonts */
   --font-sans: "Noto Sans", system-ui, sans-serif;
   --font-serif: "Noto Serif", serif;
-  
+
   /* Define custom spacing */
   --spacing-sidebar: 280px;
-  
+
   /* Define custom colors */
   --color-paper: #fafafa;
   --color-card: #ffffff;
-  
+
   /* Define border radius */
   --radius-DEFAULT: 0.5rem;
 }

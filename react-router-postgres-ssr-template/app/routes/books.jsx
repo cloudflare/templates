@@ -5,7 +5,7 @@ import { useLoaderData } from "react-router";
 export async function loader({ request }) {
   try {
     const url = new URL(request.url);
-    
+
     // Try fetching from the API
     let data = { books: [] };
     try {
@@ -18,11 +18,11 @@ export async function loader({ request }) {
     } catch (fetchError) {
       console.warn("Books API fetch failed:", fetchError);
     }
-    
+
     // Ensure we have a books array even if the API fails
-    return { 
+    return {
       books: data.books || [],
-      source: data.source // Let the source come directly from the API
+      source: data.source, // Let the source come directly from the API
     };
   } catch (error) {
     console.error("Unexpected error in books loader:", error);
@@ -32,24 +32,17 @@ export async function loader({ request }) {
 
 export default function BooksRoot() {
   const data = useLoaderData();
-  const breadcrumbItems = [
-    { label: 'All Books', value: null }
-  ];
+  const breadcrumbItems = [{ label: "All Books", value: null }];
 
   return (
     <>
-      <Breadcrumbs 
-        items={breadcrumbItems} 
-        onNavigate={() => {}} 
-      />
-      
+      <Breadcrumbs items={breadcrumbItems} onNavigate={() => {}} />
+
       <div className="page-header">
         <h1>My Library</h1>
-        <p className="text-gray-900">
-          Discover your next favorite book
-        </p>
+        <p className="text-gray-900">Discover your next favorite book</p>
       </div>
-      
+
       <BooksList initialBooks={data.books} filter={null} />
     </>
   );

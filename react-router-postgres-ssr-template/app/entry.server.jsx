@@ -7,7 +7,7 @@ export default async function handleRequest(
   responseStatusCode,
   responseHeaders,
   routerContext,
-  _loadContext
+  _loadContext,
 ) {
   let shellRendered = false;
   const userAgent = request.headers.get("user-agent");
@@ -24,7 +24,7 @@ export default async function handleRequest(
           console.error(error);
         }
       },
-    }
+    },
   );
   shellRendered = true;
 

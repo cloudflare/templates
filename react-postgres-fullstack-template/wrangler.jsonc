@@ -10,11 +10,11 @@
   "compatibility_date": "2025-04-01",
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
+    "head_sampling_rate": 1,
   },
   "assets": {
     "binding": "ASSETS",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
   },
   // Hyperdrive binding is optional - if not provided, app will use mock data
   // To enable Hyperdrive, uncomment and configure properly:
@@ -28,6 +28,6 @@
   ],
   */
   "placement": {
-    "mode": "smart"
-  }
+    "mode": "smart",
+  },
 }

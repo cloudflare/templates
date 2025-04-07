@@ -1,11 +1,11 @@
-import { Hono } from 'hono';
-import { selectDataSource, booksMockUtils } from '../lib/utils.js';
+import { Hono } from "hono";
+import { selectDataSource, booksMockUtils } from "../lib/utils.js";
 
 // Create books router
 const booksRouter = new Hono();
 
 // Books list endpoint with filtering and sorting
-booksRouter.get('/', async (c) => {
+booksRouter.get("/", async (c) => {
   const { genre, sort } = c.req.query();
 
   // Use imported mock logic
@@ -26,22 +26,22 @@ booksRouter.get('/', async (c) => {
     // Apply sorting if provided
     if (sort) {
       switch (sort) {
-        case 'title_asc':
+        case "title_asc":
           query = genre
             ? sql`SELECT * FROM public.books WHERE genre = ${genre} ORDER BY title ASC`
             : sql`SELECT * FROM public.books ORDER BY title ASC`;
           break;
-        case 'title_desc':
+        case "title_desc":
           query = genre
             ? sql`SELECT * FROM public.books WHERE genre = ${genre} ORDER BY title DESC`
             : sql`SELECT * FROM public.books ORDER BY title DESC`;
           break;
-        case 'author_asc':
+        case "author_asc":
           query = genre
             ? sql`SELECT * FROM public.books WHERE genre = ${genre} ORDER BY author ASC`
             : sql`SELECT * FROM public.books ORDER BY author ASC`;
           break;
-        case 'author_desc':
+        case "author_desc":
           query = genre
             ? sql`SELECT * FROM public.books WHERE genre = ${genre} ORDER BY author DESC`
             : sql`SELECT * FROM public.books ORDER BY author DESC`;
@@ -58,7 +58,7 @@ booksRouter.get('/', async (c) => {
     // Return results
     return Response.json({
       books: results,
-      source: 'database',
+      source: "database",
     });
   };
 
@@ -66,8 +66,8 @@ booksRouter.get('/', async (c) => {
 });
 
 // Book details endpoint
-booksRouter.get('/:id', async (c) => {
-  const bookId = c.req.param('id');
+booksRouter.get("/:id", async (c) => {
+  const bookId = c.req.param("id");
 
   // Use imported mock logic
   const mockLogic = async (c) => {
@@ -82,12 +82,12 @@ booksRouter.get('/:id', async (c) => {
     const book = await sql`SELECT * FROM public.books WHERE id = ${bookId}`;
 
     if (book.length === 0) {
-      return Response.json({ error: 'Book not found' }, { status: 404 });
+      return Response.json({ error: "Book not found" }, { status: 404 });
     }
 
     return Response.json({
       book: book[0],
-      source: 'database',
+      source: "database",
     });
   };
 

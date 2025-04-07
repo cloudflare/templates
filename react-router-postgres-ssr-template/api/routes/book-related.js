@@ -1,12 +1,12 @@
-import { Hono } from 'hono';
-import { selectDataSource, bookRelatedMockUtils } from '../lib/utils.js';
+import { Hono } from "hono";
+import { selectDataSource, bookRelatedMockUtils } from "../lib/utils.js";
 
 // Create book related router
 const bookRelatedRouter = new Hono();
 
 // Related books endpoint
-bookRelatedRouter.get('/', async (c) => {
-  const bookId = c.req.param('id');
+bookRelatedRouter.get("/", async (c) => {
+  const bookId = c.req.param("id");
 
   // Use the imported mock logic
   const mockLogic = async (c) => {
@@ -20,7 +20,7 @@ bookRelatedRouter.get('/', async (c) => {
     const book = await sql`SELECT * FROM public.books WHERE id = ${bookId}`;
 
     if (book.length === 0) {
-      return Response.json({ error: 'Book not found' }, { status: 404 });
+      return Response.json({ error: "Book not found" }, { status: 404 });
     }
 
     let relatedBooks = [];
@@ -52,7 +52,7 @@ bookRelatedRouter.get('/', async (c) => {
       relatedBooks,
       recentRecommendations: recentBooks,
       genreStats: genreCounts,
-      source: 'database',
+      source: "database",
     });
   };
 

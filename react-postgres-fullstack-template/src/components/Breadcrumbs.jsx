@@ -1,19 +1,19 @@
-import { Link } from 'react-router';
+import { Link } from "react-router";
 
 function Breadcrumbs({ items, onNavigate }) {
   return (
     <nav className="breadcrumbs">
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
-        
+
         // Determine the appropriate link based on the item value
-        let linkTo = '/';
-        if (item.value && item.value !== 'book') {
+        let linkTo = "/";
+        if (item.value && item.value !== "book") {
           linkTo = `/genre/${encodeURIComponent(item.value)}`;
-        } else if (item.value === 'book') {
+        } else if (item.value === "book") {
           linkTo = null; // Current book page, no link
         }
-        
+
         return (
           <div key={index} className="breadcrumb-item">
             {isLast ? (
@@ -25,7 +25,7 @@ function Breadcrumbs({ items, onNavigate }) {
                     {item.label}
                   </Link>
                 ) : (
-                  <span 
+                  <span
                     className="breadcrumb-link"
                     onClick={() => onNavigate && onNavigate(item.value)}
                   >
