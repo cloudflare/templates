@@ -2,6 +2,21 @@
   "name": "react-router-postgres-ssr-template",
   "private": true,
   "type": "module",
+  "cloudflare": {
+    "label": "React Router + SSR + Workers + Static Assets + Vite + Postgres + Hyperdrive + Smart Placement",
+    "products": [
+      "Workers",
+      "Hyperdrive",
+      "Cloudflare Vite plugin",
+      "Workers Static Assets",
+      "Smart Placement"
+    ],
+    "categories": [
+      "fullstack",
+      "database",
+      "SSR"
+    ]
+  },
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
