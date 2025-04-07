@@ -68,6 +68,12 @@
       ],
       "dependencies": ["tailwindcss"],
       "range": "^3.4.0"
+    },
+    {
+      "label": "Allow Wrangler 3.x for react router/remix templates",
+      "packages": ["remix-starter-template", "to-do-list-kv-template"],
+      "dependencies": ["wrangler"],
+      "range": "^3.114.4"
     }
   ]
 }

@@ -1,43 +1,55 @@
 {
   "templates": {
+    "astro-blog-starter-template": {
+      "package_json_hash": "f8e0b7fc89422b57f723a44202fba632985c7a37"
+    },
     "d1-template": {
-      "package_json_hash": "86be6f6aeac6902cab5896dd29c2a4065387bd84"
+      "package_json_hash": "2c97a0d623c54f1ac39f6ee219070144d539d973"
+    },
+    "d1-starter-sessions-api-template": {
+      "package_json_hash": "e0bc429eaceb170fa738255f5a683f241d342926"
+    },
+    "mysql-hyperdrive-template": {
+      "package_json_hash": "f11c26bf9229b274ed38cd3450f931004a9a82ad"
     },
     "multiplayer-globe-template": {
-      "package_json_hash": "6a2c2424c37b39337d29d25e5d1c7e517eedd5a0"
+      "package_json_hash": "0c5987561c0540e7feae7730d3a935e3e39fb714"
     },
     "next-starter-template": {
-      "package_json_hash": "5ca339b3524fd8760c74a2a7b7d1a6fe5198f182"
+      "package_json_hash": "fe76cbee3d0745adc6b430a4a9287ad68d68f9ee"
     },
     "openauth-template": {
-      "package_json_hash": "3a1f9719ed7e6d1bb002614b5bf26afd5d01ef60"
-    },
-    "react-router-starter-template": {
-      "package_json_hash": "3412c01983023f4bf06533ea3be75810acffdd80"
-    },
-    "astro-blog-starter-template": {
-      "package_json_hash": "983e80902dd85792091fe0a731c56adf006583b0"
+      "package_json_hash": "6d3086e9dc59199b7e93122854e35c9363028fcb"
     },
     "durable-chat-template": {
-      "package_json_hash": "ea56d6b4bfe7dec69235849110fd36f6c83f4418"
+      "package_json_hash": "eefd983499fdcfcf1542c2b1d41ff9ac6afeb1ae"
+    },
+    "postgres-hyperdrive-template": {
+      "package_json_hash": "0dd9d46af27f1c414e329de027508e883f116d11"
     },
     "remix-starter-template": {
-      "package_json_hash": "75e8834a84c433a1593f4b3a67e0a1e8459c2f5d"
+      "package_json_hash": "b04fe799e946e68202b40b0f1c2ee56524746b03"
     },
-    "text-to-image-template": {
-      "package_json_hash": "cce3be28eee879f4d18aef7d76147a9682e0eafb"
+    "react-router-starter-template": {
+      "package_json_hash": "f896f54da22063947cba0d970a74e60b49daef32"
     },
     "saas-admin-template": {
-      "package_json_hash": "a1421fd0b1a2c2c3955c1795c2bf3d26cf3dedae"
+      "package_json_hash": "bca37d8683a8d0311182f9bac0caf9634fd541b9"
+    },
+    "text-to-image-template": {
+      "package_json_hash": "865b80caef117b66a047ccd9e5e37c5b4183827a"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "9045137a1451c0eed6af9bd91a6ea40d51308575"
+      "package_json_hash": "fca3abc453f8711365d9ec7598ecd121c8603a06"
     },
     "vite-react-template": {
-      "package_json_hash": "c472c9a936df94be020f8b51f03dba80493c2444"
+      "package_json_hash": "c45dff0402ed52ce6bbee3323a325f1e0c67eca3"
+    },
+    "hello-world-do-template": {
+      "package_json_hash": "bb887f2b248739a425023bcd9527544c79c695fc"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "f72dbde321cb239bc4f80f38058aab0cefb9b03f"
+      "package_json_hash": "341c1c68b99bd7c4c02c497c21193a6aad0b34e2"
     }
   }
 }
