@@ -50,6 +50,9 @@
     },
     "react-router-postgres-ssr-template": {
       "package_json_hash": "341c1c68b99bd7c4c02c497c21193a6aad0b34e2"
+    },
+    "react-postgres-fullstack-template": {
+      "package_json_hash": "14b78b0cbeef8cff860a891dae39616a4c136437"
     }
   }
 }
