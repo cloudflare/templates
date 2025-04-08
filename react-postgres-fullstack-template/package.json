@@ -43,7 +43,7 @@
     "hono": "4.7.5",
     "postcss": "8.5.3",
     "postgres": "3.4.5",
-    "vite": "6.2.5",
+    "vite": "5.4.17",
     "wrangler": "4.7.0"
   },
   "private": true,
