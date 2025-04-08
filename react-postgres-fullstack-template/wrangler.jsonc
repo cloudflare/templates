@@ -1,3 +1,7 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "react-postgres-fullstack-template",
@@ -6,11 +10,23 @@
   "compatibility_date": "2025-04-01",
   "observability": {
     "enabled": true,
+    "head_sampling_rate": 1,
   },
   "assets": {
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
   },
+  // Hyperdrive binding is optional - if not provided, app will use mock data
+  // To enable Hyperdrive, uncomment and configure properly:
+  /*
+    "hyperdrive": [
+      {
+        "binding": "HYPERDRIVE",
+        "id": "YOUR_HYPERDRIVE_ID",
+        "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
+      }
+    ],
+    */
   "placement": {
     "mode": "smart",
   },
