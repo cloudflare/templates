@@ -14,6 +14,8 @@ export type LintConfig = {
   fix: boolean;
 };
 
+const integrationsPlatCategories = ["starter", "storage", "ai"];
+
 export function lint(config: LintConfig) {
   const templates = getTemplates(config.templateDirectory);
   const results = templates.flatMap((template) =>
@@ -307,6 +309,13 @@ function lintPackageJson(
     }
     if (!Array.isArray(pkg.cloudflare.categories)) {
       problems.push('"cloudflare.categories" must be an array');
+    } else {
+      pkg.cloudflare.categories.forEach((cat) => {
+        !["starter", "storage", "ai"].includes(cat) &&
+          problems.push(
+            `"cloudflare.categories" lists "${cat}", but can only include "starter", "storage", and "ai".`,
+          );
+      });
     }
     if (!Array.isArray(pkg.cloudflare.icon_urls)) {
       problems.push('"cloudflare.icon_urls" must be an array');

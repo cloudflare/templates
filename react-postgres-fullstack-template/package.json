@@ -11,8 +11,8 @@
       "Smart Placement"
     ],
     "categories": [
-      "fullstack",
-      "database"
+      "starter",
+      "storage"
     ],
     "docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
     "preview_image_url": "https://github.com/cloudflare/templates/blob/staging/react-postgres-fullstack-template/preview-image.png",
