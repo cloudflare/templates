@@ -1,24 +1,48 @@
 # React + Vite + PostgreSQL + Hyperdrive on Cloudflare Workers
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/staging/react-postgres-fullstack-template)
+
+![Build a library of books using Cloudflare Workes Assets, Hono, and Hyperdrive](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cd71c67a-253f-477d-022c-2f90cb4b3d00/public)
+
 <!-- dash-content-start -->
 
-This project demonstrates a full-stack application with a React single-page application frontend, served as [static assets through Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/). The backend
-consists of API routes built with Hono, running on Cloudflare Workers, connecting to a PostgreSQL database through [Hyperdrive](https://developers.cloudflare.com/hyperdrive/). [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) is enabled to
-automatically position your Worker closer to your database for reduced latency.
+Build a library of books using [Cloudflare Workers Assets](https://developers.cloudflare.com/workers/static-assets/), Hono API routes, and [Cloudflare Hyperdrive](https://developers.cloudflare.com/hyperdrive/) to connect to a PostgreSQL database. [Workers Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) is enabled to automatically position your Worker closer to your database for reduced latency.
+
+Browse a categorized collection of books in this application. To learn more about a title, click on it to navigate to an expanded view. The collection can also be filtered by genre. If a custom database connection is not provided, a fallback set of books will be used.
+
+If creating a personal database, books are expected to be stored in the following format:
+```sql
+(INDEX, 'BOOK_TITLE', 'BOOK_AUTHOR', 'BOOK_DESCRIPTION', '/images/books/BOOK_COVER_IMAGE.jpg', 'BOOK_GENRE')
+```
+
+## Features
+
+- 📖 Dynamic routes
+- 📦 Asset bundling and optimization
+- 🌐 Optimized Worker placement
+- 🚀 Database connection via Hyperdrive
+- 🎉 TailwindCSS for styling
+- 🐳 Docker for container management
+
+## Smart Placement Benefits
+
+This application uses Cloudflare Workers' [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) feature to optimize performance.
+
+- **What is Smart Placement?** Smart Placement [can dynamically position](https://developers.cloudflare.com/workers/configuration/smart-placement/#understand-how-smart-placement-works) your Worker in Cloudflare's network to minimize latency between your Worker and database.
+
+- **How does it work?** The application makes multiple database round trips per request. Smart Placement analyzes this traffic pattern and can choose to position the Worker and Hyperdrive closer to your deployed database to reduce latency. This can significantly improve response times, especially for read-intensive operations requiring multiple database queries — as demonstrated in this application's book-related API endpoints.
+
+- **No configuration needed:** Smart Placement works automatically when enabled in `wrangler.jsonc` with `"mode": "smart"`.
 
 <!-- dash-content-end -->
 
-## Architecture Overview
+## Tech Stack
 
-This application demonstrates a full-stack architecture using Cloudflare Workers, with the following structure:
-
-- **Frontend**: React SPA with React Router for client-side navigation ([using declarative routing](https://reactrouter.com/en/main/start/overview))
-
+- **Frontend**: React + React Router for client-side navigation [using declarative routing](https://reactrouter.com/en/main/start/overview)
   - Built with Vite and deployed as static assets via Workers
-  - single-page application (SPA) mode enabled in `wrangler.jsonc` for client-side navigation
+  - React SPA mode enabled in `wrangler.jsonc` for client-side navigation
 
-- **Backend**: API routes served by a Worker using Hono framework
-
+- **Backend**: API routes served by a Worker using [Hono](https://hono.dev/)
   - API endpoints defined in `/api/routes` directory
   - Automatic fallback to mock data when database is unavailable
 
@@ -26,75 +50,27 @@ This application demonstrates a full-stack architecture using Cloudflare Workers
   - Smart Placement enabled for optimal performance
   - Handles missing connection strings or connection failures
 
-## Smart Placement Benefits
+## Get Started
 
-This application uses Cloudflare Workers' [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement/) feature to optimize performance:
+To run the applicaton locally, use the Docker container defined in `docker-compose.yml`:
 
-- **What is Smart Placement?** Smart Placement [can dynamically position](https://developers.cloudflare.com/workers/configuration/smart-placement/#understand-how-smart-placement-works) your Worker in Cloudflare's network to minimize latency between your Worker and database.
+1. `docker-compose up -d`
+   - Creates container with PostgreSQL and seeds it with the data found in `init.sql`
+2. `npm run dev`
 
-- **Why it's enabled in this app:** The application makes multiple database round trips per request. Smart Placement analyzes this traffic pattern and can choose to position the Worker and Hyperdrive closer to your deployed database to reduce latency.
+If you update `init.sql`, be sure to run `docker-compose down -v` to teardown the previous image.
 
-- **Performance implications:** This can significantly improve response times, especially for read-intensive operations requiring multiple database queries, as demonstrated in the book-related API endpoints.
+### Setting Up Hyperdrive Bindings
 
-- **No configuration needed:** Smart Placement works automatically when enabled in `wrangler.jsonc` with `"mode": "smart"`.
-
-## Rendering Modes
-
-This application uses two main rendering modes:
-
-1. **Single-page application (SPA)**: The entire application is rendered client-side using React Router, with assets served by Cloudflare Workers.
-
-2. **API-driven data fetching**: Backend data is retrieved from API endpoints that connect to either:
-   - A real PostgreSQL database via Hyperdrive (production mode)
-   - Mock data automatically provided when no database is available (demo mode)
-
-## Deployment Options
-
-This application can be deployed in two ways:
-
-### Option 1: With Database (Full Experience)
-
-1. Run `npm i`
-2. Sign up for a PostgreSQL provider like [Neon](https://neon.tech) and create a database
-3. Load the sample data using the provided SQL script:
-   - The `/init.sql` file contains all database schema and sample data
-   - You can either:
-     - Copy and paste the contents into your database provider's SQL editor
-     - Or use a command line tool like `psql`: `psql -h hostname -U username -d dbname -f init.sql`
-4. Create a Hyperdrive connection by running:
-   ```
-   npx wrangler hyperdrive create <YOUR_CONFIG_NAME> --connection-string="<postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name>"
-   ```
-5. Uncomment and update the Hyperdrive binding in `wrangler.jsonc` with the ID from step 4:
-   ```json
-   "hyperdrive": [
-     {
-       "binding": "HYPERDRIVE",
-       "id": "YOUR_HYPERDRIVE_ID",
-       "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
-     }
-   ]
-   ```
-6. Deploy with `npm run deploy`
-
-### Option 2: Without Database (Demo Mode)
-
-1. Run `npm i`
-2. Keep the Hyperdrive binding commented out in `wrangler.jsonc` (this is the default)
-3. Deploy with `npm run deploy`
-4. The app will automatically use mock data instead of a real database
-
-## Setting Up Hyperdrive Bindings
-
-Hyperdrive is Cloudflare's database connector that provides optimized connections between your Workers and various database providers. Here's a detailed explanation of how to set it up (or you can read more in [documentation](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/):
+Cloudflare's Hyperdrive is database connector that optimizes queries from your Workers to various database providers using a connection string. Here's a detailed explanation of how to set it up:
 
 1. **Create a Hyperdrive configuration**:
 
-   ```
+   ```sh
    npx wrangler hyperdrive create my-hyperdrive-config --connection-string="postgres://user:password@hostname:port/dbname"
    ```
 
-   This command will return a Hyperdrive ID that you'll need for your configuration.
+   This command will return the Hyperdrive ID that you'll need for your configuration.
 
 2. **Configure Hyperdrive in wrangler.jsonc**:
 
@@ -122,25 +98,52 @@ Hyperdrive is Cloudflare's database connector that provides optimized connection
    - Hyperdrive binding is not configured
    - Database connection fails for any reason
 
-## Running Locally
+For a more detailed walkthrough, see the [Hyperdrive documentation](https://developers.cloudflare.com/hyperdrive/configuration/connect-to-postgres/).
 
-To run locally, you can use the Docker container defined in the docker compose:
+### More on Docker's Use in Local Development
 
-1. `docker-compose up -d`
-   - Creates container with PostgreSQL and seeds it with the "init.sql" data
-2. `npm run dev`
+When developing locally with Hyperdrive, you **must** use the Docker setup provided. This is because Hyperdrive's local dev mode requires a database running on localhost with the exact configuration specified in `localConnectionString`.
 
-If you update the "init.sql" file, make sure to run `docker-compose down -v` to teardown.
+The Docker setup in this template ensures the PostgreSQL instance is properly configured to work with Hyperdrive locally. The container automatically runs `init.sql` to create tables and load sample data.
 
-### Why Docker is Required for Local Development
+While remote database use in local dev with Hyperdrive is not currently supported, it is being worked on.
 
-When developing locally with Hyperdrive, you **must** use the Docker setup provided:
+## Ways to Deploy
 
-- **Local connection requirements**: Hyperdrive's local development mode requires a database running on localhost with the exact configuration specified in `localConnectionString`.
-- **Compatibility**: The Docker setup ensures the PostgreSQL instance is properly configured to work with the local Hyperdrive development environment.
-- **Automatic configuration**: The container automatically runs the init.sql script to create tables and load sample data.
+There are two different ways to deploy this application: Full Experience and Demo Mode.
 
-This approach is the recommended and supported method for local development with this application. Attempting to use a remote database for local development with Hyperdrive is not currently supported, but is being worked on.
+### Option 1: With Database (Full Experience)
+
+1. Run `npm i`
+2. Sign up for a PostgreSQL provider and create a database
+    - Quickstart options: [Supabase](https://supabase.com/), [Neon](https://neon.tech/)
+3. Load the sample data using the provided SQL script:
+    - The `/init.sql` file contains all database schema and sample data
+    - You can either:
+      - Copy and paste the contents into your database provider's SQL editor
+      - Or use a command line tool like `psql`: `psql -h hostname -U username -d dbname -f init.sql`
+4. Create a Hyperdrive connection by running:
+   ```sh
+   npx wrangler hyperdrive create <YOUR_CONFIG_NAME> --connection-string="<postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name>"
+   ```
+5. Uncomment and update the Hyperdrive binding in `wrangler.jsonc` with the ID from step 4:
+   ```json
+   "hyperdrive": [
+     {
+       "binding": "HYPERDRIVE",
+       "id": "YOUR_HYPERDRIVE_ID",
+       "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
+     }
+   ]
+   ```
+6. Deploy with `npm run deploy`
+
+### Option 2: Without Database (Demo Mode)
+
+1. Run `npm i`
+2. Keep the Hyperdrive binding commented out in `wrangler.jsonc` (this is the default)
+3. Deploy with `npm run deploy`
+4. The app will automatically use mock data instead of a real database
 
 ## Resources
 
