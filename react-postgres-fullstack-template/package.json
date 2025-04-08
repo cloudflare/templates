@@ -1,12 +1,12 @@
 {
   "name": "react-postgres-fullstack-template",
+  "description": "Deploy your own library of books using Postgres and Workers.",
   "version": "0.0.0",
   "cloudflare": {
     "label": "React + Postgres Fullstack App",
     "products": [
       "Workers",
       "Hyperdrive",
-      "Cloudflare Vite plugin",
       "Workers Static Assets",
       "Smart Placement"
     ],
@@ -15,7 +15,7 @@
       "storage"
     ],
     "docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/d8db5141-a2b8-4084-5e55-edb98b4f0d00/public",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cd71c67a-253f-477d-022c-2f90cb4b3d00/public",
     "icon_urls": [],
     "dash": true
   },
