@@ -11,6 +11,7 @@ Build a library of books using [Cloudflare Workers Assets](https://developers.cl
 Browse a categorized collection of books in this application. To learn more about a title, click on it to navigate to an expanded view. The collection can also be filtered by genre. If a custom database connection is not provided, a fallback set of books will be used.
 
 If creating a personal database, books are expected to be stored in the following format:
+
 ```sql
 (INDEX, 'BOOK_TITLE', 'BOOK_AUTHOR', 'BOOK_DESCRIPTION', '/images/books/BOOK_COVER_IMAGE.jpg', 'BOOK_GENRE')
 ```
@@ -39,10 +40,12 @@ This application uses Cloudflare Workers' [Smart Placement](https://developers.c
 ## Tech Stack
 
 - **Frontend**: React + React Router for client-side navigation [using declarative routing](https://reactrouter.com/en/main/start/overview)
+
   - Built with Vite and deployed as static assets via Workers
   - React SPA mode enabled in `wrangler.jsonc` for client-side navigation
 
 - **Backend**: API routes served by a Worker using [Hono](https://hono.dev/)
+
   - API endpoints defined in `/api/routes` directory
   - Automatic fallback to mock data when database is unavailable
 
@@ -116,12 +119,12 @@ There are two different ways to deploy this application: Full Experience and Dem
 
 1. Run `npm i`
 2. Sign up for a PostgreSQL provider and create a database
-    - Quickstart options: [Supabase](https://supabase.com/), [Neon](https://neon.tech/)
+   - Quickstart options: [Supabase](https://supabase.com/), [Neon](https://neon.tech/)
 3. Load the sample data using the provided SQL script:
-    - The `/init.sql` file contains all database schema and sample data
-    - You can either:
-      - Copy and paste the contents into your database provider's SQL editor
-      - Or use a command line tool like `psql`: `psql -h hostname -U username -d dbname -f init.sql`
+   - The `/init.sql` file contains all database schema and sample data
+   - You can either:
+     - Copy and paste the contents into your database provider's SQL editor
+     - Or use a command line tool like `psql`: `psql -h hostname -U username -d dbname -f init.sql`
 4. Create a Hyperdrive connection by running:
    ```sh
    npx wrangler hyperdrive create <YOUR_CONFIG_NAME> --connection-string="<postgres://user:password@HOSTNAME_OR_IP_ADDRESS:PORT/database_name>"
