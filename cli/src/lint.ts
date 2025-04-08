@@ -321,10 +321,7 @@ function lintPackageJson(
       problems.push('"cloudflare.icon_urls" must be an array');
     }
     //Ensure either a preview image url is set OR one is intentionally not set by forcing an empty string specification
-    if (
-      !pkg.cloudflare.preview_image_url &&
-      pkg.cloudflare.preview_image_url !== ""
-    ) {
+    if (!pkg.cloudflare.preview_image_url) {
       problems.push('"cloudflare.preview_image_url" must be defined');
     }
   }
