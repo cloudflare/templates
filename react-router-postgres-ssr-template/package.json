@@ -1,5 +1,6 @@
 {
   "name": "react-router-postgres-ssr-template",
+  "description": "Deploy your own library of books using Postgres and Workers.",
   "cloudflare": {
     "label": "React Router SSR template",
     "products": [
@@ -16,7 +17,7 @@
     "docs_url": "https://developers.cloudflare.com/workers/frameworks/framework-guides/react-router/",
     "icon_urls": [],
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/8db618d7-0c0e-4ab5-f6f5-721e45b80c00/public",
-    "dash": true
+    "dash": false
   },
   "dependencies": {
     "@tailwindcss/postcss": "4.1.1",
