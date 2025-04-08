@@ -37,7 +37,7 @@
     "hono": "4.7.5",
     "postgres": "3.4.5",
     "vite": "6.2.5",
-    "wrangler": "4.7.0"
+    "wrangler": "4.9.0"
   },
   "engines": {
     "node": ">=20.0.0"
