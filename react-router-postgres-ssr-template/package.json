@@ -15,7 +15,7 @@
     ],
     "docs_url": "https://developers.cloudflare.com/workers/frameworks/framework-guides/react-router/",
     "icon_urls": [],
-    "preview_image_url": "",
+    "preview_image_url": "https://api.cloudflare.com/client/v4/accounts/8ae4e74afb48193eb3d72bbfcc499b70/images/v1/8db618d7-0c0e-4ab5-f6f5-721e45b80c00",
     "dash": true
   },
   "dependencies": {
