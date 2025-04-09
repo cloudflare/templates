@@ -22,7 +22,7 @@
     "react-router": "7.5.0"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.0.2",
+    "@cloudflare/vite-plugin": "1.0.4",
     "@cloudflare/workers-types": "^4.20250404.0",
     "@react-router/dev": "7.5.0",
     "@tailwindcss/vite": "4.1.1",
