@@ -7,6 +7,7 @@ import {
   readToml,
   Template,
   writeJson,
+  writeJsonC,
 } from "./util";
 
 export type LintConfig = {
@@ -119,7 +120,7 @@ function lintWranglerJsonC(
     wrangler.observability = { enabled: true };
     wrangler.upload_source_maps = true;
     wrangler.name = template.name;
-    writeJson(filePath, wrangler);
+    writeJsonC(filePath, wrangler);
     return [];
   }
   const problems = [];

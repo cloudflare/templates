@@ -1,4 +1,4 @@
-import { parse } from "jsonc-parser";
+import { parse, stringify } from "comment-json";
 import fs from "node:fs";
 import path from "node:path";
 import toml from "toml";
@@ -72,6 +72,10 @@ export function readToml(filePath: string): unknown {
 
 export function readJsonC(filePath: string): unknown {
   return parse(fs.readFileSync(filePath, { encoding: "utf-8" }));
+}
+
+export function writeJsonC(filePath: string, object: unknown) {
+  fs.writeFileSync(filePath, stringify(object, undefined, 2) + "\n");
 }
 
 export function readJson(filePath: string): unknown {
