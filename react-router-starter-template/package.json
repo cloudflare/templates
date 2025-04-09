@@ -41,7 +41,7 @@
     "dev": "react-router dev",
     "preview": "npm run build && vite preview",
     "typecheck": "npm run typegen && tsc -b",
-    "typegen": "wrangler types && react-router-typegen"
+    "typegen": "wrangler types && react-router typegen"
   },
   "type": "module"
 }
