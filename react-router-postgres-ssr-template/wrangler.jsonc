@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "react-router-postgres-ssr-template",
+  "compatibility_date": "2025-04-01",
+  "main": "./api/index.js",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {},
+  // "hyperdrive": [
+  //   {
+  //     "binding": "HYPERDRIVE",
+  //     "id": "YOUR_HYPERDRIVE_ID",
+  //     "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
+  //   }
+  // ],
+  "placement": {
+    "mode": "smart",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "upload_source_maps": true,
+}
