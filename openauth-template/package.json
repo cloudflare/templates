@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "typescript": "5.8.2",
-    "wrangler": "4.7.0"
+    "wrangler": "4.10.0"
   },
   "scripts": {
     "check": "tsc && wrangler --experimental-json-config deploy --dry-run",
