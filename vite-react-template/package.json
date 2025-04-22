@@ -36,6 +36,7 @@
     "wrangler": "4.12.0"
   },
   "scripts": {
+    "check": "tsc && vite build && wrangler deploy --dry-run",
     "build": "tsc -b && vite build",
     "cf-typegen": "wrangler types",
     "deploy": "npm run build && wrangler deploy",

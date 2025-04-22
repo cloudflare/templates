@@ -26,6 +26,7 @@
     "wrangler": "4.12.0"
   },
   "scripts": {
+    "check": "tsc && wrangler deploy --dry-run",
     "cf-typegen": "wrangler types",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",

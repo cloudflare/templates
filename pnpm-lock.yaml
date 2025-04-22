@@ -323,6 +323,9 @@ importers:
       '@neondatabase/serverless':
         specifier: 0.10.4
         version: 0.10.4
+      '@types/node':
+        specifier: 22.14.1
+        version: 22.14.1
       '@types/react':
         specifier: 19.0.10
         version: 19.0.10
@@ -402,6 +405,9 @@ importers:
       '@react-router/dev':
         specifier: 7.5.1
         version: 7.5.1(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(react-router@7.5.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(terser@5.16.9)(tsx@4.19.3)(typescript@5.8.3)(vite@6.3.2(@types/node@22.14.1)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0))(wrangler@4.12.0)(yaml@2.7.0)
+      '@types/node':
+        specifier: 22.14.1
+        version: 22.14.1
       autoprefixer:
         specifier: 10.4.21
         version: 10.4.21(postcss@8.5.3)

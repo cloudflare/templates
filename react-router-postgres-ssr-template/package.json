@@ -33,6 +33,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.0.8",
     "@react-router/dev": "7.5.1",
+    "@types/node": "22.14.1",
     "autoprefixer": "10.4.21",
     "hono": "4.7.7",
     "postgres": "3.4.5",
@@ -49,8 +50,9 @@
   },
   "private": true,
   "scripts": {
+    "check": "vite build && wrangler deploy --dry-run",
     "build": "react-router build",
-    "cf-typegen": "wrangler types && react-router-typegen",
+    "cf-typegen": "wrangler types",
     "deploy": "npm run build && wrangler deploy",
     "dev": "react-router dev",
     "start": "wrangler dev"

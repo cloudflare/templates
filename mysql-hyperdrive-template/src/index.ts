@@ -102,7 +102,7 @@ async function handleApiRequest(
 
     // API endpoint for Organizations POST operation
     if (url.pathname === "/api/organizations" && request.method === "POST") {
-      const body = await request.json();
+      const body = await request.json<{ name: string }>();
 
       if (!body.name || typeof body.name !== "string") {
         return Response.json(
@@ -173,7 +173,7 @@ async function handleApiRequest(
 
     // API endpoint for Users POST operation
     if (url.pathname === "/api/users" && request.method === "POST") {
-      const body = await request.json();
+      const body = await request.json<{ username: string; organization_id?: string }>();
 
       if (!body.username || typeof body.username !== "string") {
         return Response.json(
@@ -215,7 +215,7 @@ async function handleApiRequest(
     // API endpoint for Users PUT operation
     if (url.pathname.startsWith("/api/users/") && request.method === "PUT") {
       const userId = Number(url.pathname.split("/").pop());
-      const body = await request.json();
+      const body = await request.json<{ username: string; organization_id?: string }>();
 
       if (!body.username || typeof body.username !== "string") {
         return Response.json(

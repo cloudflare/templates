@@ -49,6 +49,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
+    "check": "tsc && remix vite:build && wrangler deploy --dry-run",
     "build": "remix vite:build",
     "cf-typegen": "wrangler types",
     "deploy": "npm run build && wrangler deploy",

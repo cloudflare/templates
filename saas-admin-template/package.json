@@ -45,6 +45,7 @@
     "wrangler": "4.12.0"
   },
   "scripts": {
+    "check": "astro build && wrangler deploy --dry-run",
     "astro": "astro",
     "build": "astro build",
     "cf-typegen": "wrangler types",

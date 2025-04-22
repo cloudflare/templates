@@ -31,6 +31,7 @@
     "@cloudflare/vite-plugin": "1.0.8",
     "@eslint/js": "9.25.1",
     "@neondatabase/serverless": "0.10.4",
+    "@types/node": "22.14.1",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "4.4.1",
@@ -48,6 +49,7 @@
   },
   "private": true,
   "scripts": {
+    "check": "vite build && wrangler deploy --dry-run",
     "build": "vite build",
     "cf-typegen": "wrangler types",
     "deploy": "vite build && wrangler deploy",
