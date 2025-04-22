@@ -173,7 +173,10 @@ async function handleApiRequest(
 
     // API endpoint for Users POST operation
     if (url.pathname === "/api/users" && request.method === "POST") {
-      const body = await request.json<{ username: string; organization_id?: string }>();
+      const body = await request.json<{
+        username: string;
+        organization_id?: string;
+      }>();
 
       if (!body.username || typeof body.username !== "string") {
         return Response.json(
@@ -215,7 +218,10 @@ async function handleApiRequest(
     // API endpoint for Users PUT operation
     if (url.pathname.startsWith("/api/users/") && request.method === "PUT") {
       const userId = Number(url.pathname.split("/").pop());
-      const body = await request.json<{ username: string; organization_id?: string }>();
+      const body = await request.json<{
+        username: string;
+        organization_id?: string;
+      }>();
 
       if (!body.username || typeof body.username !== "string") {
         return Response.json(

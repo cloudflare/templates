@@ -47,9 +47,9 @@
   },
   "private": true,
   "scripts": {
-    "check": "tsc && remix vite:build && wrangler deploy --dry-run",
     "build": "remix vite:build",
     "cf-typegen": "wrangler types",
+    "check": "tsc && remix vite:build && wrangler deploy --dry-run",
     "deploy": "npm run build && wrangler deploy",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",

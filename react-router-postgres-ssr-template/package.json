@@ -50,9 +50,9 @@
   },
   "private": true,
   "scripts": {
-    "check": "vite build && wrangler deploy --dry-run",
     "build": "react-router build",
     "cf-typegen": "wrangler types",
+    "check": "vite build && wrangler deploy --dry-run",
     "deploy": "npm run build && wrangler deploy",
     "dev": "react-router dev",
     "start": "wrangler dev"

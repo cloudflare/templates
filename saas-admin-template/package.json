@@ -45,10 +45,10 @@
     "wrangler": "4.12.0"
   },
   "scripts": {
-    "check": "astro build && wrangler deploy --dry-run",
     "astro": "astro",
     "build": "astro build",
     "cf-typegen": "wrangler types",
+    "check": "astro build && npm run wrangler:wrapper && wrangler deploy --dry-run",
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "deploy": "astro build && npm run wrangler:wrapper && wrangler deploy",

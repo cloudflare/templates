@@ -29,8 +29,8 @@
   },
   "private": true,
   "scripts": {
-    "check": "tsc && wrangler deploy --dry-run",
     "cf-typegen": "wrangler types",
+    "check": "tsc && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "start": "wrangler dev",

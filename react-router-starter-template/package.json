@@ -35,13 +35,13 @@
     "wrangler": "4.12.0"
   },
   "scripts": {
-    "check": "tsc && react-router build && wrangler deploy --dry-run",
     "build": "react-router build",
+    "cf-typegen": "wrangler types && react-router typegen",
+    "check": "tsc && react-router build && wrangler deploy --dry-run",
     "deploy": "npm run build && wrangler deploy",
     "dev": "react-router dev",
     "preview": "npm run build && vite preview",
-    "typecheck": "npm run typegen && tsc -b",
-    "cf-typegen": "wrangler types && react-router typegen"
+    "typecheck": "npm run typegen && tsc -b"
   },
   "type": "module"
 }

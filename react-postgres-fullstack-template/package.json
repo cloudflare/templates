@@ -49,9 +49,9 @@
   },
   "private": true,
   "scripts": {
-    "check": "vite build && wrangler deploy --dry-run",
     "build": "vite build",
     "cf-typegen": "wrangler types",
+    "check": "vite build && wrangler deploy --dry-run",
     "deploy": "vite build && wrangler deploy",
     "dev": "vite",
     "lint": "eslint .",

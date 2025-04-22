@@ -12,7 +12,7 @@
   "scripts": {
     "check:ci": "tsx cli/src/index.ts lint . && prettier . --check && syncpack lint && turbo run check types cf-typegen && git diff --exit-code && pnpm lint-npm-lockfiles",
     "deploy": "turbo run deploy",
-    "fix:ci": "tsx cli/src/index.ts lint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types cf-typegen && pnpm generate-npm-lockfiles",
+    "fix:ci": "tsx cli/src/index.ts lint . --fix && turbo run types cf-typegen && prettier . --write && syncpack format && syncpack fix-mismatches && pnpm generate-npm-lockfiles",
     "generate-npm-lockfiles": "tsx cli/src/index.ts generate-npm-lockfiles",
     "lint-npm-lockfiles": "tsx cli/src/index.ts lint-npm-lockfiles",
     "test": "vitest",
