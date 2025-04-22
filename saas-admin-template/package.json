@@ -17,32 +17,32 @@
     "dash": true
   },
   "dependencies": {
-    "@astrojs/cloudflare": "12.4.0",
-    "@astrojs/react": "4.2.3",
+    "@astrojs/cloudflare": "12.5.0",
+    "@astrojs/react": "4.2.4",
     "@astrojs/tailwind": "5.1.4",
     "@hookform/resolvers": "3.9.1",
-    "@radix-ui/react-accordion": "1.2.3",
-    "@radix-ui/react-dialog": "1.1.6",
-    "@radix-ui/react-label": "2.1.2",
-    "@radix-ui/react-navigation-menu": "1.2.5",
-    "@radix-ui/react-slot": "1.1.2",
-    "@tanstack/react-table": "8.21.2",
+    "@radix-ui/react-accordion": "1.2.7",
+    "@radix-ui/react-dialog": "1.1.10",
+    "@radix-ui/react-label": "2.1.4",
+    "@radix-ui/react-navigation-menu": "1.2.9",
+    "@radix-ui/react-slot": "1.2.0",
+    "@tanstack/react-table": "8.21.3",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
-    "astro": "5.6.0",
+    "astro": "5.7.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
-    "lucide-react": "0.487.0",
+    "lucide-react": "0.503.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-hook-form": "7.55.0",
+    "react-hook-form": "7.56.0",
     "tailwind-merge": "2.6.0",
     "tailwindcss": "3.4.17",
     "tailwindcss-animate": "1.0.7",
-    "zod": "3.24.2"
+    "zod": "3.24.3"
   },
   "devDependencies": {
-    "wrangler": "4.7.0"
+    "wrangler": "4.12.0"
   },
   "scripts": {
     "astro": "astro",

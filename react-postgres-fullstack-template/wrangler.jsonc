@@ -1,8 +1,7 @@
 /**
  * For more details on how to configure Wrangler, refer to:
  * https://developers.cloudflare.com/workers/wrangler/configuration/
- */
-{
+ */ {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "react-postgres-fullstack-template",
   "main": "api/index.js",
@@ -10,7 +9,6 @@
   "compatibility_date": "2025-04-01",
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1,
   },
   "assets": {
     "binding": "ASSETS",
