@@ -5,14 +5,14 @@
     "prettier": "3.5.3",
     "syncpack": "13.0.3",
     "tsx": "4.19.3",
-    "turbo": "2.4.4",
-    "vitest": "3.0.9"
+    "turbo": "2.5.0",
+    "vitest": "3.1.2"
   },
   "packageManager": "pnpm@10.2.0",
   "scripts": {
-    "check:ci": "tsx cli/src/index.ts lint . && prettier . --check && syncpack lint && turbo run check types && git diff --exit-code && pnpm lint-npm-lockfiles",
+    "check:ci": "tsx cli/src/index.ts lint . && prettier . --check && syncpack lint && turbo run check types cf-typegen && git diff --exit-code && pnpm lint-npm-lockfiles",
     "deploy": "turbo run deploy",
-    "fix:ci": "tsx cli/src/index.ts lint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types && pnpm generate-npm-lockfiles",
+    "fix:ci": "tsx cli/src/index.ts lint . --fix && turbo run types cf-typegen && prettier . --write && syncpack format && syncpack fix-mismatches && pnpm generate-npm-lockfiles",
     "generate-npm-lockfiles": "tsx cli/src/index.ts generate-npm-lockfiles",
     "lint-npm-lockfiles": "tsx cli/src/index.ts lint-npm-lockfiles",
     "test": "vitest",
