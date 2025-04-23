@@ -14,24 +14,24 @@
     "dash": true
   },
   "dependencies": {
-    "@astrojs/cloudflare": "12.4.0",
-    "@astrojs/mdx": "4.2.3",
+    "@astrojs/cloudflare": "12.5.0",
+    "@astrojs/mdx": "4.2.4",
     "@astrojs/rss": "4.0.11",
     "@astrojs/sitemap": "3.3.0",
-    "astro": "5.6.0",
-    "typescript": "5.8.2"
+    "astro": "5.7.4",
+    "typescript": "5.8.3"
   },
   "devDependencies": {
-    "wrangler": "4.7.0"
+    "wrangler": "4.12.0"
   },
   "scripts": {
     "astro": "astro",
     "build": "astro build",
+    "cf-typegen": "wrangler types",
     "check": "astro build && tsc && wrangler deploy --dry-run",
     "deploy": "astro build && wrangler deploy",
     "dev": "astro dev",
-    "preview": "astro build && wrangler dev",
-    "types": "wrangler types"
+    "preview": "astro build && wrangler dev"
   },
   "type": "module"
 }

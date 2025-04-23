@@ -16,13 +16,13 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/fc7b4b62-442b-4769-641b-ad4422d74300/public"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250404.0",
-    "typescript": "5.8.2",
-    "wrangler": "4.7.0"
+    "typescript": "5.8.3",
+    "wrangler": "4.12.0"
   },
   "private": true,
   "scripts": {
     "cf-typegen": "wrangler types",
+    "check": "tsc && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "start": "wrangler dev"

@@ -4,6 +4,7 @@
   "tasks": {
     "check": {},
     "types": {},
+    "cf-typegen": {},
     "deploy": {}
   }
 }
