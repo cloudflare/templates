@@ -54,7 +54,9 @@ export default {
     // class. The name of class is used to identify the Durable Object.
     // Requests from all Workers to the instance named
     // will go to a single globally unique Durable Object instance.
-    const id: DurableObjectId = env.MY_DURABLE_OBJECT.idFromName(new URL(request.url).pathname);
+    const id: DurableObjectId = env.MY_DURABLE_OBJECT.idFromName(
+      new URL(request.url).pathname,
+    );
 
     // Create a stub to open a communication channel with the Durable
     // Object instance.
