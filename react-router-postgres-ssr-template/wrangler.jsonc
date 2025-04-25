@@ -13,10 +13,10 @@
   //   }
   // ],
   "placement": {
-    "mode": "smart",
+    "mode": "smart"
   },
   "observability": {
-    "enabled": true,
+    "enabled": true
   },
-  "upload_source_maps": true,
+  "upload_source_maps": true
 }
