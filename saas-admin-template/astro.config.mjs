@@ -10,7 +10,7 @@ export default defineConfig({
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
-      configPath: "wrangler.json",
+      configPath: "wrangler.jsonc",
       persist: {
         path: "./.cache/wrangler/v3",
       },
