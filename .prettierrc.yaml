@@ -1,2 +1,5 @@
-# This file is intentionally left blank. All Prettier defaults are used
-# unchanged.
+overrides:
+  - files:
+      - "*.jsonc"
+    options:
+      trailingComma: none

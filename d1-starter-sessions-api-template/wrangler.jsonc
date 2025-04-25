@@ -8,10 +8,10 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-03-17",
   "observability": {
-    "enabled": true,
+    "enabled": true
   },
   "assets": {
-    "directory": "./public/",
+    "directory": "./public/"
   },
   /**
    * Bindings
@@ -23,7 +23,7 @@
     {
       "binding": "DB01",
       "database_name": "d1-starter-sessions-api",
-      "database_id": "3690f364-3425-4fab-8eb7-c74c5717578a",
-    },
-  ],
+      "database_id": "3690f364-3425-4fab-8eb7-c74c5717578a"
+    }
+  ]
 }
