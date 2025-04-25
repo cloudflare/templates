@@ -20,14 +20,14 @@
     "valibot": "^1.0.0-beta.9"
   },
   "devDependencies": {
-    "typescript": "5.8.2",
-    "wrangler": "4.7.0"
+    "typescript": "5.8.3",
+    "wrangler": "4.12.0"
   },
   "scripts": {
-    "check": "tsc && wrangler --experimental-json-config deploy --dry-run",
-    "deploy": "wrangler --experimental-json-config deploy",
-    "dev": "wrangler --experimental-json-config dev",
-    "predeploy": "wrangler --experimental-json-config d1 migrations apply AUTH_DB --remote",
-    "types": "wrangler --experimental-json-config types"
+    "cf-typegen": "wrangler types",
+    "check": "tsc && wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "predeploy": "wrangler d1 migrations apply AUTH_DB --remote"
   }
 }
