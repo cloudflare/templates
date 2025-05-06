@@ -1,0 +1,78 @@
+name: "Pull Request Workflow Run"
+
+on:
+  workflow_run: # this action runs in a trusted context, but passed info from the "Pull Request" untrusted workflow
+    workflows: ["Pull Request"]
+    types:
+      - completed
+
+permissions:
+  pull-requests: write
+
+env:
+  PR_DIR: "_pr"
+  PR_ZIP: "_pr.zip"
+  PREVIEW_DIR: "_preview-templates"
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: "Download pull request info"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: ${{github.event.workflow_run.id }},
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "pr"
+            })[0];
+            var download = await github.rest.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            var fs = require('fs');
+            var path = require('path');
+            fs.writeFileSync(path.join('${{github.workspace}}', process.env.PR_ZIP), Buffer.from(download.data));
+
+      - name: "Load PR info into environment variables"
+        run: mkdir $PR_DIR && unzip $PR_ZIP -d $PR_DIR && cat $PR_DIR/env >> $GITHUB_ENV
+        #
+        # Note: Checking out the source of the PR means checking out untrusted code.
+        # We shouldn't run any tests or package installs past this point.
+        # Simply checking out to fetch the files is reasonable, however.
+        # https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/
+        #
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: $PREVIEW_DIR
+          persist-credentials: 'false'
+
+      - name: "Make preview"
+        run: |
+          pnpm -w preview $PREVIEW_DIR \
+            --repoFullName $PR_REPOSITORY \
+            --branch $PR_SHA \
+            --pr $PR_ID

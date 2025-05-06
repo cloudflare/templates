@@ -25,7 +25,8 @@ jobs:
           node-version: "20.x"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm -w check:ci
+      - run: pnpm -w check
+      - run: pnpm -w test
       - run: pnpm run deploy
       - run: |
           pnpm run upload . \

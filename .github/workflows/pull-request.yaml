@@ -1,0 +1,48 @@
+name: "Pull Request"
+
+on:
+  pull_request: # this action runs in an untrusted but secure context with no secrets
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-check
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Run checks
+        run: pnpm -w check
+
+      - name: Run tests
+        run: pnpm -w test
+
+      - name: Save PR info # extract the info we need to run in the trusted context later
+        run: |
+          mkdir -p ./pr
+          echo PR_ID=${{ github.event.number }} >> ./pr/env
+          echo PR_REPOSITORY=${{ github.event.pull_request.head.repo.full_name }} >> ./pr/env
+          echo PR_SHA=${{ github.event.pull_request.head.sha }} >> ./pr/env
+
+      - name: Upload PR info
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr
+          path: pr/
