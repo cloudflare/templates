@@ -2,6 +2,7 @@ import { parse, stringify } from "comment-json";
 import fs from "node:fs";
 import path from "node:path";
 import toml from "toml";
+import subprocess from "node:child_process";
 
 const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
@@ -12,6 +13,22 @@ type PackageJson = {
 };
 
 export type Template = { name: string; path: string };
+
+export type SeedRepo = {
+  provider: "github" | "gitlab";
+  owner: string;
+  repository: string;
+  branch?: string;
+  path?: string;
+};
+
+export const SEED_REPO_FILES = [
+  "wrangler.jsonc",
+  "wrangler.json",
+  "wrangler.toml",
+  "package.json",
+  "README.md",
+];
 
 export function getTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
@@ -52,6 +69,37 @@ export function getTemplates(templateDirectory: string): Template[] {
       name,
       path: path.join(templateDirectory, name),
     }));
+}
+
+export function collectTemplateFiles(
+  templatePath: string,
+  onlySeedRepoFiles?: boolean,
+): File[] {
+  return fs
+    .readdirSync(templatePath, { recursive: true })
+    .map((file) => ({
+      name: file.toString(),
+      filePath: path.join(templatePath, file.toString()),
+    }))
+    .filter(({ name }) =>
+      onlySeedRepoFiles ? SEED_REPO_FILES.includes(name) : true,
+    )
+    .filter(
+      ({ filePath }) =>
+        !filePath.includes("node_modules") &&
+        !fs.statSync(filePath).isDirectory() &&
+        !gitIgnored(filePath),
+    )
+    .map(({ name, filePath }) => new File([fs.readFileSync(filePath)], name));
+}
+
+function gitIgnored(filePath: string): boolean {
+  try {
+    subprocess.execSync(`git check-ignore ${filePath}`);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function isDashTemplate(packageJsonPath: string): boolean {

@@ -26,4 +26,7 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm -w check:ci
-      - run: pnpm run upload --staging
+      - run: |
+          pnpm run upload . --staging \
+            --repoFullName ${{ github.repository }} \
+            --branch ${{ github.sha }}

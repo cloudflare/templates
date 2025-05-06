@@ -1,7 +1,10 @@
+#! /usr/bin/env node
+
 import { Command } from "@commander-js/extra-typings";
 import { upload } from "./upload";
 import { lint } from "./lint";
 import { generateNpmLockfiles, lintNpmLockfiles } from "./npm";
+import { preview } from "./preview";
 
 const program = new Command();
 
@@ -16,6 +19,8 @@ program
     ".",
   )
   .option("--staging", "use the staging API endpoint")
+  .requiredOption("--repoFullName <number>", "the owner/repo combination")
+  .requiredOption("--branch <string>", "the branch or sha")
   .action((templateDirectory, options) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
     const clientSecret = process.env.TEMPLATES_API_CLIENT_SECRET;
@@ -27,8 +32,15 @@ program
     const subdomain = options.staging
       ? "integrations-platform-staging"
       : "integrations-platform";
+    const [owner, repository] = options.repoFullName.split("/");
     return upload({
       templateDirectory,
+      seedRepo: {
+        provider: "github",
+        owner,
+        repository,
+        branch: options.branch,
+      },
       api: {
         endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
         clientId,
@@ -62,6 +74,51 @@ program
   .description("Lint all templates to ensure npm lockfiles are up to date")
   .action(async () => {
     await lintNpmLockfiles();
+  });
+
+program
+  .command("preview")
+  .description("Generates a preview for the templates in a PR")
+  .argument(
+    "<path-to-templates>",
+    "path to directory containing preview templates",
+  )
+  .option("--staging", "use the staging API endpoint")
+  .requiredOption("--repoFullName <number>", "the owner/repo combination")
+  .requiredOption("--branch <string>", "the branch or sha")
+  .requiredOption("--pr <string>", "the ID of the pull request")
+  .action((templateDirectory, options) => {
+    const clientId = process.env.TEMPLATES_API_CLIENT_ID;
+    const clientSecret = process.env.TEMPLATES_API_CLIENT_SECRET;
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (!clientId || !clientSecret) {
+      throw new Error(
+        `Missing TEMPLATES_API_CLIENT_ID or TEMPLATES_API_CLIENT_SECRET`,
+      );
+    }
+    if (!githubToken) {
+      throw new Error("Missing GITHUB_TOKEN");
+    }
+    const subdomain = options.staging
+      ? "integrations-platform-staging"
+      : "integrations-platform";
+    const [owner, repository] = options.repoFullName.split("/");
+    return preview({
+      templateDirectory,
+      prId: options.pr,
+      githubToken,
+      seedRepo: {
+        provider: "github",
+        owner,
+        repository,
+        branch: options.branch,
+      },
+      api: {
+        endpoint: `https://${subdomain}.cfdata.org/api/v1/template-previews`,
+        clientId,
+        clientSecret,
+      },
+    });
   });
 
 program.parseAsync();
