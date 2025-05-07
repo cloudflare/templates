@@ -61,7 +61,7 @@ export async function lintNpmLockfiles(): Promise<void> {
     if (modified) {
       echo(
         chalk.red(
-          `npm package lock for ${name} is out of date! Please run \`pnpm generate-npm-lockfiles\``,
+          `npm package lock for ${name} is out of date! Please run \`templates generate-npm-lockfiles\``,
         ),
       );
       process.exit(1);

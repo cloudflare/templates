@@ -25,5 +25,10 @@ jobs:
           node-version: "20.x"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm -w check:ci
-      - run: pnpm run upload --staging
+      - run: pnpm -w check
+      - run: pnpm -w test
+      - run: |
+          pnpm run upload . \
+            --staging \
+            --repoFullName ${{ github.repository }} \
+            --branch ${{ github.sha }}

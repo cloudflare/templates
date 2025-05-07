@@ -1,6 +1,9 @@
 {
   "name": "cli",
   "description": "A handy CLI for developing templates.",
+  "bin": {
+    "templates": "./dist/index.js"
+  },
   "dependencies": {
     "@commander-js/extra-typings": "12.1.0",
     "commander": "12.1.0",
@@ -15,6 +18,7 @@
     "typescript": "5.8.3"
   },
   "scripts": {
-    "check": "tsc"
+    "build": "tsc",
+    "postinstall": "pnpm run build"
   }
 }
