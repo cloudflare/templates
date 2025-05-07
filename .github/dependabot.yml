@@ -10,4 +10,92 @@ updates:
       - "**/*"
     target-branch: "staging"
     schedule:
+      # just in time for on-call handoff
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    groups:
+      # consolidates dependabot PRs into a single grouped PR
+      non-breaking-wrangler-updates:
+        applies-to: version-updates
+        patterns:
+          - "wrangler"
+        update-types:
+          - "minor"
+          - "patch"
+      breaking-wrangler-updates:
+        applies-to: version-updates
+        patterns:
+          - "wrangler"
+        update-types:
+          - "major"
+      non-breaking-vite-updates:
+        applies-to: version-updates
+        patterns:
+          - "vite"
+          - "vitest"
+        update-types:
+          - "minor"
+          - "patch"
+      breaking-vite-updates:
+        applies-to: version-updates
+        patterns:
+          - "vite"
+          - "vitest"
+        update-types:
+          - "major"
+      non-breaking-typescript-updates:
+        applies-to: version-updates
+        patterns:
+          - "typescript"
+        update-types:
+          - "minor"
+          - "patch"
+      breaking-typescript-updates:
+        applies-to: version-updates
+        patterns:
+          - "typescript"
+        update-types:
+          - "major"
+      non-breaking-eslint-updates:
+        applies-to: version-updates
+        patterns:
+          - "eslint*"
+        update-types:
+          - "minor"
+          - "patch"
+      breaking-eslint-updates:
+        applies-to: version-updates
+        patterns:
+          - "eslint*"
+        update-types:
+          - "major"
+      non-breaking-react-updates:
+        applies-to: version-updates
+        patterns:
+          - "react"
+          - "react-dom"
+        update-types:
+          - "minor"
+          - "patch"
+      breaking-react-updates:
+        applies-to: version-updates
+        patterns:
+          - "react"
+          - "react-dom"
+        update-types:
+          - "major"
+      non-breaking-astro-updates:
+        applies-to: version-updates
+        patterns:
+          - "@astro/*"
+        update-types:
+          - "minor"
+          - "patch"
+      breaking-astro-updates:
+        applies-to: version-updates
+        patterns:
+          - "astro/*"
+        update-types:
+          - "major"
