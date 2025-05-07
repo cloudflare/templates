@@ -1,4 +1,5 @@
 import { collectTemplateFiles, getTemplates, SeedRepo } from "./util";
+import fs from "node:fs";
 
 export type PreviewConfig = {
   templateDirectory: string;
@@ -29,6 +30,9 @@ async function uploadPreview({
   seedRepo,
   api,
 }: PreviewConfig) {
+  const files = fs.readdirSync('.');
+  console.log('cwd', process.cwd());
+  console.log('current directory', files);
   const templates = getTemplates(templateDirectory);
   const body = templates.reduce((formData, { name, path: templatePath }) => {
     for (const file of collectTemplateFiles(templatePath)) {
