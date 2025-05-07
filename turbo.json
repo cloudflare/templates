@@ -1,6 +1,5 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"],
   "tasks": {
     "build": {
       "outputs": [
@@ -15,7 +14,9 @@
     },
     "check": {},
     "cf-typegen": {},
-    "deploy": {},
+    "deploy": {
+      "env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"]
+    },
     "test": {}
   }
 }
