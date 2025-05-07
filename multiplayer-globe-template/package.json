@@ -26,7 +26,7 @@
     "@types/react-dom": "18.3.1",
     "esbuild": "0.25.2",
     "typescript": "5.8.3",
-    "wrangler": "4.12.0"
+    "wrangler": "4.14.3"
   },
   "scripts": {
     "cf-typegen": "wrangler types ./src/server/worker-configuration.d.ts",
