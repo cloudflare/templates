@@ -7,6 +7,9 @@
     "turbo": "2.5.0",
     "vitest": "3.1.2"
   },
+  "engines": {
+    "node": ">=20.16.0 || >=22.3.0"
+  },
   "packageManager": "pnpm@10.2.0",
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -31,7 +34,7 @@
     "fix:turbo": "turbo run cf-typegen",
     "postinstall": "turbo run build",
     "preview": "templates preview",
-    "test": "turbo run test",
+    "test": "turbo run test -- --passWithNoTests",
     "upload": "templates upload"
   }
 }
