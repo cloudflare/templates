@@ -31,7 +31,7 @@ jobs:
           node-version: "20.x"
           cache: "pnpm"
 
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile --child-concurrency=10
 
       - name: "Download pull request info"
         uses: actions/github-script@v7
