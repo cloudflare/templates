@@ -5,10 +5,8 @@ export default defineWorkersConfig({
     deps: {
       optimizer: {
         ssr: {
-          include:[
-            "@remix-run/cloudflare"
-          ]
-        }
+          include: ["@remix-run/cloudflare"],
+        },
       },
     },
     include: ["test/**/*.test.ts"],
