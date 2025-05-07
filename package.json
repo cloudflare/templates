@@ -4,36 +4,34 @@
     "cli": "workspace:*",
     "prettier": "3.5.3",
     "syncpack": "13.0.3",
-    "tsx": "4.19.3",
     "turbo": "2.5.0",
     "vitest": "3.1.2"
   },
   "packageManager": "pnpm@10.2.0",
-  "scripts": {
-    "check": "turbo run build && pnpm run \"/^check:.*/\" && git diff --exit-code",
-    "check:lockfiles": "pnpm lint-npm-lockfiles",
-    "check:prettier": "prettier . --check",
-    "check:syncpack": "syncpack lint",
-    "check:templates": "templates lint .",
-    "check:turbo": "turbo run check types cf-typegen",
-    "deploy": "turbo run deploy",
-    "fix": "turbo run build && pnpm run \"/^fix:.*/\"",
-    "fix:lockfiles": "pnpm generate-npm-lockfiles",
-    "fix:prettier": "prettier . --write",
-    "fix:syncpack": "syncpack format && syncpack fix-mismatches",
-    "fix:templates": "templates lint . --fix",
-    "fix:turbo": "turbo run types cf-typegen",
-    "generate-npm-lockfiles": "templates generate-npm-lockfiles",
-    "lint-npm-lockfiles": "templates lint-npm-lockfiles",
-    "preview": "templates preview",
-    "test": "turbo run test",
-    "upload": "templates upload"
-  },
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild",
       "sharp",
       "workerd"
     ]
+  },
+  "scripts": {
+    "check": "pnpm run /^check:.*/ && git diff --exit-code",
+    "check:lockfiles": "templates lint-npm-lockfiles",
+    "check:prettier": "prettier . --check",
+    "check:syncpack": "syncpack lint",
+    "check:templates": "templates lint .",
+    "check:turbo": "turbo run check cf-typegen",
+    "deploy": "turbo run deploy",
+    "fix": "pnpm run /^fix:.*/",
+    "fix:lockfiles": "templates generate-npm-lockfiles",
+    "fix:prettier": "prettier . --write",
+    "fix:syncpack": "syncpack format && syncpack fix-mismatches",
+    "fix:templates": "templates lint . --fix",
+    "fix:turbo": "turbo run cf-typegen",
+    "postinstall": "turbo run build",
+    "preview": "templates preview",
+    "test": "turbo run test",
+    "upload": "templates upload"
   }
 }

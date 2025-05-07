@@ -68,7 +68,7 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
           path: $PREVIEW_DIR
-          persist-credentials: 'false'
+          persist-credentials: "false"
 
       - name: "Make preview"
         run: |
