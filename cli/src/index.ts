@@ -19,7 +19,7 @@ program
     ".",
   )
   .option("--staging", "use the staging API endpoint")
-  .requiredOption("--repoFullName <number>", "the owner/repo combination")
+  .requiredOption("--repoFullName <string>", "the owner/repo combination")
   .requiredOption("--branch <string>", "the branch or sha")
   .action((templateDirectory, options) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
@@ -84,7 +84,7 @@ program
     "path to directory containing preview templates",
   )
   .option("--staging", "use the staging API endpoint")
-  .requiredOption("--repoFullName <number>", "the owner/repo combination")
+  .requiredOption("--repoFullName <string>", "the owner/repo combination")
   .requiredOption("--branch <string>", "the branch or sha")
   .requiredOption("--pr <string>", "the ID of the pull request")
   .action((templateDirectory, options) => {

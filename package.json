@@ -28,5 +28,12 @@
     "preview": "templates preview",
     "test": "turbo run test",
     "upload": "templates upload"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }
