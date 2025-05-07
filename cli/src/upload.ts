@@ -1,10 +1,8 @@
-import fs from "node:fs";
-import path from "node:path";
-import subprocess from "node:child_process";
-import { getTemplates } from "./util";
+import { collectTemplateFiles, getTemplates, SeedRepo } from "./util";
 
 export type UploadConfig = {
   templateDirectory: string;
+  seedRepo: SeedRepo;
   api: {
     endpoint: string;
     clientId: string;
@@ -38,7 +36,9 @@ async function uploadTemplate(templatePath: string, config: UploadConfig) {
     console.info(`  - ${file.name}`);
     body.set(file.name, file);
   });
-  const response = await fetch(config.api.endpoint, {
+  const queryParams = new URLSearchParams(config.seedRepo);
+  queryParams.set("path", templatePath);
+  const response = await fetch(`${config.api.endpoint}?${queryParams}`, {
     method: "POST",
     headers: {
       "Cf-Access-Client-Id": config.api.clientId,
@@ -50,30 +50,5 @@ async function uploadTemplate(templatePath: string, config: UploadConfig) {
     throw new Error(
       `Error response from ${config.api.endpoint} (${response.status}): ${await response.text()}`,
     );
-  }
-}
-
-function collectTemplateFiles(templatePath: string): File[] {
-  return fs
-    .readdirSync(templatePath, { recursive: true })
-    .map((file) => ({
-      name: file.toString(),
-      filePath: path.join(templatePath, file.toString()),
-    }))
-    .filter(
-      ({ filePath }) =>
-        !filePath.includes("node_modules") &&
-        !fs.statSync(filePath).isDirectory() &&
-        !gitIgnored(filePath),
-    )
-    .map(({ name, filePath }) => new File([fs.readFileSync(filePath)], name));
-}
-
-function gitIgnored(filePath: string): boolean {
-  try {
-    subprocess.execSync(`git check-ignore ${filePath}`);
-    return true;
-  } catch {
-    return false;
   }
 }
