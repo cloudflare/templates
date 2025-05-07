@@ -30,9 +30,9 @@ async function uploadPreview({
   seedRepo,
   api,
 }: PreviewConfig) {
-  const files = fs.readdirSync('.');
-  console.log('cwd', process.cwd());
-  console.log('current directory', files);
+  const files = fs.readdirSync(".");
+  console.log("cwd", process.cwd());
+  console.log("current directory", files);
   const templates = getTemplates(templateDirectory);
   const body = templates.reduce((formData, { name, path: templatePath }) => {
     for (const file of collectTemplateFiles(templatePath)) {
