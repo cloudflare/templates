@@ -35,6 +35,7 @@ updates:
         patterns:
           - "vite"
           - "vitest"
+          - "@cloudflare/vite*"
         update-types:
           - "minor"
           - "patch"
@@ -43,6 +44,7 @@ updates:
         patterns:
           - "vite"
           - "vitest"
+          - "@cloudflare/vite*"
         update-types:
           - "major"
       non-breaking-typescript-updates:
