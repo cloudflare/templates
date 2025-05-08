@@ -139,6 +139,7 @@ export async function actionWithSummary(
   title: string,
   action: () => Promise<string | void> | string | void,
 ) {
+  console.log(process.env);
   try {
     const markdown = await action();
     if (
