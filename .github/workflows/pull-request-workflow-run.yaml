@@ -58,8 +58,8 @@ jobs:
         #
       - uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.sha }}
+          repository: ${{ env.PR_REPOSITORY }}
+          ref: ${{ env.PR_REF }}
           path: ${{ env.PREVIEW_DIR }}
           persist-credentials: "false"
 
@@ -67,5 +67,5 @@ jobs:
         run: |
           pnpm -w preview $PREVIEW_DIR \
             --repoFullName $PR_REPOSITORY \
-            --branch $PR_SHA \
+            --branch $PR_REF \
             --pr $PR_ID
