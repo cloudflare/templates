@@ -5,6 +5,9 @@ import { upload } from "./upload";
 import { lint } from "./lint";
 import { generateNpmLockfiles, lintNpmLockfiles } from "./npm";
 import { preview } from "./preview";
+import { validateLiveDemoLinks } from "./validateLiveDemoLinks";
+import { actionWithSummary } from "./util";
+import { validateD2CButtons } from "./validateD2CButtons";
 
 const program = new Command();
 
@@ -20,7 +23,7 @@ program
   )
   .option("--staging", "use the staging API endpoint")
   .requiredOption("--repoFullName <string>", "the owner/repo combination")
-  .requiredOption("--branch <string>", "the branch or sha")
+  .requiredOption("--branch <string>", "the branch or ref")
   .action((templateDirectory, options) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
     const clientSecret = process.env.TEMPLATES_API_CLIENT_SECRET;
@@ -33,20 +36,22 @@ program
       ? "integrations-platform-staging"
       : "integrations-platform";
     const [owner, repository] = options.repoFullName.split("/");
-    return upload({
-      templateDirectory,
-      seedRepo: {
-        provider: "github",
-        owner,
-        repository,
-        branch: options.branch,
-      },
-      api: {
-        endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
-        clientId,
-        clientSecret,
-      },
-    });
+    return actionWithSummary("Upload", () =>
+      upload({
+        templateDirectory,
+        seedRepo: {
+          provider: "github",
+          owner,
+          repository,
+          branch: options.branch,
+        },
+        api: {
+          endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
+          clientId,
+          clientSecret,
+        },
+      }),
+    );
   });
 
 program
@@ -59,21 +64,55 @@ program
   )
   .option("--fix", "fix problems that can be automatically fixed")
   .action((templateDirectory, options) => {
-    lint({ templateDirectory, fix: options.fix ?? false });
+    return actionWithSummary("Lint", () =>
+      lint({ templateDirectory, fix: options.fix ?? false }),
+    );
   });
 
 program
   .command("generate-npm-lockfiles")
   .description("Generate npm lockfiles to improve install time of templates")
-  .action(async () => {
-    await generateNpmLockfiles();
+  .action(() => {
+    return actionWithSummary("Generate npm lockfiles", () =>
+      generateNpmLockfiles(),
+    );
   });
 
 program
   .command("lint-npm-lockfiles")
   .description("Lint all templates to ensure npm lockfiles are up to date")
-  .action(async () => {
-    await lintNpmLockfiles();
+  .action(() => {
+    return actionWithSummary("Lint npm lockfiles", () => lintNpmLockfiles());
+  });
+
+program
+  .command("validate-live-demo-links")
+  .description("Ensures every template has a live demo that returns a 200")
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
+    return actionWithSummary("Validate live demo links", () =>
+      validateLiveDemoLinks({ templateDirectory }),
+    );
+  });
+
+program
+  .command("validate-d2c-buttons")
+  .description(
+    "Ensures every template has a Deploy to Cloudflare button in the readme",
+  )
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
+    return actionWithSummary("Validate Deploy to Cloudflare buttons", () =>
+      validateD2CButtons({ templateDirectory }),
+    );
   });
 
 program
@@ -85,7 +124,7 @@ program
   )
   .option("--staging", "use the staging API endpoint")
   .requiredOption("--repoFullName <string>", "the owner/repo combination")
-  .requiredOption("--branch <string>", "the branch or sha")
+  .requiredOption("--branch <string>", "the branch or ref")
   .requiredOption("--pr <string>", "the ID of the pull request")
   .action((templateDirectory, options) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
@@ -103,22 +142,24 @@ program
       ? "integrations-platform-staging"
       : "integrations-platform";
     const [owner, repository] = options.repoFullName.split("/");
-    return preview({
-      templateDirectory,
-      prId: options.pr,
-      githubToken,
-      seedRepo: {
-        provider: "github",
-        owner,
-        repository,
-        branch: options.branch,
-      },
-      api: {
-        endpoint: `https://${subdomain}.cfdata.org/api/v1/template-previews`,
-        clientId,
-        clientSecret,
-      },
-    });
+    return actionWithSummary("Preview", () =>
+      preview({
+        templateDirectory,
+        prId: options.pr,
+        githubToken,
+        seedRepo: {
+          provider: "github",
+          owner,
+          repository,
+          branch: options.branch,
+        },
+        api: {
+          endpoint: `https://${subdomain}.cfdata.org/api/v1/template-previews`,
+          clientId,
+          clientSecret,
+        },
+      }),
+    );
   });
 
 program.parseAsync();

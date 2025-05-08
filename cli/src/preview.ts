@@ -1,4 +1,11 @@
-import { collectTemplateFiles, getTemplates, SeedRepo } from "./util";
+import {
+  collectTemplateFiles,
+  getTemplates,
+  handleCloudflareResponse,
+  SeedRepo,
+} from "./util";
+import fs from "node:fs";
+import MarkdownError from "./MarkdownError";
 
 export type PreviewConfig = {
   templateDirectory: string;
@@ -12,13 +19,21 @@ export type PreviewConfig = {
   };
 };
 export async function preview(config: PreviewConfig) {
+  const thisRepo = `${config.seedRepo.owner}/${config.seedRepo.repository}`;
+  if (process.env.GITHUB_REPOSITORY !== thisRepo) {
+    console.warn(`Preview links are not generated for forks (${thisRepo}).`);
+    return commentOnPR(
+      config,
+      "Preview link not generated: you must be a collaborator and not on a fork.",
+    );
+  }
   try {
     await uploadPreview(config);
-    await commentOnPR(config, previewLinkBody(config));
+    return commentOnPR(config, previewLinkBody(config));
   } catch (err) {
-    await commentOnPR(
-      config,
-      ["Could not create preview:", (err as Error).message].join("\n"),
+    throw new MarkdownError(
+      "Could not create preview.",
+      (err as Error).message,
     );
   }
 }
@@ -31,7 +46,7 @@ async function uploadPreview({
 }: PreviewConfig) {
   const templates = getTemplates(templateDirectory);
   const body = templates.reduce((formData, { name, path: templatePath }) => {
-    for (const file of collectTemplateFiles(templatePath)) {
+    for (const file of collectTemplateFiles(templatePath, !!seedRepo)) {
       formData.set(path.join(name, file.name), file);
     }
     return formData;
@@ -45,18 +60,12 @@ async function uploadPreview({
     },
     body,
   });
-  if (!response.ok) {
-    const json: any = await response.json();
-    if (Array.isArray(json.errors) && json.errors[0]?.message) {
-      throw new Error(json.errors[0]?.message);
-    }
-    throw new Error(`Error response from ${api.endpoint} (${response.status})`);
-  }
+  return handleCloudflareResponse(response);
 }
 
 async function commentOnPR({ prId, githubToken }: PreviewConfig, body: string) {
   const response = await fetch(
-    `  https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
     {
       method: "POST",
       headers: {
@@ -70,16 +79,17 @@ async function commentOnPR({ prId, githubToken }: PreviewConfig, body: string) {
   );
   if (!response.ok) {
     throw new Error(
-      `Error response from GitHub API (${response.status}): ${await response.text()}`,
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
     );
   }
+  return body;
 }
 
 function previewLinkBody(config: PreviewConfig) {
   const url = new URL("https://dash.cloudflare.com");
   url.searchParams.set(
     "to",
-    `/:account/workers-and-pages/templates?preview_pr=${config.prId}`,
+    `/:account/workers-and-pages/template-preview/${config.prId}`,
   );
   return `[Dashboard preview link](${url})`;
 }

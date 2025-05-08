@@ -1,15 +1,17 @@
-name: Staging
+name: "Release"
 
 on:
-  push:
-    branches: ["staging"]
+  release:
+    types:
+      - released
 
 jobs:
-  check-and-upload-staging:
-    name: Check and Upload
+  upload:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    concurrency: templates-check-and-upload-staging
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-upload
+      cancel-in-progress: true
     env:
       TEMPLATES_API_CLIENT_ID: ${{ secrets.TEMPLATES_API_CLIENT_ID }}
       TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
@@ -17,10 +19,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
 
-      - run: pnpm -w check
-      - run: pnpm -w test
-      - run: |
+      - name: Make templates live and publicly accessible in the dash
+        run: |
           pnpm run upload . \
-            --staging \
             --repoFullName ${{ github.repository }} \
             --branch ${{ github.ref_name }}
