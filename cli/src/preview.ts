@@ -65,7 +65,7 @@ async function uploadPreview({
 
 async function commentOnPR({ prId, githubToken }: PreviewConfig, body: string) {
   const response = await fetch(
-    `  https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
     {
       method: "POST",
       headers: {
