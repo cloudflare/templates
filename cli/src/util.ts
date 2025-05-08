@@ -1,3 +1,4 @@
+import "zx/globals";
 import { parse, stringify } from "comment-json";
 import fs from "node:fs";
 import path from "node:path";
@@ -141,26 +142,26 @@ export async function actionWithSummary(
 ) {
   try {
     const markdown = await action();
-    if (
-      typeof markdown === "string" &&
-      process.env.GITHUB_STEP_SUMMARY !== undefined
-    ) {
-      fs.appendFileSync(
-        process.env.GITHUB_STEP_SUMMARY,
-        [`## ${title}`, markdown].join("\n"),
-      );
+    if (typeof markdown === "string") {
+      echo(chalk.green(markdown));
+      if (process.env.GITHUB_STEP_SUMMARY !== undefined) {
+        fs.appendFileSync(
+          process.env.GITHUB_STEP_SUMMARY,
+          [`## ${title}`, markdown].join("\n"),
+        );
+      }
     }
   } catch (err) {
-    console.error(err);
-    if (
-      err instanceof MarkdownError &&
-      process.env.GITHUB_STEP_SUMMARY !== undefined
-    ) {
-      console.error(err.markdown);
-      fs.appendFileSync(
-        process.env.GITHUB_STEP_SUMMARY,
-        [`## ${title}`, err.markdown].join("\n"),
-      );
+    echo(chalk.red((err as Error).message));
+    if (err instanceof MarkdownError) {
+      chalk.yellow(err.markdown);
+      if (process.env.GITHUB_STEP_SUMMARY !== undefined) {
+        fs.appendFileSync(
+          process.env.GITHUB_STEP_SUMMARY,
+          [`## ${title}`, err.markdown].join("\n"),
+        );
+      }
+      process.exit(1);
     }
     throw err;
   }
