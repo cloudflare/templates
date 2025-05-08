@@ -1,10 +1,14 @@
-import fs from "node:fs";
-import path from "node:path";
-import subprocess from "node:child_process";
-import { getTemplates } from "./util";
+import {
+  collectTemplateFiles,
+  getTemplates,
+  handleCloudflareResponse,
+  SeedRepo,
+} from "./util";
+import MarkdownError from "./MarkdownError";
 
 export type UploadConfig = {
   templateDirectory: string;
+  seedRepo: SeedRepo;
   api: {
     endpoint: string;
     clientId: string;
@@ -14,31 +18,35 @@ export type UploadConfig = {
 
 export async function upload(config: UploadConfig) {
   const templates = getTemplates(config.templateDirectory);
-  const errors = [];
-  for (const { path } of templates) {
-    try {
-      await uploadTemplate(path, config);
-    } catch (e) {
-      errors.push(`Upload ${path} failed: ${e}`);
-    }
-  }
+  const successes: string[] = [];
+  const errors: string[] = [];
+  await Promise.all(
+    templates.map(async ({ path }) => {
+      try {
+        await uploadTemplate(path, config);
+        successes.push(`- ✅ ${path}`);
+      } catch (err) {
+        errors.push(`- ❌ ${path} failed: ${(err as Error).message}`);
+      }
+    }),
+  );
   if (errors.length > 0) {
-    errors.forEach((error) => {
-      console.error(error);
-    });
-    process.exit(1);
+    throw new MarkdownError("Upload failed.", errors.join("\n"));
   }
+  return successes.join("\n");
 }
 
 async function uploadTemplate(templatePath: string, config: UploadConfig) {
-  const files = collectTemplateFiles(templatePath);
+  const files = collectTemplateFiles(templatePath, !!config.seedRepo);
   console.info(`Uploading ${templatePath}:`);
   const body = new FormData();
   files.forEach((file) => {
     console.info(`  - ${file.name}`);
     body.set(file.name, file);
   });
-  const response = await fetch(config.api.endpoint, {
+  const queryParams = new URLSearchParams(config.seedRepo);
+  queryParams.set("path", templatePath);
+  const response = await fetch(`${config.api.endpoint}?${queryParams}`, {
     method: "POST",
     headers: {
       "Cf-Access-Client-Id": config.api.clientId,
@@ -46,34 +54,5 @@ async function uploadTemplate(templatePath: string, config: UploadConfig) {
     },
     body,
   });
-  if (!response.ok) {
-    throw new Error(
-      `Error response from ${config.api.endpoint} (${response.status}): ${await response.text()}`,
-    );
-  }
-}
-
-function collectTemplateFiles(templatePath: string): File[] {
-  return fs
-    .readdirSync(templatePath, { recursive: true })
-    .map((file) => ({
-      name: file.toString(),
-      filePath: path.join(templatePath, file.toString()),
-    }))
-    .filter(
-      ({ filePath }) =>
-        !filePath.includes("node_modules") &&
-        !fs.statSync(filePath).isDirectory() &&
-        !gitIgnored(filePath),
-    )
-    .map(({ name, filePath }) => new File([fs.readFileSync(filePath)], name));
-}
-
-function gitIgnored(filePath: string): boolean {
-  try {
-    subprocess.execSync(`git check-ignore ${filePath}`);
-    return true;
-  } catch {
-    return false;
-  }
+  return handleCloudflareResponse(response);
 }
