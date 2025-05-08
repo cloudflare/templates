@@ -11,8 +11,6 @@ jobs:
     timeout-minutes: 20
     concurrency: templates-check-and-upload-staging
     env:
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       TEMPLATES_API_CLIENT_ID: ${{ secrets.TEMPLATES_API_CLIENT_ID }}
       TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
     steps:

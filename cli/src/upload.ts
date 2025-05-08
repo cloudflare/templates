@@ -20,14 +20,16 @@ export async function upload(config: UploadConfig) {
   const templates = getTemplates(config.templateDirectory);
   const successes: string[] = [];
   const errors: string[] = [];
-  for (const { path } of templates) {
-    try {
-      await uploadTemplate(path, config);
-      successes.push(`- ✅ ${path}`);
-    } catch (err) {
-      errors.push(`- ❌ ${path} failed: ${(err as Error).message}`);
-    }
-  }
+  await Promise.all(
+    templates.map(async ({ path }) => {
+      try {
+        await uploadTemplate(path, config);
+        successes.push(`- ✅ ${path}`);
+      } catch (err) {
+        errors.push(`- ❌ ${path} failed: ${(err as Error).message}`);
+      }
+    }),
+  );
   if (errors.length > 0) {
     throw new MarkdownError("Upload failed.", errors.join("\n"));
   }
