@@ -19,6 +19,14 @@ export type PreviewConfig = {
   };
 };
 export async function preview(config: PreviewConfig) {
+  const thisRepo = `${config.seedRepo.owner}/${config.seedRepo.repository}`;
+  if (process.env.GITHUB_REPOSITORY !== thisRepo) {
+    console.warn(`Preview links are not generated for forks (${thisRepo}).`);
+    return commentOnPR(
+      config,
+      "Preview link not generated: you must be a collaborator and not on a fork.",
+    );
+  }
   try {
     await uploadPreview(config);
     return commentOnPR(config, previewLinkBody(config));
