@@ -154,7 +154,7 @@ export async function actionWithSummary(
   } catch (err) {
     echo(chalk.red((err as Error).message));
     if (err instanceof MarkdownError) {
-      chalk.yellow(err.markdown);
+      echo(chalk.yellow(err.markdown));
       if (process.env.GITHUB_STEP_SUMMARY !== undefined) {
         fs.appendFileSync(
           process.env.GITHUB_STEP_SUMMARY,
