@@ -20,7 +20,7 @@ export async function validateD2CButtons({
       const contents = fs.readFileSync(readmePath, "utf-8");
       const url = `https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/${name}`;
       const button = `[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](${url})`;
-      if (contents.indexOf(button) !== -1) {
+      if (contents.indexOf(button) === -1) {
         numBadStatuses++;
         errors.push(
           `Please add the following to \`${name}/README.md\`:`,
