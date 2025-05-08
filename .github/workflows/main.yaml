@@ -5,11 +5,11 @@ on:
     branches: ["main"]
 
 jobs:
-  check-and-deploy:
+  check-and-deploy-main:
     name: Check and Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    concurrency: templates-check-and-deploy
+    concurrency: templates-check-and-deploy-main
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -19,8 +19,4 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm -w check
       - run: pnpm -w test
-      - run: pnpm run deploy
-      - run: |
-          pnpm run upload . \
-            --repoFullName ${{ github.repository }} \
-            --branch ${{ github.sha }}
+      - run: pnpm -w deploy

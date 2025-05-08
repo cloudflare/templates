@@ -1,4 +1,10 @@
-import { collectTemplateFiles, getTemplates, SeedRepo } from "./util";
+import {
+  collectTemplateFiles,
+  getTemplates,
+  handleCloudflareResponse,
+  SeedRepo,
+} from "./util";
+import MarkdownError from "./MarkdownError";
 
 export type UploadConfig = {
   templateDirectory: string;
@@ -12,20 +18,20 @@ export type UploadConfig = {
 
 export async function upload(config: UploadConfig) {
   const templates = getTemplates(config.templateDirectory);
-  const errors = [];
+  const successes: string[] = [];
+  const errors: string[] = [];
   for (const { path } of templates) {
     try {
       await uploadTemplate(path, config);
-    } catch (e) {
-      errors.push(`Upload ${path} failed: ${e}`);
+      successes.push(`- ✅ ${path}`);
+    } catch (err) {
+      errors.push(`- ❌ ${path} failed: ${(err as Error).message}`);
     }
   }
   if (errors.length > 0) {
-    errors.forEach((error) => {
-      console.error(error);
-    });
-    process.exit(1);
+    throw new MarkdownError("Upload failed.", errors.join("\n"));
   }
+  return successes.join("\n");
 }
 
 async function uploadTemplate(templatePath: string, config: UploadConfig) {
@@ -46,9 +52,5 @@ async function uploadTemplate(templatePath: string, config: UploadConfig) {
     },
     body,
   });
-  if (!response.ok) {
-    throw new Error(
-      `Error response from ${config.api.endpoint} (${response.status}): ${await response.text()}`,
-    );
-  }
+  return handleCloudflareResponse(response);
 }

@@ -1,5 +1,5 @@
-name: 'Setup Environment'
-description: 'Performs the repo setup including cloning, dependency installation, and node setup.'
+name: "Setup Environment"
+description: "Performs the repo setup including cloning, dependency installation, and node setup."
 
 runs:
   using: "composite"

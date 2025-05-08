@@ -35,6 +35,7 @@
     "postinstall": "turbo run build",
     "preview": "templates preview",
     "test": "turbo run test -- --passWithNoTests",
-    "upload": "templates upload"
+    "upload": "templates upload",
+    "validate-live-demo-links": "templates validate-live-demo-links"
   }
 }
