@@ -31,3 +31,5 @@ Questions about Workers? Join the [official Cloudflare Discord](https://workers.
 ## Contributing
 
 We welcome template contributions! If there's a Workers template you think would be valuable, please read our [contributing guide](./CONTRIBUTING.md) and open an issue or pull request.
+
+Test 3.
