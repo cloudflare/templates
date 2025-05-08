@@ -30,6 +30,7 @@ jobs:
           echo PR_ID=${{ github.event.number }} >> ./pr/env
           echo PR_REPOSITORY=${{ github.event.pull_request.head.repo.full_name }} >> ./pr/env
           echo PR_SHA=${{ github.event.pull_request.head.sha }} >> ./pr/env
+          echo PR_REF=${{ github.event.pull_request.head.ref }} >> ./pr/env
 
       - name: Upload PR info
         uses: actions/upload-artifact@v4

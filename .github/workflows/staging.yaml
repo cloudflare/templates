@@ -25,4 +25,4 @@ jobs:
           pnpm run upload . \
             --staging \
             --repoFullName ${{ github.repository }} \
-            --branch ${{ github.sha }}
+            --branch ${{ github.ref_name }}
