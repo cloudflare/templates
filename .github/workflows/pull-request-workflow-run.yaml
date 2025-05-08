@@ -70,7 +70,7 @@ jobs:
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.sha }}
-          path: $PREVIEW_DIR
+          path: ${{ env.PREVIEW_DIR }}
           persist-credentials: "false"
 
       - name: "Make preview"
