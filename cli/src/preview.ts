@@ -80,7 +80,7 @@ function previewLinkBody(config: PreviewConfig) {
   const url = new URL("https://dash.cloudflare.com");
   url.searchParams.set(
     "to",
-    `/:account/workers-and-pages/templates?preview_pr=${config.prId}`,
+    `/:account/workers-and-pages/template-preview/${config.prId}`,
   );
   return `[Dashboard preview link](${url})`;
 }
