@@ -5,11 +5,11 @@ on:
     branches: ["staging"]
 
 jobs:
-  check-and-deploy:
-    name: Check and Deploy
+  check-and-upload-staging:
+    name: Check and Upload
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    concurrency: templates-check-and-deploy
+    concurrency: templates-check-and-upload-staging
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -17,13 +17,12 @@ jobs:
       TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-          cache: "pnpm"
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm -w check:ci
-      - run: pnpm run upload --staging
+      - uses: ./.github/actions/setup
+
+      - run: pnpm -w check
+      - run: pnpm -w test
+      - run: |
+          pnpm run upload . \
+            --staging \
+            --repoFullName ${{ github.repository }} \
+            --branch ${{ github.ref_name }}
