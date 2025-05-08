@@ -13,6 +13,7 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}-upload
       cancel-in-progress: true
     steps:
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
 
       - name: Make templates live and publicly accessible in the dash
