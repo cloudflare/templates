@@ -7,6 +7,7 @@ import { generateNpmLockfiles, lintNpmLockfiles } from "./npm";
 import { preview } from "./preview";
 import { validateLiveDemoLinks } from "./validateLiveDemoLinks";
 import { actionWithSummary } from "./util";
+import { validateD2CButtons } from "./validateD2CButtons";
 
 const program = new Command();
 
@@ -95,6 +96,22 @@ program
   .action((templateDirectory) => {
     return actionWithSummary("Validate live demo links", () =>
       validateLiveDemoLinks({ templateDirectory }),
+    );
+  });
+
+program
+  .command("validate-d2c-buttons")
+  .description(
+    "Ensures every template has a Deploy to Cloudflare button in the readme",
+  )
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
+    return actionWithSummary("Validate Deploy to Cloudflare buttons", () =>
+      validateD2CButtons({ templateDirectory }),
     );
   });
 
