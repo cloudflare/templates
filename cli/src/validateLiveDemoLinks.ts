@@ -15,7 +15,7 @@ export async function validateLiveDemoLinks({
   await Promise.all(
     templates.map(async ({ name }) => {
       const url = `${name}.templates.workers.dev`;
-      const response = await fetch(url);
+      const response = await fetch(`https://${url}`);
       if (!response.ok) {
         numBadStatuses++;
         errors.push(`- ❌ ${url} => ${response.status}`);
