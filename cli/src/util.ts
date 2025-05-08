@@ -1,8 +1,10 @@
+import "zx/globals";
 import { parse, stringify } from "comment-json";
 import fs from "node:fs";
 import path from "node:path";
 import toml from "toml";
 import subprocess from "node:child_process";
+import MarkdownError from "./MarkdownError";
 
 const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
@@ -132,4 +134,51 @@ export function readJson(filePath: string): unknown {
 
 export function writeJson(filePath: string, object: unknown) {
   fs.writeFileSync(filePath, JSON.stringify(object, undefined, 2) + "\n");
+}
+
+export async function actionWithSummary(
+  title: string,
+  action: () => Promise<string | void> | string | void,
+) {
+  try {
+    const markdown = await action();
+    if (typeof markdown === "string") {
+      echo(chalk.green(markdown));
+      if (process.env.GITHUB_STEP_SUMMARY !== undefined) {
+        fs.appendFileSync(
+          process.env.GITHUB_STEP_SUMMARY,
+          [`## ${title}`, markdown].join("\n"),
+        );
+      }
+    }
+  } catch (err) {
+    echo(chalk.red((err as Error).message));
+    if (err instanceof MarkdownError) {
+      echo(chalk.yellow(err.markdown));
+      if (process.env.GITHUB_STEP_SUMMARY !== undefined) {
+        fs.appendFileSync(
+          process.env.GITHUB_STEP_SUMMARY,
+          [`## ${title}`, err.markdown].join("\n"),
+        );
+      }
+      process.exit(1);
+    }
+    throw err;
+  }
+}
+
+export async function handleCloudflareResponse(response: Response) {
+  const text = await response.text();
+  if (!response.ok) {
+    const json: any = JSON.parse(text);
+    if (Array.isArray(json.errors) && json.errors[0]?.message) {
+      throw new Error(
+        `Error response from ${response.url}: ${json.errors[0]?.message}`,
+      );
+    }
+    throw new Error(
+      `Error response from ${response.url} (${response.status}): ${text}`,
+    );
+  }
+  return JSON.parse(text);
 }
