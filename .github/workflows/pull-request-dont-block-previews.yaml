@@ -21,3 +21,5 @@ jobs:
 
       - name: Validate live demo links
         run: pnpm -w validate-live-demo-links
+
+      - run: echo "hello" >> $GITHUB_STEP_SUMMARY
