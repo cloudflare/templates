@@ -20,4 +20,4 @@ jobs:
         run: |
           pnpm run upload . \
             --repoFullName ${{ github.repository }} \
-            --branch ${{ github.ref }}
+            --branch ${{ github.ref_name }}
