@@ -29,7 +29,7 @@ export async function upload(config: UploadConfig) {
 }
 
 async function uploadTemplate(templatePath: string, config: UploadConfig) {
-  const files = collectTemplateFiles(templatePath);
+  const files = collectTemplateFiles(templatePath, !!config.seedRepo);
   console.info(`Uploading ${templatePath}:`);
   const body = new FormData();
   files.forEach((file) => {
