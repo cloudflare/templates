@@ -21,3 +21,6 @@ jobs:
 
       - name: Validate live demo links
         run: pnpm -w validate-live-demo-links
+
+      - name: Validate Deploy to Cloudflare buttons
+        run: pnpm -w validate-d2c-buttons
