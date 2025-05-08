@@ -9,6 +9,7 @@ import {
   writeJson,
   writeJsonC,
 } from "./util";
+import MarkdownError from "./MarkdownError";
 
 export type LintConfig = {
   templateDirectory: string;
@@ -23,13 +24,14 @@ export function lint(config: LintConfig) {
     lintTemplate(template, config.fix),
   );
   if (results.length > 0) {
-    results.forEach(({ filePath, problems }) => {
-      console.error(`Problems with ${filePath}`);
-      problems.forEach((problem) => {
-        console.log(`  - ${problem}`);
-      });
-    });
-    process.exit(1);
+    throw new MarkdownError(
+      "Linting failed. Run `pnpm -w fix:templates` to fix.",
+      results
+        .flatMap(({ filePath, problems }) => {
+          return [`- ${filePath}`, problems.map((problem) => `  - ${problem}`)];
+        })
+        .join("\n"),
+    );
   }
 }
 const CHECKS = {
@@ -89,9 +91,7 @@ function lintWranglerToml(
     fs.unlinkSync(filePath);
     return [];
   }
-  return [
-    `Found ${filePath}. Use --fix to convert wrangler.toml to wrangler.json.`,
-  ];
+  return [`Found ${filePath}. Please convert wrangler.toml to wrangler.json.`];
 }
 
 function lintWranglerJsonC(
