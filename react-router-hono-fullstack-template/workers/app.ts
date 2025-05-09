@@ -5,15 +5,15 @@ const app = new Hono();
 
 // Add more routes here
 
-app.get("*", c => {
+app.get("*", (c) => {
   const requestHandler = createRequestHandler(
     () => import("virtual:react-router/server-build"),
-    import.meta.env.MODE
+    import.meta.env.MODE,
   );
 
   return requestHandler(c.req.raw, {
-    cloudflare: { env: c.env, ctx: c.executionCtx }
-  })
-})
+    cloudflare: { env: c.env, ctx: c.executionCtx },
+  });
+});
 
 export default app;

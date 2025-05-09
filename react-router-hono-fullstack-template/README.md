@@ -26,18 +26,20 @@ A perfect starting point for building interactive, styled, and edge-deployed SPA
 
 ## Tech Stack
 
-- **Frontend**: React + React Router + ShadCN UI  
-  - SPA architecture powered by React Router  
-  - Includes accessible, themeable UI from ShadCN  
-  - Styled with utility-first Tailwind CSS  
+- **Frontend**: React + React Router + ShadCN UI
+
+  - SPA architecture powered by React Router
+  - Includes accessible, themeable UI from ShadCN
+  - Styled with utility-first Tailwind CSS
   - Built and optimized with Vite
 
-- **Backend**: Hono on Cloudflare Workers  
-  - API routes defined and handled via Hono in `/api/*`  
+- **Backend**: Hono on Cloudflare Workers
+
+  - API routes defined and handled via Hono in `/api/*`
   - Supports REST-like endpoints, CORS, and middleware
 
-- **Deployment**: Cloudflare Workers via Wrangler  
-  - Vite plugin auto-bundles frontend and backend together  
+- **Deployment**: Cloudflare Workers via Wrangler
+  - Vite plugin auto-bundles frontend and backend together
   - Deployed worldwide on Cloudflare’s edge network
 
 ## Resources
