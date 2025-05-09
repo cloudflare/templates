@@ -29,7 +29,9 @@ jobs:
         run: pnpm -w test
 
       - name: Save PR ID
-        run: ${{ github.event.number }} > ${{ env.PR_ID_FILE }}
+        run: |
+          pr_id=${{ github.event.number }}
+          $pr_id > ${{ env.PR_ID_FILE }}
 
       - name: Upload PR ID
         uses: actions/upload-artifact@v4
