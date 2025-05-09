@@ -10,7 +10,6 @@ permissions:
   pull-requests: write
 
 env:
-  PR_ID_DIR: "_pr"
   PR_ID_FILE: "_pr_id.txt"
   PREVIEW_DIR: "_preview-templates"
   ALLOW_PREVIEW_LABEL: "allow preview"
@@ -31,13 +30,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pr_id
-          path: ${{ env.PR_ID_DIR }}
           github-token: ${{ env.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
 
       - shell: bash
         run: |
-          value=`cat ${{ env.PR_ID_DIR }}/${{ env.PR_ID_FILE }}`
+          value=`cat ${{ env.PR_ID_FILE }}`
           echo PR_ID=$value >> $GITHUB_ENV
 
       - name: "Download pull request info"
