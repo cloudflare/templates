@@ -6,6 +6,11 @@ on:
       - opened
       - reopened
       - synchronize
+      - labeled
+
+env:
+  PR_ID_FILE: "_pr_id.txt"
+  PR_ID: ${{ github.event.number }}
 
 jobs:
   check:
@@ -24,16 +29,11 @@ jobs:
       - name: Run tests
         run: pnpm -w test
 
-      - name: Save PR info # extract the info we need to run in the trusted context later
-        run: |
-          mkdir -p ./pr
-          echo PR_ID=${{ github.event.number }} >> ./pr/env
-          echo PR_REPOSITORY=${{ github.event.pull_request.head.repo.full_name }} >> ./pr/env
-          echo PR_SHA=${{ github.event.pull_request.head.sha }} >> ./pr/env
-          echo PR_REF=${{ github.event.pull_request.head.ref }} >> ./pr/env
+      - name: Save PR ID
+        run: echo "$PR_ID" > ${{ env.PR_ID_FILE }}
 
-      - name: Upload PR info
+      - name: Upload PR ID
         uses: actions/upload-artifact@v4
         with:
-          name: pr
-          path: pr/
+          name: pr_id
+          path: ${{ env.PR_ID_FILE }}
