@@ -22,7 +22,7 @@
       "package_json_hash": "3c65985a7dae3fddd2b8ef787d615935345442b9"
     },
     "durable-chat-template": {
-      "package_json_hash": "e3af53fbada4878e1f2b17c9f5e573ba971be3c9"
+      "package_json_hash": "4b582412cb853df48176677318113e9f8ed97296"
     },
     "postgres-hyperdrive-template": {
       "package_json_hash": "d632291510a8fb1902c8711467085eb8378833f7"
@@ -31,7 +31,7 @@
       "package_json_hash": "ca1c4f16625cedd28b680ac53a506def0b6cac42"
     },
     "react-router-starter-template": {
-      "package_json_hash": "c322d490eec926b3f774689e823ffedc782893f0"
+      "package_json_hash": "ff3888fbe13023bc0b2d4c698554a8aeee6097c3"
     },
     "saas-admin-template": {
       "package_json_hash": "3406f8c5ef7b9f0b5513a79eebc0123dbc3ad261"
@@ -49,10 +49,10 @@
       "package_json_hash": "c9734ba698e6de88f2a0af248311b39dbefebf13"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "3332b3545939507ade048616d11e7e041ba855e5"
+      "package_json_hash": "8242c7b608795ca8481594cabfcf6b66964d84a9"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "2724b0149f5b0f67ef0eafb77becdeca1e1ac455"
+      "package_json_hash": "144b07963382b3db3553b98306b361bce7ea699c"
     }
   }
 }

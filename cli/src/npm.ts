@@ -1,6 +1,7 @@
 import "zx/globals";
 import { z } from "zod";
 import { createHash } from "node:crypto";
+import MarkdownError from "./MarkdownError";
 
 const repoRoot = path.resolve(__dirname, "../..");
 
@@ -53,6 +54,7 @@ export async function lintNpmLockfiles(): Promise<void> {
   const config = await new TemplatesConfig().load();
   const templates = await getTemplates();
 
+  const errors: string[] = [];
   for (const name of templates) {
     cd(path.resolve(repoRoot, name));
     const packageJsonHash = await hashFile("./package.json");
@@ -61,11 +63,21 @@ export async function lintNpmLockfiles(): Promise<void> {
     if (modified) {
       echo(
         chalk.red(
-          `npm package lock for ${name} is out of date! Please run \`pnpm generate-npm-lockfiles\``,
+          `npm package lock for ${name} is out of date! Please run \`pnpm -w fix:lockfiles\`.`,
         ),
       );
-      process.exit(1);
+      errors.push(`- ❌ ${name}`);
     }
+  }
+  if (errors.length) {
+    throw new MarkdownError(
+      "Found out-of-date npm lockfiles.",
+      [
+        "The following templates are out of date:",
+        ...errors,
+        "Please run `pnpm -w fix:lockfiles`.",
+      ].join("\n"),
+    );
   }
 }
 
