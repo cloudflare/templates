@@ -5,8 +5,10 @@ env.d.ts
 # Framework build output
 .open-next
 .astro
+.react-router
 
 pnpm-lock.yaml
 templates.json
 package-lock.json
 yarn.lock
+

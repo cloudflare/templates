@@ -1,0 +1,39 @@
+name: "Pull Request"
+
+on:
+  pull_request: # this action runs in an untrusted but secure context with no secrets
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+
+env:
+  PR_ID_FILE: "_pr_id.txt"
+  PR_ID: ${{ github.event.number }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-check
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Run checks
+        run: pnpm -w check
+
+      - name: Run tests
+        run: pnpm -w test
+
+      - name: Save PR ID
+        run: echo "$PR_ID" > ${{ env.PR_ID_FILE }}
+
+      - name: Upload PR ID
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr_id
+          path: ${{ env.PR_ID_FILE }}

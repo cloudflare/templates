@@ -30,11 +30,13 @@ export class MyDurableObject extends DurableObject<Env> {
    * The Durable Object exposes an RPC method sayHello which will be invoked when when a Durable
    *  Object instance receives a request from a Worker via the same method invocation on the stub
    *
-   * @param name - The name provided to a Durable Object instance from a Worker
    * @returns The greeting to be sent back to the Worker
    */
-  async sayHello(name: string): Promise<string> {
-    return `Hello, ${name}!`;
+  async sayHello(): Promise<string> {
+    let result = this.ctx.storage.sql
+      .exec("SELECT 'Hello, World!' as greeting")
+      .one() as { greeting: string };
+    return result.greeting;
   }
 }
 
@@ -49,9 +51,12 @@ export default {
    */
   async fetch(request, env, ctx): Promise<Response> {
     // Create a `DurableObjectId` for an instance of the `MyDurableObject`
-    // class named "foo". Requests from all Workers to the instance named
-    // "foo" will go to a single globally unique Durable Object instance.
-    const id: DurableObjectId = env.MY_DURABLE_OBJECT.idFromName("foo");
+    // class. The name of class is used to identify the Durable Object.
+    // Requests from all Workers to the instance named
+    // will go to a single globally unique Durable Object instance.
+    const id: DurableObjectId = env.MY_DURABLE_OBJECT.idFromName(
+      new URL(request.url).pathname,
+    );
 
     // Create a stub to open a communication channel with the Durable
     // Object instance.
@@ -59,7 +64,7 @@ export default {
 
     // Call the `sayHello()` RPC method on the stub to invoke the method on
     // the remote Durable Object instance
-    const greeting = await stub.sayHello("world");
+    const greeting = await stub.sayHello();
 
     return new Response(greeting);
   },

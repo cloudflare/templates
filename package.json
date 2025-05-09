@@ -4,18 +4,39 @@
     "cli": "workspace:*",
     "prettier": "3.5.3",
     "syncpack": "13.0.3",
-    "tsx": "4.19.3",
-    "turbo": "2.4.4",
-    "vitest": "3.0.9"
+    "turbo": "2.5.0",
+    "vitest": "3.1.2"
+  },
+  "engines": {
+    "node": ">=20.16.0 || >=22.3.0"
   },
   "packageManager": "pnpm@10.2.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
+  },
   "scripts": {
-    "check:ci": "tsx cli/src/index.ts lint . && prettier . --check && syncpack lint && turbo run check types && git diff --exit-code && pnpm lint-npm-lockfiles",
+    "check": "pnpm run /^check:.*/ && git diff --exit-code",
+    "check:lockfiles": "templates lint-npm-lockfiles",
+    "check:prettier": "prettier . --check",
+    "check:syncpack": "syncpack lint",
+    "check:templates": "templates lint .",
+    "check:turbo": "turbo run check cf-typegen",
     "deploy": "turbo run deploy",
-    "fix:ci": "tsx cli/src/index.ts lint . --fix && prettier . --write && syncpack format && syncpack fix-mismatches && turbo run types && pnpm generate-npm-lockfiles",
-    "generate-npm-lockfiles": "tsx cli/src/index.ts generate-npm-lockfiles",
-    "lint-npm-lockfiles": "tsx cli/src/index.ts lint-npm-lockfiles",
-    "test": "vitest",
-    "upload": "tsx cli/src/index.ts upload ."
+    "fix": "pnpm run /^fix:.*/",
+    "fix:lockfiles": "templates generate-npm-lockfiles",
+    "fix:prettier": "prettier . --write",
+    "fix:syncpack": "syncpack format && syncpack fix-mismatches",
+    "fix:templates": "templates lint . --fix",
+    "fix:turbo": "turbo run cf-typegen",
+    "postinstall": "turbo run build",
+    "preview": "templates preview",
+    "test": "turbo run test -- --passWithNoTests",
+    "upload": "templates upload",
+    "validate-d2c-buttons": "templates validate-d2c-buttons",
+    "validate-live-demo-links": "templates validate-live-demo-links"
   }
 }

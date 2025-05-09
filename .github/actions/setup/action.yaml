@@ -1,0 +1,28 @@
+name: "Setup Environment"
+description: "Performs the repo setup including cloning, dependency installation, and node setup."
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache turbo build setup
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20.x"
+        cache: "pnpm"
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile --child-concurrency=10
+      shell: bash

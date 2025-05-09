@@ -1,6 +1,6 @@
 # d1-starter-sessions-api
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/d1-starter-sessions-api)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/d1-starter-sessions-api-template)
 
 <!-- dash-content-start -->
 
@@ -29,7 +29,7 @@ The UI when visiting the deployed Worker project shows 3 buttons.
 The UI JavaScript code maintains the latest `bookmark` returned by the API and sends it along every subsequent request.
 This ensures that we have sequential consistency in our observed database results and all our actions are properly ordered.
 
-Read more information about how the Sessions API works, and how sequential consistency is achieved in the [D1 read replication documentation](https://developers.cloudflare.com/d1/best-practices/read-replication/.
+Read more information about how the Sessions API works, and how sequential consistency is achieved in the [D1 read replication documentation](https://developers.cloudflare.com/d1/best-practices/read-replication/).
 
 <!-- dash-content-end -->
 

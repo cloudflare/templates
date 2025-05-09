@@ -2,8 +2,14 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/remix-starter-template)
 
+<!-- dash-content-start -->
+
+Build a fullstack Remix application, deployed to Cloudflare Workers.
+
 - 📖 [Remix docs](https://remix.run/docs)
 - 📖 [Remix Cloudflare docs](https://remix.run/guides/vite#cloudflare)
+
+<!-- dash-content-end -->
 
 ## Development
 
