@@ -31,6 +31,7 @@ jobs:
         with:
           name: pr_id
           path: ${{ env.PR_ID_FILE }}
+          github-token: ${{ env.GITHUB_TOKEN }}
           run-id: ${{github.event.workflow_run.id }}
 
       - shell: bash
