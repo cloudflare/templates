@@ -10,6 +10,7 @@ on:
 
 env:
   PR_ID_FILE: "_pr_id.txt"
+  PR_ID: ${{ github.event.number }}
 
 jobs:
   check:
@@ -30,8 +31,7 @@ jobs:
 
       - name: Save PR ID
         run: |
-          pr_id=${{ github.event.number }}
-          echo "$pr_id" > ${{ env.PR_ID_FILE }}
+          echo "$PR_ID" > ${{ env.PR_ID_FILE }}
 
       - name: Upload PR ID
         uses: actions/upload-artifact@v4
