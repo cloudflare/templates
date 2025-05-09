@@ -49,10 +49,10 @@ jobs:
               pull_number: process.env.PR_ID,
             })
             const allowPreview = pr.labels?.find((label) => label.name == process.env.ALLOW_PREVIEW_LABEL)
-            fs.appendFileSync(process.env.GITHUB_ENV, `PR_REPOSITORY=${pr.head.repo.full_name}`)
-            fs.appendFileSync(process.env.GITHUB_ENV, `PR_REF=${pr.head.ref}`)
+            fs.appendFileSync(process.env.GITHUB_ENV, `PR_REPOSITORY=${pr.head.repo.full_name}\n`)
+            fs.appendFileSync(process.env.GITHUB_ENV, `PR_REF=${pr.head.ref}\n`)
             if (allowPreview) {
-              fs.appendFileSync(process.env.GITHUB_ENV, 'PR_ALLOW_PREVIEW=true')
+              fs.appendFileSync(process.env.GITHUB_ENV, 'PR_ALLOW_PREVIEW=true\n')
             }
 
         #
