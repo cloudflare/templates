@@ -18,7 +18,16 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm -w check
       - run: pnpm -w test
-      - run: pnpm run deploy # pnpm deploy is a whole other thing apparently
+
+      - name: Deploy live demos
+        run: pnpm run deploy # pnpm deploy is a whole other thing apparently
 
       - name: Validate live demo links
         run: pnpm -w validate-live-demo-links
+
+      - name: Deploy to staging
+        run: |
+          pnpm run upload . \
+            --staging \
+            --repoFullName ${{ github.repository }} \
+            --branch ${{ github.ref_name }}
