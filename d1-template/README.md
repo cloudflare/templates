@@ -1,7 +1,6 @@
 # Worker + D1 Database
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/d1-template)
-
+1efdc345-0365-4d3c-90f1-84578d001487
 ![Worker + D1 Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public)
 
 <!-- dash-content-start -->
