@@ -37,6 +37,7 @@
     "test": "turbo run test -- --passWithNoTests",
     "upload": "templates upload",
     "validate-d2c-buttons": "templates validate-d2c-buttons",
-    "validate-live-demo-links": "templates validate-live-demo-links"
+    "validate-live-demo-links": "templates validate-live-demo-links",
+    "test:cli": "vitest"
   }
 }

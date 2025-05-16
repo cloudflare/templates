@@ -10,7 +10,7 @@ const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
 type PackageJson = {
   cloudflare?: {
-    dash?: boolean;
+    publish?: boolean;
   };
 };
 
@@ -110,7 +110,7 @@ function isDashTemplate(packageJsonPath: string): boolean {
       return false;
     }
     const pkg = readJson(packageJsonPath) as PackageJson;
-    return pkg.cloudflare?.dash === true;
+    return pkg.cloudflare?.publish === true;
   } catch {
     return false;
   }

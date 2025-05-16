@@ -14,14 +14,14 @@ describe("util", () => {
     fs.mkdirSync(dashTemplate, { recursive: true });
     fs.mkdirSync(nonDashTemplate, { recursive: true });
 
-    // Create package.json with dash: true
+    // Create package.json with publish: true
     writeJson(path.join(dashTemplate, "package.json"), {
-      cloudflare: { dash: true },
+      cloudflare: { publish: true },
     });
 
     // Create package.json without dash
     writeJson(path.join(nonDashTemplate, "package.json"), {
-      cloudflare: { dash: false },
+      cloudflare: { publish: false },
     });
   });
 
