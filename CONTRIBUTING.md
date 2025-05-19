@@ -12,18 +12,18 @@ If CI is failing on your pull request, running `npm run fix:ci` in the repositor
 
 ## Requirements
 
-In order to introduce a new template to this collection, the following requirements must all be satisfied. For a boiled down version of these requirements, scroll down to the [Checklist](#checklist).
+In order to introduce a new template to this collection, the following requirements must all be satisfied. For a boiled-down version of these requirements, scroll down to the [Checklist](#checklist).
 
 ### Package.json content
 
-The integrations platform extracts `name`, and `description`, and a `cloudflare` object directly from each template's `package.json` configuration. This extracted metadata provides content necessary for the template to be rendered in the Cloudflare dashboard. If the minmally required values are not included in your template, it will fail CI.
+Cloudflare's Templates Platform extracts `name`, and `description`, and a `cloudflare` object directly from each template's `package.json` configuration. This extracted metadata provides content necessary for the template to be rendered in the Cloudflare dashboard. If the minimally required values are not included in your template, it will fail CI.
 
 | Required?         | Package.json key               | Description                                                                                   | Example                                                                                                                |
 | ----------------- | ------------------------------ | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | ✅                | `name`                         | Kebab-case name of your template, should match directory                                      | durable-chat-template                                                                                                  |
 | ✅                | `description`                  | Brief, one-line description of the template                                                   | Chat with other users in real-time using Durable Objects and PartyKit.                                                 |
 | ✅                | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                          |                                                                                                                        |
-| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in dashboard                                               | Durable Chat App                                                                                                       |
+| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's dashboard                                               | Durable Chat App                                                                                                       |
 | _if publish=true_ | `cloudflare.products`          | List <=3 products featured in your example                                                    | ["D1", "Durable Objects"]                                                                                              |
 | ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                  | ["starter", "storage"]                                                                                                 |
 | _if publish=true_ | `cloudflare.icon_urls`         | Link to icons to make visible on the template card                                            | https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public (default TypeScript logo) |
@@ -48,14 +48,14 @@ All of our templates and Deploy to Cloudflare projects automatically set up Work
 To generate a package-lock.json for your template, run this command in the root of the repository:
 
 ```sh
-pnpm generate-npm-lockfiles
+pnpm fix:lockfiles
 ```
 
 ### README.md content
 
 Every ReadMe should include a “getting started” section that provides guidance for running the application locally, directions for installing any third-party tokens, and a description of the application’s functionality. You should also include a screenshot and/or live deployment of the application.
 
-A portion of your template’s README.md file will be displayed on the Template Details Page in Dash to provide the user with additional information about the template.
+A portion of your template’s README.md file will be displayed on the Template Details Page in the Cloudflare Dashboard to provide the user with additional information about the template.
 
 - ✅ This section _should_ include: Key features of the template, which bindings and frameworks the template uses, and a short description of how the template application works.
 - ❌ This section _should not_ include: Project bootstrapping instructions, shell commands, or additional images (but these things should still be inlcluded in the longer project ReadMe).
@@ -92,9 +92,9 @@ The above requirements, distilled into checklist form:
 
 - [ ] Confirm your template is working as expected, both locally and deployed
 - [ ] Write a clear, concise, and helpful ReadMe - Use a developer-oriented tone; provide neither too much nor too little detail
-- [ ] Designate which section of content should be displayed in the dashboard by wrapping it in <!-- dash-content-start --> and <!-- dash-content-end -->
-- [ ] Include a link to the publicly accessible deployed preview in your ReadMe
-- [ ] Include required metadata in package.json (title, description, cf label, cf products, icon_urls, preview_image_url)
+- [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in <!-- dash-content-start --> and <!-- dash-content-end -->
+- [ ] Include a link to the publicly-accessible deployed preview in your ReadMe
+- [ ] Include required metadata in package.json (name, description, Cloudflare label, Cloudflare products, icon_urls, preview_image_url)
 - [ ] Include the most up-to-date package lock file
 - [ ] Include a preview image of the application (16:9 aspect ratio, >=500px width) in your template assets
 - [ ] Open a PR against the public repository's main branch
