@@ -35,6 +35,7 @@
     "postinstall": "turbo run build",
     "preview": "templates preview",
     "test": "turbo run test -- --passWithNoTests",
+    "test:cli": "vitest",
     "upload": "templates upload",
     "validate-d2c-buttons": "templates validate-d2c-buttons",
     "validate-live-demo-links": "templates validate-live-demo-links"

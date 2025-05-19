@@ -14,7 +14,7 @@
     ],
     "docs_url": "https://developers.cloudflare.com/workers/",
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/0f9ff766-eb55-4eee-1ad6-efeb981fe800/public",
-    "dash": true
+    "publish": true
   },
   "dependencies": {
     "@astrojs/cloudflare": "12.5.0",
