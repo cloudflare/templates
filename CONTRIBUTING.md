@@ -8,7 +8,7 @@ We're especially interested in templates that use multiple binding or handler ty
 
 Code formatting, linting, and all other checks are covered under the `check:ci` script. The `fix:ci` script will automatically fix as many of these issues as possible.
 
-If CI is failing on your pull request, running `npm run fix:ci` in the repository root might solve your problems.
+If CI is failing on your pull request, running `pnpm run fix:ci` in the repository root might solve your problems.
 
 ## Requirements
 
@@ -23,8 +23,8 @@ Cloudflare's Templates Platform extracts `name`, and `description`, and a `cloud
 | ✅                | `name`                         | Kebab-case name of your template, should match directory                                      | durable-chat-template                                                                                                  |
 | ✅                | `description`                  | Brief, one-line description of the template                                                   | Chat with other users in real-time using Durable Objects and PartyKit.                                                 |
 | ✅                | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                          |                                                                                                                        |
-| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's dashboard                                               | Durable Chat App                                                                                                       |
-| _if publish=true_ | `cloudflare.products`          | List <=3 products featured in your example                                                    | ["D1", "Durable Objects"]                                                                                              |
+| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's dashboard                                  | Durable Chat App                                                                                                       |
+| _if publish=true_ | `cloudflare.products`          | List <3 products featured in your example                                                     | ["D1", "Durable Objects"]                                                                                              |
 | ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                  | ["starter", "storage"]                                                                                                 |
 | _if publish=true_ | `cloudflare.icon_urls`         | Link to icons to make visible on the template card                                            | https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public (default TypeScript logo) |
 | _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                            | (Link will be provided during PR review)                                                                               |
@@ -76,15 +76,15 @@ This content will NOT be included in the template detail page
 
 ### Secrets & Environment Variables
 
+For both Secrets and Env Vars, we recommend letting your users know if any configuration is missing after first deploying directly in the deployed application's UI. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
+
 #### Secrets
 
-Until the Secrets Store is ready for adoption, there is no standard way to derive the required secrets from a project’s repository. Please include a section in your README.md listing all required secrets for your template and where users should go to find the appropriate values.
+Today, there is no standard way to derive the required secrets from a project’s repository. Please include a section in your ReadMe listing all required secrets for your template and where users should go to find the appropriate values.
 
 #### Environment Variables
 
 Environment Variables that do not require users to update them will automatically be included in the new project (e.g. `“ENVIRONMENT”: “staging”`). Environment variables that require user update (e.g. `“PROJECT_ID”: “[your project id]”`) will need to be configured after initial deployment by following the documentation for [Environment Variables](https://developers.cloudflare.com/workers/configuration/environment-variables) and [Secrets](https://developers.cloudflare.com/workers/configuration/secrets).
-
-For both Secrets and Env Vars, we recommend letting your users know if any configuration is missing after first deploying directly in the deployed application's UI. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
 
 ## Checklist
 
@@ -94,7 +94,7 @@ The above requirements, distilled into checklist form:
 - [ ] Write a clear, concise, and helpful ReadMe - Use a developer-oriented tone; provide neither too much nor too little detail
 - [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in <!-- dash-content-start --> and <!-- dash-content-end -->
 - [ ] Include a link to the publicly-accessible deployed preview in your ReadMe
-- [ ] Include required metadata in package.json (name, description, Cloudflare label, Cloudflare products, icon_urls, preview_image_url)
+- [ ] Include required metadata in package.json (name, description, cloudflare.label, cloudflare.products, cloudflare.icon_urls, cloudflare.preview_image_url)
 - [ ] Include the most up-to-date package lock file
 - [ ] Include a preview image of the application (16:9 aspect ratio, >=500px width) in your template assets
 - [ ] Open a PR against the public repository's main branch
