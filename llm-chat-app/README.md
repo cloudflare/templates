@@ -5,7 +5,12 @@ A simple, ready-to-deploy chat application template powered by Cloudflare Worker
 <!-- dash-content-start -->
 ## Demo
 
-This template demonstrates how to build a chat interface using Cloudflare Workers AI. It combines Workers for backend processing with the Workers AI binding to create an interactive streaming chat experience.
+This template demonstrates how to build an AI-powered chat interface using Cloudflare Workers AI with streaming responses. It features:
+
+- Real-time streaming of AI responses using Server-Sent Events (SSE)
+- Easy customization of models and system prompts
+- Support for AI Gateway integration
+- Clean, responsive UI that works on mobile and desktop
 <!-- dash-content-end -->
 
 ## Features
@@ -104,11 +109,16 @@ To use a different AI model, update the `MODEL_ID` constant in `src/index.ts`. Y
 
 ### Using AI Gateway
 
-The template includes commented code for AI Gateway integration. To use AI Gateway:
+The template includes commented code for AI Gateway integration, which provides additional capabilities like rate limiting, caching, and analytics.
 
-1. Uncomment the gateway configuration in `src/index.ts`
-2. Replace `YOUR_GATEWAY_ID` with your actual AI Gateway ID
-3. Configure other gateway options as needed
+To enable AI Gateway:
+
+1. [Create an AI Gateway](https://dash.cloudflare.com/?to=/:account/ai/ai-gateway) in your Cloudflare dashboard
+2. Uncomment the gateway configuration in `src/index.ts`
+3. Replace `YOUR_GATEWAY_ID` with your actual AI Gateway ID
+4. Configure other gateway options as needed:
+   - `skipCache`: Set to `true` to bypass gateway caching
+   - `cacheTtl`: Set the cache time-to-live in seconds
 
 Learn more about [AI Gateway](https://developers.cloudflare.com/ai-gateway/).
 
