@@ -2,6 +2,8 @@
 
 A simple, ready-to-deploy chat application template powered by Cloudflare Workers AI. This template provides a clean starting point for building AI chat applications with streaming responses.
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/llm-chat-app)
+
 <!-- dash-content-start -->
 
 ## Demo
@@ -22,6 +24,7 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 - 📱 Mobile-friendly design
 - 🔄 Maintains chat history on the client
 <!-- dash-content-end -->
+
 ## Getting Started
 
 ### Prerequisites
