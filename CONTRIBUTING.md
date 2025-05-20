@@ -58,7 +58,7 @@ Every ReadMe should include a “getting started” section that provides guidan
 A portion of your template’s README.md file will be displayed on the Template Details Page in the Cloudflare Dashboard to provide the user with additional information about the template.
 
 - ✅ This section _should_ include: Key features of the template, which bindings and frameworks the template uses, and a short description of how the template application works.
-- ❌ This section _should not_ include: Project bootstrapping instructions, shell commands, or additional images (but these things should still be inlcluded in the longer project ReadMe).
+- ❌ This section _should not_ include: Project bootstrapping instructions, shell commands, or additional images (but these things should still be included in the longer project ReadMe).
 
 You can designate the block of content to display by wrapping it in a markdown comment like so:
 
@@ -76,7 +76,7 @@ This content will NOT be included in the template detail page
 
 ### Secrets & Environment Variables
 
-For both Secrets and Env Vars, we recommend letting your users know if any configuration is missing after first deploying directly in the deployed application's UI. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
+For both Secrets and Env Vars, we recommend letting your users know if any configuration is missing directly in the deployed application's UI. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
 
 #### Secrets
 
@@ -84,7 +84,7 @@ Today, there is no standard way to derive the required secrets from a project’
 
 #### Environment Variables
 
-Environment Variables that do not require users to update them will automatically be included in the new project (e.g. `“ENVIRONMENT”: “staging”`). Environment variables that require user update (e.g. `“PROJECT_ID”: “[your project id]”`) will need to be configured after initial deployment by following the documentation for [Environment Variables](https://developers.cloudflare.com/workers/configuration/environment-variables) and [Secrets](https://developers.cloudflare.com/workers/configuration/secrets).
+Environment Variables that do not require user updates will automatically be included in the new project (e.g. `“ENVIRONMENT”: “staging”`). Environment variables that require user updates (e.g. `“PROJECT_ID”: “[your project id]”`) will need to be configured after initial deployment by following the documentation for [Environment Variables](https://developers.cloudflare.com/workers/configuration/environment-variables) and [Secrets](https://developers.cloudflare.com/workers/configuration/secrets).
 
 ## Checklist
 
