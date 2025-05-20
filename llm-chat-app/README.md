@@ -3,6 +3,7 @@
 A simple, ready-to-deploy chat application template powered by Cloudflare Workers AI. This template provides a clean starting point for building AI chat applications with streaming responses.
 
 <!-- dash-content-start -->
+
 ## Demo
 
 This template demonstrates how to build an AI-powered chat interface using Cloudflare Workers AI with streaming responses. It features:
@@ -33,12 +34,14 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 ### Installation
 
 1. Clone this repository:
+
    ```bash
    git clone https://github.com/cloudflare/templates.git
    cd templates/llm-chat-app
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -51,6 +54,7 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 ### Development
 
 Start a local development server:
+
 ```bash
 npm run dev
 ```
@@ -62,6 +66,7 @@ Note: Using Workers AI accesses your Cloudflare account even during local develo
 ### Deployment
 
 Deploy to Cloudflare Workers:
+
 ```bash
 npm run deploy
 ```

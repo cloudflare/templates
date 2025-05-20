@@ -7,7 +7,7 @@ export interface Env {
    * Binding for the Workers AI API.
    */
   AI: Ai;
-  
+
   /**
    * Binding for static assets.
    */
@@ -18,6 +18,6 @@ export interface Env {
  * Represents a chat message.
  */
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
