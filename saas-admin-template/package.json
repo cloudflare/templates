@@ -47,14 +47,15 @@
   "scripts": {
     "astro": "astro",
     "build": "astro build",
+    "postbuild": "npm run wrangler:wrapper",
     "cf-typegen": "wrangler types",
-    "check": "astro build && npm run wrangler:wrapper && wrangler deploy --dry-run",
+    "check": "npm run build && wrangler deploy --dry-run",
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
-    "deploy": "astro build && npm run wrangler:wrapper && wrangler deploy",
-    "dev": "astro build && npm run wrangler:wrapper && npx wrangler dev",
+    "deploy": "wrangler deploy",
+    "dev": "npm run build && npx wrangler dev",
     "predeploy": "npm run db:migrate:remote",
-    "preview": "astro build && npm run wrangler:wrapper && wrangler dev",
+    "preview": "npm run build && wrangler dev",
     "wrangler:wrapper": "cp src/workflows/wrapper.js dist/index.js"
   }
 }
