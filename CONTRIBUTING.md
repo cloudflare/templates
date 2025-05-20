@@ -6,9 +6,9 @@ We're especially interested in templates that use multiple binding or handler ty
 
 ## CI Checks
 
-Code formatting, linting, and all other checks are covered under the `check:ci` script. The `fix:ci` script will automatically fix as many of these issues as possible.
+Code formatting, linting, and all other checks are covered under the `check:ci` script. The `fix` script will automatically fix as many of these issues as possible.
 
-If CI is failing on your pull request, running `pnpm run fix:ci` in the repository root might solve your problems.
+If CI is failing on your pull request, running `pnpm run fix` in the repository root might solve your problems.
 
 ## Requirements
 
