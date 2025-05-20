@@ -12,7 +12,6 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 - Easy customization of models and system prompts
 - Support for AI Gateway integration
 - Clean, responsive UI that works on mobile and desktop
-<!-- dash-content-end -->
 
 ## Features
 
@@ -22,7 +21,7 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 - 🛠️ Built with TypeScript and Cloudflare Workers
 - 📱 Mobile-friendly design
 - 🔄 Maintains chat history on the client
-
+<!-- dash-content-end -->
 ## Getting Started
 
 ### Prerequisites
