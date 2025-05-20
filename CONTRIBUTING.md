@@ -6,7 +6,7 @@ We're especially interested in templates that use multiple binding or handler ty
 
 ## CI Checks
 
-Code formatting, linting, and all other checks are covered under the `check:ci` script. The `fix` script will automatically fix as many of these issues as possible.
+Code formatting, linting, and all other checks are covered under the `check` script. The `fix` script will automatically fix as many of these issues as possible.
 
 If CI is failing on your pull request, running `pnpm run fix` in the repository root might solve your problems.
 
@@ -22,7 +22,7 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | ✅                | `name`                         | Kebab-case name of your template, should match directory                                                      | durable-chat-template                                                                                                  |
 | ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit.                                                 |
-| ✅                | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                                                                        |
+|                  | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                                                                        |
 | _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                                                                       |
 | _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                                                                              |
 | ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                                                                 |
