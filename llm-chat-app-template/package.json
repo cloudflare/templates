@@ -1,5 +1,5 @@
 {
-  "name": "llm-chat-app",
+  "name": "llm-chat-app-template",
   "version": "0.0.0",
   "private": true,
   "description": "A simple chat application powered by Cloudflare Workers AI",
@@ -22,6 +22,7 @@
       "ai"
     ],
     "docs_url": "https://developers.cloudflare.com/workers-ai/",
+    "icon_urls": [],
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/153a71bf-d89c-4425-e510-0c7488f22500/public",
     "publish": true
   },

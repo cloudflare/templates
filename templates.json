@@ -53,6 +53,9 @@
     },
     "react-postgres-fullstack-template": {
       "package_json_hash": "308e5a7c162cf129f9dcb8c2ea60bf638ddbbc70"
+    },
+    "llm-chat-app-template": {
+      "package_json_hash": "91e67ba16f7787dd3d8a5861dc8ab264854d044b"
     }
   }
 }
