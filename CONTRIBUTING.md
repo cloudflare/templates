@@ -92,6 +92,7 @@ Environment variables that do not require users to update them will automaticall
 
 The above requirements, distilled into checklist form:
 
+- [ ] Confirm your template directory ends in `-template`
 - [ ] Confirm your template is working as expected, both locally and deployed
 - [ ] Write a clear, concise, and helpful ReadMe - Use a developer-oriented tone; provide neither too much nor too little detail
 - [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in \<!-- dash-content-start --> and \<!-- dash-content-end -->
