@@ -8,6 +8,7 @@ import { preview } from "./preview";
 import { validateLiveDemoLinks } from "./validateLiveDemoLinks";
 import { actionWithSummary } from "./util";
 import { validateD2CButtons } from "./validateD2CButtons";
+import { setupHooks } from "./setupHooks";
 
 const program = new Command();
 
@@ -160,6 +161,13 @@ program
         },
       }),
     );
+  });
+
+program
+  .command("setup-hooks")
+  .description("sets up git hooks")
+  .action(() => {
+    setupHooks();
   });
 
 program.parseAsync();
