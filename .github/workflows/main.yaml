@@ -20,6 +20,7 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm -w check
       - run: pnpm -w test
+      - run: pnpm -w deps:check
 
       - name: Deploy live demos
         run: pnpm run deploy # pnpm deploy is a whole other thing apparently
