@@ -13,6 +13,7 @@ jobs:
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       TEMPLATES_API_CLIENT_ID: ${{ secrets.TEMPLATES_API_CLIENT_ID }}
       TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
     steps:
@@ -20,7 +21,17 @@ jobs:
       - uses: ./.github/actions/setup
       - run: pnpm -w check
       - run: pnpm -w test
-      - run: pnpm -w deps:check
+
+      - name: Sync dependencies
+        # if dependencies aren't already synced, make a new PR with an autofix
+        run: |
+          $(pnpm -w deps:check)
+          if [ $? -ne 0 ]; then
+            pnpm -w deps:fix
+            pnpm install
+            pnpm -w fix
+            gh pr create -B main -H autofix/${{ github.sha }} --title 'Autofix dependencies' --body 'Sync dependencies via syncpack.'
+          fi
 
       - name: Deploy live demos
         run: pnpm run deploy # pnpm deploy is a whole other thing apparently
