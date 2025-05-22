@@ -1,0 +1,1 @@
+npm create cloudflare@latest -- --template=cloudflare/templates/openauth-template
