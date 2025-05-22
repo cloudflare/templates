@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directories:
       - "**/*"
-    target-branch: "staging"
+    target-branch: "main"
     schedule:
       # just in time for on-call handoff
       interval: "weekly"

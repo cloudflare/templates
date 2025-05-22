@@ -19,13 +19,16 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: Autofix
-        run: pnpm -w deps:fix
+        run: pnpm -w fix:deps
 
       - name: Install updated packages
         run: pnpm install
 
       - name: Re-run other fixes with updated packages
         run: pnpm -w fix
+
+      - name: Run checks
+        run: pnpm -w check
 
       - name: Run tests
         run: pnpm -w test
