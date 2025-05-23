@@ -53,6 +53,9 @@
     },
     "react-postgres-fullstack-template": {
       "package_json_hash": "137cfd26e62d734cbb2013a18475472e4beb9c7b"
+    },
+    "r2-explorer-template": {
+      "package_json_hash": "e08192b8f13b50c705cd74c4e59f82868586982f"
     }
   }
 }
