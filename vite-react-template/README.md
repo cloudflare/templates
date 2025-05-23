@@ -72,7 +72,7 @@ npm run preview
 Deploy your project to Cloudflare Workers:
 
 ```bash
-npx wrangler deploy
+npm run build && npm run deploy
 ```
 
 ## Additional Resources
