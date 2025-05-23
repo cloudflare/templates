@@ -67,6 +67,7 @@ export async function depsInfo({ prId, githubToken }: DepsInfoConfig) {
     prId,
     githubToken,
     body: convertToMarkdownTable(deps),
+    noDuplicates: true,
   });
 }
 

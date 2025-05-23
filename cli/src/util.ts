@@ -187,13 +187,23 @@ export type CommentOnPRConfig = {
   prId: string;
   githubToken: string;
   body: string;
+  noDuplicates?: boolean;
 };
 
 export async function commentOnPR({
   prId,
   githubToken,
   body,
+  noDuplicates,
 }: CommentOnPRConfig) {
+  const isDuplicate = await isDuplicateComment({
+    prId,
+    githubToken,
+    body,
+  });
+  if (isDuplicate && noDuplicates) {
+    return body;
+  }
   const response = await fetch(
     `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
     {
@@ -213,6 +223,28 @@ export async function commentOnPR({
     );
   }
   return body;
+}
+
+export async function isDuplicateComment({
+  prId,
+  githubToken,
+  body,
+}: CommentOnPRConfig) {
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    {
+      headers: {
+        Authorization: `Bearer ${githubToken}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  const comments = (await response.json()) as Array<{ body: string }>;
+  return comments.find((comment) => comment.body === body);
 }
 
 export function convertToMarkdownTable(arr: Array<Record<string, unknown>>) {
