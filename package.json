@@ -5,7 +5,7 @@
     "prettier": "3.5.3",
     "syncpack": "13.0.3",
     "turbo": "2.5.0",
-    "vitest": "3.1.2"
+    "vitest": "3.1.4"
   },
   "engines": {
     "node": ">=20.16.0 || >=22.3.0"
