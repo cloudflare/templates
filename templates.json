@@ -1,7 +1,7 @@
 {
   "templates": {
     "astro-blog-starter-template": {
-      "package_json_hash": "bc868e7b2f8ed06da08ee0422ef92b1cbd00917c"
+      "package_json_hash": "db0a46cc8b322fb93bb37091be3318e19483d756"
     },
     "d1-template": {
       "package_json_hash": "20929e0c13b9e547075e00539e65e1c4017dc038"
@@ -16,7 +16,7 @@
       "package_json_hash": "425a25f11d17df904c3f944c3ff61911a595b906"
     },
     "next-starter-template": {
-      "package_json_hash": "790386f341a0e5a733c5f2393f75078ab0ae0839"
+      "package_json_hash": "4542381a1b3c3e287f41dfdfaa6c9afca4b79dc8"
     },
     "openauth-template": {
       "package_json_hash": "0a6b25c46834c6cdefd7daad43c85dd4f57b63ed"
@@ -28,31 +28,31 @@
       "package_json_hash": "d632291510a8fb1902c8711467085eb8378833f7"
     },
     "remix-starter-template": {
-      "package_json_hash": "ca1c4f16625cedd28b680ac53a506def0b6cac42"
+      "package_json_hash": "eb6b17781564ff82ee8b2e5eab5f312e585c0c9c"
     },
     "react-router-starter-template": {
-      "package_json_hash": "1f7a404b9810420df9c4457127079b3b9f4f7960"
+      "package_json_hash": "2d0ee85f8d7c1028036ec14bfdd7bdff45e0837f"
     },
     "saas-admin-template": {
-      "package_json_hash": "4c23be66c58bf655e776b7d70da78430a68f1883"
+      "package_json_hash": "43eca6c253aafe154fb06a15c02307a0cb5d7526"
     },
     "text-to-image-template": {
       "package_json_hash": "cf234718e4e75eb61b662745deca63bb1f9b472c"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "43a5f79ec8692a5f5bd5cdb16d76bcb8bbdce22d"
+      "package_json_hash": "07a8a32930c64d63dfb407770837221bf90bec4c"
     },
     "vite-react-template": {
-      "package_json_hash": "253bf7d15ee1da7a0ad4b638a3eaf7196ff315e3"
+      "package_json_hash": "aec2ed2fe03601e8d3405befb65d4c36382c183d"
     },
     "hello-world-do-template": {
       "package_json_hash": "c9734ba698e6de88f2a0af248311b39dbefebf13"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "7b589d2c47f30147ba0ad26913d5335890e70536"
+      "package_json_hash": "fe65eb5733ed8991a14f283ce3f4f78952bf2410"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "308e5a7c162cf129f9dcb8c2ea60bf638ddbbc70"
+      "package_json_hash": "137cfd26e62d734cbb2013a18475472e4beb9c7b"
     }
   }
 }
