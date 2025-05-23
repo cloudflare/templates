@@ -11,7 +11,7 @@ import { Env, ChatMessage } from "./types";
 
 // Model ID for Workers AI model
 // https://developers.cloudflare.com/workers-ai/models/
-const MODEL_ID = "@cf/meta/llama-3.1-8b-instruct-fp8-fast";
+const MODEL_ID = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 
 // Default system prompt
 const SYSTEM_PROMPT =
@@ -67,32 +67,25 @@ async function handleChatRequest(
       messages.unshift({ role: "system", content: SYSTEM_PROMPT });
     }
 
-    // Stream the AI response
-    const stream = await env.AI.run(
+    const response = await env.AI.run(
       MODEL_ID,
       {
         messages,
-        stream: true,
         max_tokens: 1024,
       },
-      // Uncomment to use AI Gateway
-      // {
-      //   gateway: {
-      //     id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID
-      //     skipCache: false,      // Set to true to bypass cache
-      //     cacheTtl: 3600,        // Cache time-to-live in seconds
-      //   },
-      // }
+      {
+        returnRawResponse: true,
+        // Uncomment to use AI Gateway
+        // gateway: {
+        //   id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID
+        //   skipCache: false,      // Set to true to bypass cache
+        //   cacheTtl: 3600,        // Cache time-to-live in seconds
+        // },
+      },
     );
 
     // Return streaming response
-    return new Response(stream, {
-      headers: {
-        "content-type": "text/event-stream",
-        "cache-control": "no-cache",
-        connection: "keep-alive",
-      },
-    });
+    return response;
   } catch (error) {
     console.error("Error processing chat request:", error);
     return new Response(
