@@ -77,19 +77,25 @@ npm run dev
 
 _If you're testing Workflows, you should run `npm run wrangler:dev` instead._
 
-5. Deploy to Cloudflare Workers:
+5. Build the application:
+
+```bash
+npm run build
+```
+
+6. Deploy to Cloudflare Workers:
 
 ```bash
 npm run deploy
 ```
 
-6. Run the database migrations remotely:
+7. Run the database migrations remotely:
 
 ```bash
 $ npm run db:migrate:remote
 ```
 
-7. Set your production API token:
+8. Set your production API token:
 
 ```bash
 npx wrangler secret put API_TOKEN
