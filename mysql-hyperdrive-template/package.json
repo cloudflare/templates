@@ -22,9 +22,9 @@
     "mysql2": "3.14.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.18",
+    "@cloudflare/vitest-pool-workers": "0.8.32",
     "typescript": "5.8.3",
-    "vitest": "3.1.2",
+    "vitest": "3.1.4",
     "wrangler": "4.12.0"
   },
   "private": true,
