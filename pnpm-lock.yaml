@@ -290,6 +290,19 @@ importers:
         specifier: 4.12.0
         version: 4.12.0(@cloudflare/workers-types@4.20250404.0)
 
+  r2-explorer-template:
+    dependencies:
+      r2-explorer:
+        specifier: ^1.1.3
+        version: 1.1.3
+    devDependencies:
+      typescript:
+        specifier: 5.8.3
+        version: 5.8.3
+      wrangler:
+        specifier: 4.12.0
+        version: 4.12.0(@cloudflare/workers-types@4.20250404.0)
+
   react-postgres-fullstack-template:
     dependencies:
       '@tailwindcss/postcss':
@@ -829,6 +842,11 @@ packages:
   '@ast-grep/napi@0.35.0':
     resolution: {integrity: sha512-3ucaaSxV6fxXoqHrE/rxAvP1THnDdY5jNzGlnvx+JvnY9C/dSRKc0jlRMRz59N3El572+/yNRUUpAV1T9aBJug==}
     engines: {node: '>= 10'}
+
+  '@asteasolutions/zod-to-openapi@7.3.2':
+    resolution: {integrity: sha512-Wvl+jHwSgYrRc3tQLMG7Qxq6wn0WjDk8E9ZA0lAyW73FqK18XPHVIKpk0lA6L0S+zmzzNKTndeV2v/Or0LyfHQ==}
+    peerDependencies:
+      zod: ^3.20.2
 
   '@astrojs/cloudflare@12.5.0':
     resolution: {integrity: sha512-rBZLC7uKsqd+qSdVWWUt2NYYeg9RnrT+npaa/qfSBRD8++yza29wsE//PYtRvM6p5wYL0sGfMlflTi1eWPyUlw==}
@@ -2285,6 +2303,11 @@ packages:
   '@hattip/walk@0.0.49':
     resolution: {integrity: sha512-AgJgKLooZyQnzMfoFg5Mo/aHM+HGBC9ExpXIjNqGimYTRgNbL/K7X5EM1kR2JY90BNKk9lo6Usq1T/nWFdT7TQ==}
     hasBin: true
+
+  '@hono/cloudflare-access@0.2.0':
+    resolution: {integrity: sha512-pHjToMqvbrX5Q+8QE6bu7KabwmyVKdHqPgzo3uqRpCuUXndkY4Bt2m6/CwmrE9SKPAhgxFTLilOgiU/DKYhSUA==}
+    peerDependencies:
+      hono: '*'
 
   '@hookform/resolvers@3.9.1':
     resolution: {integrity: sha512-ud2HqmGBM0P0IABqoskKWI6PEf6ZDDBZkFqe2Vnl+mTHCEHzr3ISjjZyCwTjC/qpL25JC9aIDkloQejvMeq0ug==}
@@ -4287,6 +4310,9 @@ packages:
   chalk@5.4.1:
     resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
+
+  chanfana@2.8.0:
+    resolution: {integrity: sha512-R0lY+c4lBVO8jnop9J5hY6W2Vq5YS3sb9NwI4nY2oJU65E38rC6LCNNhEVEITVmcn+EhuKIQK4FLJLW93gFG4g==}
 
   character-entities-html4@2.1.0:
     resolution: {integrity: sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==}
@@ -6676,6 +6702,9 @@ packages:
   oniguruma-to-es@4.1.0:
     resolution: {integrity: sha512-SNwG909cSLo4vPyyPbU/VJkEc9WOXqu2ycBlfd1UCXLqk1IijcQktSBb2yRQ2UFPsDhpkaf+C1dtT3PkLK/yWA==}
 
+  openapi3-ts@4.4.0:
+    resolution: {integrity: sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==}
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -6866,6 +6895,9 @@ packages:
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
     engines: {node: '>= 0.4'}
+
+  postal-mime@2.4.3:
+    resolution: {integrity: sha512-KT8P+/We7LH48EhjmLRLEiQx+HI6zZ5TTeuzhuZkMbcJnp9mdmxm/FgiRIzmhZm8mxmk8mtisIAelq1wNwumxg==}
 
   postcss-discard-duplicates@5.1.0:
     resolution: {integrity: sha512-zmX3IoSI2aoenxHV6C7plngHWWhUOV3sP1T8y2ifzxzbtnuhk1EdPwm0S1bIUNaJ2eNbWeGLEwzw8huPD67aQw==}
@@ -7065,6 +7097,9 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  r2-explorer@1.1.3:
+    resolution: {integrity: sha512-oMYs2NiqRvm5Zk9kitKFFBdPLQpKg1Q5me0IH/Bb/Mti4LT58q2SgME5/lp4QYC4uvFrgZoZKCuEeLciCoPE1A==}
 
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
@@ -8635,6 +8670,11 @@ snapshots:
       '@ast-grep/napi-win32-arm64-msvc': 0.35.0
       '@ast-grep/napi-win32-ia32-msvc': 0.35.0
       '@ast-grep/napi-win32-x64-msvc': 0.35.0
+
+  '@asteasolutions/zod-to-openapi@7.3.2(zod@3.24.3)':
+    dependencies:
+      openapi3-ts: 4.4.0
+      zod: 3.24.3
 
   '@astrojs/cloudflare@12.5.0(@types/node@22.14.1)(astro@5.7.4(@types/node@22.14.1)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.40.0)(terser@5.16.9)(tsx@4.19.3)(typescript@5.8.3)(yaml@2.7.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(tsx@4.19.3)(yaml@2.7.0)':
     dependencies:
@@ -10669,6 +10709,10 @@ snapshots:
       '@hattip/headers': 0.0.49
       cac: 6.7.14
       mime-types: 2.1.35
+
+  '@hono/cloudflare-access@0.2.0(hono@4.7.7)':
+    dependencies:
+      hono: 4.7.7
 
   '@hookform/resolvers@3.9.1(react-hook-form@7.56.0(react@19.0.0))':
     dependencies:
@@ -13155,6 +13199,13 @@ snapshots:
       supports-color: 7.2.0
 
   chalk@5.4.1: {}
+
+  chanfana@2.8.0:
+    dependencies:
+      '@asteasolutions/zod-to-openapi': 7.3.2(zod@3.24.3)
+      js-yaml: 4.1.0
+      openapi3-ts: 4.4.0
+      zod: 3.24.3
 
   character-entities-html4@2.1.0: {}
 
@@ -16475,6 +16526,10 @@ snapshots:
       regex: 6.0.1
       regex-recursion: 6.0.2
 
+  openapi3-ts@4.4.0:
+    dependencies:
+      yaml: 2.7.0
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -16676,6 +16731,8 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
+  postal-mime@2.4.3: {}
+
   postcss-discard-duplicates@5.1.0(postcss@8.5.3):
     dependencies:
       postcss: 8.5.3
@@ -16851,6 +16908,14 @@ snapshots:
       side-channel: 1.1.0
 
   queue-microtask@1.2.3: {}
+
+  r2-explorer@1.1.3:
+    dependencies:
+      '@hono/cloudflare-access': 0.2.0(hono@4.7.7)
+      chanfana: 2.8.0
+      hono: 4.7.7
+      postal-mime: 2.4.3
+      zod: 3.24.3
 
   radix3@1.1.2: {}
 
