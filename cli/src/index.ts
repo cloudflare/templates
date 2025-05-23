@@ -9,6 +9,7 @@ import { validateLiveDemoLinks } from "./validateLiveDemoLinks";
 import { actionWithSummary } from "./util";
 import { validateD2CButtons } from "./validateD2CButtons";
 import { setupHooks } from "./setupHooks";
+import { depsInfo } from "./depsInfo";
 
 const program = new Command();
 
@@ -159,6 +160,25 @@ program
           clientId,
           clientSecret,
         },
+      }),
+    );
+  });
+
+program
+  .command("deps-info")
+  .description(
+    "Lists out version info for dependencies that have been added or modified",
+  )
+  .requiredOption("--pr <string>", "the ID of the pull request")
+  .action((options) => {
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (!githubToken) {
+      throw new Error("Missing GITHUB_TOKEN");
+    }
+    return actionWithSummary("Deps Info", () =>
+      depsInfo({
+        prId: options.pr,
+        githubToken,
       }),
     );
   });

@@ -6,7 +6,7 @@ import toml from "toml";
 import subprocess from "node:child_process";
 import MarkdownError from "./MarkdownError";
 
-const TEMPLATE_DIRECTORY_SUFFIX = "-template";
+export const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
 type PackageJson = {
   cloudflare?: {
@@ -181,4 +181,53 @@ export async function handleCloudflareResponse(response: Response) {
     );
   }
   return JSON.parse(text);
+}
+
+export type CommentOnPRConfig = {
+  prId: string;
+  githubToken: string;
+  body: string;
+};
+
+export async function commentOnPR({
+  prId,
+  githubToken,
+  body,
+}: CommentOnPRConfig) {
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${githubToken}`,
+      },
+      body: JSON.stringify({
+        body,
+      }),
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  return body;
+}
+
+export function convertToMarkdownTable(arr: Array<Record<string, unknown>>) {
+  if (!arr || arr.length === 0) {
+    return "";
+  }
+
+  const headers = Object.keys(arr[0]);
+  const headerRow = `| ${headers.join(" | ")} |`;
+  const separatorRow = `| ${headers.map(() => "---").join(" | ")} |`;
+
+  const dataRows = arr.map((obj) => {
+    const row = headers.map((header) => obj[header]);
+    return `| ${row.join(" | ")} |`;
+  });
+
+  return [headerRow, separatorRow, ...dataRows].join("\n");
 }
