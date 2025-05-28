@@ -16,6 +16,8 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Cache turbo build setup
         uses: actions/cache@v4
