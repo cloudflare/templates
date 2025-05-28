@@ -37,7 +37,7 @@
     "autoprefixer": "10.4.21",
     "hono": "4.7.7",
     "postgres": "3.4.5",
-    "vite": "6.3.5",
+    "vite": "5.4.19",
     "wrangler": "4.16.1"
   },
   "engines": {
