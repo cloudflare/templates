@@ -18,14 +18,14 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/197c675e-4dbc-4c19-be36-9415d4979800/public"
   },
   "dependencies": {
-    "@types/node": "22.14.1",
+    "@types/node": "22.15.19",
     "mysql2": "3.14.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.18",
+    "@cloudflare/vitest-pool-workers": "0.8.32",
     "typescript": "5.8.3",
-    "vitest": "3.1.2",
-    "wrangler": "4.16.1"
+    "vitest": "3.1.4",
+    "wrangler": "4.16.0"
   },
   "private": true,
   "scripts": {

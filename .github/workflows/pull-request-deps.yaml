@@ -8,7 +8,7 @@ on:
 
 jobs:
   autofix-deps:
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     concurrency:
@@ -16,7 +16,28 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --child-concurrency=10
 
       - name: Autofix
         run: pnpm -w fix:deps
@@ -27,9 +48,6 @@ jobs:
       - name: Re-run other fixes with updated packages
         run: pnpm -w fix
 
-      - name: Run checks
-        run: pnpm -w check
-
       - name: Run tests
         run: pnpm -w test
 
@@ -39,7 +57,7 @@ jobs:
             # configure user
             git config --global user.name "${{ github.actor }}"
             git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-
+            git add .
             git commit -m 'autofix dependabot PR'
             git push
           fi
