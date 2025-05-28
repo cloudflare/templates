@@ -54,6 +54,8 @@ jobs:
             if (allowPreview) {
               fs.appendFileSync(process.env.GITHUB_ENV, 'PR_ALLOW_PREVIEW=true\n')
             }
+      - name: "Dependency info"
+        run: pnpm -w info:deps --pr $PR_ID
 
         #
         # Note: Checking out the source of the PR means checking out untrusted code.

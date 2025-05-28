@@ -1,5 +1,6 @@
 import {
   collectTemplateFiles,
+  commentOnPR,
   getTemplates,
   handleCloudflareResponse,
   SeedRepo,
@@ -27,18 +28,21 @@ export async function preview(config: PreviewConfig) {
     console.warn(
       `Preview links are not generated for forks (${headRepo}) without the \`${process.env.ALLOW_PREVIEW_LABEL}\` label.`,
     );
-    return commentOnPR(
-      config,
-      [
+    return commentOnPR({
+      ...config,
+      body: [
         "Preview link not generated: you must be on a branch, not on a fork.",
         `Collaborators may enable previews for this pull request by attaching the \`${process.env.ALLOW_PREVIEW_LABEL}\` label.`,
         "If you are already a collaborator, please create a branch rather than forking.",
       ].join("\n"),
-    );
+    });
   }
   try {
     await uploadPreview(config);
-    return commentOnPR(config, previewLinkBody(config));
+    return commentOnPR({
+      ...config,
+      body: previewLinkBody(config),
+    });
   } catch (err) {
     throw new MarkdownError(
       "Could not create preview.",
@@ -70,28 +74,6 @@ async function uploadPreview({
     body,
   });
   return handleCloudflareResponse(response);
-}
-
-async function commentOnPR({ prId, githubToken }: PreviewConfig, body: string) {
-  const response = await fetch(
-    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${githubToken}`,
-      },
-      body: JSON.stringify({
-        body,
-      }),
-    },
-  );
-  if (!response.ok) {
-    throw new Error(
-      `Error response from GitHub (${response.status}): ${await response.text()}`,
-    );
-  }
-  return body;
 }
 
 function previewLinkBody(config: PreviewConfig) {

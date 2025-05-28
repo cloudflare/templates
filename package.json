@@ -32,6 +32,7 @@
     "fix:prettier": "prettier . --write",
     "fix:templates": "templates lint . --fix",
     "fix:turbo": "turbo run cf-typegen --force",
+    "info:deps": "templates deps-info",
     "postinstall": "turbo run build && templates setup-hooks",
     "preview": "templates preview",
     "test": "turbo run test -- --passWithNoTests",

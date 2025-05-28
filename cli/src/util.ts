@@ -6,7 +6,7 @@ import toml from "toml";
 import subprocess from "node:child_process";
 import MarkdownError from "./MarkdownError";
 
-const TEMPLATE_DIRECTORY_SUFFIX = "-template";
+export const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
 type PackageJson = {
   cloudflare?: {
@@ -197,4 +197,85 @@ export async function handleCloudflareResponse(response: Response) {
     );
   }
   return JSON.parse(text);
+}
+
+export type CommentOnPRConfig = {
+  prId: string;
+  githubToken: string;
+  body: string;
+  noDuplicates?: boolean;
+};
+
+export async function commentOnPR({
+  prId,
+  githubToken,
+  body,
+  noDuplicates,
+}: CommentOnPRConfig) {
+  const isDuplicate = await isDuplicateComment({
+    prId,
+    githubToken,
+    body,
+  });
+  if (isDuplicate && noDuplicates) {
+    return body;
+  }
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${githubToken}`,
+      },
+      body: JSON.stringify({
+        body,
+      }),
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  return body;
+}
+
+export async function isDuplicateComment({
+  prId,
+  githubToken,
+  body,
+}: CommentOnPRConfig) {
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    {
+      headers: {
+        Authorization: `Bearer ${githubToken}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  const comments = (await response.json()) as Array<{ body: string }>;
+  return comments.find((comment) => comment.body === body);
+}
+
+export function convertToMarkdownTable(arr: Array<Record<string, unknown>>) {
+  if (!arr || arr.length === 0) {
+    return "";
+  }
+
+  const headers = Object.keys(arr[0]);
+  const headerRow = `| ${headers.join(" | ")} |`;
+  const separatorRow = `| ${headers.map(() => "---").join(" | ")} |`;
+
+  const dataRows = arr.map((obj) => {
+    const row = headers.map((header) => obj[header]);
+    return `| ${row.join(" | ")} |`;
+  });
+
+  return [headerRow, separatorRow, ...dataRows].join("\n");
 }
