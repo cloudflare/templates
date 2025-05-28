@@ -76,7 +76,13 @@ npm run preview
 
 If you don't have a Cloudflare account, [create one here](https://dash.cloudflare.com/sign-up)! Go to your [Workers dashboard](https://dash.cloudflare.com/?to=%2F%3Aaccount%2Fworkers-and-pages) to see your [free custom Cloudflare Workers subdomain](https://developers.cloudflare.com/workers/configuration/routing/workers-dev/) on `*.workers.dev`.
 
-Once that's done, you can deploy your app:
+Once that's done, you can build your app:
+
+```sh
+npm run build
+```
+
+And deploy it:
 
 ```sh
 npm run deploy

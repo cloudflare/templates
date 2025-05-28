@@ -72,14 +72,16 @@ This application can be deployed in two ways:
      }
    ]
    ```
-6. Deploy with `npm run deploy`
+6. Build the application with `npm run build`
+7. Deploy with `npm run deploy`
 
 ### Option 2: Without Database (Demo Mode)
 
 1. Run `npm i`
 2. Keep the Hyperdrive binding commented out in `wrangler.jsonc` (this is the default)
-3. Deploy with `npm run deploy`
-4. The app will automatically use mock data instead of a real database
+3. Build the application with `npm run build`
+4. Deploy with `npm run deploy`
+5. The app will automatically use mock data instead of a real database
 
 ## Setting Up Hyperdrive Bindings
 

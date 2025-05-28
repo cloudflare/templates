@@ -5,7 +5,7 @@
     "prettier": "3.5.3",
     "syncpack": "13.0.3",
     "turbo": "2.5.0",
-    "vitest": "3.1.2"
+    "vitest": "3.1.4"
   },
   "engines": {
     "node": ">=20.16.0 || >=22.3.0"
@@ -19,20 +19,20 @@
     ]
   },
   "scripts": {
-    "check": "pnpm run /^check:.*/ && git diff --exit-code",
+    "check": "pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",
+    "check:deps": "syncpack lint",
     "check:lockfiles": "templates lint-npm-lockfiles",
     "check:prettier": "prettier . --check",
-    "check:syncpack": "syncpack lint",
     "check:templates": "templates lint .",
-    "check:turbo": "turbo run check cf-typegen",
+    "check:turbo": "turbo run check cf-typegen --force",
     "deploy": "turbo run deploy",
-    "fix": "pnpm run /^fix:.*/",
+    "fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:turbo && pnpm run fix:prettier",
+    "fix:deps": "syncpack format && syncpack fix-mismatches",
     "fix:lockfiles": "templates generate-npm-lockfiles",
     "fix:prettier": "prettier . --write",
-    "fix:syncpack": "syncpack format && syncpack fix-mismatches",
     "fix:templates": "templates lint . --fix",
-    "fix:turbo": "turbo run cf-typegen",
-    "postinstall": "turbo run build",
+    "fix:turbo": "turbo run cf-typegen --force",
+    "postinstall": "turbo run build && templates setup-hooks",
     "preview": "templates preview",
     "test": "turbo run test -- --passWithNoTests",
     "test:cli": "vitest",
