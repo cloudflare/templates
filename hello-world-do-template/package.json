@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "typescript": "5.8.3",
-    "wrangler": "4.16.1"
+    "wrangler": "4.17.0"
   },
   "private": true,
   "scripts": {
