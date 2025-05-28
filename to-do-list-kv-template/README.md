@@ -38,7 +38,11 @@ A live public deployment of this template is available at [https://to-do-list-kv
    npx wrangler kv namespace create TO_DO_LIST
    ```
    ...and update the `kv_namespaces` -> `id` field in `wrangler.json` with the new namespace ID.
-3. Deploy the project!
+3. Build the application:
+   ```bash
+   npm run build
+   ```
+4. And deploy it!
    ```bash
    npx wrangler deploy
    ```

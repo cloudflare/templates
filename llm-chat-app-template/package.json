@@ -1,0 +1,37 @@
+{
+  "name": "llm-chat-app-template",
+  "description": "A simple chat application powered by Cloudflare Workers AI",
+  "version": "0.0.0",
+  "cloudflare": {
+    "label": "LLM Chat App",
+    "products": [
+      "Workers",
+      "Workers AI",
+      "AI Gateway"
+    ],
+    "categories": [
+      "ai"
+    ],
+    "docs_url": "https://developers.cloudflare.com/workers-ai/",
+    "icon_urls": [],
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/153a71bf-d89c-4425-e510-0c7488f22500/public",
+    "publish": true
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.32",
+    "@cloudflare/workers-types": "^4.20250404.0",
+    "@types/node": "22.15.19",
+    "typescript": "5.8.3",
+    "vitest": "~3.1.4",
+    "wrangler": "4.16.1"
+  },
+  "private": true,
+  "scripts": {
+    "cf-typegen": "wrangler types",
+    "check": "tsc --noEmit && wrangler deploy --dry-run",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest"
+  }
+}
