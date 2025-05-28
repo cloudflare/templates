@@ -16,7 +16,7 @@
       "package_json_hash": "a43524711d0192efc96e1adf9795a19078629129"
     },
     "next-starter-template": {
-      "package_json_hash": "425713275856674e3af5deb2efca242ad50c2595"
+      "package_json_hash": "2143b6e25292e3fc47fab9fb959e1bbcff07568d"
     },
     "openauth-template": {
       "package_json_hash": "96b1339406d60e10409d95057e0af66dae531ffd"
@@ -28,7 +28,7 @@
       "package_json_hash": "68456efa7b2e5336e4338e5c51b20727d0eb94ea"
     },
     "remix-starter-template": {
-      "package_json_hash": "eb6b17781564ff82ee8b2e5eab5f312e585c0c9c"
+      "package_json_hash": "723f6f8dc663aebf9d435ab99312df248a455694"
     },
     "react-router-starter-template": {
       "package_json_hash": "0d35d84e0e6cd46dc6669d8a2f373cc00a717b09"
@@ -40,10 +40,10 @@
       "package_json_hash": "f8f2ae7acc2a373ceab438b8f30f54c78acb4c27"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "db99e3aaf675cfb361315b307171a2c0c7237a39"
+      "package_json_hash": "a82c92324c3f9d08be1aaeb2a258ab15c8792757"
     },
     "vite-react-template": {
-      "package_json_hash": "dc4b32563dd1a452f2e0f5afaa48909fe779c20d"
+      "package_json_hash": "11f9b8424fb0611d51650dd4517db42e8ac39d68"
     },
     "hello-world-do-template": {
       "package_json_hash": "c737ca032b9940c7aaef7adbb5907e930496c7ba"
@@ -52,7 +52,7 @@
       "package_json_hash": "0e7fcf263aec7716687e99ccf751bf14c7b45dc7"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "65291e64e824afa648cbdce9e1669484017773f6"
+      "package_json_hash": "60cfca970585402ab1d51bb02a8c65283d08cc92"
     },
     "llm-chat-app-template": {
       "package_json_hash": "ff63cc32cc49a3b5b340a0a03d518d4998612186"
