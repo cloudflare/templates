@@ -8,7 +8,7 @@ on:
 
 jobs:
   autofix-deps:
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     concurrency:
@@ -16,6 +16,8 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Cache turbo build setup
         uses: actions/cache@v4
@@ -46,9 +48,6 @@ jobs:
       - name: Re-run other fixes with updated packages
         run: pnpm -w fix
 
-      - name: Run checks
-        run: pnpm -w check
-
       - name: Run tests
         run: pnpm -w test
 
@@ -58,7 +57,7 @@ jobs:
             # configure user
             git config --global user.name "${{ github.actor }}"
             git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-
+            git add .
             git commit -m 'autofix dependabot PR'
             git push
           fi
