@@ -20,7 +20,7 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 
 | Required?         | Package.json key               | Description                                                                                                   | Example                                                                                                                |
 | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| ✅                | `name`                         | Kebab-case name of your template, should match directory                                                      | durable-chat-template                                                                                                  |
+| ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                                                                  |
 | ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit.                                                 |
 | ✅                | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                                                                        |
 | _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                                                                       |
@@ -92,6 +92,7 @@ Environment variables that do not require users to update them will automaticall
 
 The above requirements, distilled into checklist form:
 
+- [ ] Confirm your template directory ends in `-template`
 - [ ] Confirm your template is working as expected, both locally and deployed
 - [ ] Write a clear, concise, and helpful ReadMe - Use a developer-oriented tone; provide neither too much nor too little detail
 - [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in \<!-- dash-content-start --> and \<!-- dash-content-end -->

@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "1.0.0-beta.3",
-    "@types/node": "22.14.1",
+    "@types/node": "22.15.19",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "eslint": "8.56.0",
@@ -28,16 +28,16 @@
     "postcss": "8.5.3",
     "tailwindcss": "3.4.17",
     "typescript": "5.8.3",
-    "wrangler": "4.12.0"
+    "wrangler": "4.16.0"
   },
   "scripts": {
     "build": "NEXT_PRIVATE_STANDALONE=true next build",
-    "postbuild": "opennextjs-cloudflare build -s",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
     "check": "npm run build && tsc && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "dev": "next dev",
     "lint": "next lint",
+    "postbuild": "opennextjs-cloudflare build -s",
     "preview": "npm run build && wrangler dev",
     "start": "next start"
   }
