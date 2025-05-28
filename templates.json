@@ -7,10 +7,10 @@
       "package_json_hash": "9be700dc01410d32ef02278998d9063a427a5787"
     },
     "d1-starter-sessions-api-template": {
-      "package_json_hash": "6ff9b1225353ba43d9852fb25a3236c4f4184657"
+      "package_json_hash": "cf47578bb5d8df2a06919284d1d094fa12744b6e"
     },
     "mysql-hyperdrive-template": {
-      "package_json_hash": "1f3f993eebde8c4075c9fdc27abfa4340b18848a"
+      "package_json_hash": "4451a992e152ebb861999eaee6c1a181102ad7bd"
     },
     "multiplayer-globe-template": {
       "package_json_hash": "a43524711d0192efc96e1adf9795a19078629129"
@@ -25,13 +25,13 @@
       "package_json_hash": "4f6d18eb7645b29869e4532a2798b8d9d3b9d954"
     },
     "postgres-hyperdrive-template": {
-      "package_json_hash": "68456efa7b2e5336e4338e5c51b20727d0eb94ea"
+      "package_json_hash": "fdf6bcf9eb29c4839480d80df8ca683a70bbc5d0"
     },
     "remix-starter-template": {
       "package_json_hash": "723f6f8dc663aebf9d435ab99312df248a455694"
     },
     "react-router-starter-template": {
-      "package_json_hash": "0d35d84e0e6cd46dc6669d8a2f373cc00a717b09"
+      "package_json_hash": "36bb970022e4d9b4332c3a81fc7d23faa79aca17"
     },
     "saas-admin-template": {
       "package_json_hash": "0caaa41069d14e062a99f758f455766e299aec10"
@@ -40,22 +40,22 @@
       "package_json_hash": "f8f2ae7acc2a373ceab438b8f30f54c78acb4c27"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "a82c92324c3f9d08be1aaeb2a258ab15c8792757"
+      "package_json_hash": "553b320c992f2ad80e33a22ca79d1585c13b6d6a"
     },
     "vite-react-template": {
-      "package_json_hash": "11f9b8424fb0611d51650dd4517db42e8ac39d68"
+      "package_json_hash": "2a6bd97a9b37373ae7ceb169ef5052cce1e36579"
     },
     "hello-world-do-template": {
       "package_json_hash": "c737ca032b9940c7aaef7adbb5907e930496c7ba"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "0e7fcf263aec7716687e99ccf751bf14c7b45dc7"
+      "package_json_hash": "1679e3a46ce27027e419dde109cde0fb298b2962"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "60cfca970585402ab1d51bb02a8c65283d08cc92"
+      "package_json_hash": "d19883a4a98eb1dfbde6be0884e35a9043d92006"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "ff63cc32cc49a3b5b340a0a03d518d4998612186"
+      "package_json_hash": "20aa1f21a7a36dc3f18cb3f828f53bc08182a084"
     }
   }
 }
