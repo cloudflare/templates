@@ -32,6 +32,9 @@ export const SEED_REPO_FILES = [
   "README.md",
 ];
 
+// these are all the non-template directories we expect to find
+export const ALLOWED_DIRECTORIES = ["cli", "node_modules"];
+
 export function getTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
     // If the specified path is a template directory, just return that.
@@ -50,14 +53,27 @@ export function getTemplates(templateDirectory: string): Template[] {
     ];
   }
 
+  const directories = fs
+    .readdirSync(templateDirectory)
+    .filter((file) =>
+      fs.statSync(path.join(templateDirectory, file)).isDirectory(),
+    );
+
+  for (const name of directories) {
+    if (
+      !name.endsWith(TEMPLATE_DIRECTORY_SUFFIX) &&
+      !name.startsWith(".") &&
+      !ALLOWED_DIRECTORIES.includes(name)
+    ) {
+      throw new Error(`"${name}" does not end with "-template".`);
+    }
+  }
+
   // Otherwise, we expect the specified path to be a directory containing many
   // templates (e.g. the repository root).
-  return fs
-    .readdirSync(templateDirectory)
-    .filter(
-      (file) =>
-        file.endsWith(TEMPLATE_DIRECTORY_SUFFIX) &&
-        fs.statSync(path.join(templateDirectory, file)).isDirectory(),
+  return directories
+    .filter((name) =>
+      fs.statSync(path.join(templateDirectory, name)).isDirectory(),
     )
     .filter((name) => {
       const packageJsonPath = path.join(
