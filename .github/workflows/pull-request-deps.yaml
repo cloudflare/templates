@@ -1,0 +1,63 @@
+name: "Pull Request Deps"
+
+on:
+  pull_request: # this action runs in an untrusted but secure context with no secrets
+    types:
+      - opened
+      - reopened
+
+jobs:
+  autofix-deps:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-autofix-deps
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile --child-concurrency=10
+
+      - name: Autofix
+        run: pnpm -w fix:deps
+
+      - name: Install updated packages
+        run: pnpm install --no-frozen-lockfile --child-concurrency=10
+
+      - name: Re-run other fixes with updated packages
+        run: pnpm -w fix
+
+      - name: Run tests
+        run: pnpm -w test
+
+      - name: Commit and push changes
+        run: |
+          if [[ -n "$(git diff --exit-code)" ]]; then
+            # configure user
+            git config --global user.name "${{ github.actor }}"
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .
+            git commit -m 'autofix dependabot PR'
+            git push
+          fi

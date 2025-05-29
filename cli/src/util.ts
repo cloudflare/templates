@@ -6,11 +6,11 @@ import toml from "toml";
 import subprocess from "node:child_process";
 import MarkdownError from "./MarkdownError";
 
-const TEMPLATE_DIRECTORY_SUFFIX = "-template";
+export const TEMPLATE_DIRECTORY_SUFFIX = "-template";
 
 type PackageJson = {
   cloudflare?: {
-    dash?: boolean;
+    publish?: boolean;
   };
 };
 
@@ -32,6 +32,9 @@ export const SEED_REPO_FILES = [
   "README.md",
 ];
 
+// these are all the non-template directories we expect to find
+export const ALLOWED_DIRECTORIES = ["cli", "node_modules"];
+
 export function getTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
     // If the specified path is a template directory, just return that.
@@ -50,14 +53,27 @@ export function getTemplates(templateDirectory: string): Template[] {
     ];
   }
 
+  const directories = fs
+    .readdirSync(templateDirectory)
+    .filter((file) =>
+      fs.statSync(path.join(templateDirectory, file)).isDirectory(),
+    );
+
+  for (const name of directories) {
+    if (
+      !name.endsWith(TEMPLATE_DIRECTORY_SUFFIX) &&
+      !name.startsWith(".") &&
+      !ALLOWED_DIRECTORIES.includes(name)
+    ) {
+      throw new Error(`"${name}" does not end with "-template".`);
+    }
+  }
+
   // Otherwise, we expect the specified path to be a directory containing many
   // templates (e.g. the repository root).
-  return fs
-    .readdirSync(templateDirectory)
-    .filter(
-      (file) =>
-        file.endsWith(TEMPLATE_DIRECTORY_SUFFIX) &&
-        fs.statSync(path.join(templateDirectory, file)).isDirectory(),
+  return directories
+    .filter((name) =>
+      fs.statSync(path.join(templateDirectory, name)).isDirectory(),
     )
     .filter((name) => {
       const packageJsonPath = path.join(
@@ -110,7 +126,7 @@ function isDashTemplate(packageJsonPath: string): boolean {
       return false;
     }
     const pkg = readJson(packageJsonPath) as PackageJson;
-    return pkg.cloudflare?.dash === true;
+    return pkg.cloudflare?.publish === true;
   } catch {
     return false;
   }
@@ -181,4 +197,85 @@ export async function handleCloudflareResponse(response: Response) {
     );
   }
   return JSON.parse(text);
+}
+
+export type CommentOnPRConfig = {
+  prId: string;
+  githubToken: string;
+  body: string;
+  noDuplicates?: boolean;
+};
+
+export async function commentOnPR({
+  prId,
+  githubToken,
+  body,
+  noDuplicates,
+}: CommentOnPRConfig) {
+  const isDuplicate = await isDuplicateComment({
+    prId,
+    githubToken,
+    body,
+  });
+  if (isDuplicate && noDuplicates) {
+    return body;
+  }
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${githubToken}`,
+      },
+      body: JSON.stringify({
+        body,
+      }),
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  return body;
+}
+
+export async function isDuplicateComment({
+  prId,
+  githubToken,
+  body,
+}: CommentOnPRConfig) {
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
+    {
+      headers: {
+        Authorization: `Bearer ${githubToken}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  const comments = (await response.json()) as Array<{ body: string }>;
+  return comments.find((comment) => comment.body === body);
+}
+
+export function convertToMarkdownTable(arr: Array<Record<string, unknown>>) {
+  if (!arr || arr.length === 0) {
+    return "";
+  }
+
+  const headers = Object.keys(arr[0]);
+  const headerRow = `| ${headers.join(" | ")} |`;
+  const separatorRow = `| ${headers.map(() => "---").join(" | ")} |`;
+
+  const dataRows = arr.map((obj) => {
+    const row = headers.map((header) => obj[header]);
+    return `| ${row.join(" | ")} |`;
+  });
+
+  return [headerRow, separatorRow, ...dataRows].join("\n");
 }

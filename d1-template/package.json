@@ -16,11 +16,11 @@
     ],
     "docs_url": "https://developers.cloudflare.com/d1/",
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public",
-    "dash": true
+    "publish": true
   },
   "devDependencies": {
     "typescript": "5.8.3",
-    "wrangler": "4.13.2"
+    "wrangler": "4.16.1"
   },
   "scripts": {
     "cf-typegen": "wrangler types",

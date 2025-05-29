@@ -40,7 +40,13 @@ You will need to rerun typegen whenever you make changes to `wrangler.toml`.
 
 If you don't already have an account, then [create a cloudflare account here](https://dash.cloudflare.com/sign-up) and after verifying your email address with Cloudflare, go to your dashboard and set up your free custom Cloudflare Workers subdomain.
 
-Once that's done, you should be able to deploy your app:
+Once that's done, you should be able to build your app:
+
+```sh
+npm run build
+```
+
+And deploy it:
 
 ```sh
 npm run deploy
