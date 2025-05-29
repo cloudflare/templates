@@ -1,7 +1,7 @@
 import {
   commentOnPR,
-  convertToMarkdownTable,
-  TEMPLATE_DIRECTORY_SUFFIX,
+  convertToMarkdownTable, getLatestPackageVersion,
+  TEMPLATE_DIRECTORY_SUFFIX
 } from "./util";
 
 export type DepsInfoConfig = {
@@ -98,19 +98,6 @@ async function getPackageJSON(url: string) {
     dependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;
   };
-}
-
-async function getLatestPackageVersion(packageName: string) {
-  const response = await fetch(
-    `https://registry.npmjs.org/${packageName}/latest`,
-  );
-  if (!response.ok) {
-    throw new Error(
-      `Error response from ${response.url} (${response.status}): ${await response.text()}`,
-    );
-  }
-  const { version } = (await response.json()) as { version: string };
-  return version;
 }
 
 async function makeDepsInfo(
