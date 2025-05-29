@@ -4,7 +4,9 @@
   "name": "durable-chat-template",
   "migrations": [
     {
-      "new_sqlite_classes": ["Chat"],
+      "new_sqlite_classes": [
+        "Chat"
+      ],
       "tag": "v1"
     }
   ],

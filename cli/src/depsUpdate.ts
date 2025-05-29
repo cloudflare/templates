@@ -126,4 +126,3 @@ function getPackages() {
   });
   return JSON.parse(result) as PNPMPackageInfo[];
 }
-//# sourceMappingURL=depsUpdate.js.map

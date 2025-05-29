@@ -4,7 +4,9 @@
   "name": "multiplayer-globe-template",
   "migrations": [
     {
-      "new_classes": ["Globe"],
+      "new_classes": [
+        "Globe"
+      ],
       "tag": "v1"
     }
   ],
