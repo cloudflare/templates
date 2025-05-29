@@ -1,6 +1,10 @@
 import "zx/globals";
 import subprocess from "node:child_process";
-import { convertToMarkdownTable, createPR, getLatestPackageVersion } from "./util";
+import {
+  convertToMarkdownTable,
+  createPR,
+  getLatestPackageVersion,
+} from "./util";
 
 export type DepsUpdateConfig = {
   githubToken: string;

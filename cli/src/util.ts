@@ -288,7 +288,7 @@ export async function createPR({ githubToken, ...params }: CreatePRConfig) {
       `Error response from GitHub (${response.status}): ${await response.text()}`,
     );
   }
-  return await response.json() as { url: string, id: number };
+  return (await response.json()) as { url: string; id: number };
 }
 
 export async function getLatestPackageVersion(packageName: string) {
