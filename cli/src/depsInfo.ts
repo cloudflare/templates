@@ -60,8 +60,8 @@ export async function depsInfo({ prId, githubToken }: DepsInfoConfig) {
     }
   }
   deps.sort((a, b) => {
-    if (a.template < b.template) return 1;
-    if (a.template > b.template) return -1;
+    if (a.template < b.template) return -1;
+    if (a.template > b.template) return 1;
     return 0;
   });
   await commentOnPR({

@@ -12,28 +12,34 @@ export async function depsUpdate({
   githubActor,
 }: DepsUpdateConfig) {
   const packages = getPackages();
-  const toUpdate = new Map<string, { packages: string[]; version: string }>();
-  const alreadyLatest = new Set();
+  const toUpdate = new Map<
+    string,
+    { packages: Record<string, string>; latestVersion: string }
+  >();
   for (const pkg of packages) {
     for (const dependencies of [
       pkg.dependencies || {},
       pkg.devDependencies || {},
     ]) {
       for (const [depName, info] of Object.entries(dependencies)) {
-        if (toUpdate.has(depName)) {
-          toUpdate.get(depName)?.packages.push(pkg.name);
+        if (!info.resolved) {
+          // it's a local dependency, like the CLI -- not an NPM package
           continue;
         }
-        if (alreadyLatest.has(depName)) {
+        const existingUpdate = toUpdate.get(depName);
+        if (existingUpdate && existingUpdate.latestVersion !== info.version) {
+          Object.assign(existingUpdate.packages, {
+            [pkg.name]: info.version,
+          });
           continue;
         }
         const latestVersion = await getLatestPackageVersion(depName);
-        if (latestVersion === info.version) {
-          alreadyLatest.add(depName);
-        } else {
+        if (latestVersion !== info.version) {
           toUpdate.set(depName, {
-            packages: [pkg.name],
-            version: latestVersion,
+            packages: {
+              [pkg.name]: info.version,
+            },
+            latestVersion,
           });
         }
       }
@@ -46,14 +52,16 @@ export async function depsUpdate({
   // );
   const date = new Date().toISOString().slice(0, 10);
   const depsToPRs = new Map();
-  for (const [depName, { packages, version }] of toUpdate) {
+  for (const [depName, { packages, latestVersion }] of toUpdate) {
     const head = `syncpack/${depName}-${date}`;
     const base = "main";
-    const title = `syncpack update ${depName} to ${version}`;
+    const title = `syncpack update ${depName} to ${latestVersion}`;
     echo(chalk.yellow(title));
     const body = [
       `Update ${depName} in the following packages:`,
-      ...packages.map((packageName) => `- ${packageName}`),
+      ...Object.entries(packages).map(
+        ([packageName, version]) => `- ${packageName}: ${version}`,
+      ),
     ].join("\n");
     subprocess.execSync(`
       git checkout -b ${head} ${base}
@@ -73,15 +81,19 @@ export async function depsUpdate({
     // });
     // depsToPRs.set(depName, `[#${id}](${url})`);
   }
-  const arr = Array.from(toUpdate).map(([depName, { packages, version }]) => ({
-    dependency: depName,
-    version,
-    affected: `<ul>${packages.map((item) => `<li>${item}</li>`).join("")}</ul>`,
-    PR: depsToPRs.get(depName),
-  }));
+  const arr = Array.from(toUpdate).map(
+    ([depName, { packages, latestVersion }]) => ({
+      dependency: depName,
+      version: latestVersion,
+      affected: `<ul>${Object.entries(packages)
+        .map(([packageName, version]) => `<li>${packageName}: ${version}</li>`)
+        .join("")}</ul>`,
+      PR: depsToPRs.get(depName),
+    }),
+  );
   arr.sort((a, b) => {
-    if (a.dependency < b.dependency) return 1;
-    if (a.dependency > b.dependency) return -1;
+    if (a.dependency < b.dependency) return -1;
+    if (a.dependency > b.dependency) return 1;
     return 0;
   });
   return convertToMarkdownTable(arr);
