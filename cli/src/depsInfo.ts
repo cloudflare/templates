@@ -1,7 +1,8 @@
 import {
   commentOnPR,
-  convertToMarkdownTable, getLatestPackageVersion,
-  TEMPLATE_DIRECTORY_SUFFIX
+  convertToMarkdownTable,
+  getLatestPackageVersion,
+  TEMPLATE_DIRECTORY_SUFFIX,
 } from "./util";
 
 export type DepsInfoConfig = {
