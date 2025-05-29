@@ -64,12 +64,14 @@ export async function depsInfo({ prId, githubToken }: DepsInfoConfig) {
     if (a.template > b.template) return 1;
     return 0;
   });
-  await commentOnPR({
-    prId,
-    githubToken,
-    body: convertToMarkdownTable(deps),
-    noDuplicates: true,
-  });
+  if (deps.length) {
+    await commentOnPR({
+      prId,
+      githubToken,
+      body: convertToMarkdownTable(deps),
+      noDuplicates: true,
+    });
+  }
 }
 
 async function getFiles(prId: string, githubToken: string) {
