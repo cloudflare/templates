@@ -263,6 +263,34 @@ export async function isDuplicateComment({
   return comments.find((comment) => comment.body === body);
 }
 
+export type CreatePRConfig = {
+  githubToken: string;
+  head: string;
+  base: string;
+  title: string;
+  body: string;
+};
+
+export async function createPR({ githubToken, ...params }: CreatePRConfig) {
+  const response = await fetch(
+    `https://api.github.com/repos/cloudflare/templates/pulls`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${githubToken}`,
+      },
+      body: JSON.stringify(params),
+    },
+  );
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  return await response.json() as { url: string, id: number };
+}
+
 export async function getLatestPackageVersion(packageName: string) {
   const response = await fetch(
     `https://registry.npmjs.org/${packageName}/latest`,

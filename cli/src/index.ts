@@ -191,13 +191,13 @@ program
   )
   .requiredOption("--actor <string>", "the actor of the GitHub action")
   .action((options) => {
-    // const githubToken = process.env.GITHUB_TOKEN;
-    // if (!githubToken) {
-    //   throw new Error("Missing GITHUB_TOKEN");
-    // }
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (!githubToken) {
+      throw new Error("Missing GITHUB_TOKEN");
+    }
     return actionWithSummary("Deps Update", () =>
       depsUpdate({
-        githubToken: "",
+        githubToken,
         githubActor: options.actor,
       }),
     );

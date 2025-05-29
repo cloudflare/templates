@@ -1,0 +1,15 @@
+name: "Update Dependencies"
+
+on:
+  schedule:
+    - cron: '0 13 * * 1'
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: "Process and update dependencies"
+        run: "pnpm -w update:deps"

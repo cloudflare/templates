@@ -1,6 +1,6 @@
 import "zx/globals";
 import subprocess from "node:child_process";
-import { convertToMarkdownTable, getLatestPackageVersion } from "./util";
+import { convertToMarkdownTable, createPR, getLatestPackageVersion } from "./util";
 
 export type DepsUpdateConfig = {
   githubToken: string;
@@ -46,10 +46,10 @@ export async function depsUpdate({
     }
   }
 
-  // subprocess.execSync(`git config --global user.name "${githubActor}"`);
-  // subprocess.execSync(
-  //   `git config --global user.email "${githubActor}@users.noreply.github.com"`,
-  // );
+  subprocess.execSync(`git config --global user.name "${githubActor}"`);
+  subprocess.execSync(
+    `git config --global user.email "${githubActor}@users.noreply.github.com"`,
+  );
   const date = new Date().toISOString().slice(0, 10);
   const depsToPRs = new Map();
   for (const [depName, { packages, latestVersion }] of toUpdate) {
@@ -65,21 +65,23 @@ export async function depsUpdate({
     ].join("\n");
     subprocess.execSync(`
       git checkout -b ${head} ${base}
-      syncpack update --filter '${depName}'
+      npx syncpack@alpha update --dependencies '${depName}'
+      pnpm install --no-frozen-lockfile --child-concurrency=10
+      pnpm run fix
       if [[ -n "$(git diff --exit-code)" ]]; then
         git add .
         git commit -m '${title}'
-        # git push
+        git push
       fi
       `);
-    // const { id, url } = await createPullRequest({
-    //   githubToken,
-    //   head,
-    //   base,
-    //   title,
-    //   body,
-    // });
-    // depsToPRs.set(depName, `[#${id}](${url})`);
+    const { id, url } = await createPR({
+      githubToken,
+      head,
+      base,
+      title,
+      body,
+    });
+    depsToPRs.set(depName, `[#${id}](${url})`);
   }
   const arr = Array.from(toUpdate).map(
     ([depName, { packages, latestVersion }]) => ({
