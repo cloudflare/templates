@@ -28,7 +28,7 @@
       "package_json_hash": "31e29875bf1fb757231e729114487be0313dc495"
     },
     "remix-starter-template": {
-      "package_json_hash": "723f6f8dc663aebf9d435ab99312df248a455694"
+      "package_json_hash": "c5dc657f547063672ecae015b9a8d855cc8cbb03"
     },
     "react-router-starter-template": {
       "package_json_hash": "489237b0b2226ba855fb4a964e8b7837281b3665"
@@ -57,8 +57,11 @@
     "llm-chat-app-template": {
       "package_json_hash": "0dd209fe0c81941968c65eee374218ba67a6a484"
     },
+    "react-router-hono-fullstack-template": {
+      "package_json_hash": "dc8f73ff15b1234d6e1eb32d41abab881bcbbebf"
+    },
     "r2-explorer-template": {
-      "package_json_hash": "53212b8109867e271eb36de2ce77f4a1fab7b7c2"
+      "package_json_hash": "a0fc6c09bb8911e1864707a96259cb22088a6c93"
     }
   }
 }

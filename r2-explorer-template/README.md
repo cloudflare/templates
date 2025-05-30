@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/r2-explorer-template)
 
-![R2 Explorer Template Preview](TODO)
+![R2 Explorer Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/e3c4ab7e-43f2-49df-6317-437f4ae8ce00/public)
 
 <!-- dash-content-start -->
 
@@ -25,6 +25,7 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
   - HTTP/Custom metadata editing
 
 - **👀 File Handling**
+
   - In-browser file preview
     - PDF documents
     - Images
@@ -34,14 +35,15 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
     - Logpush files
   - In-browser file editing
   - Folder upload support
+
 - **📧 Email Integration**
   - Receive and process emails via Cloudflare Email Routing
   - View email attachments directly in the interface
 
+<!-- dash-content-end -->
+
 > [!IMPORTANT]
 > When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/r2-explorer-template#setup-steps) before deploying.
-
-<!-- dash-content-end -->
 
 ## Getting Started
 
