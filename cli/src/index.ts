@@ -10,6 +10,7 @@ import { actionWithSummary } from "./util";
 import { validateD2CButtons } from "./validateD2CButtons";
 import { setupHooks } from "./setupHooks";
 import { depsInfo } from "./depsInfo";
+import { depsUpdate } from "./depsUpdate";
 
 const program = new Command();
 
@@ -179,6 +180,25 @@ program
       depsInfo({
         prId: options.pr,
         githubToken,
+      }),
+    );
+  });
+
+program
+  .command("deps-update")
+  .description(
+    "Creates pull requests for each dependency that requires updating",
+  )
+  .requiredOption("--actor <string>", "the actor of the GitHub action")
+  .action((options) => {
+    const githubToken = process.env.GITHUB_TOKEN;
+    if (!githubToken) {
+      throw new Error("Missing GITHUB_TOKEN");
+    }
+    return actionWithSummary("Deps Update", () =>
+      depsUpdate({
+        githubToken,
+        githubActor: options.actor,
       }),
     );
   });
