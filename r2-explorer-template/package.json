@@ -1,0 +1,30 @@
+{
+  "name": "r2-explorer-template",
+  "description": "A Google Drive Interface for your Cloudflare R2 Buckets!",
+  "cloudflare": {
+    "label": "R2-Explorer App",
+    "products": [
+      "R2",
+      "Access",
+      "Workers"
+    ],
+    "categories": [
+      "storage"
+    ],
+    "icon_urls": [],
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/e3c4ab7e-43f2-49df-6317-437f4ae8ce00/public",
+    "publish": true
+  },
+  "dependencies": {
+    "r2-explorer": "^1.1.5"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3",
+    "wrangler": "4.12.0"
+  },
+  "scripts": {
+    "cf-typegen": "wrangler types",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  }
+}
