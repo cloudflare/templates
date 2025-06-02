@@ -2,12 +2,14 @@ name: "Update Dependencies"
 
 on:
   schedule:
-    - cron: "0 16 * * 1"
+    - cron: "0 20 * * 1"
 
 jobs:
   update-dependencies:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
