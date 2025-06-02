@@ -13,4 +13,4 @@ jobs:
       - uses: ./.github/actions/setup
 
       - name: "Process and update dependencies"
-        run: "pnpm -w update:deps"
+        run: pnpm -w update:deps --actor ${{ github.actor }}
