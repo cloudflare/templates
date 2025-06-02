@@ -2,7 +2,7 @@ name: "Update Dependencies"
 
 on:
   schedule:
-    - cron: "0 15 * * 1"
+    - cron: "0 16 * * 1"
 
 jobs:
   update-dependencies:
