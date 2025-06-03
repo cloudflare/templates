@@ -1,5 +1,6 @@
 import "zx/globals";
 import subprocess from "node:child_process";
+import path from "node:path";
 import {
   convertToMarkdownTable,
   convertToSafeBranchName,
@@ -58,7 +59,8 @@ export async function depsUpdate({
   );
   const depsToPRs = new Map();
   const failedUpdates = new Set<string>();
-  const branchesDir = "_branches";
+  const cwd = process.cwd();
+  const branchesDir = path.join(cwd, "_branches");
 
   for (const [depName, { packages, latestVersion }] of toUpdate) {
     const head = `syncpack/${depName}-${convertToSafeBranchName(latestVersion)}`;
@@ -135,13 +137,12 @@ export async function depsUpdate({
     } catch (err) {
       console.error(err);
       failedUpdates.add(depName);
-    } finally {
-      try {
-        echo(chalk.green(`cleaning up ${branchesDir}`));
-        subprocess.execSync(`git worktree remove ${branchesDir} --force`);
-        subprocess.execSync(`rm -rf ${branchesDir}`);
-      } catch {}
     }
+    try {
+      echo(chalk.green(`cleaning up ${branchesDir}`));
+      subprocess.execSync(`git worktree remove ${branchesDir} --force`);
+      subprocess.execSync(`rm -rf ${branchesDir}`);
+    } catch {}
   }
   const arr = Array.from(toUpdate).map(
     ([depName, { packages, latestVersion }]) => ({
