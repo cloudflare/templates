@@ -2,8 +2,10 @@ import "zx/globals";
 import subprocess from "node:child_process";
 import {
   convertToMarkdownTable,
+  convertToSafeBranchName,
   createPR,
   getLatestPackageVersion,
+  getPRByBranch,
 } from "./util";
 
 export type DepsUpdateConfig = {
@@ -56,48 +58,67 @@ export async function depsUpdate({
   );
   const date = new Date().toISOString().slice(0, 10);
   const depsToPRs = new Map();
+  const failedUpdates = new Set<string>();
   for (const [depName, { packages, latestVersion }] of toUpdate) {
-    const head = `syncpack/${depName}-${date}`;
+    const head = `syncpack/${depName}-${convertToSafeBranchName(latestVersion)}`;
     const base = "main";
     const title = `syncpack update ${depName} to ${latestVersion}`;
+
+    const existingPR = await getPRByBranch({
+      githubToken,
+      head,
+      base,
+    });
+    if (existingPR) {
+      continue;
+    }
+
     echo(chalk.yellow(title));
-    const body = [
-      `Update ${depName} in the following packages:`,
-      ...Object.entries(packages).map(
-        ([packageName, version]) => `- ${packageName}: ${version}`,
-      ),
-    ].join("\n");
-    subprocess.execSync(`
+
+    try {
+      const body = [
+        `Update ${depName} in the following packages:`,
+        ...Object.entries(packages).map(
+          ([packageName, version]) => `- ${packageName}: ${version}`,
+        ),
+      ].join("\n");
+      subprocess.execSync(`
       git checkout -b ${head} ${base}
       npx syncpack@alpha update --dependencies '${depName}'
       pnpm install --no-frozen-lockfile --child-concurrency=10
       pnpm run fix
       `);
-    const diff = subprocess.execSync("git diff", { encoding: "utf-8" });
-    echo(diff);
-    echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
-    if (diff) {
-      subprocess.execSync(
-        `
+      const diff = subprocess.execSync("git diff", { encoding: "utf-8" });
+      echo(diff);
+      echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
+      if (diff) {
+        subprocess.execSync(
+          `
         git add .
         git commit -m '${title}'
         git push --set-upstream origin ${head}
         `,
-      );
-      const { id, url } = await createPR({
-        githubToken,
-        head,
-        base,
-        title,
-        body,
-      });
-      depsToPRs.set(depName, `[#${id}](${url})`);
+        );
+        const { id, url } = await createPR({
+          githubToken,
+          head,
+          base,
+          title,
+          body,
+          draft: true,
+        });
+        depsToPRs.set(depName, `[#${id}](${url})`);
+      }
+    } catch (err) {
+      console.error(err);
+      failedUpdates.add(depName);
     }
   }
   const arr = Array.from(toUpdate).map(
     ([depName, { packages, latestVersion }]) => ({
       dependency: depName,
       version: latestVersion,
+      succeeded: failedUpdates.has(depName) ? ":x:" : ":white_check_mark:",
       affected: `<ul>${Object.entries(packages)
         .map(([packageName, version]) => `<li>${packageName}: ${version}</li>`)
         .join("")}</ul>`,
