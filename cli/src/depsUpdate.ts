@@ -56,7 +56,6 @@ export async function depsUpdate({
   subprocess.execSync(
     `git config --global user.email "${githubActor}@users.noreply.github.com"`,
   );
-  const date = new Date().toISOString().slice(0, 10);
   const depsToPRs = new Map();
   const failedUpdates = new Set<string>();
   for (const [depName, { packages, latestVersion }] of toUpdate) {
@@ -64,18 +63,19 @@ export async function depsUpdate({
     const base = "main";
     const title = `syncpack update ${depName} to ${latestVersion}`;
 
-    const existingPR = await getPRByBranch({
-      githubToken,
-      head,
-      base,
-    });
-    if (existingPR) {
-      continue;
-    }
-
-    echo(chalk.yellow(title));
-
     try {
+      const existingPR = await getPRByBranch({
+        githubToken,
+        head,
+        base,
+        state: "all",
+      });
+      if (existingPR) {
+        continue;
+      }
+
+      echo(chalk.yellow(title));
+
       const body = [
         `Update ${depName} in the following packages:`,
         ...Object.entries(packages).map(
@@ -105,7 +105,6 @@ export async function depsUpdate({
           base,
           title,
           body,
-          draft: true,
         });
         depsToPRs.set(depName, `[#${id}](${url})`);
       }
