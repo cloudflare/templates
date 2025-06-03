@@ -3,7 +3,7 @@
   "devDependencies": {
     "cli": "workspace:*",
     "prettier": "3.5.3",
-    "syncpack": "13.0.3",
+    "syncpack": "13.0.4",
     "turbo": "2.5.0",
     "vitest": "3.1.4"
   },
