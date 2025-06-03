@@ -301,19 +301,21 @@ export type GetPRByBranchConfig = {
   githubToken: string;
   head: string;
   base: string;
+  state: "open" | "closed" | "all";
 };
 
 export async function getPRByBranch({
   githubToken,
   head,
   base,
+  state,
 }: GetPRByBranchConfig): Promise<PR | null> {
   const url = new URL(
     `https://api.github.com/repos/cloudflare/templates/pulls`,
   );
-  url.searchParams.set("state", "open");
   url.searchParams.set("head", `cloudflare:${head}`);
   url.searchParams.set("base", base);
+  url.searchParams.set("state", state);
   const response = await fetch(url, {
     headers: {
       Accept: "application/vnd.github+json",
