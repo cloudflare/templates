@@ -87,10 +87,12 @@ export async function depsUpdate({
           ([packageName, version]) => `- ${packageName}: ${version}`,
         ),
       ].join("\n");
-      subprocess.execSync(`git worktree add ${branchesDir} main`);
+      subprocess.execSync(`
+      mkdir ${branchesDir}
+      git worktree add ${branchesDir} main -b ${head} --force
+      `);
       subprocess.execSync(
         `
-      git checkout -b ${head} ${base}
       npx syncpack@alpha update --dependencies '${depName}'
       pnpm install --no-frozen-lockfile --child-concurrency=10
       pnpm run fix
@@ -130,8 +132,8 @@ export async function depsUpdate({
       failedUpdates.add(depName);
     } finally {
       try {
-        // clean up past worktrees
-        subprocess.execSync(`git worktree remove ${branchesDir}`);
+        subprocess.execSync(`git worktree remove ${branchesDir} --force`);
+        subprocess.execSync(`rm -rf ${branchesDir}`);
       } catch {}
     }
   }
