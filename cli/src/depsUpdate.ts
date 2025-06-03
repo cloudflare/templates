@@ -97,6 +97,7 @@ export async function depsUpdate({
         git add .
         git commit -m '${title}'
         git push --set-upstream origin ${head}
+        git clean -dfX # removes built files
         `,
         );
         const { id, url } = await createPR({
