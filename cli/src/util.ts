@@ -263,15 +263,21 @@ export async function isDuplicateComment({
   return comments.find((comment) => comment.body === body);
 }
 
+export type PR = { url: string; id: number };
+
 export type CreatePRConfig = {
   githubToken: string;
   head: string;
   base: string;
   title: string;
   body: string;
+  draft?: boolean;
 };
 
-export async function createPR({ githubToken, ...params }: CreatePRConfig) {
+export async function createPR({
+  githubToken,
+  ...params
+}: CreatePRConfig): Promise<PR> {
   const response = await fetch(
     `https://api.github.com/repos/cloudflare/templates/pulls`,
     {
@@ -288,7 +294,39 @@ export async function createPR({ githubToken, ...params }: CreatePRConfig) {
       `Error response from GitHub (${response.status}): ${await response.text()}`,
     );
   }
-  return (await response.json()) as { url: string; id: number };
+  return (await response.json()) as PR;
+}
+
+export type GetPRByBranchConfig = {
+  githubToken: string;
+  head: string;
+  base: string;
+};
+
+export async function getPRByBranch({
+  githubToken,
+  head,
+  base,
+}: GetPRByBranchConfig): Promise<PR | null> {
+  const url = new URL(
+    `https://api.github.com/repos/cloudflare/templates/pulls`,
+  );
+  url.searchParams.set("state", "open");
+  url.searchParams.set("head", `cloudflare:${head}`);
+  url.searchParams.set("base", base);
+  const response = await fetch(url, {
+    headers: {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${githubToken}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error(
+      `Error response from GitHub (${response.status}): ${await response.text()}`,
+    );
+  }
+  const [pr] = (await response.json()) as PR[];
+  return pr ?? null;
 }
 
 export async function getLatestPackageVersion(packageName: string) {
@@ -319,4 +357,12 @@ export function convertToMarkdownTable(arr: Array<Record<string, unknown>>) {
   });
 
   return [headerRow, separatorRow, ...dataRows].join("\n");
+}
+
+export function convertToSafeBranchName(str: string) {
+  return str
+    .toLowerCase() // Convert to lowercase
+    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric characters with hyphens
+    .replace(/^-+|-+$/g, "") // Remove leading or trailing hyphens
+    .substring(0, 100); // Limit length
 }
