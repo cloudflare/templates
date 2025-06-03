@@ -59,9 +59,6 @@ export async function depsUpdate({
   const depsToPRs = new Map();
   const failedUpdates = new Set<string>();
   const branchesDir = "_branches";
-  const cwd = process.cwd();
-
-  subprocess.execSync(`mkdir ${branchesDir}`);
 
   for (const [depName, { packages, latestVersion }] of toUpdate) {
     const head = `syncpack/${depName}-${convertToSafeBranchName(latestVersion)}`;
@@ -69,6 +66,7 @@ export async function depsUpdate({
     const title = `syncpack update ${depName} to ${latestVersion}`;
 
     try {
+      echo(chalk.green(`checking if PR exists for ${head}`));
       const existingPR = await getPRByBranch({
         githubToken,
         head,
@@ -87,10 +85,15 @@ export async function depsUpdate({
           ([packageName, version]) => `- ${packageName}: ${version}`,
         ),
       ].join("\n");
+      echo(
+        chalk.green(`creating ${branchesDir} as a working tree for ${head}`),
+      );
       subprocess.execSync(`
       mkdir ${branchesDir}
       git worktree add ${branchesDir} main -b ${head} --force
       `);
+
+      echo(chalk.green(`updating ${depName}`));
       subprocess.execSync(
         `
       npx syncpack@alpha update --dependencies '${depName}'
@@ -101,13 +104,15 @@ export async function depsUpdate({
           cwd: branchesDir,
         },
       );
+      echo(chalk.green(`checking for any changes to commit`));
       const diff = subprocess.execSync("git diff", {
         encoding: "utf-8",
         cwd: branchesDir,
       });
-      echo(diff);
-      echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
+
       if (diff) {
+        echo(diff);
+        echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
         subprocess.execSync(
           `
         git add .
@@ -132,6 +137,7 @@ export async function depsUpdate({
       failedUpdates.add(depName);
     } finally {
       try {
+        echo(chalk.green(`cleaning up ${branchesDir}`));
         subprocess.execSync(`git worktree remove ${branchesDir} --force`);
         subprocess.execSync(`rm -rf ${branchesDir}`);
       } catch {}
