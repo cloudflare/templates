@@ -58,6 +58,11 @@ export async function depsUpdate({
   );
   const depsToPRs = new Map();
   const failedUpdates = new Set<string>();
+  const branchesDir = "_branches";
+  const cwd = process.cwd();
+
+  subprocess.execSync(`mkdir ${branchesDir}`);
+
   for (const [depName, { packages, latestVersion }] of toUpdate) {
     const head = `syncpack/${depName}-${convertToSafeBranchName(latestVersion)}`;
     const base = "main";
@@ -83,12 +88,23 @@ export async function depsUpdate({
         ),
       ].join("\n");
       subprocess.execSync(`
-      git checkout -b ${head} ${base}
+      mkdir ${branchesDir}
+      git worktree add ${branchesDir} main -b ${head} --force
+      `);
+      subprocess.execSync(
+        `
       npx syncpack@alpha update --dependencies '${depName}'
       pnpm install --no-frozen-lockfile --child-concurrency=10
       pnpm run fix
-      `);
-      const diff = subprocess.execSync("git diff", { encoding: "utf-8" });
+      `,
+        {
+          cwd: branchesDir,
+        },
+      );
+      const diff = subprocess.execSync("git diff", {
+        encoding: "utf-8",
+        cwd: branchesDir,
+      });
       echo(diff);
       echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
       if (diff) {
@@ -97,8 +113,10 @@ export async function depsUpdate({
         git add .
         git commit -m '${title}'
         git push --set-upstream origin ${head}
-        git clean -dfX # removes built files
         `,
+          {
+            cwd: branchesDir,
+          },
         );
         const { id, url } = await createPR({
           githubToken,
@@ -112,6 +130,11 @@ export async function depsUpdate({
     } catch (err) {
       console.error(err);
       failedUpdates.add(depName);
+    } finally {
+      try {
+        subprocess.execSync(`git worktree remove ${branchesDir} --force`);
+        subprocess.execSync(`rm -rf ${branchesDir}`);
+      } catch {}
     }
   }
   const arr = Array.from(toUpdate).map(
