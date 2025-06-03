@@ -81,7 +81,7 @@ export async function depsUpdate({
         `
         git add .
         git commit -m '${title}'
-        git push
+        git push --set-upstream origin ${head}
         `,
       );
       const { id, url } = await createPR({
