@@ -1,7 +1,6 @@
 import {
   commentOnPR,
   convertToMarkdownTable,
-  fetchWithRetries,
   TEMPLATE_DIRECTORY_SUFFIX,
 } from "./util";
 
@@ -75,7 +74,7 @@ export async function depsInfo({ prId, githubToken }: DepsInfoConfig) {
 }
 
 async function getFiles(prId: string, githubToken: string) {
-  const response = await fetchWithRetries(
+  const response = await fetch(
     `https://api.github.com/repos/cloudflare/templates/pulls/${prId}/files`,
     {
       headers: {
@@ -91,7 +90,7 @@ async function getFiles(prId: string, githubToken: string) {
 }
 
 async function getPackageJSON(url: string) {
-  const response = await fetchWithRetries(url);
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
       `Error response from ${response.url} (${response.status}): ${await response.text()}`,
@@ -104,7 +103,7 @@ async function getPackageJSON(url: string) {
 }
 
 async function getLatestPackageVersion(packageName: string) {
-  const response = await fetchWithRetries(
+  const response = await fetch(
     `https://registry.npmjs.org/${packageName}/latest`,
   );
   if (!response.ok) {

@@ -1,6 +1,5 @@
 import {
   collectTemplateFiles,
-  fetchWithRetries,
   getTemplates,
   handleCloudflareResponse,
   SeedRepo,
@@ -47,16 +46,13 @@ async function uploadTemplate(templatePath: string, config: UploadConfig) {
   });
   const queryParams = new URLSearchParams(config.seedRepo);
   queryParams.set("path", templatePath);
-  const response = await fetchWithRetries(
-    `${config.api.endpoint}?${queryParams}`,
-    {
-      method: "POST",
-      headers: {
-        "Cf-Access-Client-Id": config.api.clientId,
-        "Cf-Access-Client-Secret": config.api.clientSecret,
-      },
-      body,
+  const response = await fetch(`${config.api.endpoint}?${queryParams}`, {
+    method: "POST",
+    headers: {
+      "Cf-Access-Client-Id": config.api.clientId,
+      "Cf-Access-Client-Secret": config.api.clientSecret,
     },
-  );
+    body,
+  });
   return handleCloudflareResponse(response);
 }

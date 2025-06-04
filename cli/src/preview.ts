@@ -1,7 +1,6 @@
 import {
   collectTemplateFiles,
   commentOnPR,
-  fetchWithRetries,
   getTemplates,
   handleCloudflareResponse,
   SeedRepo,
@@ -66,7 +65,7 @@ async function uploadPreview({
     return formData;
   }, new FormData());
   const queryParams = new URLSearchParams({ ...seedRepo, pr_id: prId });
-  const response = await fetchWithRetries(`${api.endpoint}?${queryParams}`, {
+  const response = await fetch(`${api.endpoint}?${queryParams}`, {
     method: "POST",
     headers: {
       "Cf-Access-Client-Id": api.clientId,
