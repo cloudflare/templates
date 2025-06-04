@@ -32,7 +32,7 @@
     "typescript": "5.8.3",
     "vite": "6.3.5",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "4.16.1"
+    "wrangler": "4.19.1"
   },
   "scripts": {
     "build": "react-router build",
