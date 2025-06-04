@@ -220,7 +220,7 @@ export async function commentOnPR({
   if (isDuplicate && noDuplicates) {
     return body;
   }
-  const response = await fetch(
+  const response = await fetchWithRetries(
     `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
     {
       method: "POST",
@@ -247,7 +247,7 @@ export async function isDuplicateComment({
   githubToken,
   body,
 }: CommentOnPRConfig) {
-  const response = await fetch(
+  const response = await fetchWithRetries(
     `https://api.github.com/repos/cloudflare/templates/issues/${prId}/comments`,
     {
       headers: {
@@ -282,7 +282,7 @@ export async function createPR({
   githubToken,
   ...params
 }: CreatePRConfig): Promise<PR> {
-  const response = await fetch(
+  const response = await fetchWithRetries(
     `https://api.github.com/repos/cloudflare/templates/pulls`,
     {
       method: "POST",
@@ -321,7 +321,7 @@ export async function getPRByBranch({
   url.searchParams.set("head", `cloudflare:${head}`);
   url.searchParams.set("base", base);
   url.searchParams.set("state", state);
-  const response = await fetch(url, {
+  const response = await fetchWithRetries(url, {
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${githubToken}`,
@@ -338,7 +338,7 @@ export async function getPRByBranch({
 }
 
 export async function getLatestPackageVersion(packageName: string) {
-  const response = await fetch(
+  const response = await fetchWithRetries(
     `https://registry.npmjs.org/${packageName}/latest`,
   );
   if (!response.ok) {
@@ -374,3 +374,18 @@ export function convertToSafeBranchName(str: string) {
     .replace(/^-+|-+$/g, "") // Remove leading or trailing hyphens
     .substring(0, 100); // Limit length
 }
+
+export const fetchWithRetries: typeof fetch = async (...args) => {
+  const maxRetries = 3;
+  for (let numRetries = 0; numRetries < maxRetries; numRetries++) {
+    try {
+      return fetch(...args);
+    } catch (err) {
+      if (numRetries === maxRetries - 1) {
+        throw err;
+      }
+      await new Promise((resolve) => setTimeout(resolve, numRetries * 5_000));
+    }
+  }
+  throw new Error("Max retries reached."); // this should be unreachable
+};
