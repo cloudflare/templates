@@ -108,20 +108,18 @@ async function sendMessage() {
       // Process SSE format
       const lines = chunk.split("\n");
       for (const line of lines) {
-        if (line.startsWith("data:")) {
-          try {
-            const jsonData = JSON.parse(line.substring(5));
-            if (jsonData.response) {
-              // Append new content to existing text
-              responseText += jsonData.response;
-              assistantMessageEl.querySelector("p").textContent = responseText;
+        try {
+          const jsonData = JSON.parse(line);
+          if (jsonData.response) {
+            // Append new content to existing text
+            responseText += jsonData.response;
+            assistantMessageEl.querySelector("p").textContent = responseText;
 
-              // Scroll to bottom
-              chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-          } catch (e) {
-            console.error("Error parsing JSON:", e);
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
           }
+        } catch (e) {
+          console.error("Error parsing JSON:", e);
         }
       }
     }
