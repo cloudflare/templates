@@ -118,7 +118,7 @@ export async function depsUpdate({
       subprocess.execSync(`templates generate-npm-lockfiles ${branchesDir}`);
 
       echo(chalk.green("regenerate types"));
-      subprocess.execSync("pnpm run cf-typegen --recursive", {
+      subprocess.execSync("pnpm run  --recursive cf-typegen", {
         cwd: branchesDir,
       });
 
