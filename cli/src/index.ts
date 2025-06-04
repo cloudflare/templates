@@ -75,17 +75,29 @@ program
 program
   .command("generate-npm-lockfiles")
   .description("Generate npm lockfiles to improve install time of templates")
-  .action(() => {
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
     return actionWithSummary("Generate npm lockfiles", () =>
-      generateNpmLockfiles(),
+      generateNpmLockfiles({ templateDirectory }),
     );
   });
 
 program
   .command("lint-npm-lockfiles")
   .description("Lint all templates to ensure npm lockfiles are up to date")
-  .action(() => {
-    return actionWithSummary("Lint npm lockfiles", () => lintNpmLockfiles());
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
+    return actionWithSummary("Lint npm lockfiles", () =>
+      lintNpmLockfiles({ templateDirectory }),
+    );
   });
 
 program

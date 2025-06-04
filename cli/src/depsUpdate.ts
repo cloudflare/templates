@@ -97,15 +97,34 @@ export async function depsUpdate({
 
       echo(chalk.green(`updating ${depName}`));
       subprocess.execSync(
-        `
-      npx syncpack@alpha update --dependencies '${depName}'
-      pnpm install --no-frozen-lockfile --child-concurrency=10
-      pnpm run fix
-      `,
+        `npx syncpack@alpha update --dependencies '${depName}'`,
         {
           cwd: branchesDir,
         },
       );
+
+      echo(chalk.green("reinstall dependencies"));
+      subprocess.execSync(
+        "pnpm install --no-frozen-lockfile --child-concurrency=10 --ignore-scripts",
+        {
+          cwd: branchesDir,
+        },
+      );
+
+      echo(chalk.green("lint templates"));
+      subprocess.execSync(`templates lint ${branchesDir} --fix`);
+
+      echo(chalk.green("generate lockfiles"));
+      subprocess.execSync(`templates generate-npm-lockfiles ${branchesDir}`);
+
+      echo(chalk.green("regenerate types"));
+      subprocess.execSync("pnpm run cf-typegen --force --recursive", {
+        cwd: branchesDir,
+      });
+
+      echo(chalk.green("run prettier"));
+      subprocess.execSync(`prettier ${branchesDir} --write`);
+
       echo(chalk.green(`checking for any changes to commit`));
       const diff = subprocess.execSync("git diff", {
         encoding: "utf-8",
@@ -113,26 +132,30 @@ export async function depsUpdate({
       });
 
       if (diff) {
-        echo(diff);
+        echo(chalk.blue(diff));
         echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
         subprocess.execSync(
           `
         git add .
         git commit -m '${title}'
-        git push --set-upstream origin ${head}
         `,
           {
             cwd: branchesDir,
           },
         );
-        const { id, url } = await createPR({
-          githubToken,
-          head,
-          base,
-          title,
-          body,
-        });
-        depsToPRs.set(depName, `[#${id}](${url})`);
+        if (process.env.CI) {
+          subprocess.execSync(`git push --set-upstream origin ${head}`, {
+            cwd: branchesDir,
+          });
+          const { id, url } = await createPR({
+            githubToken,
+            head,
+            base,
+            title,
+            body,
+          });
+          depsToPRs.set(depName, `[#${id}](${url})`);
+        }
       }
     } catch (err) {
       console.error(err);
