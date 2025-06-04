@@ -263,7 +263,9 @@ export async function isDuplicateComment({
   return comments.find((comment) => comment.body === body);
 }
 
-export type PR = { url: string; id: number };
+export type PRState = "open" | "closed" | "all";
+
+export type PR = { url: string; id: number; state: PRState };
 
 export type CreatePRConfig = {
   githubToken: string;
@@ -301,7 +303,7 @@ export type GetPRByBranchConfig = {
   githubToken: string;
   head: string;
   base: string;
-  state: "open" | "closed" | "all";
+  state: PRState;
 };
 
 export async function getPRByBranch({

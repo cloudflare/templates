@@ -75,7 +75,7 @@ export async function depsUpdate({
         base,
         state: "all",
       });
-      if (existingPR) {
+      if (existingPR?.state === "closed") {
         continue;
       }
 
@@ -132,7 +132,6 @@ export async function depsUpdate({
       });
 
       if (diff) {
-        echo(chalk.blue(diff));
         echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
         subprocess.execSync(
           `
@@ -144,17 +143,22 @@ export async function depsUpdate({
           },
         );
         if (process.env.CI) {
-          subprocess.execSync(`git push --set-upstream origin ${head}`, {
-            cwd: branchesDir,
-          });
-          const { id, url } = await createPR({
-            githubToken,
-            head,
-            base,
-            title,
-            body,
-          });
-          depsToPRs.set(depName, `[#${id}](${url})`);
+          subprocess.execSync(
+            `git push --force --set-upstream origin ${head}`,
+            {
+              cwd: branchesDir,
+            },
+          );
+          const pr =
+            existingPR ??
+            (await createPR({
+              githubToken,
+              head,
+              base,
+              title,
+              body,
+            }));
+          depsToPRs.set(depName, `[#${pr.id}](${pr.url})`);
         }
       }
     } catch (err) {
