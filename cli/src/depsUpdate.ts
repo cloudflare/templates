@@ -97,7 +97,7 @@ export async function depsUpdate({
 
       echo(chalk.green(`updating ${depName}`));
       subprocess.execSync(
-        `npx syncpack@alpha update --dependencies '${depName}'`,
+        `pnpm dlx syncpack@alpha update --dependencies '${depName}'`,
         {
           cwd: branchesDir,
         },
