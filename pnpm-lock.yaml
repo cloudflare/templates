@@ -349,8 +349,8 @@ importers:
         specifier: 1.2.4
         version: 1.2.4(rollup@4.41.1)(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))(workerd@1.20250525.0)(wrangler@4.16.1(@cloudflare/workers-types@4.20250529.0))
       '@eslint/js':
-        specifier: 9.25.1
-        version: 9.25.1
+        specifier: 10.0.0
+        version: 10.0.0
       '@neondatabase/serverless':
         specifier: 0.10.4
         version: 0.10.4
@@ -812,8 +812,8 @@ importers:
         specifier: 1.2.4
         version: 1.2.4(rollup@4.41.1)(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))(workerd@1.20250525.0)(wrangler@4.16.1(@cloudflare/workers-types@4.20250529.0))
       '@eslint/js':
-        specifier: 9.25.1
-        version: 9.25.1
+        specifier: 10.0.0
+        version: 10.0.0
       '@types/node':
         specifier: 22.15.19
         version: 22.15.19
@@ -2516,13 +2516,14 @@ packages:
     resolution: {integrity: sha512-gtF186CXhIl1p4pJNGZw8Yc6RlshoePRvE0X91oPGb3vZ8pM3qOS9W9NGPat9LziaBV7XrJWGylNQXkGcnM3IQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@eslint/js@10.0.0':
+    resolution: {integrity: sha512-J2VKrn6YUBegZFzRQVOVA8jk7VViV/MXhQUvXuCUK1I2RGGT2E+bmNGOsgtdO9Wo25Kd3hfZFuCm8LcfsUFV7g==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version should not be used.
+
   '@eslint/js@8.56.0':
     resolution: {integrity: sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  '@eslint/js@9.25.1':
-    resolution: {integrity: sha512-dEIwmjntEx8u3Uvv+kr3PDeeArL8Hw07H9kyYxCjnM9pBjfEhk6uLXSchxxzgiwtRhhzVzqmUSDFBOi1TuZ7qg==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/js@9.27.0':
     resolution: {integrity: sha512-G5JD9Tu5HJEu4z2Uo4aHY2sLV64B7CDMXxFzqzjl3NKd6RVzSXNoE80jk7Y0lJkTTkjiIhBAqmlYwjuBY3tvpA==}
@@ -10858,9 +10859,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint/js@8.56.0': {}
+  '@eslint/js@10.0.0': {}
 
-  '@eslint/js@9.25.1': {}
+  '@eslint/js@8.56.0': {}
 
   '@eslint/js@9.27.0': {}
 
