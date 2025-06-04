@@ -227,6 +227,7 @@ export async function commentOnPR({
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${githubToken}`,
+        Connection: "close",
       },
       body: JSON.stringify({
         body,
@@ -251,6 +252,7 @@ export async function isDuplicateComment({
     {
       headers: {
         Authorization: `Bearer ${githubToken}`,
+        Connection: "close",
       },
     },
   );
@@ -287,6 +289,7 @@ export async function createPR({
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${githubToken}`,
+        Connection: "close",
       },
       body: JSON.stringify(params),
     },
@@ -322,6 +325,7 @@ export async function getPRByBranch({
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${githubToken}`,
+      Connection: "close",
     },
   });
   if (!response.ok) {
