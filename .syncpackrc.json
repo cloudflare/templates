@@ -39,7 +39,7 @@
         "@types/react",
         "@types/react-dom"
       ],
-      "range": "^19.0.0"
+      "pinVersion": "^19.0.0"
     },
     {
       "label": "Keep React 18 for other templates",
@@ -56,7 +56,7 @@
         "@types/react",
         "@types/react-dom"
       ],
-      "range": "^18.0.0"
+      "pinVersion": "^18.0.0"
     },
     {
       "label": "Allow tailwind 3.x for some templates",
@@ -67,13 +67,13 @@
         "remix-starter-template"
       ],
       "dependencies": ["tailwindcss"],
-      "range": "^3.4.0"
+      "pinVersion": "^3.4.0"
     },
     {
       "label": "Allow Wrangler 3.x for react router/remix templates",
       "packages": ["remix-starter-template", "to-do-list-kv-template"],
       "dependencies": ["wrangler"],
-      "range": "^3.114.4"
+      "pinVersion": "^3.114.4"
     }
   ]
 }
