@@ -1,24 +1,27 @@
 import "zx/globals";
 import { z } from "zod";
 import { createHash } from "node:crypto";
+import path from "node:path";
 import MarkdownError from "./MarkdownError";
+import { getTemplates } from "./util";
 
-const repoRoot = path.resolve(__dirname, "../..");
-
-async function getTemplates(): Promise<string[]> {
-  return (await glob("./*-template/package.json")).map((t) => path.dirname(t));
-}
+export type NpmLockfilesConfig = {
+  templateDirectory: string;
+};
 
 /**
  * Generates npm lockfiles for all templates in the repository.
  * Updates template hashes and regenerates package-lock.json files when necessary.
  * @throws {Error} If template operations fail
  */
-export async function generateNpmLockfiles(): Promise<void> {
-  const config = await new TemplatesConfig().load();
-  const templates = await getTemplates();
+export async function generateNpmLockfiles({
+  templateDirectory,
+}: NpmLockfilesConfig): Promise<void> {
+  const repoRoot = path.resolve(templateDirectory);
+  const config = await new TemplatesConfig(repoRoot).load();
+  const templates = getTemplates(templateDirectory);
 
-  for (const name of templates) {
+  for (const { name } of templates) {
     echo(chalk.blue(`Updating template: ${chalk.grey(name)}`));
     cd(path.resolve(repoRoot, name));
 
@@ -50,12 +53,15 @@ export async function generateNpmLockfiles(): Promise<void> {
  * with their respective package.json files.
  * @throws {Error} If any template's lockfile is out of date
  */
-export async function lintNpmLockfiles(): Promise<void> {
-  const config = await new TemplatesConfig().load();
-  const templates = await getTemplates();
+export async function lintNpmLockfiles({
+  templateDirectory,
+}: NpmLockfilesConfig): Promise<void> {
+  const repoRoot = path.resolve(templateDirectory);
+  const config = await new TemplatesConfig(repoRoot).load();
+  const templates = getTemplates(templateDirectory);
 
   const errors: string[] = [];
-  for (const name of templates) {
+  for (const { name } of templates) {
     cd(path.resolve(repoRoot, name));
     const packageJsonHash = await hashFile("./package.json");
     const modified = config.updateTemplateHash(name, packageJsonHash);
@@ -82,8 +88,12 @@ export async function lintNpmLockfiles(): Promise<void> {
 }
 
 class TemplatesConfig {
-  private configPath = path.resolve(repoRoot, "./templates.json");
+  private configPath: string;
   templates: Config["templates"] = {};
+
+  constructor(repoRoot: string) {
+    this.configPath = path.resolve(repoRoot, "./templates.json");
+  }
 
   async load(): Promise<TemplatesConfig> {
     const cfg = await fs
