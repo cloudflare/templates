@@ -352,8 +352,8 @@ importers:
         specifier: 9.25.1
         version: 9.25.1
       '@neondatabase/serverless':
-        specifier: 0.10.4
-        version: 0.10.4
+        specifier: 1.0.0
+        version: 1.0.0
       '@types/node':
         specifier: 22.15.19
         version: 22.15.19
@@ -2746,8 +2746,9 @@ packages:
   '@mjackson/node-fetch-server@0.6.1':
     resolution: {integrity: sha512-9ZJnk/DJjt805uv5PPv11haJIW+HHf3YEEyVXv+8iLQxLD/iXA68FH220XoiTPBC4gCg5q+IMadDw8qPqlA5wg==}
 
-  '@neondatabase/serverless@0.10.4':
-    resolution: {integrity: sha512-2nZuh3VUO9voBauuh+IGYRhGU/MskWHt1IuZvHcJw6GLjDgtqj/KViKo7SIrLdGLdot7vFbiRRw+BgEy3wT9HA==}
+  '@neondatabase/serverless@1.0.0':
+    resolution: {integrity: sha512-XWmEeWpBXIoksZSDN74kftfTnXFEGZ3iX8jbANWBc+ag6dsiQuvuR4LgB0WdCOKMb5AQgjqgufc0TgAsZubUYw==}
+    engines: {node: '>=19.0.0'}
 
   '@next/env@14.2.26':
     resolution: {integrity: sha512-vO//GJ/YBco+H7xdQhzJxF7ub3SUwft76jwaeOyVVQFHCi5DCnkP16WHB+JBylo4vOKPoZBlR94Z8xBxNBdNJA==}
@@ -11099,8 +11100,9 @@ snapshots:
 
   '@mjackson/node-fetch-server@0.6.1': {}
 
-  '@neondatabase/serverless@0.10.4':
+  '@neondatabase/serverless@1.0.0':
     dependencies:
+      '@types/node': 22.15.19
       '@types/pg': 8.11.6
 
   '@next/env@14.2.26': {}
