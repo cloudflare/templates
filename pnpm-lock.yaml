@@ -70,8 +70,8 @@ importers:
         specifier: 3.24.3
         version: 3.24.3
       zx:
-        specifier: 8.5.3
-        version: 8.5.3
+        specifier: 8.5.5
+        version: 8.5.5
     devDependencies:
       '@types/node':
         specifier: 22.15.19
@@ -8803,8 +8803,8 @@ packages:
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
-  zx@8.5.3:
-    resolution: {integrity: sha512-TsGLAt8Ngr4wDXLZmN9BT+6FWVLFbqdQ0qpXkV3tIfH7F+MgN/WUeSY7W4nNqAntjWunmnRaznpyxtJRPhCbUQ==}
+  zx@8.5.5:
+    resolution: {integrity: sha512-kzkjV3uqyEthw1IBDbA7Co2djji77vCP1DRvt58aYSMwiX4nyvAkFE8OBSEsOUbDJAst0Yo4asNvMTGG5HGPXA==}
     engines: {node: '>= 12.17.0'}
     hasBin: true
 
@@ -19034,4 +19034,4 @@ snapshots:
 
   zwitch@2.0.4: {}
 
-  zx@8.5.3: {}
+  zx@8.5.5: {}
