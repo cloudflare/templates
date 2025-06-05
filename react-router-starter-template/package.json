@@ -16,7 +16,7 @@
     "publish": true
   },
   "dependencies": {
-    "isbot": "5.1.26",
+    "isbot": "5.1.28",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router": "7.5.2"
