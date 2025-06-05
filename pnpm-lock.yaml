@@ -562,8 +562,8 @@ importers:
   remix-starter-template:
     dependencies:
       '@remix-run/cloudflare':
-        specifier: 2.16.5
-        version: 2.16.5(@cloudflare/workers-types@4.20250529.0)(typescript@5.8.3)
+        specifier: 2.16.8
+        version: 2.16.8(@cloudflare/workers-types@4.20250529.0)(typescript@5.8.3)
       '@remix-run/react':
         specifier: 2.16.5
         version: 2.16.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
@@ -726,8 +726,8 @@ importers:
   to-do-list-kv-template:
     dependencies:
       '@remix-run/cloudflare':
-        specifier: 2.16.5
-        version: 2.16.5(@cloudflare/workers-types@4.20250529.0)(typescript@5.8.3)
+        specifier: 2.16.8
+        version: 2.16.8(@cloudflare/workers-types@4.20250529.0)(typescript@5.8.3)
       '@remix-run/react':
         specifier: 2.16.5
         version: 2.16.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
@@ -3198,8 +3198,8 @@ packages:
       typescript:
         optional: true
 
-  '@remix-run/cloudflare@2.16.5':
-    resolution: {integrity: sha512-dYPH1BdNhnEvs/mUo+pivtdHbj7hU5LFVDOqv+Q/Ss7VRfAMHbfEref72rQ5Z/Opyc2YyHnXW/+NOH8VB2RKdw==}
+  '@remix-run/cloudflare@2.16.8':
+    resolution: {integrity: sha512-3KBsnmHcZHqUpuVGeYtUVfyGrfHXtV5JOZu8ig6WGeQB2sVMY5zEUNt+tJX2kXaPNswuQjVNk2b+/d6WUbKDOg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@cloudflare/workers-types': ^4.0.0
@@ -3254,6 +3254,15 @@ packages:
 
   '@remix-run/server-runtime@2.16.5':
     resolution: {integrity: sha512-LGGNEJoior2zvgtqyPC5tVPucAvewovQvL4ztC5yE8ZszHmLri9bB9YYWvHqsiT+EaunKHNLmI8jpJHe3PEKhA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      typescript: ^5.1.0
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  '@remix-run/server-runtime@2.16.8':
+    resolution: {integrity: sha512-ZwWOam4GAQTx10t+wK09YuYctd2Koz5Xy/klDgUN3lmTXmwbV0tZU0baiXEqZXrvyD+WDZ4b0ADDW9Df3+dpzA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: ^5.1.0
@@ -8058,6 +8067,9 @@ packages:
   turbo-stream@2.4.0:
     resolution: {integrity: sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g==}
 
+  turbo-stream@2.4.1:
+    resolution: {integrity: sha512-v8kOJXpG3WoTN/+at8vK7erSzo6nW6CIaeOvNOkHQVDajfz1ZVeSxCbc6tOH4hrGZW7VUCV0TOXd8CPzYnYkrw==}
+
   turbo-windows-64@2.5.0:
     resolution: {integrity: sha512-9BCo8oQ7BO7J0K913Czbc3tw8QwLqn2nTe4E47k6aVYkM12ASTScweXPTuaPFP5iYXAT6z5Dsniw704Ixa5eGg==}
     cpu: [x64]
@@ -11620,11 +11632,11 @@ snapshots:
     optionalDependencies:
       typescript: 5.8.3
 
-  '@remix-run/cloudflare@2.16.5(@cloudflare/workers-types@4.20250529.0)(typescript@5.8.3)':
+  '@remix-run/cloudflare@2.16.8(@cloudflare/workers-types@4.20250529.0)(typescript@5.8.3)':
     dependencies:
       '@cloudflare/kv-asset-handler': 0.1.3
       '@cloudflare/workers-types': 4.20250529.0
-      '@remix-run/server-runtime': 2.16.5(typescript@5.8.3)
+      '@remix-run/server-runtime': 2.16.8(typescript@5.8.3)
     optionalDependencies:
       typescript: 5.8.3
 
@@ -11745,6 +11757,18 @@ snapshots:
       set-cookie-parser: 2.7.1
       source-map: 0.7.4
       turbo-stream: 2.4.0
+    optionalDependencies:
+      typescript: 5.8.3
+
+  '@remix-run/server-runtime@2.16.8(typescript@5.8.3)':
+    dependencies:
+      '@remix-run/router': 1.23.0
+      '@types/cookie': 0.6.0
+      '@web3-storage/multipart-parser': 1.0.0
+      cookie: 0.7.2
+      set-cookie-parser: 2.7.1
+      source-map: 0.7.4
+      turbo-stream: 2.4.1
     optionalDependencies:
       typescript: 5.8.3
 
@@ -18182,6 +18206,8 @@ snapshots:
     optional: true
 
   turbo-stream@2.4.0: {}
+
+  turbo-stream@2.4.1: {}
 
   turbo-windows-64@2.5.0:
     optional: true
