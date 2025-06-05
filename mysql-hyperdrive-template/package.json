@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@types/node": "22.15.19",
-    "mysql2": "3.14.0"
+    "mysql2": "3.14.1"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.32",
