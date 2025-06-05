@@ -86,8 +86,8 @@ importers:
         specifier: 0.8.32
         version: 0.8.32(@cloudflare/workers-types@4.20250529.0)(@vitest/runner@3.1.4)(@vitest/snapshot@3.1.4)(vitest@3.1.4(@types/debug@4.1.12)(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
       durable-utils:
-        specifier: 0.3.4
-        version: 0.3.4
+        specifier: 0.3.5
+        version: 0.3.5
       typescript:
         specifier: 5.8.3
         version: 5.8.3
@@ -4850,8 +4850,8 @@ packages:
   duplexify@3.7.1:
     resolution: {integrity: sha512-07z8uv2wMyS51kKhD1KsdXJg5WQ6t93RneqRxUHnskXVtlYYkLqM0gqStQZ3pj073g687jPCHrqNfCzawLYh5g==}
 
-  durable-utils@0.3.4:
-    resolution: {integrity: sha512-w/nsRi78nfFPkyaZFJ1NKyhhJWU3lkeea17CkK712q0NV23UnF7iDeH6TBSGlB5kv7zbT0JC6m/xc3lShatTCg==}
+  durable-utils@0.3.5:
+    resolution: {integrity: sha512-R0XI76HP0KJh3xQ0ZkeWq1MsuQnd30t/CKhUm2aab2KBOhiCZrFYuc+FIg46UqXimDr3rRdt1Zd6Z1uiAyAIFQ==}
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -13692,7 +13692,7 @@ snapshots:
       readable-stream: 2.3.8
       stream-shift: 1.0.3
 
-  durable-utils@0.3.4: {}
+  durable-utils@0.3.5: {}
 
   eastasianwidth@0.2.0: {}
 
