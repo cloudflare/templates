@@ -24,7 +24,7 @@
     "@eslint/js": "9.25.1",
     "@types/node": "22.15.19",
     "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
+    "@types/react-dom": "19.1.6",
     "@vitejs/plugin-react": "4.4.1",
     "eslint": "9.27.0",
     "eslint-plugin-react-hooks": "5.2.0",
