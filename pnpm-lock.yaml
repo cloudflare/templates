@@ -177,8 +177,8 @@ importers:
   multiplayer-globe-template:
     dependencies:
       cobe:
-        specifier: 0.6.3
-        version: 0.6.3
+        specifier: 0.6.4
+        version: 0.6.4
       partyserver:
         specifier: 0.0.66
         version: 0.0.66(@cloudflare/workers-types@4.20250529.0)
@@ -4536,8 +4536,8 @@ packages:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
-  cobe@0.6.3:
-    resolution: {integrity: sha512-WHr7X4o1ym94GZ96h7b1pNemZJacbOzd02dZtnVwuC4oWBaLg96PBmp2rIS1SAhUDhhC/QyS9WEqkpZIs/ZBTg==}
+  cobe@0.6.4:
+    resolution: {integrity: sha512-huuGFnDoXLy/tsCZYYa/H35BBRs9cxsS0XKJ3BXjRp699cQKuoEVrvKlAQMx0DKXG7+VUv4jsHVrS7yPbkLSkQ==}
 
   collapse-white-space@2.1.0:
     resolution: {integrity: sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw==}
@@ -13441,7 +13441,7 @@ snapshots:
 
   clsx@2.1.1: {}
 
-  cobe@0.6.3:
+  cobe@0.6.4:
     dependencies:
       phenomenon: 1.6.0
 
