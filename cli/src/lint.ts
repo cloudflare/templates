@@ -318,9 +318,6 @@ function lintPackageJson(
           );
       });
     }
-    if (!Array.isArray(pkg.cloudflare.icon_urls)) {
-      problems.push('"cloudflare.icon_urls" must be an array');
-    }
     // Ensure a preview image URL is set
     if (!pkg.cloudflare.preview_image_url) {
       problems.push('"cloudflare.preview_image_url" must be defined');

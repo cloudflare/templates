@@ -18,17 +18,16 @@ In order to introduce a new template to this collection, the following requireme
 
 Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflare` object directly from each template's `package.json` configuration. This extracted metadata provides content necessary for the template to be rendered in the Cloudflare Dashboard. If the minimally required values are not included in your template, it will fail CI.
 
-| Required?         | Package.json key               | Description                                                                                                   | Example                                                                                                                |
-| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                                                                  |
-| ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit.                                                 |
-|                   | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                                                                        |
-| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                                                                       |
-| _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                                                                              |
-| ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                                                                 |
-| _if publish=true_ | `cloudflare.icon_urls`         | Link to icons to make visible on the template card                                                            | https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public (default TypeScript logo) |
-| _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                            | (Link will be provided during PR review)                                                                               |
-| ❌                | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team | (Primarily for internal contributor use)                                                                               |
+| Required?         | Package.json key               | Description                                                                                                   | Example                                                                |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                  |
+| ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit. |
+|                   | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                        |
+| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                       |
+| _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                              |
+| ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                 |
+| _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                            | (Link will be provided during PR review)                               |
+| ❌                | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team | (Primarily for internal contributor use)                               |
 
 ### Best Practices: package.json
 
@@ -39,7 +38,6 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 - **`cloudflare.preview_image_url`**
   - Can only be provided by a Cloudflare team member. Image files for icons and preview images are stored in the Cloudflare Templates CF account.
   - Preview image should be a screenshot of the application running in-browser.
-- **`cloudflare.icon_urls`** - Icon image should be a png of any logos you want to appear on the templates card (most commonly TypeScript, in which case you can use [this URL](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public)).
 
 ### Package-lock.json
 
@@ -104,5 +102,5 @@ The above requirements, distilled into checklist form:
 
 These checklist items are enforced by our CI/CD pipeline:
 
-- [ ] Include required metadata in package.json (name, description, cloudflare.label, cloudflare.products, cloudflare.icon_urls, cloudflare.preview_image_url)
+- [ ] Include required metadata in package.json (name, description, cloudflare.label, cloudflare.products, cloudflare.preview_image_url)
 - [ ] Include a preview image of the application (16:9 aspect ratio, >=500px width) in your template assets
