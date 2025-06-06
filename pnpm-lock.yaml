@@ -277,7 +277,7 @@ importers:
     dependencies:
       '@openauthjs/openauth':
         specifier: 0.4.3
-        version: 0.4.3(arctic@2.3.4)(hono@4.7.7)
+        version: 0.4.3(arctic@2.3.4)(hono@4.7.11)
       valibot:
         specifier: ^1.0.0-beta.9
         version: 1.1.0(typescript@5.8.3)
@@ -385,8 +385,8 @@ importers:
         specifier: 15.15.0
         version: 15.15.0
       hono:
-        specifier: 4.7.7
-        version: 4.7.7
+        specifier: 4.7.11
+        version: 4.7.11
       postcss:
         specifier: 8.5.3
         version: 8.5.3
@@ -403,8 +403,8 @@ importers:
   react-router-hono-fullstack-template:
     dependencies:
       hono:
-        specifier: 4.7.7
-        version: 4.7.7
+        specifier: 4.7.11
+        version: 4.7.11
       isbot:
         specifier: 5.1.26
         version: 5.1.26
@@ -498,8 +498,8 @@ importers:
         specifier: 10.4.21
         version: 10.4.21(postcss@8.5.3)
       hono:
-        specifier: 4.7.7
-        version: 4.7.7
+        specifier: 4.7.11
+        version: 4.7.11
       postgres:
         specifier: 3.4.5
         version: 3.4.5
@@ -799,8 +799,8 @@ importers:
   vite-react-template:
     dependencies:
       hono:
-        specifier: 4.7.7
-        version: 4.7.7
+        specifier: 4.7.11
+        version: 4.7.11
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -5601,6 +5601,10 @@ packages:
 
   hastscript@9.0.1:
     resolution: {integrity: sha512-g7df9rMFX/SPi34tyGCyUBREQoKkapwdY/T04Qn9TDWfHhAYt4/I0gMVirzK5wEzeUqIjEB+LXC/ypb7Aqno5w==}
+
+  hono@4.7.11:
+    resolution: {integrity: sha512-rv0JMwC0KALbbmwJDEnxvQCeJh+xbS3KEWW5PC9cMJ08Ur9xgatI0HmtgYZfOdOSOeYsp5LO2cOhdI8cLEbDEQ==}
+    engines: {node: '>=16.9.0'}
 
   hono@4.7.7:
     resolution: {integrity: sha512-2PCpQRbN87Crty8/L/7akZN3UyZIAopSoRxCwRbJgUuV1+MHNFHzYFxZTg4v/03cXUm+jce/qa2VSBZpKBm3Qw==}
@@ -11206,12 +11210,12 @@ snapshots:
     dependencies:
       which: 3.0.1
 
-  '@openauthjs/openauth@0.4.3(arctic@2.3.4)(hono@4.7.7)':
+  '@openauthjs/openauth@0.4.3(arctic@2.3.4)(hono@4.7.11)':
     dependencies:
       '@standard-schema/spec': 1.0.0-beta.3
       arctic: 2.3.4
       aws4fetch: 1.0.20
-      hono: 4.7.7
+      hono: 4.7.11
       jose: 5.9.6
 
   '@opennextjs/aws@3.5.7':
@@ -15079,6 +15083,8 @@ snapshots:
       hast-util-parse-selector: 4.0.0
       property-information: 7.1.0
       space-separated-tokens: 2.0.2
+
+  hono@4.7.11: {}
 
   hono@4.7.7: {}
 
