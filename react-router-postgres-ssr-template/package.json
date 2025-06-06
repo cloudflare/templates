@@ -20,7 +20,7 @@
     "publish": false
   },
   "dependencies": {
-    "@tailwindcss/postcss": "4.1.4",
+    "@tailwindcss/postcss": "4.1.8",
     "isbot": "5.1.26",
     "match-sorter": "8.0.0",
     "react": "19.0.0",
