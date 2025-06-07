@@ -5,7 +5,7 @@
     "templates": "./dist/index.js"
   },
   "dependencies": {
-    "@commander-js/extra-typings": "12.1.0",
+    "@commander-js/extra-typings": "14.0.0",
     "commander": "12.1.0",
     "comment-json": "4.2.5",
     "jsonc-parser": "3.3.1",
