@@ -1,7 +1,7 @@
 {
   "templates": {
     "astro-blog-starter-template": {
-      "package_json_hash": "c30ff75ee5764c176de64e78442983cb450c54b6"
+      "package_json_hash": "988c6e0d454714906427d03fbeb8217fdd3db572"
     },
     "d1-template": {
       "package_json_hash": "e74bbbde87a7c7bdf8090ec435da2525d2fb9799"
@@ -34,7 +34,7 @@
       "package_json_hash": "489237b0b2226ba855fb4a964e8b7837281b3665"
     },
     "saas-admin-template": {
-      "package_json_hash": "f81651ee1deb0e1e1a466c6a798dd502e4052a29"
+      "package_json_hash": "a3e9e90c7ec1dd61263c42886940f873443d86be"
     },
     "text-to-image-template": {
       "package_json_hash": "f33a8300c35c61378325614ae53af5e63bb343b0"
