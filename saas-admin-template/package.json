@@ -28,7 +28,7 @@
     "@radix-ui/react-slot": "1.2.0",
     "@tanstack/react-table": "8.21.3",
     "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
+    "@types/react-dom": "19.1.6",
     "astro": "5.7.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
