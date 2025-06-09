@@ -647,8 +647,8 @@ importers:
         specifier: 4.2.4
         version: 4.2.4(@types/node@22.15.19)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(jiti@2.4.2)(lightningcss@1.29.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(terser@5.16.9)(yaml@2.8.0)
       '@astrojs/tailwind':
-        specifier: 5.1.4
-        version: 5.1.4(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(tailwindcss@3.4.17)
+        specifier: 6.0.2
+        version: 6.0.2(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(tailwindcss@3.4.17)
       '@hookform/resolvers':
         specifier: 3.9.1
         version: 3.9.1(react-hook-form@7.56.0(react@19.0.0))
@@ -963,8 +963,8 @@ packages:
   '@astrojs/sitemap@3.3.0':
     resolution: {integrity: sha512-nYE4lKQtk+Kbrw/w0G0TTgT724co0jUsU4tPlHY9au5HmTBKbwiCLwO/15b1/y13aZ4Kr9ZbMeMHlXuwn0ty4Q==}
 
-  '@astrojs/tailwind@5.1.4':
-    resolution: {integrity: sha512-EJ3uoTZZr0RYwTrVS2HgYN0+VbXvg7h87AtwpD5OzqS3GyMwRmzfOwHfORTxoWGQRrY9k/Fi+Awk60kwpvRL5Q==}
+  '@astrojs/tailwind@6.0.2':
+    resolution: {integrity: sha512-j3mhLNeugZq6A8dMNXVarUa8K6X9AW+QHU9u3lKNrPLMHhOQ0S7VeWhHwEeJFpEK1BTKEUY1U78VQv2gN6hNGg==}
     peerDependencies:
       astro: ^3.0.0 || ^4.0.0 || ^5.0.0
       tailwindcss: ^3.0.24
@@ -8976,7 +8976,7 @@ snapshots:
       stream-replace-string: 2.0.0
       zod: 3.24.3
 
-  '@astrojs/tailwind@5.1.4(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(tailwindcss@3.4.17)':
+  '@astrojs/tailwind@6.0.2(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(tailwindcss@3.4.17)':
     dependencies:
       astro: 5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0)
       autoprefixer: 10.4.21(postcss@8.5.3)
