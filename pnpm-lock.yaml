@@ -27,8 +27,8 @@ importers:
   astro-blog-starter-template:
     dependencies:
       '@astrojs/cloudflare':
-        specifier: 12.5.0
-        version: 12.5.0(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
+        specifier: 12.5.4
+        version: 12.5.4(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
       '@astrojs/mdx':
         specifier: 4.2.4
         version: 4.2.4(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))
@@ -641,8 +641,8 @@ importers:
   saas-admin-template:
     dependencies:
       '@astrojs/cloudflare':
-        specifier: 12.5.0
-        version: 12.5.0(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
+        specifier: 12.5.4
+        version: 12.5.4(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
       '@astrojs/react':
         specifier: 4.2.4
         version: 4.2.4(@types/node@22.15.19)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(jiti@2.4.2)(lightningcss@1.29.2)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(terser@5.16.9)(yaml@2.8.0)
@@ -924,8 +924,8 @@ packages:
     peerDependencies:
       zod: ^3.20.2
 
-  '@astrojs/cloudflare@12.5.0':
-    resolution: {integrity: sha512-rBZLC7uKsqd+qSdVWWUt2NYYeg9RnrT+npaa/qfSBRD8++yza29wsE//PYtRvM6p5wYL0sGfMlflTi1eWPyUlw==}
+  '@astrojs/cloudflare@12.5.4':
+    resolution: {integrity: sha512-WKUeMP2tIbddEu0tlVEPj8o9m/8CJB6who3a3jupuIyR56ltmW924ZOMYtp/C9uxH7KeDJXrMszRj3LHs9U97w==}
     peerDependencies:
       astro: ^5.0.0
 
@@ -973,8 +973,8 @@ packages:
     resolution: {integrity: sha512-wxhSKRfKugLwLlr4OFfcqovk+LIFtKwLyGPqMsv+9/ibqqnW3Gv7tBhtKEb0gAyUAC4G9BTVQeQahqnQAhd6IQ==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=22.0.0}
 
-  '@astrojs/underscore-redirects@0.6.0':
-    resolution: {integrity: sha512-dnJgFpaM955IFNIkEEmMaaIdWXRdeZs1ID6mlGBqdjh6NiCXfKmOdq7L4fd9Dd/tr18fkLrOJ25IUJSxRAEhjQ==}
+  '@astrojs/underscore-redirects@0.6.1':
+    resolution: {integrity: sha512-4bMLrs2KW+8/vHEE5Ffv2HbxCbbgXO+2N6MpoCsMXUlUoi7pgEEx8kbkzMXJ2dZtWF3gvwm9lvgjnFeanC2LGg==}
 
   '@aws-crypto/crc32@5.2.0':
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -6550,11 +6550,6 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  miniflare@4.20250525.0:
-    resolution: {integrity: sha512-F5XRDn9WqxUaHphUT8qwy5WXC/3UwbBRJTdjjP5uwHX82vypxIlHNyHziZnplPLhQa1kbSdIY7wfuP1XJyyYZw==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-
   minimatch@10.0.1:
     resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
     engines: {node: 20 || >=22}
@@ -8861,16 +8856,12 @@ snapshots:
       openapi3-ts: 4.4.0
       zod: 3.24.3
 
-  '@astrojs/cloudflare@12.5.0(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)':
+  '@astrojs/cloudflare@12.5.4(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)':
     dependencies:
       '@astrojs/internal-helpers': 0.6.1
-      '@astrojs/underscore-redirects': 0.6.0
+      '@astrojs/underscore-redirects': 0.6.1
       '@cloudflare/workers-types': 4.20250529.0
       astro: 5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0)
-      esbuild: 0.25.2
-      estree-walker: 3.0.3
-      magic-string: 0.30.17
-      miniflare: 4.20250525.0
       tinyglobby: 0.2.14
       vite: 6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
       wrangler: 4.16.1(@cloudflare/workers-types@4.20250529.0)
@@ -8998,7 +8989,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/underscore-redirects@0.6.0': {}
+  '@astrojs/underscore-redirects@0.6.1': {}
 
   '@aws-crypto/crc32@5.2.0':
     dependencies:
@@ -16437,24 +16428,6 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  miniflare@4.20250525.0:
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      acorn: 8.14.0
-      acorn-walk: 8.3.2
-      exit-hook: 2.2.1
-      glob-to-regexp: 0.4.1
-      sharp: 0.33.5
-      stoppable: 1.1.0
-      undici: 5.29.0
-      workerd: 1.20250525.0
-      ws: 8.18.0
-      youch: 3.3.4
-      zod: 3.22.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
   minimatch@10.0.1:
     dependencies:
       brace-expansion: 2.0.1
@@ -18886,6 +18859,7 @@ snapshots:
       '@cloudflare/workerd-linux-64': 1.20250525.0
       '@cloudflare/workerd-linux-arm64': 1.20250525.0
       '@cloudflare/workerd-windows-64': 1.20250525.0
+    optional: true
 
   wrangler@3.114.4(@cloudflare/workers-types@4.20250529.0):
     dependencies:
