@@ -18,7 +18,7 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/af6f091c-ef52-42fe-91f0-4549f47a4400/public"
   },
   "dependencies": {
-    "postgres": "3.4.5"
+    "postgres": "3.4.7"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.32",
