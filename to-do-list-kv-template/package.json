@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.32",
-    "@cloudflare/workers-types": "^4.20250404.0",
+    "@cloudflare/workers-types": "^4.20250607.0",
     "@remix-run/dev": "2.16.5",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",

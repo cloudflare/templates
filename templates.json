@@ -28,7 +28,7 @@
       "package_json_hash": "31e29875bf1fb757231e729114487be0313dc495"
     },
     "remix-starter-template": {
-      "package_json_hash": "c5dc657f547063672ecae015b9a8d855cc8cbb03"
+      "package_json_hash": "00810beea65b5961362ced688327df7772c37d37"
     },
     "react-router-starter-template": {
       "package_json_hash": "489237b0b2226ba855fb4a964e8b7837281b3665"
@@ -40,7 +40,7 @@
       "package_json_hash": "f33a8300c35c61378325614ae53af5e63bb343b0"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "553b320c992f2ad80e33a22ca79d1585c13b6d6a"
+      "package_json_hash": "8639727c1d0f129fda7d1421cdf563f846a5b378"
     },
     "vite-react-template": {
       "package_json_hash": "a0e4d2e5a0c5d80b3dbe83d0306ee38e98d74dcf"
@@ -55,10 +55,10 @@
       "package_json_hash": "70d2c4db42a205e9c8a1aa4a721368d3cc872db1"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "0dd209fe0c81941968c65eee374218ba67a6a484"
+      "package_json_hash": "acd8d873bfc601805388a9bcb68083f7bd717f08"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "ff37044000c265c8af54b17ad7d7ae9a673b0908"
+      "package_json_hash": "c82f9bab69f01c518c738c4f5711f768a88cb929"
     },
     "r2-explorer-template": {
       "package_json_hash": "53212b8109867e271eb36de2ce77f4a1fab7b7c2"
