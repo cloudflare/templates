@@ -22,7 +22,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.2.4",
     "@eslint/js": "9.25.1",
-    "@types/node": "22.15.19",
+    "@types/node": "22.15.30",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
     "@vitejs/plugin-react": "4.4.1",

@@ -18,7 +18,7 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/197c675e-4dbc-4c19-be36-9415d4979800/public"
   },
   "dependencies": {
-    "@types/node": "22.15.19",
+    "@types/node": "22.15.30",
     "mysql2": "3.14.0"
   },
   "devDependencies": {

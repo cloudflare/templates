@@ -14,7 +14,7 @@
     "zx": "8.5.3"
   },
   "devDependencies": {
-    "@types/node": "22.15.19",
+    "@types/node": "22.15.30",
     "typescript": "5.8.3"
   },
   "scripts": {
