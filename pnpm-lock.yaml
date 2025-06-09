@@ -364,8 +364,8 @@ importers:
         specifier: 19.0.4
         version: 19.0.4(@types/react@19.0.10)
       '@vitejs/plugin-react':
-        specifier: 4.4.1
-        version: 4.4.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
+        specifier: 4.5.1
+        version: 4.5.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
       autoprefixer:
         specifier: 10.4.21
         version: 10.4.21(postcss@8.5.3)
@@ -824,8 +824,8 @@ importers:
         specifier: 19.0.4
         version: 19.0.4(@types/react@19.0.10)
       '@vitejs/plugin-react':
-        specifier: 4.4.1
-        version: 4.4.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
+        specifier: 4.5.1
+        version: 4.5.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
       eslint:
         specifier: 9.27.0
         version: 9.27.0(jiti@2.4.2)
@@ -3277,6 +3277,9 @@ packages:
   '@remix-run/web-stream@1.1.0':
     resolution: {integrity: sha512-KRJtwrjRV5Bb+pM7zxcTJkhIqWWSy+MYsIxHK+0m5atcznsf15YwUBWHWulZerV2+vvHH1Lp1DD7pw6qKW8SgA==}
 
+  '@rolldown/pluginutils@1.0.0-beta.9':
+    resolution: {integrity: sha512-e9MeMtVWo186sgvFFJOPGy7/d2j2mZhLJIdVW0C/xDluuOvymEATqz6zKsP0ZmXGzQtqlyjz5sC1sYQUoJG98w==}
+
   '@rollup/plugin-replace@6.0.2':
     resolution: {integrity: sha512-7QaYCf8bqF04dOy7w/eHmJeNExxTYwvKAmlSAH/EaWWUzbT0h5sbF6bktFoX/0F/0qwng5/dWFMyf3gzaM8DsQ==}
     engines: {node: '>=14.0.0'}
@@ -4094,8 +4097,8 @@ packages:
   '@vanilla-extract/private@1.0.7':
     resolution: {integrity: sha512-v9Yb0bZ5H5Kr8ciwPXyEToOFD7J/fKKH93BYP7NCSZg02VYsA/pNFrLeVDJM2OO/vsygduPKuiEI6ORGQ4IcBw==}
 
-  '@vitejs/plugin-react@4.4.1':
-    resolution: {integrity: sha512-IpEm5ZmeXAP/osiBXVVP5KjFMzbWOonMs0NaQQl+xYnUAcq4oHUBsF2+p4MgKWG4YMmFYJU8A6sxRPuowllm6w==}
+  '@vitejs/plugin-react@4.5.1':
+    resolution: {integrity: sha512-uPZBqSI0YD4lpkIru6M35sIfylLGTyhGHvDZbNLuMA73lMlwJKz5xweH7FajfcCAc2HnINciejA9qTz0dr0M7A==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0 || ^6.0.0
@@ -8946,7 +8949,7 @@ snapshots:
     dependencies:
       '@types/react': 19.0.10
       '@types/react-dom': 19.0.4(@types/react@19.0.10)
-      '@vitejs/plugin-react': 4.4.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
+      '@vitejs/plugin-react': 4.5.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       ultrahtml: 1.6.0
@@ -11776,6 +11779,8 @@ snapshots:
     dependencies:
       web-streams-polyfill: 3.3.3
 
+  '@rolldown/pluginutils@1.0.0-beta.9': {}
+
   '@rollup/plugin-replace@6.0.2(rollup@4.41.1)':
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.41.1)
@@ -12847,11 +12852,12 @@ snapshots:
 
   '@vanilla-extract/private@1.0.7': {}
 
-  '@vitejs/plugin-react@4.4.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))':
+  '@vitejs/plugin-react@4.5.1(vite@6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0))':
     dependencies:
       '@babel/core': 7.27.3
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.27.3)
       '@babel/plugin-transform-react-jsx-source': 7.27.1(@babel/core@7.27.3)
+      '@rolldown/pluginutils': 1.0.0-beta.9
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
       vite: 6.3.5(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
