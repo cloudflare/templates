@@ -28,7 +28,7 @@
     "tailwindcss": "4.1.1"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.2.4",
+    "@cloudflare/vite-plugin": "1.5.0",
     "@eslint/js": "9.25.1",
     "@neondatabase/serverless": "0.10.4",
     "@types/node": "22.15.19",

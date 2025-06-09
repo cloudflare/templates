@@ -31,7 +31,7 @@
     "tiny-invariant": "1.3.3"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.2.4",
+    "@cloudflare/vite-plugin": "1.5.0",
     "@react-router/dev": "7.5.2",
     "@types/node": "22.15.19",
     "autoprefixer": "10.4.21",
