@@ -651,7 +651,7 @@ importers:
         version: 5.1.4(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(tailwindcss@3.4.17)
       '@hookform/resolvers':
         specifier: 3.9.1
-        version: 3.9.1(react-hook-form@7.56.0(react@19.0.0))
+        version: 3.9.1(react-hook-form@7.57.0(react@19.0.0))
       '@radix-ui/react-accordion':
         specifier: 1.2.7
         version: 1.2.7(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -695,8 +695,8 @@ importers:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
       react-hook-form:
-        specifier: 7.56.0
-        version: 7.56.0(react@19.0.0)
+        specifier: 7.57.0
+        version: 7.57.0(react@19.0.0)
       tailwind-merge:
         specifier: 2.6.0
         version: 2.6.0
@@ -7269,8 +7269,8 @@ packages:
     peerDependencies:
       react: ^19.0.0
 
-  react-hook-form@7.56.0:
-    resolution: {integrity: sha512-U2QQgx5z2Y8Z0qlXv3W19hWHJgfKdWMz0O/osuY+o+CYq568V2R/JhzC6OAXfR8k24rIN0Muan2Qliaq9eKs/g==}
+  react-hook-form@7.57.0:
+    resolution: {integrity: sha512-RbEks3+cbvTP84l/VXGUZ+JMrKOS8ykQCRYdm5aYsxnDquL0vspsyNhGRO7pcH6hsZqWlPOjLye7rJqdtdAmlg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
@@ -10901,9 +10901,9 @@ snapshots:
     dependencies:
       hono: 4.7.7
 
-  '@hookform/resolvers@3.9.1(react-hook-form@7.56.0(react@19.0.0))':
+  '@hookform/resolvers@3.9.1(react-hook-form@7.57.0(react@19.0.0))':
     dependencies:
-      react-hook-form: 7.56.0(react@19.0.0)
+      react-hook-form: 7.57.0(react@19.0.0)
 
   '@humanfs/core@0.19.1': {}
 
@@ -17162,7 +17162,7 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0
 
-  react-hook-form@7.56.0(react@19.0.0):
+  react-hook-form@7.57.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
