@@ -10,7 +10,7 @@
     "comment-json": "4.2.5",
     "jsonc-parser": "3.3.1",
     "toml": "3.0.0",
-    "zod": "3.24.3",
+    "zod": "3.25.56",
     "zx": "8.5.3"
   },
   "devDependencies": {

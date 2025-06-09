@@ -67,8 +67,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       zod:
-        specifier: 3.24.3
-        version: 3.24.3
+        specifier: 3.25.56
+        version: 3.25.56
       zx:
         specifier: 8.5.3
         version: 8.5.3
@@ -707,8 +707,8 @@ importers:
         specifier: 1.0.7
         version: 1.0.7(tailwindcss@3.4.17)
       zod:
-        specifier: 3.24.3
-        version: 3.24.3
+        specifier: 3.25.56
+        version: 3.25.56
     devDependencies:
       wrangler:
         specifier: 4.16.1
@@ -8800,6 +8800,9 @@ packages:
   zod@3.24.3:
     resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
 
+  zod@3.25.56:
+    resolution: {integrity: sha512-rd6eEF3BTNvQnR2e2wwolfTmUTnp70aUTqr0oaGbHifzC3BKJsoV+Gat8vxUMR1hwOKBs6El+qWehrHbCpW6SQ==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -8856,10 +8859,10 @@ snapshots:
       '@ast-grep/napi-win32-ia32-msvc': 0.35.0
       '@ast-grep/napi-win32-x64-msvc': 0.35.0
 
-  '@asteasolutions/zod-to-openapi@7.3.2(zod@3.24.3)':
+  '@asteasolutions/zod-to-openapi@7.3.2(zod@3.25.56)':
     dependencies:
       openapi3-ts: 4.4.0
-      zod: 3.24.3
+      zod: 3.25.56
 
   '@astrojs/cloudflare@12.5.0(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)':
     dependencies:
@@ -10263,7 +10266,7 @@ snapshots:
       semver: 7.7.2
       vitest: 3.1.4(@types/debug@4.1.12)(@types/node@22.15.19)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)
       wrangler: 4.16.1(@cloudflare/workers-types@4.20250529.0)
-      zod: 3.24.3
+      zod: 3.25.56
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - bufferutil
@@ -13376,10 +13379,10 @@ snapshots:
 
   chanfana@2.8.0:
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.3.2(zod@3.24.3)
+      '@asteasolutions/zod-to-openapi': 7.3.2(zod@3.25.56)
       js-yaml: 4.1.0
       openapi3-ts: 4.4.0
-      zod: 3.24.3
+      zod: 3.25.56
 
   character-entities-html4@2.1.0: {}
 
@@ -17131,7 +17134,7 @@ snapshots:
       chanfana: 2.8.0
       hono: 4.7.7
       postal-mime: 2.4.3
-      zod: 3.24.3
+      zod: 3.25.56
 
   radix3@1.1.2: {}
 
@@ -19031,6 +19034,8 @@ snapshots:
   zod@3.22.3: {}
 
   zod@3.24.3: {}
+
+  zod@3.25.56: {}
 
   zwitch@2.0.4: {}
 
