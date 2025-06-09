@@ -23,7 +23,7 @@
     "@tailwindcss/postcss": "4.1.4",
     "isbot": "5.1.26",
     "match-sorter": "8.0.0",
-    "react": "19.0.0",
+    "react": "19.1.0",
     "react-dom": "19.0.0",
     "react-router": "7.5.2",
     "sort-by": "1.2.0",
