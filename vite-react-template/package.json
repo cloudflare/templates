@@ -31,7 +31,7 @@
     "eslint-plugin-react-refresh": "0.4.20",
     "globals": "15.15.0",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.31.0",
+    "typescript-eslint": "8.33.1",
     "vite": "6.3.5",
     "wrangler": "4.16.1"
   },
