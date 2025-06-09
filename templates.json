@@ -16,7 +16,7 @@
       "package_json_hash": "9d81b2543534a813d1befab84ac8be551f0efa69"
     },
     "next-starter-template": {
-      "package_json_hash": "6874ebeee951758b3d0d350ad7b4b5d036e8680a"
+      "package_json_hash": "1d097f45311926678e7fe2877553d194c5ad67f0"
     },
     "openauth-template": {
       "package_json_hash": "4d41352011bef7e1760c0f78daae7f6246588138"
@@ -28,7 +28,7 @@
       "package_json_hash": "31e29875bf1fb757231e729114487be0313dc495"
     },
     "remix-starter-template": {
-      "package_json_hash": "c5dc657f547063672ecae015b9a8d855cc8cbb03"
+      "package_json_hash": "59efc482e7d5442b576cf80462183b83db3e578d"
     },
     "react-router-starter-template": {
       "package_json_hash": "489237b0b2226ba855fb4a964e8b7837281b3665"
@@ -40,7 +40,7 @@
       "package_json_hash": "f33a8300c35c61378325614ae53af5e63bb343b0"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "553b320c992f2ad80e33a22ca79d1585c13b6d6a"
+      "package_json_hash": "b626c49da6b95497907108592c352cd026473801"
     },
     "vite-react-template": {
       "package_json_hash": "a0e4d2e5a0c5d80b3dbe83d0306ee38e98d74dcf"
@@ -52,7 +52,7 @@
       "package_json_hash": "6f4b40837d8cbc8997cf351ce903e5792a4a1c74"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "70d2c4db42a205e9c8a1aa4a721368d3cc872db1"
+      "package_json_hash": "c86e8114bc145e066764fa2a792d8a3735c69b6e"
     },
     "llm-chat-app-template": {
       "package_json_hash": "0dd209fe0c81941968c65eee374218ba67a6a484"

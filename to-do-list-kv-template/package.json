@@ -37,7 +37,7 @@
     "@typescript-eslint/parser": "8.31.0",
     "autoprefixer": "10.4.21",
     "eslint": "9.27.0",
-    "postcss": "8.5.3",
+    "postcss": "8.5.4",
     "tailwindcss": "3.4.17",
     "typescript": "5.8.3",
     "vite": "5.4.14",
