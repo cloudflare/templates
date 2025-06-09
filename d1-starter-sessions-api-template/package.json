@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "0.8.32",
-    "durable-utils": "0.3.4",
+    "durable-utils": "0.3.5",
     "typescript": "5.8.3",
     "vitest": "3.1.4",
     "wrangler": "4.16.1"
