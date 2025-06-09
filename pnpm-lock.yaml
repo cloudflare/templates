@@ -243,8 +243,8 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@opennextjs/cloudflare':
-        specifier: 1.0.0-beta.3
-        version: 1.0.0-beta.3(wrangler@4.16.1(@cloudflare/workers-types@4.20250529.0))
+        specifier: 1.0.0-beta.4
+        version: 1.0.0-beta.4(wrangler@4.16.1(@cloudflare/workers-types@4.20250529.0))
       '@types/node':
         specifier: 22.15.19
         version: 22.15.19
@@ -2875,11 +2875,11 @@ packages:
     resolution: {integrity: sha512-YjyHJrkIHI7YwQRCp8GjDOudu86oOc1RiwxvBBpPHrplsS18H4ZmkzGggAKhK6B4myGsJQ/q9kNP2TraoZiNzg==}
     hasBin: true
 
-  '@opennextjs/cloudflare@1.0.0-beta.3':
-    resolution: {integrity: sha512-qKBXQZhUeQ+iGvfJeF7PO30g59LHnPOlRVZd77zxwn6Uc9C+c0LSwo8N28XRIWyQPkY007rKk9pSIxOrP4MHtQ==}
+  '@opennextjs/cloudflare@1.0.0-beta.4':
+    resolution: {integrity: sha512-/nEFnjrn8oxfZgW03ZgMzwJvcQ/U/MuXCTIABYvIGnja1+KxFZEc46GFGSxjTwdz4Hmt2eutaEGpQOqC6uRR3w==}
     hasBin: true
     peerDependencies:
-      wrangler: ^3.114.3 || ^4.7.0
+      wrangler: ^4.7.0
 
   '@oslojs/asn1@1.0.0':
     resolution: {integrity: sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==}
@@ -9031,7 +9031,7 @@ snapshots:
       '@aws-crypto/sha256-js': 3.0.0
       '@aws-crypto/supports-web-crypto': 3.0.0
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.398.0
+      '@aws-sdk/types': 3.804.0
       '@aws-sdk/util-locate-window': 3.804.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
@@ -9049,7 +9049,7 @@ snapshots:
   '@aws-crypto/sha256-js@3.0.0':
     dependencies:
       '@aws-crypto/util': 3.0.0
-      '@aws-sdk/types': 3.398.0
+      '@aws-sdk/types': 3.804.0
       tslib: 1.14.1
 
   '@aws-crypto/sha256-js@5.2.0':
@@ -9068,7 +9068,7 @@ snapshots:
 
   '@aws-crypto/util@3.0.0':
     dependencies:
-      '@aws-sdk/types': 3.398.0
+      '@aws-sdk/types': 3.804.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
 
@@ -11236,7 +11236,7 @@ snapshots:
       - aws-crt
       - supports-color
 
-  '@opennextjs/cloudflare@1.0.0-beta.3(wrangler@4.16.1(@cloudflare/workers-types@4.20250529.0))':
+  '@opennextjs/cloudflare@1.0.0-beta.4(wrangler@4.16.1(@cloudflare/workers-types@4.20250529.0))':
     dependencies:
       '@dotenvx/dotenvx': 1.31.0
       '@opennextjs/aws': 3.5.7
@@ -17633,7 +17633,7 @@ snapshots:
 
   send@1.2.0:
     dependencies:
-      debug: 4.3.6
+      debug: 4.4.1
       encodeurl: 2.0.0
       escape-html: 1.0.3
       etag: 1.8.1
