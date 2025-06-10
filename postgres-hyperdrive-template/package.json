@@ -18,11 +18,17 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/af6f091c-ef52-42fe-91f0-4549f47a4400/public"
   },
   "dependencies": {
-    "postgres": "3.4.5"
+    "pg": "^8.13.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@cloudflare/vitest-pool-workers": "0.8.44",
     "@types/node": "24.0.4",
+=======
+    "@cloudflare/vitest-pool-workers": "0.8.32",
+    "@types/node": "22.15.19",
+    "@types/pg": "^8.11.10",
+>>>>>>> 6109ebe (migrate to pg from postgres.js)
     "typescript": "5.8.3",
     "vitest": "3.2.4",
     "wrangler": "4.21.x"
