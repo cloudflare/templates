@@ -202,7 +202,7 @@ async function performUpdates({
     subprocess.execSync(`prettier ${branchesDir} --write`);
 
     echo(chalk.green(`checking for any changes to commit`));
-    const diff = subprocess.execSync("git diff", {
+    const diff = subprocess.execSync("git diff --name-only", {
       encoding: "utf-8",
       cwd: branchesDir,
     });
