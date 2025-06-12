@@ -87,7 +87,7 @@ export async function depsUpdate({
       title: "syncpack update first party dependencies",
       branch: "syncpack/1st-party-updates",
     },
-    ...thirdPartyMajorUpdates.keys().map((depName) => ({
+    ...Array.from(thirdPartyMajorUpdates.keys()).map((depName) => ({
       depNames: [depName],
       updates: thirdPartyMajorUpdates,
       githubToken,
