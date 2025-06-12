@@ -86,6 +86,17 @@ Today, there is no standard way to derive the required secrets from a project’
 
 Environment variables that do not require users to update them will automatically be included in the new project (e.g. `“ENVIRONMENT”: “staging”`). Variables that require user update (e.g. `“PROJECT_ID”: “[your project id]”`) will need to be configured after initial deployment.
 
+#### Tests
+
+Tests are mandatory for every template. We use vitest as the standard test runner. These tests should focus on the functionality and intent of your template.
+
+Example tests:
+
+- https://github.com/cloudflare/templates/blob/main/d1-starter-sessions-api-template/test/index.spec.ts
+- https://github.com/cloudflare/templates/blob/main/to-do-list-kv-template/test/to-do-manager.test.ts
+
+**Note: we are now requiring a minimum of 5 tests to be written.**
+
 ## Checklist
 
 The above requirements, distilled into checklist form:
@@ -96,6 +107,7 @@ The above requirements, distilled into checklist form:
 - [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in \<!-- dash-content-start --> and \<!-- dash-content-end -->
 - [ ] Include a link to the publicly-accessible deployed preview in your ReadMe
 - [ ] Include the most up-to-date package lock file
+- [ ] There are (minimum 5) tests that highlight your template's functionality and intent.
 - [ ] Open a PR against the public repository's main branch
 
 #### Enforced by CI
