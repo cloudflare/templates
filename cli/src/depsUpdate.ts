@@ -37,36 +37,32 @@ export async function depsUpdate({
           // it's a local dependency, like the CLI -- not an NPM package
           continue;
         }
-        const existingUpdate =
-          firstPartyUpdates.get(depName) ?? thirdPartyMajorUpdates.get(depName);
-        if (existingUpdate && existingUpdate.latestVersion !== info.version) {
-          Object.assign(existingUpdate.packages, {
-            [pkg.name]: info.version,
-          });
-          continue;
-        }
         const latestVersion = await getLatestPackageVersion(depName);
         if (latestVersion !== info.version) {
           const is1stParty =
             depName.startsWith("@cloudflare/") || depName === "wrangler";
 
           if (is1stParty) {
-            firstPartyUpdates.set(depName, {
-              packages: {
-                [pkg.name]: info.version,
-              },
+            const update = firstPartyUpdates.get(depName) ?? {
+              packages: {},
               latestVersion,
+            };
+            Object.assign(update.packages, {
+              [pkg.name]: info.version,
             });
+            firstPartyUpdates.set(depName, update);
           } else {
             const [currentMajorVersion] = info.version.split(".");
             const [latestMajorVersion] = latestVersion.split(".");
             if (Number(currentMajorVersion) < Number(latestMajorVersion)) {
-              thirdPartyMajorUpdates.set(depName, {
-                packages: {
-                  [pkg.name]: info.version,
-                },
+              const update = thirdPartyMajorUpdates.get(depName) ?? {
+                packages: {},
                 latestVersion,
+              };
+              Object.assign(update.packages, {
+                [pkg.name]: info.version,
               });
+              thirdPartyMajorUpdates.set(depName, update);
             }
           }
         }
@@ -171,13 +167,26 @@ async function performUpdates({
       `);
 
     echo(chalk.green(`updating ${depNames}`));
-    const updateCommand = depNames.reduce(
-      (command, depName) => `${command} --dependencies '${depName}'`,
-      "pnpm dlx syncpack@alpha update",
-    );
+    const updateCommand = depNames.reduce((command, depName) => {
+      // only update the packages we specified
+      const sources = Object.keys(updates.get(depName)!.packages)
+        .map((packageName) => `--source '${packageName}/package.json'`)
+        .join(" ");
+      return `${command} --dependencies '${depName}' ${sources}`;
+    }, "pnpm dlx syncpack@alpha update");
     subprocess.execSync(updateCommand, {
       cwd: branchesDir,
     });
+
+    echo(chalk.green(`checking for any changes to commit`));
+    const diff = subprocess.execSync("git diff --name-only", {
+      encoding: "utf-8",
+      cwd: branchesDir,
+    });
+
+    if (!diff) {
+      return { depsToPRs, failedUpdates };
+    }
 
     echo(chalk.green("reinstall dependencies"));
     subprocess.execSync(
@@ -201,39 +210,31 @@ async function performUpdates({
     echo(chalk.green("run prettier"));
     subprocess.execSync(`prettier ${branchesDir} --write`);
 
-    echo(chalk.green(`checking for any changes to commit`));
-    const diff = subprocess.execSync("git diff --name-only", {
-      encoding: "utf-8",
-      cwd: branchesDir,
-    });
-
-    if (diff) {
-      echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
-      subprocess.execSync(
-        `
+    echo(chalk.yellow(`Creating pull request ${head} => ${base}`));
+    subprocess.execSync(
+      `
         git add .
         git commit -m '${title}'
         `,
-        {
-          cwd: branchesDir,
-        },
-      );
-      if (process.env.CI) {
-        subprocess.execSync(`git push --force --set-upstream origin ${head}`, {
-          cwd: branchesDir,
-        });
-        const pr =
-          existingPR ??
-          (await createPR({
-            githubToken,
-            head,
-            base,
-            title,
-            body,
-          }));
-        for (const depName of depNames) {
-          depsToPRs.set(depName, `[#${pr.id}](${pr.html_url})`);
-        }
+      {
+        cwd: branchesDir,
+      },
+    );
+    if (process.env.CI) {
+      subprocess.execSync(`git push --force --set-upstream origin ${head}`, {
+        cwd: branchesDir,
+      });
+      const pr =
+        existingPR ??
+        (await createPR({
+          githubToken,
+          head,
+          base,
+          title,
+          body,
+        }));
+      for (const depName of depNames) {
+        depsToPRs.set(depName, `[#${pr.id}](${pr.html_url})`);
       }
     }
   } catch (err) {
