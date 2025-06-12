@@ -267,7 +267,12 @@ export async function isDuplicateComment({
 
 export type PRState = "open" | "closed" | "all";
 
-export type PR = { url: string; id: number; state: PRState };
+export type PR = {
+  url: string;
+  html_url: string;
+  id: number;
+  state: PRState;
+};
 
 export type CreatePRConfig = {
   githubToken: string;
