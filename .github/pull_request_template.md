@@ -15,6 +15,7 @@ The following selections do not need to be completed if this PR only contains ch
   - [ ] template preview image uploaded to Images
   - [ ] README is populated and uses `<!-- dash-content-start -->` and `<!-- dash-content-end -->` to designate the Dash readme preview
   - [ ] package.json contains a `deploy` command
+  - [ ] there are (minimally 5) tests written using Vitest that focus on template functionality and intent
 
 ## Example package.json
 
@@ -32,6 +33,11 @@ The following selections do not need to be completed if this PR only contains ch
   "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public"
 }
 ```
+
+## Example tests
+
+- https://github.com/cloudflare/templates/blob/main/d1-starter-sessions-api-template/test/index.spec.ts
+- https://github.com/cloudflare/templates/blob/main/to-do-list-kv-template/test/to-do-manager.test.ts
 
 <!--
 Have you read our [Contributing guide](https://github.com/cloudflare/workers-sdk/blob/main/CONTRIBUTING.md)?
