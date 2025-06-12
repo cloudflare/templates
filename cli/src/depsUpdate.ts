@@ -242,12 +242,13 @@ async function performUpdates({
     for (const depName of depNames) {
       failedUpdates.add(depName);
     }
+  } finally {
+    try {
+      echo(chalk.green(`cleaning up ${branchesDir}`));
+      subprocess.execSync(`git worktree remove ${branchesDir} --force`);
+      subprocess.execSync(`rm -rf ${branchesDir}`);
+    } catch {}
   }
-  try {
-    echo(chalk.green(`cleaning up ${branchesDir}`));
-    subprocess.execSync(`git worktree remove ${branchesDir} --force`);
-    subprocess.execSync(`rm -rf ${branchesDir}`);
-  } catch {}
   return { depsToPRs, failedUpdates };
 }
 
