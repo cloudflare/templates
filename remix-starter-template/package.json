@@ -30,7 +30,7 @@
     "@typescript-eslint/parser": "8.31.0",
     "autoprefixer": "10.4.21",
     "eslint": "9.27.0",
-    "eslint-import-resolver-typescript": "3.7.0",
+    "eslint-import-resolver-typescript": "4.4.3",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",
