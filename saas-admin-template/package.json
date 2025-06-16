@@ -19,7 +19,7 @@
   "dependencies": {
     "@astrojs/cloudflare": "12.5.0",
     "@astrojs/react": "4.2.4",
-    "@astrojs/tailwind": "5.1.4",
+    "@astrojs/tailwind": "6.0.2",
     "@hookform/resolvers": "3.9.1",
     "@radix-ui/react-accordion": "1.2.7",
     "@radix-ui/react-dialog": "1.1.10",
