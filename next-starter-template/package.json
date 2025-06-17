@@ -33,9 +33,11 @@
   },
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "NEXT_PRIVATE_STANDALONE=true next build",
+    "postbuild": "opennextjs-cloudflare build -s",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "check": "npm run build && tsc && wrangler deploy --dry-run",
+    "deploy": "opennextjs-cloudflare deploy",
     "dev": "next dev",
     "lint": "next lint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
