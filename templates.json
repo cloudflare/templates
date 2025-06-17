@@ -59,6 +59,9 @@
     },
     "r2-explorer-template": {
       "package_json_hash": "53212b8109867e271eb36de2ce77f4a1fab7b7c2"
+    },
+    "next-starter-template": {
+      "package_json_hash": "631f09f13c9d37425da5a9d7eb7ddfe67703224a"
     }
   }
 }
