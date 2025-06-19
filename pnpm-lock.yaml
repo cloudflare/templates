@@ -292,6 +292,25 @@ importers:
         specifier: ^4.20.1
         version: 4.20.1
 
+  openapi-template:
+    dependencies:
+      chanfana:
+        specifier: ^2.8.1
+        version: 2.8.1
+      hono:
+        specifier: ^4.8.0
+        version: 4.8.2
+      zod:
+        specifier: ^3.25.67
+        version: 3.25.67
+    devDependencies:
+      typescript:
+        specifier: 5.8.3
+        version: 5.8.3
+      wrangler:
+        specifier: 4.20.3
+        version: 4.20.3
+
   openauth-template:
     dependencies:
       '@openauthjs/openauth':
@@ -4609,8 +4628,9 @@ packages:
     resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
-  chanfana@2.8.0:
-    resolution: {integrity: sha512-R0lY+c4lBVO8jnop9J5hY6W2Vq5YS3sb9NwI4nY2oJU65E38rC6LCNNhEVEITVmcn+EhuKIQK4FLJLW93gFG4g==}
+  chanfana@2.8.1:
+    resolution: {integrity: sha512-iYNlH+pA2yXAV5YksIe/Wewr0b935+jot+cTDqdkyFAae2QzJ2t1t2/ShEMtUjHc8RdDb7IvPCDjZgtMl3Py8A==}
+    hasBin: true
 
   character-entities-html4@2.1.0:
     resolution: {integrity: sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==}
@@ -6652,6 +6672,11 @@ packages:
 
   miniflare@4.20250612.0:
     resolution: {integrity: sha512-zMUKXBS8Ru1DcmX8dSCmxm7ZjEd7jHQlZpJMNT1/LqxHo3KEye/CHgoEZ1vdsH7T3fe0I0qRcRQx7IWhlXnN1w==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
+  miniflare@4.20250617.1:
+    resolution: {integrity: sha512-NjwKVzPGCAUgkCOJxHBwgV2Obu3g4/wAJE0JaA9whcYip4VAJwQ1fU9TMtoKLY91jD9ANR221+CqLyqxennjqg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -8798,6 +8823,16 @@ packages:
       '@cloudflare/workers-types':
         optional: true
 
+  wrangler@4.20.3:
+    resolution: {integrity: sha512-ugvmi43CFPbjeQFfhU7EqE1V0ek6ZFv80jzwHcPk/7jPFmOA4ahT5uUU1ga5ZP6vz6lUuG2bLnyl1T5qJah0cg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    peerDependencies:
+      '@cloudflare/workers-types': ^4.20250617.0
+    peerDependenciesMeta:
+      '@cloudflare/workers-types':
+        optional: true
+
   wrangler@4.21.0:
     resolution: {integrity: sha512-37xm0CG2qMvsJUNZYQKje6HbCsJFYuE8dQSnu7981iDRT4DLrEIL1DAUnZJG9HiXteKPvrSj96AkZyomi5sYHw==}
     engines: {node: '>=18.0.0'}
@@ -8869,6 +8904,10 @@ packages:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
 
+  yargs-parser@22.0.0:
+    resolution: {integrity: sha512-rwu/ClNdSMpkSrUb+d6BRsSkLUq1fmfsY6TOpYzTwvwkg1/NRG85KBy3kq++A8LKQwX6lsu+aWad+2khvuXrqw==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=23}
+
   yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
@@ -8907,6 +8946,9 @@ packages:
 
   zod@3.24.3:
     resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
+
+  zod@3.25.67:
+    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -8964,10 +9006,10 @@ snapshots:
       '@ast-grep/napi-win32-ia32-msvc': 0.35.0
       '@ast-grep/napi-win32-x64-msvc': 0.35.0
 
-  '@asteasolutions/zod-to-openapi@7.3.2(zod@3.24.3)':
+  '@asteasolutions/zod-to-openapi@7.3.2(zod@3.25.67)':
     dependencies:
       openapi3-ts: 4.4.0
-      zod: 3.24.3
+      zod: 3.25.67
 
   '@astrojs/cloudflare@12.5.0(@types/node@22.15.19)(astro@5.7.4(@types/node@22.15.19)(aws4fetch@1.0.20)(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.41.1)(terser@5.16.9)(typescript@5.8.3)(yaml@2.8.0))(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.16.9)(yaml@2.8.0)':
     dependencies:
@@ -13535,12 +13577,13 @@ snapshots:
 
   chalk@5.4.1: {}
 
-  chanfana@2.8.0:
+  chanfana@2.8.1:
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.3.2(zod@3.24.3)
+      '@asteasolutions/zod-to-openapi': 7.3.2(zod@3.25.67)
       js-yaml: 4.1.0
       openapi3-ts: 4.4.0
-      zod: 3.24.3
+      yargs-parser: 22.0.0
+      zod: 3.25.67
 
   character-entities-html4@2.1.0: {}
 
@@ -16485,6 +16528,24 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  miniflare@4.20250617.1:
+    dependencies:
+      '@cspotcode/source-map-support': 0.8.1
+      acorn: 8.14.0
+      acorn-walk: 8.3.2
+      exit-hook: 2.2.1
+      glob-to-regexp: 0.4.1
+      sharp: 0.33.5
+      stoppable: 1.1.0
+      undici: 5.29.0
+      workerd: 1.20250617.0
+      ws: 8.18.0
+      youch: 3.3.4
+      zod: 3.22.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   miniflare@4.20250617.3:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
@@ -17168,10 +17229,10 @@ snapshots:
   r2-explorer@1.1.7:
     dependencies:
       '@hono/cloudflare-access': 0.2.0(hono@4.8.2)
-      chanfana: 2.8.0
+      chanfana: 2.8.1
       hono: 4.8.2
       postal-mime: 2.4.3
-      zod: 3.24.3
+      zod: 3.25.67
 
   radix3@1.1.2: {}
 
@@ -19048,6 +19109,22 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  wrangler@4.20.3:
+    dependencies:
+      '@cloudflare/kv-asset-handler': 0.4.0
+      '@cloudflare/unenv-preset': 2.3.3(unenv@2.0.0-rc.17)(workerd@1.20250617.0)
+      blake3-wasm: 2.1.5
+      esbuild: 0.25.4
+      miniflare: 4.20250617.1
+      path-to-regexp: 6.3.0
+      unenv: 2.0.0-rc.17
+      workerd: 1.20250617.0
+    optionalDependencies:
+      fsevents: 2.3.3
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   wrangler@4.21.0:
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
@@ -19100,6 +19177,8 @@ snapshots:
 
   yargs-parser@21.1.1: {}
 
+  yargs-parser@22.0.0: {}
+
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.2.1: {}
@@ -19134,6 +19213,8 @@ snapshots:
   zod@3.22.3: {}
 
   zod@3.24.3: {}
+
+  zod@3.25.67: {}
 
   zwitch@2.0.4: {}
 
