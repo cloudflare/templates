@@ -11,6 +11,7 @@ import { validateD2CButtons } from "./validateD2CButtons";
 import { setupHooks } from "./setupHooks";
 import { depsInfo } from "./depsInfo";
 import { depsUpdate } from "./depsUpdate";
+import deployLiveDemos from "./deployLiveDemos";
 
 const program = new Command();
 
@@ -97,6 +98,20 @@ program
   .action((templateDirectory) => {
     return actionWithSummary("Lint npm lockfiles", () =>
       lintNpmLockfiles({ templateDirectory }),
+    );
+  });
+
+program
+  .command("deploy-live-demos")
+  .description("Builds and deploys each template in isolataion")
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
+    return actionWithSummary("Deploy live demos", () =>
+      deployLiveDemos({ templateDirectory }),
     );
   });
 
