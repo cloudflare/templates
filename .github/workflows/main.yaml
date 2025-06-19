@@ -23,7 +23,7 @@ jobs:
       - run: pnpm -w test
 
       - name: Deploy live demos
-        run: pnpm run deploy # pnpm deploy is a whole other thing apparently
+        run: pnpm -w deploy-live-demos
 
       - name: Validate live demo links
         run: pnpm -w validate-live-demo-links
