@@ -17,11 +17,11 @@
   },
   "dependencies": {
     "@openauthjs/openauth": "0.4.3",
-    "valibot": "^1.0.0-beta.9"
+    "valibot": "1.0.0-beta.15"
   },
   "devDependencies": {
     "typescript": "5.8.3",
-    "wrangler": "4.16.1"
+    "wrangler": "4.20.5"
   },
   "scripts": {
     "cf-typegen": "wrangler types",

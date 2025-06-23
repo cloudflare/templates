@@ -18,14 +18,14 @@
     "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/af6f091c-ef52-42fe-91f0-4549f47a4400/public"
   },
   "dependencies": {
-    "postgres": "3.4.5"
+    "postgres": "3.4.7"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.32",
-    "@types/node": "22.15.19",
+    "@cloudflare/vitest-pool-workers": "0.8.43",
+    "@types/node": "24.0.3",
     "typescript": "5.8.3",
-    "vitest": "3.1.4",
-    "wrangler": "4.16.1"
+    "vitest": "3.2.4",
+    "wrangler": "4.20.5"
   },
   "private": true,
   "scripts": {
