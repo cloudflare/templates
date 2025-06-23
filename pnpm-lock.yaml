@@ -83,18 +83,18 @@ importers:
   containers-template:
     dependencies:
       '@cloudflare/containers':
-        specifier: ^0.0.8
-        version: 0.0.8
+        specifier: ^0.0.10
+        version: 0.0.10
+      hono:
+        specifier: ^4.8.2
+        version: 4.8.2
     devDependencies:
-      '@cloudflare/workers-types':
-        specifier: ^4.20250506.0
-        version: 4.20250529.0
       typescript:
         specifier: ^5.5.2
         version: 5.8.3
       wrangler:
-        specifier: https://pkg.pr.new/wrangler@9098
-        version: https://pkg.pr.new/wrangler@9098(@cloudflare/workers-types@4.20250529.0)
+        specifier: https://pkg.pr.new/wrangler@main
+        version: https://pkg.pr.new/wrangler@main
 
   d1-starter-sessions-api-template:
     devDependencies:
@@ -296,7 +296,7 @@ importers:
     dependencies:
       '@openauthjs/openauth':
         specifier: 0.4.3
-        version: 0.4.3(arctic@2.3.4)(hono@4.7.7)
+        version: 0.4.3(arctic@2.3.4)(hono@4.8.2)
       valibot:
         specifier: ^1.0.0-beta.9
         version: 1.1.0(typescript@5.8.3)
@@ -1426,8 +1426,8 @@ packages:
   '@capsizecss/unpack@2.4.0':
     resolution: {integrity: sha512-GrSU71meACqcmIUxPYOJvGKF0yryjN/L1aCuE9DViCTJI7bfkjgYDPD1zbNDcINJwSSP6UaBZY9GAbYDO7re0Q==}
 
-  '@cloudflare/containers@0.0.8':
-    resolution: {integrity: sha512-Uaw11AaUN0jVxRAd6PW33shAA4D4u0Yei3Xl/AOSijguYDhDGDMW4Dykx8vYUAl4tCbV9hGxvBgw9mAFCFXoJw==}
+  '@cloudflare/containers@0.0.10':
+    resolution: {integrity: sha512-0C4YZEBhqBvOLGCRB2jv7MDvX4KGdiDqy6XfefBp/lP0cLGkXb1+yrDvPv5wxnjBwzEpNZ5qAoFTqN6WH6gF8A==}
 
   '@cloudflare/kv-asset-handler@0.1.3':
     resolution: {integrity: sha512-FNcunDuTmEfQTLRLtA6zz+buIXUHj1soPvSWzzQFBC+n2lsy+CGf/NIrR3SEPCmsVNQj70/Jx2lViCpq+09YpQ==}
@@ -1440,8 +1440,8 @@ packages:
     resolution: {integrity: sha512-+tv3z+SPp+gqTIcImN9o0hqE9xyfQjI1XD9pL6NuKjua9B1y7mNYv0S9cP+QEbA4ppVgGZEmKOvHX5G5Ei1CVA==}
     engines: {node: '>=18.0.0'}
 
-  '@cloudflare/kv-asset-handler@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@197dfd5':
-    resolution: {tarball: https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@197dfd5}
+  '@cloudflare/kv-asset-handler@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@2a4c467':
+    resolution: {tarball: https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@2a4c467}
     version: 0.4.0
     engines: {node: '>=18.0.0'}
 
@@ -1481,8 +1481,8 @@ packages:
       workerd:
         optional: true
 
-  '@cloudflare/unenv-preset@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@197dfd5':
-    resolution: {tarball: https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@197dfd5}
+  '@cloudflare/unenv-preset@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@2a4c467':
+    resolution: {tarball: https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@2a4c467}
     version: 2.3.3
     peerDependencies:
       unenv: 2.0.0-rc.17
@@ -5724,6 +5724,10 @@ packages:
     resolution: {integrity: sha512-2PCpQRbN87Crty8/L/7akZN3UyZIAopSoRxCwRbJgUuV1+MHNFHzYFxZTg4v/03cXUm+jce/qa2VSBZpKBm3Qw==}
     engines: {node: '>=16.9.0'}
 
+  hono@4.8.2:
+    resolution: {integrity: sha512-hM+1RIn9PK1I6SiTNS6/y7O1mvg88awYLFEuEtoiMtRyT3SD2iu9pSFgbBXT3b1Ua4IwzvSTLvwO0SEhDxCi4w==}
+    engines: {node: '>=16.9.0'}
+
   hosted-git-info@6.1.3:
     resolution: {integrity: sha512-HVJyzUrLIL1c0QmviVh5E8VGyUS7xCFPS6yydaVd1UegW+ibV/CohqTH9MkOLDp5o+rb82DMo77PTuc9F/8GKw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -6666,9 +6670,9 @@ packages:
     engines: {node: '>=18.0.0'}
     hasBin: true
 
-  miniflare@https://pkg.pr.new/cloudflare/workers-sdk/miniflare@197dfd5:
-    resolution: {tarball: https://pkg.pr.new/cloudflare/workers-sdk/miniflare@197dfd5}
-    version: 4.20250617.1
+  miniflare@https://pkg.pr.new/cloudflare/workers-sdk/miniflare@2a4c467:
+    resolution: {tarball: https://pkg.pr.new/cloudflare/workers-sdk/miniflare@2a4c467}
+    version: 4.20250617.3
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -8810,9 +8814,9 @@ packages:
       '@cloudflare/workers-types':
         optional: true
 
-  wrangler@https://pkg.pr.new/wrangler@9098:
-    resolution: {tarball: https://pkg.pr.new/wrangler@9098}
-    version: 4.20.3
+  wrangler@https://pkg.pr.new/wrangler@main:
+    resolution: {tarball: https://pkg.pr.new/wrangler@main}
+    version: 4.20.5
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -10293,7 +10297,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@cloudflare/containers@0.0.8': {}
+  '@cloudflare/containers@0.0.10': {}
 
   '@cloudflare/kv-asset-handler@0.1.3':
     dependencies:
@@ -10307,7 +10311,7 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
-  '@cloudflare/kv-asset-handler@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@197dfd5':
+  '@cloudflare/kv-asset-handler@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@2a4c467':
     dependencies:
       mime: 3.0.0
 
@@ -10347,7 +10351,7 @@ snapshots:
     optionalDependencies:
       workerd: 1.20250612.0
 
-  '@cloudflare/unenv-preset@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@197dfd5(unenv@2.0.0-rc.17)(workerd@1.20250617.0)':
+  '@cloudflare/unenv-preset@https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@2a4c467(unenv@2.0.0-rc.17)(workerd@1.20250617.0)':
     dependencies:
       unenv: 2.0.0-rc.17
     optionalDependencies:
@@ -11045,9 +11049,9 @@ snapshots:
       cac: 6.7.14
       mime-types: 2.1.35
 
-  '@hono/cloudflare-access@0.2.0(hono@4.7.7)':
+  '@hono/cloudflare-access@0.2.0(hono@4.8.2)':
     dependencies:
-      hono: 4.7.7
+      hono: 4.8.2
 
   '@hookform/resolvers@3.9.1(react-hook-form@7.56.0(react@19.0.0))':
     dependencies:
@@ -11422,12 +11426,12 @@ snapshots:
     dependencies:
       which: 3.0.1
 
-  '@openauthjs/openauth@0.4.3(arctic@2.3.4)(hono@4.7.7)':
+  '@openauthjs/openauth@0.4.3(arctic@2.3.4)(hono@4.8.2)':
     dependencies:
       '@standard-schema/spec': 1.0.0-beta.3
       arctic: 2.3.4
       aws4fetch: 1.0.20
-      hono: 4.7.7
+      hono: 4.8.2
       jose: 5.9.6
 
   '@opennextjs/aws@3.6.5':
@@ -15122,6 +15126,8 @@ snapshots:
 
   hono@4.7.7: {}
 
+  hono@4.8.2: {}
+
   hosted-git-info@6.1.3:
     dependencies:
       lru-cache: 7.18.3
@@ -16500,7 +16506,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  miniflare@https://pkg.pr.new/cloudflare/workers-sdk/miniflare@197dfd5:
+  miniflare@https://pkg.pr.new/cloudflare/workers-sdk/miniflare@2a4c467:
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       acorn: 8.14.0
@@ -17182,9 +17188,9 @@ snapshots:
 
   r2-explorer@1.1.7:
     dependencies:
-      '@hono/cloudflare-access': 0.2.0(hono@4.7.7)
+      '@hono/cloudflare-access': 0.2.0(hono@4.8.2)
       chanfana: 2.8.0
-      hono: 4.7.7
+      hono: 4.8.2
       postal-mime: 2.4.3
       zod: 3.24.3
 
@@ -19063,18 +19069,17 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  wrangler@https://pkg.pr.new/wrangler@9098(@cloudflare/workers-types@4.20250529.0):
+  wrangler@https://pkg.pr.new/wrangler@main:
     dependencies:
-      '@cloudflare/kv-asset-handler': https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@197dfd5
-      '@cloudflare/unenv-preset': https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@197dfd5(unenv@2.0.0-rc.17)(workerd@1.20250617.0)
+      '@cloudflare/kv-asset-handler': https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/kv-asset-handler@2a4c467
+      '@cloudflare/unenv-preset': https://pkg.pr.new/cloudflare/workers-sdk/@cloudflare/unenv-preset@2a4c467(unenv@2.0.0-rc.17)(workerd@1.20250617.0)
       blake3-wasm: 2.1.5
       esbuild: 0.25.4
-      miniflare: https://pkg.pr.new/cloudflare/workers-sdk/miniflare@197dfd5
+      miniflare: https://pkg.pr.new/cloudflare/workers-sdk/miniflare@2a4c467
       path-to-regexp: 6.3.0
       unenv: 2.0.0-rc.17
       workerd: 1.20250617.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250529.0
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil
