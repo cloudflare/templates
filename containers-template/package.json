@@ -10,12 +10,12 @@
     "cf-typegen": "wrangler types"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250506.0",
     "typescript": "^5.5.2",
-    "wrangler": "https://pkg.pr.new/wrangler@9098"
+    "wrangler": "https://pkg.pr.new/wrangler@main"
   },
   "dependencies": {
-    "@cloudflare/containers": "^0.0.8"
+    "@cloudflare/containers": "^0.0.10",
+    "hono": "^4.0.0"
   },
   "cloudflare": {
     "label": "Containers Starter",
