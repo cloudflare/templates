@@ -18,9 +18,9 @@ function runCommand(command: string, cwd: string) {
     return result;
   } catch (error) {
     console.error(`✗ Failed: ${command} in ${cwd}`);
-    if (error && typeof error === 'object' && 'stdout' in error) {
-      console.error('STDOUT:', (error as any).stdout?.toString());
-      console.error('STDERR:', (error as any).stderr?.toString());
+    if (error && typeof error === "object" && "stdout" in error) {
+      console.error("STDOUT:", (error as any).stdout?.toString());
+      console.error("STDERR:", (error as any).stderr?.toString());
     }
     throw error;
   }
