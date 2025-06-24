@@ -26,7 +26,7 @@
     "check:templates": "templates lint .",
     "check:turbo": "turbo run check cf-typegen --force",
     "deploy": "turbo run deploy",
-    "deploy-live-demos": "templates deploy-live-demos .",
+    "deploy-live-demos": "node --env-file=.env ./cli/dist/index.js deploy-live-demos .",
     "fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:turbo && pnpm run fix:prettier",
     "fix:deps": "syncpack format && syncpack fix-mismatches",
     "fix:lockfiles": "templates generate-npm-lockfiles .",
