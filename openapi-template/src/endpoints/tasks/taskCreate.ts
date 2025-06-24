@@ -6,7 +6,7 @@ export class TaskCreate extends D1CreateEndpoint<HandleArgs> {
   _meta = {
     model: TaskModel,
     fields: TaskModel.schema.pick({
-      // this is proposedly missing the id, because users shouldn't be able to define it
+      // this is purposely missing the id, because users shouldn't be able to define it
       name: true,
       slug: true,
       description: true,
