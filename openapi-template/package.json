@@ -1,8 +1,8 @@
 {
   "name": "openapi-template",
-  "description": "Complete backend API template using Hono + Chanfana + D1.",
+  "description": "Complete backend API template using Hono + Chanfana + D1 + Vitest.",
   "cloudflare": {
-    "label": "Worker + Hono + Chanfana + D1",
+    "label": "Backend OpenAPI Template",
     "products": [
       "Workers",
       "D1"
@@ -22,7 +22,8 @@
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "predeploy": "wrangler d1 migrations apply DB --remote",
-    "schema": "npx chanfana"
+    "schema": "npx chanfana",
+    "test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
   },
   "dependencies": {
     "chanfana": "^2.8.1",
@@ -30,6 +31,8 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.44",
+    "@types/node": "22.15.19",
     "typescript": "5.8.3",
     "wrangler": "4.20.3"
   }

@@ -8,8 +8,6 @@ import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 const app = new Hono<{ Bindings: Env }>();
 
 app.onError((err, c) => {
-  console.error("Global error handler caught:", err); // Log the error
-
   if (err instanceof ApiException) {
     // If it's a Chanfana ApiException, let Chanfana handle the response
     return c.json(
@@ -17,6 +15,8 @@ app.onError((err, c) => {
       err.status as ContentfulStatusCode,
     );
   }
+
+  console.error("Global error handler caught:", err); // Log the error if it's not known
 
   // For other errors, return a generic 500 response
   return c.json(

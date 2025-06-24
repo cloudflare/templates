@@ -11,7 +11,7 @@ This is a Cloudflare Worker with OpenAPI 3.1 Auto Generation and Validation usin
 This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
 `openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
 
-This template includes various endpoints and a D1 database as example, in endpoints you will find [chanfana D1 AutoEndpoints](https://chanfana.com/endpoints/auto/d1) and a [normal endpoint](https://chanfana.com/endpoints/defining-endpoints) to serve as example for your projects.
+This template includes various endpoints, a D1 database, and integration tests using [Vitest](https://vitest.dev/) as examples. In endpoints, you will find [chanfana D1 AutoEndpoints](https://chanfana.com/endpoints/auto/d1) and a [normal endpoint](https://chanfana.com/endpoints/defining-endpoints) to serve as examples for your projects.
 
 Besides being able to see the OpenAPI schema (openapi.json) in the browser, you can also extract the schema locally no hassle by running this command `npm run schema`.
 
@@ -25,7 +25,7 @@ Besides being able to see the OpenAPI schema (openapi.json) in the browser, you 
 Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/openauth-template
+npm create cloudflare@latest -- --template=cloudflare/templates/openapi-template
 ```
 
 A live public deployment of this template is available at [https://openapi-template.templates.workers.dev](https://openapi-template.templates.workers.dev)
@@ -50,8 +50,19 @@ A live public deployment of this template is available at [https://openapi-templ
    npx wrangler deploy
    ```
 
+## Testing
+
+This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
+
+```bash
+npm run test
+```
+
+Test files are located in the `tests/` directory, with examples demonstrating how to test your endpoints and database interactions.
+
 ## Project structure
 
 1. Your main router is defined in `src/index.ts`.
 2. Each endpoint has its own file in `src/endpoints/`.
-3. For more information read the [chanfana documentation](https://chanfana.com/) and [Hono documentation](https://hono.dev/docs).
+3. Integration tests are located in the `tests/` directory.
+4. For more information read the [chanfana documentation](https://chanfana.com/), [Hono documentation](https://hono.dev/docs), and [Vitest documentation](https://vitest.dev/guide/).
