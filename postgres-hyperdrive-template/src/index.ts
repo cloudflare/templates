@@ -1,4 +1,4 @@
-import postgres from "postgres";
+import { Client } from "pg";
 
 interface Env {
   HYPERDRIVE: Hyperdrive;
@@ -17,9 +17,8 @@ export default {
     if (url.pathname.startsWith("/api/")) {
       return handleApiRequest(request, env, ctx);
     }
-
-    // Serve static assets for everything else
-    return env.ASSETS.fetch(request);
+    
+    return Response.json({ message: "Hello World!" });
   },
 };
 
@@ -30,20 +29,21 @@ async function handleApiRequest(
 ): Promise<Response> {
   const url = new URL(request.url);
   console.log(env.HYPERDRIVE.connectionString);
-  const sql = postgres(env.HYPERDRIVE.connectionString);
-
+  const client = new Client({ connectionString: env.HYPERDRIVE.connectionString });
+  
   try {
+    await client.connect();
     // API endpoint to check if tables exist
     if (url.pathname === "/api/check-tables" && request.method === "GET") {
-      const tables = await sql`
-        SELECT table_name 
+      const tables = await client.query(
+        `SELECT table_name 
         FROM information_schema.tables 
         WHERE table_schema = 'public' 
-        AND (table_name = 'organizations' OR table_name = 'users')
-      `;
+        AND (table_name = 'organizations' OR table_name = 'users')`
+      );
       console.log("tables", tables);
 
-      const existingTables = tables.map((t) => t.table_name);
+      const existingTables = tables.rows.map((t) => t.table_name);
 
       return Response.json({
         organizations: existingTables.includes("organizations"),
@@ -54,17 +54,17 @@ async function handleApiRequest(
     // API endpoint to initialize tables
     if (url.pathname === "/api/initialize" && request.method === "POST") {
       // Create organizations table
-      await sql`
+      await client.query(`
         CREATE TABLE IF NOT EXISTS organizations (
           id SERIAL PRIMARY KEY,
           name VARCHAR(255) NOT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-      `;
+      `);
 
       // Create trigger for updated_at
-      await sql`
+      await client.query(`
         CREATE OR REPLACE FUNCTION update_modified_column() 
         RETURNS TRIGGER AS $$
         BEGIN
@@ -72,21 +72,21 @@ async function handleApiRequest(
           RETURN NEW;
         END;
         $$ language 'plpgsql'
-      `;
+      `);
 
-      await sql`
+      await client.query(`
         DROP TRIGGER IF EXISTS update_organizations_modtime ON organizations
-      `;
+      `);
 
-      await sql`
+      await client.query(`
         CREATE TRIGGER update_organizations_modtime
         BEFORE UPDATE ON organizations
         FOR EACH ROW
         EXECUTE FUNCTION update_modified_column()
-      `;
+      `);
 
       // Create users table with foreign key
-      await sql`
+      await client.query(`
         CREATE TABLE IF NOT EXISTS users (
           id SERIAL PRIMARY KEY,
           username VARCHAR(255) NOT NULL,
@@ -95,18 +95,18 @@ async function handleApiRequest(
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE SET NULL
         )
-      `;
+      `);
 
-      await sql`
+      await client.query(`
         DROP TRIGGER IF EXISTS update_users_modtime ON users
-      `;
+      `);
 
-      await sql`
+      await client.query(`
         CREATE TRIGGER update_users_modtime
         BEFORE UPDATE ON users
         FOR EACH ROW
         EXECUTE FUNCTION update_modified_column()
-      `;
+      `);
 
       return Response.json({
         success: true,
@@ -116,8 +116,8 @@ async function handleApiRequest(
 
     // API endpoint for Organizations GET operation
     if (url.pathname === "/api/organizations" && request.method === "GET") {
-      const rows = await sql`SELECT * FROM organizations ORDER BY id`;
-      return Response.json(rows);
+      const result = await client.query(`SELECT * FROM organizations ORDER BY id`);
+      return Response.json(result.rows);
     }
 
     // API endpoint for Organizations POST operation
@@ -131,14 +131,15 @@ async function handleApiRequest(
         );
       }
 
-      const result = await sql`
-        INSERT INTO organizations (name) VALUES (${body.name}) RETURNING id
-      `;
+      const result = await client.query(
+        `INSERT INTO organizations (name) VALUES ($1) RETURNING id`,
+        [body.name]
+      );
 
       return Response.json({
         success: true,
         message: "Organization created successfully",
-        id: result[0].id,
+        id: result.rows[0].id,
       });
     }
 
@@ -150,11 +151,12 @@ async function handleApiRequest(
       const orgId = Number(url.pathname.split("/").pop());
 
       // First check if there are any users associated with this organization
-      const userCheck = await sql`
-        SELECT COUNT(*) as count FROM users WHERE organization_id = ${orgId}
-      `;
+      const userCheck = await client.query(
+        `SELECT COUNT(*) as count FROM users WHERE organization_id = $1`,
+        [orgId]
+      );
 
-      if (Number(userCheck[0].count) > 0) {
+      if (Number(userCheck.rows[0].count) > 0) {
         return Response.json(
           {
             error: "Cannot delete organization with associated users",
@@ -163,7 +165,7 @@ async function handleApiRequest(
         );
       }
 
-      await sql`DELETE FROM organizations WHERE id = ${orgId}`;
+      await client.query(`DELETE FROM organizations WHERE id = $1`, [orgId]);
       return Response.json({
         success: true,
         message: "Organization deleted successfully",
@@ -174,25 +176,26 @@ async function handleApiRequest(
     if (url.pathname === "/api/users" && request.method === "GET") {
       const orgFilter = url.searchParams.get("organization_id");
 
-      let rows;
+      let result;
       if (orgFilter) {
-        rows = await sql`
-          SELECT users.*, organizations.name as organization_name 
+        result = await client.query(
+          `SELECT users.*, organizations.name as organization_name 
           FROM users 
           LEFT JOIN organizations ON users.organization_id = organizations.id
-          WHERE organization_id = ${Number(orgFilter)}
-          ORDER BY users.id
-        `;
+          WHERE organization_id = $1
+          ORDER BY users.id`,
+          [Number(orgFilter)]
+        );
       } else {
-        rows = await sql`
-          SELECT users.*, organizations.name as organization_name 
+        result = await client.query(
+          `SELECT users.*, organizations.name as organization_name 
           FROM users 
           LEFT JOIN organizations ON users.organization_id = organizations.id
-          ORDER BY users.id
-        `;
+          ORDER BY users.id`
+        );
       }
 
-      return Response.json(rows);
+      return Response.json(result.rows);
     }
 
     // API endpoint for Users POST operation
@@ -211,11 +214,12 @@ async function handleApiRequest(
 
       // If organization_id is provided, verify it exists
       if (orgId !== null) {
-        const orgCheck = await sql`
-          SELECT id FROM organizations WHERE id = ${orgId}
-        `;
+        const orgCheck = await client.query(
+          `SELECT id FROM organizations WHERE id = $1`,
+          [orgId]
+        );
 
-        if (orgCheck.length === 0) {
+        if (orgCheck.rows.length === 0) {
           return Response.json(
             { error: "Organization not found" },
             { status: 400 },
@@ -223,16 +227,17 @@ async function handleApiRequest(
         }
       }
 
-      const result = await sql`
-        INSERT INTO users (username, organization_id) 
-        VALUES (${body.username}, ${orgId}) 
-        RETURNING id
-      `;
+      const result = await client.query(
+        `INSERT INTO users (username, organization_id) 
+        VALUES ($1, $2) 
+        RETURNING id`,
+        [body.username, orgId]
+      );
 
       return Response.json({
         success: true,
         message: "User created successfully",
-        id: result[0].id,
+        id: result.rows[0].id,
       });
     }
 
@@ -258,11 +263,12 @@ async function handleApiRequest(
 
       // If organization_id is provided, verify it exists
       if (orgId !== undefined && orgId !== null) {
-        const orgCheck = await sql`
-          SELECT id FROM organizations WHERE id = ${orgId}
-        `;
+        const orgCheck = await client.query(
+          `SELECT id FROM organizations WHERE id = $1`,
+          [orgId]
+        );
 
-        if (orgCheck.length === 0) {
+        if (orgCheck.rows.length === 0) {
           return Response.json(
             { error: "Organization not found" },
             { status: 400 },
@@ -271,15 +277,17 @@ async function handleApiRequest(
       }
 
       if (orgId !== undefined) {
-        await sql`
-          UPDATE users SET username = ${body.username}, organization_id = ${orgId}
-          WHERE id = ${userId}
-        `;
+        await client.query(
+          `UPDATE users SET username = $1, organization_id = $2
+          WHERE id = $3`,
+          [body.username, orgId, userId]
+        );
       } else {
-        await sql`
-          UPDATE users SET username = ${body.username}
-          WHERE id = ${userId}
-        `;
+        await client.query(
+          `UPDATE users SET username = $1
+          WHERE id = $2`,
+          [body.username, userId]
+        );
       }
 
       return Response.json({
@@ -291,7 +299,7 @@ async function handleApiRequest(
     // API endpoint for Users DELETE operation
     if (url.pathname.startsWith("/api/users/") && request.method === "DELETE") {
       const userId = Number(url.pathname.split("/").pop());
-      await sql`DELETE FROM users WHERE id = ${userId}`;
+      await client.query(`DELETE FROM users WHERE id = $1`, [userId]);
 
       return Response.json({
         success: true,
@@ -308,6 +316,6 @@ async function handleApiRequest(
     );
   } finally {
     // Clean up the connection
-    ctx.waitUntil(sql.end());
+    ctx.waitUntil(client.end());
   }
 }
