@@ -22,6 +22,7 @@
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
     "predeploy": "wrangler d1 migrations apply DB --remote",
+    "seedLocalDb": "wrangler d1 migrations apply DB --local",
     "schema": "npx chanfana",
     "test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
   },

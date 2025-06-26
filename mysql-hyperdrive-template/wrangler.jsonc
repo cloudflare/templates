@@ -11,7 +11,7 @@
     {
       "binding": "HYPERDRIVE",
       "id": "7668c461af3c47969772c19cbd988391",
-      "localConnectionString": "<ENTER_LOCAL_CONNECTION_STRING_FOR_LOCAL_DEVELOPMENT>"
+      "localConnectionString": "mysql://username:password@mysql-domain.com:3306/defaultdb" // Replace with your connection string
     }
   ],
   "assets": {

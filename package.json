@@ -1,6 +1,8 @@
 {
   "name": "templates",
   "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.4",
     "cli": "workspace:*",
     "prettier": "3.5.3",
     "syncpack": "13.0.4",
@@ -38,9 +40,14 @@
     "preview": "templates preview",
     "test": "turbo run test -- --passWithNoTests",
     "test:cli": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:live": "PLAYWRIGHT_USE_LIVE=true playwright test",
     "update:deps": "templates deps-update",
     "upload": "templates upload",
     "validate-d2c-buttons": "templates validate-d2c-buttons",
     "validate-live-demo-links": "templates validate-live-demo-links"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }

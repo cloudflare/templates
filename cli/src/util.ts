@@ -33,7 +33,13 @@ export const SEED_REPO_FILES = [
 ];
 
 // these are all the non-template directories we expect to find
-export const ALLOWED_DIRECTORIES = ["cli", "node_modules"];
+export const ALLOWED_DIRECTORIES = [
+  "cli",
+  "node_modules",
+  "playwright-tests",
+  "playwright-report",
+  "test-results",
+];
 
 export function getTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
