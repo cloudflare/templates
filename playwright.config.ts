@@ -12,8 +12,7 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Limit workers to avoid port conflicts, but allow more for live URLs */
-  workers:
-    process.env.PLAYWRIGHT_USE_LIVE === "true" ? (process.env.CI ? 2 : 4) : 1, // Always use 1 worker for local dev to prevent port conflicts
+  workers: process.env.PLAYWRIGHT_USE_LIVE === "true" ? 4 : 1, // Always use 1 worker for local dev to prevent port conflicts
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

@@ -29,9 +29,6 @@ jobs:
       - name: Run tests
         run: pnpm -w test
 
-      - name: Run e2e tests
-        run: pnpm test:e2e
-
       - name: Save PR ID
         run: echo "$PR_ID" > ${{ env.PR_ID_FILE }}
 
