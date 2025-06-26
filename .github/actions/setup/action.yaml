@@ -26,3 +26,6 @@ runs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile --child-concurrency=10
       shell: bash
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
