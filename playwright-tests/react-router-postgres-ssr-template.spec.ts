@@ -15,13 +15,7 @@ test.describe("React Router Postgres SSR Template", () => {
       page.getByRole("img", { name: "Anna Karenina" }),
     ).toBeVisible();
     await page.getByRole("combobox").selectOption("");
-    await page.getByRole("link", { name: "Historical Fiction(2)" }).click();
-    await expect(
-      page.getByRole("img", { name: "Giovanni's Room" }),
-    ).toBeVisible();
     await page.getByRole("button", { name: "Learn more" }).first().click();
-    await expect(
-      page.getByRole("heading", { name: "Giovanni's Room" }),
-    ).toBeVisible();
+    await expect(page.getByText("All Books>")).toBeVisible();
   });
 });

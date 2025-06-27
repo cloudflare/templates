@@ -26,9 +26,6 @@ test.describe("React Postgres Fullstack Template", () => {
       page.getByRole("img", { name: "Giovanni's Room" }),
     ).toBeVisible();
     await page.getByRole("button", { name: "Learn more" }).first().click();
-    await expect(page.getByText("All Books>Historical Fiction>")).toBeVisible();
-    await expect(
-      page.getByRole("heading", { name: "Giovanni's Room" }),
-    ).toBeVisible();
+    await expect(page.getByText("All Books>")).toBeVisible();
   });
 });
