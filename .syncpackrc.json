@@ -66,6 +66,18 @@
       "packages": ["remix-starter-template", "to-do-list-kv-template"],
       "dependencies": ["wrangler"],
       "pinVersion": "^3.114.4"
+    },
+    {
+      "label": "Set wrangler 4.21.x for everywhere",
+      "packages": ["*"],
+      "dependencies": ["wrangler"],
+      "pinVersion": "4.21.x"
+    },
+    {
+      "label": "Set vite to v6",
+      "packages": ["*"],
+      "dependencies": ["vite"],
+      "pinVersion": "^6.0.0"
     }
   ]
 }

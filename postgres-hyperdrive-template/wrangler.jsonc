@@ -14,8 +14,8 @@
   "hyperdrive": [
     {
       "binding": "HYPERDRIVE",
-      "id": "5bbc3c9c39ec4641b7f94344675acd2d",
-      "localConnectionString": "<ENTER_LOCAL_CONNECTION_STRING_FOR_LOCAL_DEVELOPMENT>"
+      "id": "7853460cd9194ddb864cc211f3fc6e68",
+      "localConnectionString": "postgresql://postgres:postgres@localhost:5432/defaultdb" // Replace with your connection string
     }
   ],
   "assets": {

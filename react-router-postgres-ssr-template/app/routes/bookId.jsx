@@ -1,27 +1,30 @@
 import { useLoaderData } from "react-router";
 import BookDetail from "../components/BookDetail";
 
-export async function loader({ params, request }) {
+export async function loader({ params, request, context }) {
   const { bookId } = params;
-  const url = new URL(request.url);
 
   try {
-    const bookResponse = await fetch(`${url.origin}/api/books/${bookId}`);
+    const booksService = context?.cloudflare?.env?.BOOKS_SERVICE;
 
-    if (!bookResponse.ok) {
-      throw new Error(`API returned status: ${bookResponse.status}`);
+    if (!booksService) {
+      throw new Error("BOOKS_SERVICE binding not available");
     }
 
-    const bookData = await bookResponse.json();
-    const relatedResponse = await fetch(
-      `${url.origin}/api/books/${bookId}/related`,
-    );
+    // Call the service binding methods directly
+    const [bookData, relatedData] = await Promise.all([
+      booksService.getBook(bookId),
+      booksService.getRelatedBooks(bookId),
+    ]);
 
-    if (!relatedResponse.ok) {
-      throw new Error(`API returned status: ${relatedResponse.status}`);
+    // Check for errors in the responses
+    if (bookData.error || bookData.status === 404) {
+      throw new Response("Book not found", { status: 404 });
     }
 
-    const relatedData = await relatedResponse.json();
+    if (relatedData.error || relatedData.status === 404) {
+      throw new Response("Related books not found", { status: 404 });
+    }
 
     return {
       book: bookData.book,
@@ -30,7 +33,12 @@ export async function loader({ params, request }) {
       genreStats: relatedData.genreStats,
     };
   } catch (error) {
-    console.error("Error in book detail loader:", error);
+    console.error("[BookId Loader] Error in book detail loader:", {
+      error: error.message,
+      stack: error.stack,
+      bookId,
+      timestamp: new Date().toISOString(),
+    });
     throw new Response("Error loading book details", { status: 500 });
   }
 }

@@ -86,6 +86,58 @@ Today, there is no standard way to derive the required secrets from a project’
 
 Environment variables that do not require users to update them will automatically be included in the new project (e.g. `“ENVIRONMENT”: “staging”`). Variables that require user update (e.g. `“PROJECT_ID”: “[your project id]”`) will need to be configured after initial deployment.
 
+## Playwright E2E Tests
+
+All templates must include Playwright end-to-end tests to ensure critical functionality works correctly. Tests should be minimal smoke tests that verify the most important user flows.
+
+### Setting up Playwright Tests
+
+Playwright is installed
+
+1. **Create test file** in the playwright-tests directory. Your test file should match the directory name of your template.
+
+2. **Basic test structure**:
+
+   ```typescript
+   import { test, expect } from "@playwright/test";
+
+   test("homepage loads correctly", async ({ page }) => {
+     await page.goto("/");
+     await expect(page.locator("h1")).toBeVisible();
+   });
+   ```
+
+### Using Playwright Codegen
+
+Playwright's codegen feature lets you generate tests by clicking through your application:
+
+1. **Start your development server**:
+
+   ```bash
+   pnpm dev
+   ```
+
+2. **Run codegen**:
+
+   ```bash
+   pnpm test:e2e:codegen
+   ```
+
+3. **Record your test**:
+   - A browser window and Playwright Inspector will open
+   - Navigate through your application's critical paths
+   - Click, type, and interact as a user would
+   - Playwright automatically generates test code in the Inspector
+
+4. **Copy generated code** into your test file and refine as needed
+
+### Test Guidelines
+
+- **Keep tests minimal**: Focus on critical user paths only
+- **Test key functionality**: Form submissions, navigation, data loading
+- **Avoid implementation details**: Test what users see, not internal code
+- **Use descriptive test names**: Clearly describe what each test validates
+
 ## Checklist
 
 The above requirements, distilled into checklist form:
@@ -96,6 +148,7 @@ The above requirements, distilled into checklist form:
 - [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in \<!-- dash-content-start --> and \<!-- dash-content-end -->
 - [ ] Include a link to the publicly-accessible deployed preview in your ReadMe
 - [ ] Include the most up-to-date package lock file
+- [ ] Add Playwright E2E tests covering critical user paths
 - [ ] Open a PR against the public repository's main branch
 
 #### Enforced by CI

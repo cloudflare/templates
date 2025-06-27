@@ -5,16 +5,16 @@
     "templates": "./dist/index.js"
   },
   "dependencies": {
-    "@commander-js/extra-typings": "12.1.0",
-    "commander": "12.1.0",
+    "@commander-js/extra-typings": "14.0.0",
+    "commander": "14.0.0",
     "comment-json": "4.2.5",
     "jsonc-parser": "3.3.1",
     "toml": "3.0.0",
-    "zod": "3.24.3",
-    "zx": "8.5.3"
+    "zod": "3.25.67",
+    "zx": "8.6.0"
   },
   "devDependencies": {
-    "@types/node": "22.15.19",
+    "@types/node": "24.0.4",
     "typescript": "5.8.3"
   },
   "scripts": {

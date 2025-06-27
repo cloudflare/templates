@@ -281,7 +281,7 @@ function lintPackageJson(
   }
 
   const pkg = readJson(filePath) as {
-    scripts?: { deploy?: string };
+    scripts?: { deploy?: string; dev?: string };
     cloudflare?: {
       label?: string;
       products?: string[];
@@ -296,6 +296,9 @@ function lintPackageJson(
   // Check deploy script
   if (!pkg.scripts?.deploy) {
     problems.push('"scripts.deploy" must be defined');
+  }
+  if (!pkg.scripts?.dev) {
+    problems.push('"scripts.dev" must be defined');
   }
 
   // Check cloudflare object and its required fields

@@ -12,6 +12,13 @@
   //     "localConnectionString": "postgresql://myuser:mypassword@localhost:5432/mydatabase"
   //   }
   // ],
+  "services": [
+    {
+      "binding": "BOOKS_SERVICE",
+      "service": "react-router-postgres-ssr-template",
+      "entrypoint": "BooksService"
+    }
+  ],
   "placement": {
     "mode": "smart"
   },

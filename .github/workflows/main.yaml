@@ -22,11 +22,21 @@ jobs:
       - run: pnpm -w check
       - run: pnpm -w test
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        shell: bash
+
+      - name: Run e2e tests
+        run: pnpm test:e2e
+
       - name: Deploy live demos
         run: pnpm -w deploy-live-demos
 
       - name: Validate live demo links
         run: pnpm -w validate-live-demo-links
+
+      - name: Run live e2e tests
+        run: pnpm test:e2e:live
 
       - name: Deploy to staging
         run: |
