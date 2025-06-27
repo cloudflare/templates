@@ -13,13 +13,13 @@ function BooksList({ books = [], onSelectBook }) {
   const handleSortChange = (e) => {
     const newSort = e.target.value;
     const newSearchParams = new URLSearchParams(searchParams);
-    
+
     if (newSort) {
       newSearchParams.set("sort", newSort);
     } else {
       newSearchParams.delete("sort");
     }
-    
+
     setSearchParams(newSearchParams);
   };
 

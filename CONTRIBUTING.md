@@ -124,7 +124,6 @@ Playwright's codegen feature lets you generate tests by clicking through your ap
    ```
 
 3. **Record your test**:
-
    - A browser window and Playwright Inspector will open
    - Navigate through your application's critical paths
    - Click, type, and interact as a user would

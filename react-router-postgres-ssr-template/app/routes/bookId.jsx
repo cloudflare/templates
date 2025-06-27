@@ -21,7 +21,7 @@ export async function loader({ params, request, context }) {
     if (bookData.error || bookData.status === 404) {
       throw new Response("Book not found", { status: 404 });
     }
-    
+
     if (relatedData.error || relatedData.status === 404) {
       throw new Response("Related books not found", { status: 404 });
     }

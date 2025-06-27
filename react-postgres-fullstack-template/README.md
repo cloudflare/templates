@@ -40,12 +40,10 @@ This application uses Cloudflare Workers' [Smart Placement](https://developers.c
 ## Tech Stack
 
 - **Frontend**: React + React Router for client-side navigation [using declarative routing](https://reactrouter.com/en/main/start/overview)
-
   - Built with Vite and deployed as static assets via Workers
   - React SPA mode enabled in `wrangler.jsonc` for client-side navigation
 
 - **Backend**: API routes served by a Worker using [Hono](https://hono.dev/)
-
   - API endpoints defined in `/api/routes` directory
   - Automatic fallback to mock data when database is unavailable
 

@@ -23,7 +23,9 @@ export class BooksService extends WorkerEntrypoint {
         return { sql: null, dbAvailable: false };
       }
     } else {
-      console.log("[BooksService] No Hyperdrive binding available, using mock data");
+      console.log(
+        "[BooksService] No Hyperdrive binding available, using mock data",
+      );
       return { sql: null, dbAvailable: false };
     }
   }
@@ -31,14 +33,14 @@ export class BooksService extends WorkerEntrypoint {
   // RPC method: Get single book by ID
   async getBook(bookId) {
     console.log("[BooksService] getBook called", { bookId });
-    
+
     const { sql, dbAvailable } = await this._initializeDatabase();
 
     try {
       if (dbAvailable && sql) {
         // Database logic
         const book = await sql`SELECT * FROM public.books WHERE id = ${bookId}`;
-        
+
         if (book.length === 0) {
           console.log("[BooksService] Book not found in database", { bookId });
           return { error: "Book not found", status: 404 };
@@ -46,7 +48,7 @@ export class BooksService extends WorkerEntrypoint {
 
         console.log("[BooksService] Book found in database", {
           bookId,
-          title: book[0].title
+          title: book[0].title,
         });
 
         return {
@@ -65,7 +67,7 @@ export class BooksService extends WorkerEntrypoint {
 
         console.log("[BooksService] Book found in mock data", {
           bookId,
-          title: book.title
+          title: book.title,
         });
 
         return {
@@ -86,7 +88,7 @@ export class BooksService extends WorkerEntrypoint {
   // RPC method: Get related books data
   async getRelatedBooks(bookId) {
     console.log("[BooksService] getRelatedBooks called", { bookId });
-    
+
     const { sql, dbAvailable } = await this._initializeDatabase();
 
     try {
@@ -95,7 +97,9 @@ export class BooksService extends WorkerEntrypoint {
         const book = await sql`SELECT * FROM public.books WHERE id = ${bookId}`;
 
         if (book.length === 0) {
-          console.log("[BooksService] Book not found for related books", { bookId });
+          console.log("[BooksService] Book not found for related books", {
+            bookId,
+          });
           return { error: "Book not found", status: 404 };
         }
 
@@ -122,7 +126,7 @@ export class BooksService extends WorkerEntrypoint {
           bookId,
           bookGenre,
           relatedBooksCount: relatedBooks.length,
-          recentBooksCount: recentBooks.length
+          recentBooksCount: recentBooks.length,
         });
 
         return {
@@ -139,19 +143,24 @@ export class BooksService extends WorkerEntrypoint {
         const book = mockBooks.find((book) => book.id === bookIdNum);
 
         if (!book) {
-          console.log("[BooksService] Book not found for related books in mock data", { bookId });
+          console.log(
+            "[BooksService] Book not found for related books in mock data",
+            { bookId },
+          );
           return { error: "Book not found", status: 404 };
         }
 
         const bookGenre = book.genre;
 
         // Generate mock related data
-        const relatedBooks = mockBooks.filter(
-          (b) => b.genre === bookGenre && b.id !== bookIdNum,
-        ).slice(0, 3);
+        const relatedBooks = mockBooks
+          .filter((b) => b.genre === bookGenre && b.id !== bookIdNum)
+          .slice(0, 3);
 
         // Generate mock recent books
-        const recentBooks = mockBooks.filter((b) => b.id !== bookIdNum).slice(0, 2);
+        const recentBooks = mockBooks
+          .filter((b) => b.id !== bookIdNum)
+          .slice(0, 2);
 
         // Generate mock genre counts
         const genres = {};
@@ -170,7 +179,7 @@ export class BooksService extends WorkerEntrypoint {
           bookId,
           bookGenre,
           relatedBooksCount: relatedBooks.length,
-          recentBooksCount: recentBooks.length
+          recentBooksCount: recentBooks.length,
         });
 
         return {
@@ -196,7 +205,7 @@ export class BooksService extends WorkerEntrypoint {
   async getBooks(options = {}) {
     const { genre, sort } = options;
     console.log("[BooksService] getBooks called", { genre, sort });
-    
+
     const { sql, dbAvailable } = await this._initializeDatabase();
 
     try {
@@ -244,7 +253,7 @@ export class BooksService extends WorkerEntrypoint {
         console.log("[BooksService] Books found in database", {
           booksCount: results.length,
           genre,
-          sort
+          sort,
         });
 
         return {
@@ -284,7 +293,7 @@ export class BooksService extends WorkerEntrypoint {
         console.log("[BooksService] Books found in mock data", {
           booksCount: results.length,
           genre,
-          sort
+          sort,
         });
 
         return {

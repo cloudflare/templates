@@ -11,13 +11,11 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
 ## Key Features
 
 - **🔒 Security**
-
   - Basic Authentication support
   - Cloudflare Access integration
   - Self-hosted on your Cloudflare account
 
 - **📁 File Management**
-
   - Drag-and-drop file upload
   - Folder creation and organization
   - Multi-part upload for large files
@@ -25,7 +23,6 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
   - HTTP/Custom metadata editing
 
 - **👀 File Handling**
-
   - In-browser file preview
     - PDF documents
     - Images
