@@ -17,22 +17,22 @@
   },
   "dependencies": {
     "isbot": "5.1.26",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-router": "7.5.2"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router": "7.6.3"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.2.4",
-    "@react-router/dev": "7.5.2",
+    "@cloudflare/vite-plugin": "1.7.5",
+    "@react-router/dev": "7.6.3",
     "@tailwindcss/vite": "4.1.4",
-    "@types/node": "22.15.19",
-    "@types/react": "19.0.1",
-    "@types/react-dom": "19.0.1",
+    "@types/node": "24.0.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "tailwindcss": "4.1.1",
     "typescript": "5.8.3",
-    "vite": "6.3.5",
+    "vite": "^6.0.0",
     "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "4.16.1"
+    "wrangler": "4.21.x"
   },
   "scripts": {
     "build": "react-router build",

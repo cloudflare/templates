@@ -16,11 +16,11 @@
     "publish": true
   },
   "dependencies": {
-    "r2-explorer": "^1.1.5"
+    "r2-explorer": "1.1.5"
   },
   "devDependencies": {
     "typescript": "5.8.3",
-    "wrangler": "4.12.0"
+    "wrangler": "4.21.x"
   },
   "scripts": {
     "cf-typegen": "wrangler types",

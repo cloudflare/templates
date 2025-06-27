@@ -3,23 +3,19 @@ import { groupByGenre } from "../lib/utils";
 import Sidebar from "../components/Sidebar";
 import MockDataBanner from "../components/MockDataBanner";
 
-export async function loader({ request }) {
+export async function loader({ request, context }) {
   try {
-    const url = new URL(request.url);
+    const booksService = context?.cloudflare?.env?.BOOKS_SERVICE;
 
-    // Try fetching from the API
-    let data = { books: [] };
-    try {
-      const response = await fetch(`${url.origin}/api/books`);
-      if (response.ok) {
-        data = await response.json();
-      } else {
-        console.warn(`API returned status: ${response.status}`);
-        // If the API returns an error, let the backend handle it
-      }
-    } catch (fetchError) {
-      console.warn("API fetch failed:", fetchError);
+    if (!booksService) {
+      console.warn(
+        "[Book Layout Loader] BOOKS_SERVICE binding not available, returning empty genres",
+      );
+      return { genres: [], dataSource: "fallback" };
     }
+
+    // Call the service binding method to get all books
+    const data = await booksService.getBooks();
 
     // Ensure we have books data or empty array
     const books = data.books || [];
@@ -28,17 +24,16 @@ export async function loader({ request }) {
     if (books.length > 0) {
       genreGroups = groupByGenre(books);
     } else {
-      console.warn("No books data available");
+      console.warn("[Book Layout Loader] No books data available from service");
     }
 
     return {
       genres: genreGroups,
-      dataSource: data.source, // Let the source come directly from the API
+      dataSource: data.source,
     };
   } catch (error) {
-    console.error("Unexpected error in book layout loader:", error);
-    // We still need a fallback, but we won't set a default source
-    return { genres: [] };
+    // Return empty genres on error
+    return { genres: [], dataSource: "error" };
   }
 }
 

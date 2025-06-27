@@ -1,78 +1,34 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import BookCard from "./BookCard";
 
-function useBooks(initialBooks = [], filter, sortBy) {
-  const [books, setBooks] = useState(initialBooks);
-  const [loading, setLoading] = useState(!initialBooks.length);
-
-  useEffect(() => {
-    // If we have initial books and there's no sorting/filtering needed, don't fetch
-    if (initialBooks.length && !filter && !sortBy) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchBooks = async () => {
-      try {
-        const params = new URLSearchParams();
-        if (filter) params.append("genre", filter);
-        if (sortBy) params.append("sort", sortBy);
-
-        const url = `/api/books${params.toString() ? `?${params.toString()}` : ""}`;
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          throw new Error(`API returned status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!data.books?.length) {
-          console.error("No books data found:", data);
-          setBooks([]);
-        } else {
-          setBooks(data.books);
-        }
-      } catch (error) {
-        console.error("Error loading books:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBooks();
-  }, [filter, sortBy, initialBooks.length]);
-
-  return { books, loading };
-}
-
-function BooksList({ initialBooks = [], filter, onSelectBook }) {
+function BooksList({ books = [], onSelectBook }) {
   const navigate = useNavigate();
-  const [sortBy, setSortBy] = useState("");
-  const { books, loading } = useBooks(initialBooks, filter, sortBy);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentSort = searchParams.get("sort") || "";
 
   const handleBookSelect = (bookId) => {
     onSelectBook ? onSelectBook(bookId) : navigate(`/book/${bookId}`);
   };
-  const handleSortChange = (e) => {
-    setSortBy(e.target.value);
-  };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="h-10 w-10 border-2 border-blue-800 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  const handleSortChange = (e) => {
+    const newSort = e.target.value;
+    const newSearchParams = new URLSearchParams(searchParams);
+    
+    if (newSort) {
+      newSearchParams.set("sort", newSort);
+    } else {
+      newSearchParams.delete("sort");
+    }
+    
+    setSearchParams(newSearchParams);
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
         <select
           className="py-2 px-4 border border-gray-300 rounded-md bg-white"
-          value={sortBy}
+          value={currentSort}
           onChange={handleSortChange}
         >
           <option value="">Sort by...</option>

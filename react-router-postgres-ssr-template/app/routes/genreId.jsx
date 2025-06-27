@@ -2,26 +2,41 @@ import { useParams, useLoaderData } from "react-router";
 import BooksList from "../components/BooksList";
 import Breadcrumbs from "../components/Breadcrumbs";
 
-export async function loader({ params, request }) {
+export async function loader({ params, request, context }) {
   const { genreId } = params;
   const activeGenre = genreId ? decodeURIComponent(genreId) : null;
+
   const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.search);
+  const sort = searchParams.get("sort");
 
   try {
-    const params = new URLSearchParams();
-    if (activeGenre) params.append("genre", activeGenre);
+    const booksService = context?.cloudflare?.env?.BOOKS_SERVICE;
 
-    const apiUrl = `${url.origin}/api/books${params.toString() ? `?${params.toString()}` : ""}`;
-    const response = await fetch(apiUrl);
-
-    if (!response.ok) {
-      throw new Error(`API returned status: ${response.status}`);
+    if (!booksService) {
+      console.warn(
+        "[Genre Loader] BOOKS_SERVICE binding not available, returning empty array",
+      );
+      return { books: [], source: "fallback" };
     }
 
-    return response.json();
+    // Call the service binding method with genre filter and sort
+    const data = await booksService.getBooks({ genre: activeGenre, sort });
+
+    return {
+      books: data.books || [],
+      source: data.source,
+    };
   } catch (error) {
-    console.error("Error in genre loader:", error);
-    return { books: [] };
+    console.error("[Genre Loader] Error in genre loader:", {
+      error: error.message,
+      stack: error.stack,
+      activeGenre,
+      sort,
+      requestUrl: request.url,
+      timestamp: new Date().toISOString(),
+    });
+    return { books: [], source: "error" };
   }
 }
 
@@ -46,7 +61,7 @@ export default function GenrePage() {
         </p>
       </div>
 
-      <BooksList initialBooks={data.books} filter={activeGenre} />
+      <BooksList books={data.books} />
     </>
   );
 }

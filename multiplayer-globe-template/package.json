@@ -18,15 +18,15 @@
     "cobe": "0.6.3",
     "partyserver": "0.0.66",
     "partysocket": "1.1.3",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
-    "@types/react": "18.3.12",
-    "@types/react-dom": "18.3.1",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "esbuild": "0.25.2",
     "typescript": "5.8.3",
-    "wrangler": "4.16.1"
+    "wrangler": "4.21.x"
   },
   "scripts": {
     "cf-typegen": "wrangler types ./src/server/worker-configuration.d.ts",
