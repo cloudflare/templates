@@ -25,7 +25,7 @@
       "package_json_hash": "31e29875bf1fb757231e729114487be0313dc495"
     },
     "remix-starter-template": {
-      "package_json_hash": "b5577e444499b87ca813276c86293c713827cb97"
+      "package_json_hash": "cfbb8d05bd68cfe74e9d9a50ad823d53ac729c93"
     },
     "react-router-starter-template": {
       "package_json_hash": "ea2bc89307421bfbd4429ae08a79212ba61e6756"
@@ -37,7 +37,7 @@
       "package_json_hash": "35408ae14751fd7c7c269caa1159fa850d4ea72c"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "9a4f67ee36936111d4c15464dc556a2a5f697c57"
+      "package_json_hash": "13c2e72f201de3bca7f0bec6f6878b50f9ac99dc"
     },
     "vite-react-template": {
       "package_json_hash": "322efbc6c868ac55015962cb8ba8b94c2639a703"
@@ -52,10 +52,10 @@
       "package_json_hash": "a41b6ecfcc31ec636116ea0d7d1d7e36e403d93c"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "80927b811b3f6d26552b7b4e7914d4b4ff4773ba"
+      "package_json_hash": "d1267c829c285acbce6c10e9a0b67aee2fc8bf19"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "692e1af07448d6de0ef55be9d599ae9538eb9d6e"
+      "package_json_hash": "2996b3cad950ec0fcedf76c804ae1ee634745c39"
     },
     "r2-explorer-template": {
       "package_json_hash": "0cc9b98105199138b51775f1fe0d995125194748"
@@ -64,7 +64,7 @@
       "package_json_hash": "0d65df6cb33a7a95fd77754fea52f481b5dde14d"
     },
     "chanfana-openapi-template": {
-      "package_json_hash": "0fdf690deff977d93c3e597f6e48ac307a1662bc"
+      "package_json_hash": "ad5d44e5edeec100a80a88e177176375eb059387"
     }
   }
 }

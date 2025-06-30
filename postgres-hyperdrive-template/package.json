@@ -21,7 +21,7 @@
     "postgres": "3.4.5"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.44",
+    "@cloudflare/vitest-pool-workers": "0.8.47",
     "@types/node": "24.0.4",
     "typescript": "5.8.3",
     "vitest": "3.2.4",
