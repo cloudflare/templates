@@ -6,7 +6,9 @@ test.describe("Multiplayer Globe Template", () => {
     await expect(
       page.getByRole("heading", { name: "Where's everyone at?" }),
     ).toBeVisible();
-    await expect(page.locator("#root")).toContainText("1 person connected.");
+    await expect(
+      page.getByText(/\d+ (?:person|people) connected\./),
+    ).toBeVisible();
     await expect(page.locator("canvas")).toBeVisible();
   });
 });

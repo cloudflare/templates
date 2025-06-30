@@ -1,4 +1,41 @@
 import { defineConfig, devices } from "@playwright/test";
+import { join } from "path";
+import { readdirSync, readFileSync, existsSync } from "fs";
+
+// Function to get published templates when running live tests
+function getTestIgnorePatterns(): string[] {
+  const isLive = process.env.PLAYWRIGHT_USE_LIVE === "true";
+  if (!isLive) return [];
+
+  const templatesRoot = process.cwd();
+  const entries = readdirSync(templatesRoot, { withFileTypes: true });
+  const templateDirs = entries
+    .filter((entry) => entry.isDirectory() && entry.name.endsWith("-template"))
+    .map((entry) => entry.name);
+
+  const unpublishedTemplates: string[] = [];
+
+  for (const templateDir of templateDirs) {
+    const packageJsonPath = join(templatesRoot, templateDir, "package.json");
+    if (existsSync(packageJsonPath)) {
+      try {
+        const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+        const cloudflareConfig = packageJson.cloudflare;
+        if (!cloudflareConfig || cloudflareConfig.publish !== true) {
+          unpublishedTemplates.push(`**/${templateDir}.spec.ts`);
+        }
+      } catch (error) {
+        // If we can't parse package.json, exclude the template from live tests
+        unpublishedTemplates.push(`**/${templateDir}.spec.ts`);
+      }
+    } else {
+      // If no package.json, exclude from live tests
+      unpublishedTemplates.push(`**/${templateDir}.spec.ts`);
+    }
+  }
+
+  return unpublishedTemplates;
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.

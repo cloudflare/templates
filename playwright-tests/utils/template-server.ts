@@ -61,6 +61,15 @@ export class TemplateServerManager {
           const packageJson = JSON.parse(
             fs.readFileSync(packageJsonPath, "utf8"),
           );
+
+          // For live tests, only include templates with cloudflare.publish === true
+          if (this.useLiveUrls) {
+            const cloudflareConfig = packageJson.cloudflare;
+            if (!cloudflareConfig || cloudflareConfig.publish !== true) {
+              continue;
+            }
+          }
+
           const template = this.analyzeTemplate(
             templateDir,
             templatePath,
