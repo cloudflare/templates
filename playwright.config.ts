@@ -48,6 +48,8 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
+  /* Ignore these files when running against live mode */
+  testIgnore: getTestIgnorePatterns(),
   /* Limit workers to avoid port conflicts, but allow more for live URLs */
   workers: process.env.PLAYWRIGHT_USE_LIVE === "true" ? 4 : 1, // Always use 1 worker for local dev to prevent port conflicts
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
