@@ -17,7 +17,7 @@ export default {
     if (url.pathname.startsWith("/api/")) {
       return handleApiRequest(request, env, ctx);
     }
-    
+
     return Response.json({ message: "Hello World!" });
   },
 };
@@ -29,8 +29,10 @@ async function handleApiRequest(
 ): Promise<Response> {
   const url = new URL(request.url);
   console.log(env.HYPERDRIVE.connectionString);
-  const client = new Client({ connectionString: env.HYPERDRIVE.connectionString });
-  
+  const client = new Client({
+    connectionString: env.HYPERDRIVE.connectionString,
+  });
+
   try {
     await client.connect();
     // API endpoint to check if tables exist
@@ -39,7 +41,7 @@ async function handleApiRequest(
         `SELECT table_name 
         FROM information_schema.tables 
         WHERE table_schema = 'public' 
-        AND (table_name = 'organizations' OR table_name = 'users')`
+        AND (table_name = 'organizations' OR table_name = 'users')`,
       );
       console.log("tables", tables);
 
@@ -116,7 +118,9 @@ async function handleApiRequest(
 
     // API endpoint for Organizations GET operation
     if (url.pathname === "/api/organizations" && request.method === "GET") {
-      const result = await client.query(`SELECT * FROM organizations ORDER BY id`);
+      const result = await client.query(
+        `SELECT * FROM organizations ORDER BY id`,
+      );
       return Response.json(result.rows);
     }
 
@@ -133,7 +137,7 @@ async function handleApiRequest(
 
       const result = await client.query(
         `INSERT INTO organizations (name) VALUES ($1) RETURNING id`,
-        [body.name]
+        [body.name],
       );
 
       return Response.json({
@@ -153,7 +157,7 @@ async function handleApiRequest(
       // First check if there are any users associated with this organization
       const userCheck = await client.query(
         `SELECT COUNT(*) as count FROM users WHERE organization_id = $1`,
-        [orgId]
+        [orgId],
       );
 
       if (Number(userCheck.rows[0].count) > 0) {
@@ -184,14 +188,14 @@ async function handleApiRequest(
           LEFT JOIN organizations ON users.organization_id = organizations.id
           WHERE organization_id = $1
           ORDER BY users.id`,
-          [Number(orgFilter)]
+          [Number(orgFilter)],
         );
       } else {
         result = await client.query(
           `SELECT users.*, organizations.name as organization_name 
           FROM users 
           LEFT JOIN organizations ON users.organization_id = organizations.id
-          ORDER BY users.id`
+          ORDER BY users.id`,
         );
       }
 
@@ -216,7 +220,7 @@ async function handleApiRequest(
       if (orgId !== null) {
         const orgCheck = await client.query(
           `SELECT id FROM organizations WHERE id = $1`,
-          [orgId]
+          [orgId],
         );
 
         if (orgCheck.rows.length === 0) {
@@ -231,7 +235,7 @@ async function handleApiRequest(
         `INSERT INTO users (username, organization_id) 
         VALUES ($1, $2) 
         RETURNING id`,
-        [body.username, orgId]
+        [body.username, orgId],
       );
 
       return Response.json({
@@ -265,7 +269,7 @@ async function handleApiRequest(
       if (orgId !== undefined && orgId !== null) {
         const orgCheck = await client.query(
           `SELECT id FROM organizations WHERE id = $1`,
-          [orgId]
+          [orgId],
         );
 
         if (orgCheck.rows.length === 0) {
@@ -280,13 +284,13 @@ async function handleApiRequest(
         await client.query(
           `UPDATE users SET username = $1, organization_id = $2
           WHERE id = $3`,
-          [body.username, orgId, userId]
+          [body.username, orgId, userId],
         );
       } else {
         await client.query(
           `UPDATE users SET username = $1
           WHERE id = $2`,
-          [body.username, userId]
+          [body.username, userId],
         );
       }
 
