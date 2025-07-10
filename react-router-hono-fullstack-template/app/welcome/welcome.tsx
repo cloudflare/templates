@@ -1,5 +1,8 @@
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/components/ui/card";
+import { Badge } from "~/components/components/ui/badge";
+import { Button } from "~/components/components/ui/button";
 
 export function Welcome({ message }: { message: string }) {
   return (
@@ -19,28 +22,40 @@ export function Welcome({ message }: { message: string }) {
             />
           </div>
         </header>
-        <div className="max-w-[300px] w-full space-y-6 px-4">
-          <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
-            <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
-              What&apos;s next?
-            </p>
-            <ul>
-              {resources.map(({ href, text, icon }) => (
-                <li key={href}>
-                  <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
+        <div className="max-w-[400px] w-full space-y-6 px-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">What&apos;s next?</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                {resources.map(({ href, text, icon }) => (
+                  <Button
+                    key={href}
+                    variant="ghost"
+                    className="w-full justify-start gap-3 h-auto p-3"
+                    asChild
                   >
-                    {icon}
-                    {text}
-                  </a>
-                </li>
-              ))}
-              <li className="self-stretch p-3 leading-normal">{message}</li>
-            </ul>
-          </nav>
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {icon}
+                      {text}
+                    </a>
+                  </Button>
+                ))}
+              </div>
+              {message && (
+                <div className="pt-4 border-t">
+                  <Badge variant="secondary" className="w-full justify-center py-2">
+                    {message}
+                  </Badge>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </main>
