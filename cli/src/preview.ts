@@ -1,24 +1,10 @@
-import {
-  collectTemplateFiles,
-  commentOnPR,
-  fetchWithRetries,
-  getTemplates,
-  handleCloudflareResponse,
-  SeedRepo,
-} from "./util";
-import fs from "node:fs";
+import { commentOnPR } from "./util";
 import MarkdownError from "./MarkdownError";
+import { upload, UploadConfig } from "./upload";
 
-export type PreviewConfig = {
-  templateDirectory: string;
+export type PreviewConfig = UploadConfig & {
   prId: string;
   githubToken: string;
-  seedRepo: SeedRepo;
-  api: {
-    endpoint: string;
-    clientId: string;
-    clientSecret: string;
-  };
 };
 export async function preview(config: PreviewConfig) {
   const headRepo = `${config.seedRepo.owner}/${config.seedRepo.repository}`;
@@ -39,7 +25,7 @@ export async function preview(config: PreviewConfig) {
     });
   }
   try {
-    await uploadPreview(config);
+    await upload(config);
     return commentOnPR({
       ...config,
       body: previewLinkBody(config),
@@ -52,36 +38,11 @@ export async function preview(config: PreviewConfig) {
   }
 }
 
-async function uploadPreview({
-  templateDirectory,
-  prId,
-  seedRepo,
-  api,
-}: PreviewConfig) {
-  const templates = getTemplates(templateDirectory);
-  const body = templates.reduce((formData, { name, path: templatePath }) => {
-    for (const file of collectTemplateFiles(templatePath, !!seedRepo)) {
-      formData.set(path.join(name, file.name), file);
-    }
-    return formData;
-  }, new FormData());
-  const queryParams = new URLSearchParams({ ...seedRepo, pr_id: prId });
-  const response = await fetchWithRetries(`${api.endpoint}?${queryParams}`, {
-    method: "POST",
-    headers: {
-      "Cf-Access-Client-Id": api.clientId,
-      "Cf-Access-Client-Secret": api.clientSecret,
-    },
-    body,
-  });
-  return handleCloudflareResponse(response);
-}
-
 function previewLinkBody(config: PreviewConfig) {
   const url = new URL("https://dash.cloudflare.com");
   url.searchParams.set(
     "to",
-    `/:account/workers-and-pages/template-preview/${config.prId}`,
+    `/:account/workers-and-pages/template-preview/${config.version}`,
   );
   return `[Dashboard preview link](${url})`;
 }

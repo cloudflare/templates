@@ -98,7 +98,7 @@ export function getTemplates(templateDirectory: string): Template[] {
 export function collectTemplateFiles(
   templatePath: string,
   onlySeedRepoFiles?: boolean,
-): File[] {
+): Array<{ filePath: string; file: File }> {
   return fs
     .readdirSync(templatePath, { recursive: true })
     .map((file) => ({
@@ -114,7 +114,10 @@ export function collectTemplateFiles(
         !fs.statSync(filePath).isDirectory() &&
         !gitIgnored(filePath),
     )
-    .map(({ name, filePath }) => new File([fs.readFileSync(filePath)], name));
+    .map(({ name, filePath }) => ({
+      filePath,
+      file: new File([fs.readFileSync(filePath)], name),
+    }));
 }
 
 function gitIgnored(filePath: string): boolean {
