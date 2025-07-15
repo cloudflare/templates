@@ -11,6 +11,7 @@ export type UploadConfig = {
   templateDirectory: string;
   seedRepo: SeedRepo;
   version: string;
+  latest?: boolean;
   api: {
     endpoint: string;
     clientId: string;
@@ -43,6 +44,9 @@ export async function upload(config: UploadConfig) {
 async function uploadTemplates(body: FormData, config: UploadConfig) {
   const queryParams = new URLSearchParams(config.seedRepo);
   queryParams.set("version", config.version);
+  if (config.latest) {
+    queryParams.set("latest", `${true}`);
+  }
   const response = await fetchWithRetries(
     `${config.api.endpoint}?${queryParams}`,
     {

@@ -50,6 +50,7 @@ program
           branch: options.branch,
         },
         version: options.branch,
+        latest: true,
         api: {
           endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
           clientId,
