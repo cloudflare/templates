@@ -11,6 +11,7 @@ import { setupHooks } from "./setupHooks";
 import { depsInfo } from "./depsInfo";
 import { depsUpdate } from "./depsUpdate";
 import deployLiveDemos from "./deployLiveDemos";
+import { preview } from "./preview";
 
 const program = new Command();
 
@@ -177,8 +178,10 @@ program
       : "integrations-platform";
     const [owner, repository] = options.repoFullName.split("/");
     return actionWithSummary("Preview", () =>
-      upload({
+      preview({
         templateDirectory,
+        githubToken,
+        prId: options.pr,
         seedRepo: {
           provider: "github",
           owner,
