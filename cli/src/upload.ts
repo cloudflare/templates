@@ -10,6 +10,7 @@ import MarkdownError from "./MarkdownError";
 export type UploadConfig = {
   templateDirectory: string;
   seedRepo: SeedRepo;
+  version: string;
   api: {
     endpoint: string;
     clientId: string;
@@ -19,34 +20,22 @@ export type UploadConfig = {
 
 export async function upload(config: UploadConfig) {
   const templates = getTemplates(config.templateDirectory);
-  const successes: string[] = [];
-  const errors: string[] = [];
-  await Promise.all(
-    templates.map(async ({ path }) => {
-      try {
-        await uploadTemplate(path, config);
-        successes.push(`- ✅ ${path}`);
-      } catch (err) {
-        errors.push(`- ❌ ${path} failed: ${(err as Error).message}`);
-      }
-    }),
-  );
-  if (errors.length > 0) {
-    throw new MarkdownError("Upload failed.", errors.join("\n"));
-  }
-  return successes.join("\n");
+  const formData = templates.reduce((body, template) => {
+    const files = collectTemplateFiles(template.path, !!config.seedRepo);
+    console.info(`Uploading ${template.path}:`);
+    files.forEach(({ file, filePath }) => {
+      console.info(`  - ${filePath}`);
+      body.set(filePath, file);
+    });
+    return body;
+  }, new FormData());
+  await uploadTemplates(formData, config);
+  return templates.map(({ name }) => `- ✅ ${name}`).join("\n");
 }
 
-async function uploadTemplate(templatePath: string, config: UploadConfig) {
-  const files = collectTemplateFiles(templatePath, !!config.seedRepo);
-  console.info(`Uploading ${templatePath}:`);
-  const body = new FormData();
-  files.forEach((file) => {
-    console.info(`  - ${file.name}`);
-    body.set(file.name, file);
-  });
+async function uploadTemplates(body: FormData, config: UploadConfig) {
   const queryParams = new URLSearchParams(config.seedRepo);
-  queryParams.set("path", templatePath);
+  queryParams.set("version", config.version);
   const response = await fetchWithRetries(
     `${config.api.endpoint}?${queryParams}`,
     {

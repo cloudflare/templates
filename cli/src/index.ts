@@ -4,7 +4,6 @@ import { Command } from "@commander-js/extra-typings";
 import { upload } from "./upload";
 import { lint } from "./lint";
 import { generateNpmLockfiles, lintNpmLockfiles } from "./npm";
-import { preview } from "./preview";
 import { validateLiveDemoLinks } from "./validateLiveDemoLinks";
 import { actionWithSummary } from "./util";
 import { validateD2CButtons } from "./validateD2CButtons";
@@ -49,6 +48,7 @@ program
           repository,
           branch: options.branch,
         },
+        version: options.branch,
         api: {
           endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
           clientId,
@@ -156,6 +156,10 @@ program
   .requiredOption("--repoFullName <string>", "the owner/repo combination")
   .requiredOption("--branch <string>", "the branch or ref")
   .requiredOption("--pr <string>", "the ID of the pull request")
+  .requiredOption(
+    "--hash <string>",
+    "the latest commit hash of the pull request",
+  )
   .action((templateDirectory, options) => {
     const clientId = process.env.TEMPLATES_API_CLIENT_ID;
     const clientSecret = process.env.TEMPLATES_API_CLIENT_SECRET;
@@ -173,18 +177,17 @@ program
       : "integrations-platform";
     const [owner, repository] = options.repoFullName.split("/");
     return actionWithSummary("Preview", () =>
-      preview({
+      upload({
         templateDirectory,
-        prId: options.pr,
-        githubToken,
         seedRepo: {
           provider: "github",
           owner,
           repository,
           branch: options.branch,
         },
+        version: `preview.${options.pr}.${options.hash}`,
         api: {
-          endpoint: `https://${subdomain}.cfdata.org/api/v1/template-previews`,
+          endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
           clientId,
           clientSecret,
         },
