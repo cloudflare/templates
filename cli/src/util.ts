@@ -205,7 +205,11 @@ export async function handleCloudflareResponse(response: Response) {
       `Error response from ${response.url} (${response.status}): ${text}`,
     );
   }
-  return JSON.parse(text);
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
 }
 
 export type CommentOnPRConfig = {
