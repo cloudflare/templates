@@ -51,7 +51,7 @@ jobs:
             const allowPreview = pr.labels?.find((label) => label.name == process.env.ALLOW_PREVIEW_LABEL)
             fs.appendFileSync(process.env.GITHUB_ENV, `PR_REPOSITORY=${pr.head.repo.full_name}\n`)
             fs.appendFileSync(process.env.GITHUB_ENV, `PR_REF=${pr.head.ref}\n`)
-            fs.appendFileSync(process.env.GITHUB_ENV, `PR_SHA_SHORT=${pr.head.sha.slice(0, 7)}`)
+            fs.appendFileSync(process.env.GITHUB_ENV, `PR_SHA_SHORT=${pr.head.sha.slice(0, 7)}\n`)
             if (allowPreview) {
               fs.appendFileSync(process.env.GITHUB_ENV, 'PR_ALLOW_PREVIEW=true\n')
             }
