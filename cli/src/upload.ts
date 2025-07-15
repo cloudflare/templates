@@ -25,7 +25,14 @@ export async function upload(config: UploadConfig) {
     console.info(`Uploading ${template.path}:`);
     files.forEach(({ file, filePath }) => {
       console.info(`  - ${filePath}`);
-      body.set(filePath, file);
+      if (
+        process.env.PREVIEW_DIR &&
+        filePath.startsWith(process.env.PREVIEW_DIR)
+      ) {
+        body.set(filePath.replace(`${process.env.PREVIEW_DIR}/`, ""), file);
+      } else {
+        body.set(filePath, file);
+      }
     });
     return body;
   }, new FormData());
