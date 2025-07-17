@@ -17,7 +17,6 @@ Features:
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
 - ✅ Built-in Observability logging
-
 <!-- dash-content-end -->
 
 ## Getting Started

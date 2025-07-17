@@ -39,7 +39,6 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
 
 - **🔎 Observability**
   - View real-time logs associated with any deployed Worker using ```wrangler tail```
-
 <!-- dash-content-end -->
 
 > [!IMPORTANT]

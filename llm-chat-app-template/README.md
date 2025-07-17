@@ -75,7 +75,7 @@ npm run deploy
 ```
 ### Monitor
 
-Monitor your Cloudflare Workers:
+View real-time logs associated with any deployed Worker:
 
 ```bash
 npm wrangler tail
