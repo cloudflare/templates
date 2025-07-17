@@ -54,7 +54,6 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
 | `npm wrangler tail`               | View real-time logs for all Workers              |
 
-
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

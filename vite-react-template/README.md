@@ -23,7 +23,7 @@ This template provides a minimal setup for building a React application with Typ
 - ⚡ Zero-config deployment to Cloudflare's global network
 - 🎯 API routes with Hono's elegant routing
 - 🔄 Full-stack development setup
-- 🔎 Observability to monitor your Worker
+- 🔎 Built-in Observability to monitor your Worker
 
 Get started in minutes with local development or deploy directly via the Cloudflare dashboard. Perfect for building modern, performant web applications at the edge.
 
