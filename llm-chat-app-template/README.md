@@ -23,6 +23,7 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 - 🛠️ Built with TypeScript and Cloudflare Workers
 - 📱 Mobile-friendly design
 - 🔄 Maintains chat history on the client
+- 🔎 Built-in Observability logging
 <!-- dash-content-end -->
 
 ## Getting Started
@@ -71,6 +72,13 @@ Deploy to Cloudflare Workers:
 
 ```bash
 npm run deploy
+```
+### Monitor
+
+Monitor your Cloudflare Workers:
+
+```bash
+npm wrangler tail
 ```
 
 ## Project Structure
