@@ -44,7 +44,7 @@ npm install
 
 ```bash
 # Create a .dev.vars file for local development
-touch .dev.vars
+cp .dev.vars.example .dev.vars
 ```
 
 Add your API token:
