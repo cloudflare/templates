@@ -25,10 +25,10 @@
       "package_json_hash": "31e29875bf1fb757231e729114487be0313dc495"
     },
     "remix-starter-template": {
-      "package_json_hash": "b5577e444499b87ca813276c86293c713827cb97"
+      "package_json_hash": "ab9060b4f522e2680722cd8e82ab67f8c5989677"
     },
     "react-router-starter-template": {
-      "package_json_hash": "ea2bc89307421bfbd4429ae08a79212ba61e6756"
+      "package_json_hash": "23e92c87f39fecbc059762c53e2875be91e98582"
     },
     "saas-admin-template": {
       "package_json_hash": "b8885523425c8e3c377d5b40e3dcdcaae94785d8"
@@ -37,10 +37,10 @@
       "package_json_hash": "35408ae14751fd7c7c269caa1159fa850d4ea72c"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "9a4f67ee36936111d4c15464dc556a2a5f697c57"
+      "package_json_hash": "d75dce652885fca9cae347c6de80b53ecd4b1a28"
     },
     "vite-react-template": {
-      "package_json_hash": "322efbc6c868ac55015962cb8ba8b94c2639a703"
+      "package_json_hash": "248617999d14a76f5cb66850cb6dd8844a752ba7"
     },
     "hello-world-do-template": {
       "package_json_hash": "8f36bd589f861e6d9bcd34a2657b53ff88e016a4"
@@ -49,13 +49,13 @@
       "package_json_hash": "6f4b40837d8cbc8997cf351ce903e5792a4a1c74"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "a41b6ecfcc31ec636116ea0d7d1d7e36e403d93c"
+      "package_json_hash": "985bcb4635fa1124b63ed1cece763ca5fbeeb93c"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "80927b811b3f6d26552b7b4e7914d4b4ff4773ba"
+      "package_json_hash": "14e5e304bc22774d50dfd7180d381669a1df008b"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "692e1af07448d6de0ef55be9d599ae9538eb9d6e"
+      "package_json_hash": "85139726855661fb89b81ba66299b080acbd65e8"
     },
     "r2-explorer-template": {
       "package_json_hash": "0cc9b98105199138b51775f1fe0d995125194748"
@@ -64,7 +64,7 @@
       "package_json_hash": "0d65df6cb33a7a95fd77754fea52f481b5dde14d"
     },
     "chanfana-openapi-template": {
-      "package_json_hash": "0fdf690deff977d93c3e597f6e48ac307a1662bc"
+      "package_json_hash": "6a7074165e6b9e771a2f8f92c1bb21a2ca18ce99"
     }
   }
 }
