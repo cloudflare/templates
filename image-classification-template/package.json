@@ -1,0 +1,25 @@
+{
+	"name": "image-classification-template",
+	"description": "Identify and label objects found in images.",
+	"cloudflare": {
+		"label": "Image Classification",
+		"products": [
+			"Workers",
+			"AI"
+		],
+		"categories": [
+			"ai"
+		]
+	},
+	"devDependencies": {
+		"typescript": "5.5.2",
+		"wrangler": "4.25.1"
+	},
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev"
+	}
+}
