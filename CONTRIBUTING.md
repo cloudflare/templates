@@ -20,14 +20,15 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 
 | Required?         | Package.json key               | Description                                                                                                   | Example                                                                |
 | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                  |
-| ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit. |
-| ✅                | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                        |
-| ✅                | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                       |
-| _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                              |
-| ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                 |
+| ✅                 | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                  |
+| ✅                 | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit. |
+| ✅                 | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                        |
+| ✅                 | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                       |
+| ❌                 | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                 |
+| _if publish=true_ | `cloudflare.docs_url`          | String URL to the related Cloudflare Developer Documentation.                                                 |
 | _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                            | (Link will be provided during PR review)                               |
-| ❌                | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team | (Primarily for internal contributor use)                               |
+| _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                              |
+| ❌                 | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team | (Primarily for internal contributor use)                               |
 
 ### Best Practices: package.json
 
