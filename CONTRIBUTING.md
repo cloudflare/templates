@@ -22,8 +22,8 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 | ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                  |
 | ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit. |
-|                   | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                        |
-| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                       |
+| ✅                | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                        |
+| ✅                | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                       |
 | _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                              |
 | ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                 |
 | _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                            | (Link will be provided during PR review)                               |
@@ -36,7 +36,7 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
   - Today, categories are optional to include. In the future, we will support filters in the templates gallery at which point this will become a new template requirement.
   - Only the following categories are supported: `"starter"`, `"storage"`, and `"ai"`. Anything outside of this set will be rejected by CI.
 - **`cloudflare.preview_image_url`**
-  - Can only be provided by a Cloudflare team member. Image files for icons and preview images are stored in the Cloudflare Templates CF account.
+  - Can only be provided by a Cloudflare team member. Image files for preview images are stored in the Cloudflare Templates CF account.
   - Preview image should be a screenshot of the application running in-browser.
 
 ### Package-lock.json
@@ -51,7 +51,7 @@ pnpm fix:lockfiles
 
 ### README.md content
 
-Every ReadMe should include a “getting started” section that provides guidance for running the application locally, directions for installing any third-party tokens, and a description of the application’s functionality. You should also include a screenshot and/or live deployment of the application.
+Every ReadMe should include a “Getting Started” section that provides guidance for running the application locally, directions for installing any third-party tokens, and a description of the application’s functionality. You should also include a screenshot and link to live deployment of the application.
 
 A portion of your template’s README.md file will be displayed on the Template Details Page in the Cloudflare Dashboard to provide the user with additional information about the template.
 
