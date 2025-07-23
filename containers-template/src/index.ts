@@ -1,4 +1,4 @@
-import { Container, loadBalance, getContainer } from "@cloudflare/containers";
+import { Container, getContainer, getRandom } from "@cloudflare/containers";
 import { Hono } from "hono";
 
 export class MyContainer extends Container {
@@ -57,7 +57,7 @@ app.get("/error", async (c) => {
 
 // Load balance requests across multiple containers
 app.get("/lb", async (c) => {
-  const container = await loadBalance(c.env.MY_CONTAINER, 3);
+  const container = await getRandom(c.env.MY_CONTAINER, 3);
   return await container.fetch(c.req.raw);
 });
 
