@@ -286,7 +286,6 @@ function lintPackageJson(
       label?: string;
       products?: string[];
       categories?: string[];
-      icon_urls?: string[];
       preview_image_url?: string;
     };
   };
