@@ -1,0 +1,25 @@
+{
+	"name": "speech-to-text-template",
+	"description": "Perform natural language processing tasks using a Large Language Model (LLM) with Workers.",
+	"cloudflare": {
+		"label": "Speech to Text",
+		"products": [
+			"Workers",
+			"AI"
+		],
+		"categories": [
+			"ai"
+		]
+	},
+	"devDependencies": {
+		"typescript": "5.5.2",
+		"wrangler": "4.25.1"
+	},
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev"
+	}
+}
