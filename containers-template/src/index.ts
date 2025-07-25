@@ -1,7 +1,7 @@
-import { Container, loadBalance, getContainer } from "@cloudflare/containers";
+import { Container, getContainer, getRandom } from "@cloudflare/containers";
 import { Hono } from "hono";
 
-export class MyContainer extends Container {
+export class MyContainer extends Container<Env> {
   // Port the container listens on (default: 8080)
   defaultPort = 8080;
   // Time before container sleeps due to inactivity (default: 30s)
@@ -27,7 +27,7 @@ export class MyContainer extends Container {
 
 // Create Hono app with proper typing for Cloudflare Workers
 const app = new Hono<{
-  Bindings: { MY_CONTAINER: DurableObjectNamespace<MyContainer> };
+  Bindings: Env;
 }>();
 
 // Home route with available endpoints
@@ -57,7 +57,7 @@ app.get("/error", async (c) => {
 
 // Load balance requests across multiple containers
 app.get("/lb", async (c) => {
-  const container = await loadBalance(c.env.MY_CONTAINER, 3);
+  const container = await getRandom(c.env.MY_CONTAINER, 3);
   return await container.fetch(c.req.raw);
 });
 
