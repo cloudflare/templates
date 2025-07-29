@@ -107,7 +107,7 @@ COOKIE_SIGNING_KEY=my-secret # comment
 
 #### Environment Variables
 
-Environment variables that can also be configured in the Wrangler configuration file as normal:
+Environment variables can also be configured in the Wrangler configuration file as normal:
 
 ```json
 {
