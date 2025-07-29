@@ -32,7 +32,7 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 
 ### Best Practices: `package.json`
 
-- **`cloudflare.description`** - Include a description for any binding which requires additional information on how to configure, especially for any values which are found outside of Cloudflare (e.g. API keys).
+- **`cloudflare.bindings.[bindingName].description`** - Include a description for any binding which requires additional information on how to configure, especially for any values which are found outside of Cloudflare (e.g. API keys).
 - **`cloudflare.products`** - Do not exceed 3 products listed. Focus on highlighting the most unique products featured in your template (e.g. majority of our templates leverage 'Worker Assets' in some capacity, but only a select few feature 'DO').
 - **`cloudflare.categories`**
   - Today, categories are optional to include. In the future, we will support filters in the templates gallery at which point this will become a new template requirement.
@@ -78,14 +78,14 @@ This content will NOT be included in the Template Details Page
 
 You can create templates which use [Worker secrets](https://developers.cloudflare.com/workers/platform/environment-variables#secrets), [environment variables](https://developers.cloudflare.com/workers/configuration/environment-variables) or [Secrets Store secrets](https://developers.cloudflare.com/secrets-store/).
 
-Although these will be configured by users during deployment, we still recommend confirming these are present and valid within your deployed application and letting your users know with a prominent warning within the deployed application's UI if anything is invalid. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
+Although these will be configured by users during deployment, we still recommend confirming these are present and valid within your deployed application. Let your users know with a prominent warning within the deployed application's UI if anything is invalid. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
 
-#### Secrets
+#### Workers Secrets
 
 Create a `.dev.vars.example` or `.env.example` file in the root of your template repository with a [dotenv](https://www.npmjs.com/package/dotenv) format:
 
 ```ini
-COOKIE_SIGNING_KEY=my-secret # comment
+COOKIE_SIGNING_KEY=my-secret # example comment: should be a real random string in production
 ```
 
 [Secrets Store](https://developers.cloudflare.com/secrets-store/) secrets can be configured in the Wrangler configuration file as normal:
