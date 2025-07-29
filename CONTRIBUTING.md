@@ -14,23 +14,25 @@ If CI is failing on your pull request, running `pnpm run fix` in the repository 
 
 In order to introduce a new template to this collection, the following requirements must all be satisfied. For a boiled-down version of these requirements, scroll down to the [Checklist](#checklist).
 
-### Package.json content
+### `package.json` content
 
 Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflare` object directly from each template's `package.json` configuration. This extracted metadata provides content necessary for the template to be rendered in the Cloudflare Dashboard. If the minimally required values are not included in your template, it will fail CI.
 
-| Required?         | Package.json key               | Description                                                                                                   | Example                                                                |
-| ----------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                          | durable-chat-template                                                  |
-| ✅                | `description`                  | Brief, one-line description of the template                                                                   | Chat with other users in real-time using Durable Objects and PartyKit. |
-|                   | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                          |                                                                        |
-| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                  | Durable Chat App                                                       |
-| _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                             | ["D1", "Durable Objects"]                                              |
-| ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                  | ["starter", "storage"]                                                 |
-| _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                            | (Link will be provided during PR review)                               |
-| ❌                | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team | (Primarily for internal contributor use)                               |
+| Required?         | Package.json key               | Description                                                                                                                                                                                                                                           | Example                                                                                                  |
+| ----------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| ✅                | `name`                         | Kebab-case name of your template, should match directory, should end in `-template`.                                                                                                                                                                  | durable-chat-template                                                                                    |
+| ✅                | `description`                  | Brief, one-line description of the template                                                                                                                                                                                                           | Chat with other users in real-time using Durable Objects and PartyKit.                                   |
+|                   | `cloudflare`                   | Object you will nest all cloudflare-specific keys in                                                                                                                                                                                                  |                                                                                                          |
+|                   | `cloudflare.bindings`          | Object containing information about each binding. Keys should be the binding names and values should be an object with a "description" string. Inline markdown `` `code` ``, `**bold**`, `__italics__` and `[links](https://example.com/)` are valid. | ``{ "COOKIE_SIGNING_KEY": { "description": "Generate a random string using `openssl rand -hex 32`" } }`` |
+| _if publish=true_ | `cloudflare.label`             | Title Case version of name for use in Cloudflare's Dashboard                                                                                                                                                                                          | Durable Chat App                                                                                         |
+| _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                                                                                                                                                                     | ["D1", "Durable Objects"]                                                                                |
+| ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                                                                                                                                                          | ["starter", "storage"]                                                                                   |
+| _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                                                                                                                                                                    | (Link will be provided during PR review)                                                                 |
+| ❌                | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team                                                                                                                                         | (Primarily for internal contributor use)                                                                 |
 
-### Best Practices: package.json
+### Best Practices: `package.json`
 
+- **`cloudflare.bindings.[bindingName].description`** - Include a description for any binding which requires additional information on how to configure, especially for any values which are found outside of Cloudflare (e.g. API keys).
 - **`cloudflare.products`** - Do not exceed 3 products listed. Focus on highlighting the most unique products featured in your template (e.g. majority of our templates leverage 'Worker Assets' in some capacity, but only a select few feature 'DO').
 - **`cloudflare.categories`**
   - Today, categories are optional to include. In the future, we will support filters in the templates gallery at which point this will become a new template requirement.
@@ -39,11 +41,11 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
   - Can only be provided by a Cloudflare team member. Image files for icons and preview images are stored in the Cloudflare Templates CF account.
   - Preview image should be a screenshot of the application running in-browser.
 
-### Package-lock.json
+### `package-lock.json`
 
 All of our templates and Deploy to Cloudflare projects automatically set up Workers CI. In our testing, including a package lock file in the template repository speeds up module resolution by 80% or more.
 
-To generate a package-lock.json for your template, run this command in the root of the repository:
+To generate a `package-lock.json` for your template, run this command in the root of the repository:
 
 ```sh
 pnpm fix:lockfiles
@@ -72,19 +74,51 @@ This content will be included in Template Details Page
 This content will NOT be included in the Template Details Page
 ```
 
-### Secrets & Environment Variables
+### Worker secrets, environment variables, and Secrets Store secrets
 
-For both secrets and environment variables, we recommend letting your users know if any configuration is missing directly in the deployed application's UI. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
+You can create templates which use [Worker secrets](https://developers.cloudflare.com/workers/platform/environment-variables#secrets), [environment variables](https://developers.cloudflare.com/workers/configuration/environment-variables) or [Secrets Store secrets](https://developers.cloudflare.com/secrets-store/).
 
-To configure application variables, follow the developer documentation for [environment variables](https://developers.cloudflare.com/workers/configuration/environment-variables) or [secrets](https://developers.cloudflare.com/workers/configuration/secrets).
+Although these will be configured by users during deployment, we still recommend confirming these are present and valid within your deployed application. Let your users know with a prominent warning within the deployed application's UI if anything is invalid. See [this example](https://saas-admin-template.templates.workers.dev/admin) from a current template.
 
-#### Secrets
+#### Workers Secrets
 
-Today, there is no standard way to derive the required secrets from a project’s repository. Please include a section in your ReadMe listing all required secrets for your template and where users should go to find the appropriate values.
+Create a `.dev.vars.example` or `.env.example` file in the root of your template repository with a [dotenv](https://www.npmjs.com/package/dotenv) format:
+
+```ini
+COOKIE_SIGNING_KEY=my-secret # example comment: should be a real random string in production
+```
+
+[Secrets Store](https://developers.cloudflare.com/secrets-store/) secrets can be configured in the Wrangler configuration file as normal:
+
+```json
+{
+  "name": "my-worker",
+  "main": "./src/index.ts",
+  "compatibility_date": "$today",
+  "secrets_store_secrets": [
+    {
+      "binding": "API_KEY",
+      "store_id": "demo",
+      "secret_name": "api-key"
+    }
+  ]
+}
+```
 
 #### Environment Variables
 
-Environment variables that do not require users to update them will automatically be included in the new project (e.g. `“ENVIRONMENT”: “staging”`). Variables that require user update (e.g. `“PROJECT_ID”: “[your project id]”`) will need to be configured after initial deployment.
+Environment variables can also be configured in the Wrangler configuration file as normal:
+
+```json
+{
+  "name": "my-worker",
+  "main": "./src/index.ts",
+  "compatibility_date": "$today",
+  "vars": {
+    "API_HOST": "https://example.com"
+  }
+}
+```
 
 ## Playwright E2E Tests
 
