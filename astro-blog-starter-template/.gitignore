@@ -12,11 +12,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
-# environment variables
-.env
-.env.production
-
 # macOS-specific files
 .DS_Store
 
@@ -25,4 +20,7 @@ pnpm-debug.log*
 
 # wrangler files
 .wrangler
-.dev.vars
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

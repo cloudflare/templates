@@ -5,3 +5,7 @@
 /.react-router/
 /build/
 /.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example

@@ -11,8 +11,11 @@ node_modules
 dist
 dist-ssr
 *.local
-.dev.vars
 .wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
 
 # Editor directories and files
 .vscode/*
