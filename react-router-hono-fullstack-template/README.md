@@ -20,6 +20,7 @@ A perfect starting point for building interactive, styled, and edge-deployed SPA
 - 🧱 File-based route separation
 - 🚀 Zero-config Vite build for Workers
 - 🛠️ Automatically deploys with Wrangler
+- 🔎 Built-in Observability to monitor your Worker
 
 <!-- dash-content-end -->
 

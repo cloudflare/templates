@@ -24,6 +24,7 @@ If creating a personal database, books are expected to be stored in the followin
 - 🚀 Database connection via Hyperdrive
 - 🎉 TailwindCSS for styling
 - 🐳 Docker for container management
+- 🔎 Observability to monitor your Worker
 
 ## Smart Placement Benefits
 
