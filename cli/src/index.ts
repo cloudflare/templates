@@ -26,6 +26,7 @@ program
     ".",
   )
   .option("--staging", "use the staging API endpoint")
+  .option("--hash <string>", "the latest commit hash on the branch")
   .requiredOption("--repoFullName <string>", "the owner/repo combination")
   .requiredOption("--branch <string>", "the branch or ref")
   .action((templateDirectory, options) => {
@@ -47,7 +48,9 @@ program
           provider: "github",
           owner,
           repository,
-          branch: options.branch,
+          branch: options.hash
+            ? `${options.branch}.${options.hash}`
+            : options.branch,
         },
         version: options.branch,
         latest: true,
