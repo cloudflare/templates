@@ -38,9 +38,16 @@ jobs:
       - name: Run live e2e tests
         run: pnpm test:e2e:live
 
+      - name: Compute short hash
+        run: |
+          full_sha="${{ github.sha }}"
+          short_sha="${full_sha:0:7}"
+          echo "SHA_SHORT=$short_sha" >> $GITHUB_ENV
+
       - name: Deploy to staging
         run: |
           pnpm run upload . \
             --staging \
             --repoFullName ${{ github.repository }} \
             --branch ${{ github.ref_name }}
+            --hash $SHA_SHORT
