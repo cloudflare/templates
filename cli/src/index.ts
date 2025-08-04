@@ -48,11 +48,11 @@ program
           provider: "github",
           owner,
           repository,
-          branch: options.hash
-            ? `${options.branch}.${options.hash}`
-            : options.branch,
+          branch: options.branch,
         },
-        version: options.branch,
+        version: options.hash
+          ? `${options.branch}.${options.hash}`
+          : options.branch,
         latest: true,
         api: {
           endpoint: `https://${subdomain}.cfdata.org/api/v1/templates`,
