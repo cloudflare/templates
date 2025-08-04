@@ -37,8 +37,8 @@ program
       );
     }
     const subdomain = options.staging
-      ? "integrations-platform-staging"
-      : "integrations-platform";
+      ? "workers-templates-staging"
+      : "workers-templates";
     const [owner, repository] = options.repoFullName.split("/");
     return actionWithSummary("Upload", () =>
       upload({
@@ -175,8 +175,8 @@ program
       throw new Error("Missing GITHUB_TOKEN");
     }
     const subdomain = options.staging
-      ? "integrations-platform-staging"
-      : "integrations-platform";
+      ? "workers-templates-staging"
+      : "workers-templates";
     const [owner, repository] = options.repoFullName.split("/");
     return actionWithSummary("Preview", () =>
       preview({
