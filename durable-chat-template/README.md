@@ -36,3 +36,7 @@ A live public deployment of this template is available at [https://durable-chat-
    ```bash
    npx wrangler deploy
    ```
+3. Monitor your worker
+   ```bash
+   npx wrangler tail
+   ```

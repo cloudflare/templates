@@ -38,7 +38,7 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
   - View email attachments directly in the interface
 
 - **🔎 Observability**
-  - View real-time logs associated with any deployed Worker using ```wrangler tail```
+  - View real-time logs associated with any deployed Worker using `wrangler tail`
   <!-- dash-content-end -->
 
 > [!IMPORTANT]
@@ -67,6 +67,10 @@ A live public deployment of this template is available at [https://demo.r2explor
 3. Deploy the project!
    ```bash
    npx wrangler deploy
+   ```
+4. Monitor your worker
+   ```bash
+   npx wrangler tail
    ```
 
 ## Next steps

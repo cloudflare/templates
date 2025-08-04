@@ -76,6 +76,12 @@ Deploy your project to Cloudflare Workers:
 npm run build && npm run deploy
 ```
 
+Monitor your workers:
+
+```bash
+npx wrangler tail
+```
+
 ## Additional Resources
 
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)

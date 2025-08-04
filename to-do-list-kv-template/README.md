@@ -42,7 +42,11 @@ A live public deployment of this template is available at [https://to-do-list-kv
    ```bash
    npm run build
    ```
-4. And deploy it!
+4. Deploy it!
    ```bash
    npx wrangler deploy
+   ```
+5. And monitor your worker!
+   ```bash
+   npx wrangler tail
    ```

@@ -47,3 +47,7 @@ A live public deployment of this template is available at [https://openauth-temp
    ```bash
    npx wrangler deploy
    ```
+6. And monitor your worker
+   ```bash
+   npx wrangler tail
+   ```
