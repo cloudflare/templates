@@ -37,7 +37,9 @@ R2-Explorer brings a familiar Google Drive-like interface to your Cloudflare R2 
   - Receive and process emails via Cloudflare Email Routing
   - View email attachments directly in the interface
 
-<!-- dash-content-end -->
+- **🔎 Observability**
+  - View real-time logs associated with any deployed Worker using `wrangler tail`
+  <!-- dash-content-end -->
 
 > [!IMPORTANT]
 > When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/r2-explorer-template#setup-steps) before deploying.
@@ -65,6 +67,10 @@ A live public deployment of this template is available at [https://demo.r2explor
 3. Deploy the project!
    ```bash
    npx wrangler deploy
+   ```
+4. Monitor your worker
+   ```bash
+   npx wrangler tail
    ```
 
 ## Next steps

@@ -51,6 +51,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 | `npm run build`                   | Build your production site                   |
 | `npm run preview`                 | Preview your build locally, before deploying |
 | `npm run build && npm run deploy` | Deploy your production site to Cloudflare    |
+| `npm wrangler tail`               | View real-time logs for all Workers          |
 
 ## Learn More
 

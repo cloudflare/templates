@@ -49,6 +49,10 @@ A live public deployment of this template is available at [https://openapi-templ
    ```bash
    npx wrangler deploy
    ```
+5. Monitor your worker
+   ```bash
+   npx wrangler tail
+   ```
 
 ## Testing
 

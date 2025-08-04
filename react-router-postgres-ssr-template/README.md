@@ -74,6 +74,7 @@ This application can be deployed in two ways:
    ```
 6. Build the application with `npm run build`
 7. Deploy with `npm run deploy`
+8. Monitor your worker with `npm wrangler tail`
 
 ### Option 2: Without Database (Demo Mode)
 

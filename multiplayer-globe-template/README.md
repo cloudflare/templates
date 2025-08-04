@@ -38,7 +38,11 @@ A live public deployment of this template is available at [https://multiplayer-g
    ```bash
    npm install
    ```
-2. Deploy the project!
+2. Deploy the project
    ```bash
    npx wrangler deploy
+   ```
+3. And monitor your workers!
+   ```bash
+   npx wrangler tail
    ```
