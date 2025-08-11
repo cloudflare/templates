@@ -40,7 +40,7 @@
       "package_json_hash": "9a4f67ee36936111d4c15464dc556a2a5f697c57"
     },
     "vite-react-template": {
-      "package_json_hash": "322efbc6c868ac55015962cb8ba8b94c2639a703"
+      "package_json_hash": "106eab5e0bfd1ca7832f4d204013f659732ee721"
     },
     "hello-world-do-template": {
       "package_json_hash": "8f36bd589f861e6d9bcd34a2657b53ff88e016a4"
@@ -49,7 +49,7 @@
       "package_json_hash": "6f4b40837d8cbc8997cf351ce903e5792a4a1c74"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "a41b6ecfcc31ec636116ea0d7d1d7e36e403d93c"
+      "package_json_hash": "7a2e2a545e44ca5d0897d5d8a4c16f79e442b5ee"
     },
     "llm-chat-app-template": {
       "package_json_hash": "80927b811b3f6d26552b7b4e7914d4b4ff4773ba"
