@@ -125,7 +125,6 @@ export const handleAsk = async (request: Request, env: Env, ragId: string, ctx: 
 }
 
 const joinChunks = (item: Awaited<ReturnType<AutoRAG['search']>>['data'][0]) => {
-    console.log(item.content)
     return item.content.reduce((acc, curr) => {
         return acc + curr.text;
     }, '');
@@ -165,7 +164,6 @@ export const handleDefault = async (rag: AutoRAG, params: Params,env: Env) => {
 }
 
 const handleStreaming = async (rag: AutoRAG, params: Params, env:Env, ctx: ExecutionContext) => {
-    console.log('handling streaming')
     const { readable, writable } = new TransformStream();
     const wrapper = new StreamingWrapper(writable);
 
