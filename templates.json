@@ -65,6 +65,9 @@
     },
     "chanfana-openapi-template": {
       "package_json_hash": "0fdf690deff977d93c3e597f6e48ac307a1662bc"
+    },
+    "worker-publisher-template": {
+      "package_json_hash": "d47b04a86395c32d80bd272d64d8fc53d20f1f3a"
     }
   }
 }
