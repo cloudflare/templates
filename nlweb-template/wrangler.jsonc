@@ -11,6 +11,9 @@
     "directory": "./public",
     "binding": "ASSETS"
   },
+  "vars": {
+    "RAG_ID": "web-dev-docs"
+  },
   "ai": {
     "binding": "AI"
   },

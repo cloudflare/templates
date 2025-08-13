@@ -425,7 +425,7 @@
     margin-bottom: 12px;
     display: flex;
     gap: 16px;
-    width: 100%;
+    max-width: 100%;
 }
 
 /* Item content styles */

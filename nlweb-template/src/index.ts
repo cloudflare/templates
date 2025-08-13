@@ -2,19 +2,17 @@ import { handleAsk } from "./ask";
 import { NLWebMcp } from "./nlweb-mcp-do";
 
 
-const ragId = 'web-dev-docs'
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === "/ask") {
-        console.log('here')
-      return handleAsk(request, env, ragId)
+      return handleAsk(request, env, env.RAG_ID, ctx)
     }
 
     if (url.pathname === "/mcp") {
       return NLWebMcp.serve('/mcp').fetch(request, env, { ...ctx, props: {
-        ragId
+        ragId: env.RAG_ID
       }});
     }
 

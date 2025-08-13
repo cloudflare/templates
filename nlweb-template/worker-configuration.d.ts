@@ -5,6 +5,7 @@ declare namespace Cloudflare {
 	interface Env {
 		AI: Ai;
         ASSETS: Fetcher;
+        RAG_ID: string;
 	}
 }
 interface Env extends Cloudflare.Env {}
@@ -5152,6 +5153,7 @@ interface AiModels {
     "@cf/facebook/detr-resnet-50": BaseAiObjectDetection;
     "@cf/meta/llama-2-7b-chat-int8": BaseAiTextGeneration;
     "@cf/mistral/mistral-7b-instruct-v0.1": BaseAiTextGeneration;
+    "@cf/openai/gpt-oss-20b": any;
     "@cf/meta/llama-2-7b-chat-fp16": BaseAiTextGeneration;
     "@hf/thebloke/llama-2-13b-chat-awq": BaseAiTextGeneration;
     "@hf/thebloke/mistral-7b-instruct-v0.1-awq": BaseAiTextGeneration;

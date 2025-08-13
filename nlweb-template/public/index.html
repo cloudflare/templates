@@ -62,20 +62,20 @@
     </style>
 </head>
 <body>
-    <!-- Include CSS -->
-
-
 <!-- Add container -->
 <div id="docs-search-container"></div>
 
 <!-- Include JavaScript -->
 <script type="module">
+
+  // replace this with absolute path or document that
   import { NLWebDropdownChat } from '/nlweb-dropdown-chat.js';
   
   const chat = new NLWebDropdownChat({
     containerId: 'docs-search-container',
     site: window.location.origin,
     placeholder: 'Search for docs...',
+    // endpoint to use for fetching data
     endpoint: window.location.origin
   });
 </script>
