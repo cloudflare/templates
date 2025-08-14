@@ -127,7 +127,7 @@ export const handleAsk = async (request: Request, env: Env, ragId: string, ctx: 
 const joinChunks = (item: Awaited<ReturnType<AutoRAG['search']>>['data'][0]) => {
     return item.content.reduce((acc, curr) => {
         return acc + curr.text;
-    }, '');
+    }, ' ');
 }
 
 export const handleDefault = async (rag: AutoRAG, params: Params,env: Env) => {
@@ -150,7 +150,7 @@ export const handleDefault = async (rag: AutoRAG, params: Params,env: Env) => {
                 site: item.filename,
                 siteUrl: item.filename,
                 score: item.score,
-                description: markdown(joinChunks(item)).substring(0, 420),
+                description: markdown(joinChunks(item)).replaceAll(/[\r\n]{2,}/g, "").substring(0, 420),
             }))
         }
 
@@ -217,7 +217,7 @@ const handleStreaming = async (rag: AutoRAG, params: Params, env:Env, ctx: Execu
                         site: item.filename,
                         siteUrl: item.filename,
                         score: item.score,
-                        description: markdown(joinChunks(item)).substring(0, 420),
+                        description: markdown(joinChunks(item)).replaceAll("\n", " ").substring(0, 420),
                     }))
                 };
 
