@@ -218,6 +218,19 @@ const handleStreaming = async (rag: AutoRAG, params: Params, env:Env, ctx: Execu
                         siteUrl: item.filename,
                         score: item.score,
                         description: markdown(joinChunks(item)).replaceAll("\n", " ").substring(0, 420),
+                        schema_object: {
+                            "@context": "http://schema.org/",
+                            "@type": "ProductGroup",
+                            "@id": "#social-preview",
+                            "productGroupID": "PHYSICAL_GIFT_CARD_BOOKLET",
+                            "name": "Social Preview",
+                            "brand": {
+                                "@type": "Brand",
+                                "name": "Cloudflare"
+                            },
+                            "description": markdown(joinChunks(item)).replaceAll("\n", " ").substring(0, 420),
+                            "image": "https://developers.cloudflare.com/cf-twitter-card.png",
+                        },
                     }))
                 };
 

@@ -49,7 +49,7 @@ export class NLWebDropdownChat {
                 import(`${this.config.endpoint}/json-renderer.js`),
                 import(`${this.config.endpoint}/type-renderers.js`),
                 import(`${this.config.endpoint}/recipe-renderer.js`),
-                import(`${this.config.endpoint}/fp-chat-interface.js`)
+                import(`${this.config.endpoint}/fp-chat-interface-snippet.js`)
             ]);
             
             // Initialize JSON renderer

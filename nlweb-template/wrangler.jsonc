@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-05-23",
   "compatibility_flags": ["nodejs_compat"],
+  "account_id": "b4497848fbd1c8c708e1c409e09b6829",
   "observability": {
     "enabled": true
   },
@@ -12,7 +13,7 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "RAG_ID": "web-dev-docs"
+    "RAG_ID": "solitary-salad-bfbb"
   },
   "ai": {
     "binding": "AI"
