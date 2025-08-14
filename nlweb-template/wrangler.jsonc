@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-05-23",
   "compatibility_flags": ["nodejs_compat"],
-  "account_id": "b4497848fbd1c8c708e1c409e09b6829",
+  "account_id": "03edf871695d6beacf406d630950ac4e",
   "observability": {
     "enabled": true
   },
@@ -13,7 +13,7 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "RAG_ID": "solitary-salad-bfbb"
+    "RAG_ID": "jolly-night-28f3"
   },
   "ai": {
     "binding": "AI"

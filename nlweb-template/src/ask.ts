@@ -209,6 +209,8 @@ const handleStreaming = async (rag: AutoRAG, params: Params, env:Env, ctx: Execu
                     query: decontextualizedQuery,
                 });
 
+                console.log(JSON.stringify(res))
+
                 const result: ResultBatch = {
                     message_type: 'result_batch',
                     results: res.data.map((item) => ({
@@ -222,14 +224,13 @@ const handleStreaming = async (rag: AutoRAG, params: Params, env:Env, ctx: Execu
                             "@context": "http://schema.org/",
                             "@type": "ProductGroup",
                             "@id": "#social-preview",
-                            "productGroupID": "PHYSICAL_GIFT_CARD_BOOKLET",
-                            "name": "Social Preview",
+                            "name": item.attributes?.file?.title || "Social Preview",
                             "brand": {
                                 "@type": "Brand",
                                 "name": "Cloudflare"
                             },
-                            "description": markdown(joinChunks(item)).replaceAll("\n", " ").substring(0, 420),
-                            "image": "https://developers.cloudflare.com/cf-twitter-card.png",
+                            "description": item.attributes?.file?.description || markdown(joinChunks(item)).replaceAll("\n", " ").substring(0, 420),
+                            "image": item.attributes?.file?.image,
                         },
                     }))
                 };

@@ -5416,7 +5416,7 @@ type AutoRagSearchResponse = {
         file_id: string;
         filename: string;
         score: number;
-        attributes: Record<string, string | number | boolean | null>;
+        attributes: Record<string, any>;
         content: {
             type: 'text';
             text: string;
