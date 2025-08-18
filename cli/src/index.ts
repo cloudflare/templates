@@ -7,6 +7,7 @@ import { generateNpmLockfiles, lintNpmLockfiles } from "./npm";
 import { validateLiveDemoLinks } from "./validateLiveDemoLinks";
 import { actionWithSummary } from "./util";
 import { validateD2CButtons } from "./validateD2CButtons";
+import { validateVersionPrivatePackageJson } from "./validateVersionPrivatePackageJson";
 import { setupHooks } from "./setupHooks";
 import { depsInfo } from "./depsInfo";
 import { depsUpdate } from "./depsUpdate";
@@ -147,6 +148,22 @@ program
   .action((templateDirectory) => {
     return actionWithSummary("Validate Deploy to Cloudflare buttons", () =>
       validateD2CButtons({ templateDirectory }),
+    );
+  });
+
+program
+  .command("validate-version-private-package-json")
+  .description(
+    "Ensures every template has a private and non-versioned package.json",
+  )
+  .argument(
+    "[path-to-template(s)]",
+    "path to directory containing template(s)",
+    ".",
+  )
+  .action((templateDirectory) => {
+    return actionWithSummary("Validate version and private package.json", () =>
+      validateVersionPrivatePackageJson({ templateDirectory }),
     );
   });
 

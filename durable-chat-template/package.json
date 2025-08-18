@@ -1,6 +1,7 @@
 {
   "name": "durable-chat-template",
   "description": "Chat with other users in real-time using Durable Objects and PartyKit.",
+  "private": true,
   "cloudflare": {
     "label": "Durable Chat App",
     "products": [

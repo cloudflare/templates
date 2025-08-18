@@ -1,6 +1,7 @@
 {
   "name": "r2-explorer-template",
   "description": "A Google Drive Interface for your Cloudflare R2 Buckets!",
+  "private": true,
   "cloudflare": {
     "label": "R2-Explorer App",
     "products": [

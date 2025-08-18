@@ -1,6 +1,6 @@
 {
   "name": "mysql-hyperdrive-template",
-  "version": "0.0.0",
+  "private": true,
   "cloudflare": {
     "label": "Worker + D1 Database",
     "products": [
@@ -27,7 +27,6 @@
     "vitest": "3.2.4",
     "wrangler": "4.21.x"
   },
-  "private": true,
   "scripts": {
     "cf-typegen": "wrangler types",
     "check": "tsc && wrangler deploy --dry-run",

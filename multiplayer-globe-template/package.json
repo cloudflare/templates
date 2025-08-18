@@ -1,6 +1,7 @@
 {
   "name": "multiplayer-globe-template",
   "description": "Display website visitor locations in real-time using Durable Objects and PartyKit.",
+  "private": true,
   "cloudflare": {
     "label": "Multiplayer Globe App",
     "products": [

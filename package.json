@@ -47,7 +47,8 @@
     "update:deps": "templates deps-update",
     "upload": "templates upload",
     "validate-d2c-buttons": "templates validate-d2c-buttons",
-    "validate-live-demo-links": "templates validate-live-demo-links"
+    "validate-live-demo-links": "templates validate-live-demo-links",
+    "validate-version-private-package-json": "templates validate-version-private-package-json"
   },
   "dependencies": {
     "node-fetch": "3.3.2"
