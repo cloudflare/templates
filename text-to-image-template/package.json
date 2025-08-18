@@ -1,6 +1,7 @@
 {
   "name": "text-to-image-template",
   "description": "Generate images based on text prompts.",
+  "private": true,
   "cloudflare": {
     "label": "Text to Image App",
     "products": [

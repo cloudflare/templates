@@ -1,6 +1,7 @@
 {
   "name": "openauth-template",
   "description": "Deploy an OpenAuth server on Cloudflare Workers.",
+  "private": true,
   "cloudflare": {
     "label": "OpenAuth Server",
     "products": [

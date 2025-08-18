@@ -1,6 +1,7 @@
 {
   "name": "to-do-list-kv-template",
   "description": "A simple to-do list app built with Cloudflare Workers Assets and Remix.",
+  "private": true,
   "cloudflare": {
     "label": "To-Do List App",
     "products": [

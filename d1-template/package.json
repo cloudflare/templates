@@ -1,6 +1,7 @@
 {
   "name": "d1-template",
   "description": "Cloudflare's native serverless SQL database.",
+  "private": true,
   "cloudflare": {
     "label": "Worker + D1 Database",
     "products": [
