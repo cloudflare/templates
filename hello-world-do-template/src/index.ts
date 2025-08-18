@@ -27,7 +27,7 @@ export class MyDurableObject extends DurableObject<Env> {
   }
 
   /**
-   * The Durable Object exposes an RPC method sayHello which will be invoked when when a Durable
+   * The Durable Object exposes an RPC method sayHello which will be invoked when a Durable
    *  Object instance receives a request from a Worker via the same method invocation on the stub
    *
    * @returns The greeting to be sent back to the Worker
