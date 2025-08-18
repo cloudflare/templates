@@ -1,6 +1,7 @@
 {
   "name": "cli",
   "description": "A handy CLI for developing templates.",
+  "private": true,
   "bin": {
     "templates": "./dist/index.js"
   },

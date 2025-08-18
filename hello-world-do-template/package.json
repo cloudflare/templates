@@ -1,6 +1,6 @@
 {
   "name": "hello-world-do-template",
-  "version": "0.0.0",
+  "private": true,
   "cloudflare": {
     "label": "Durable Objects Starter",
     "products": [
@@ -19,7 +19,6 @@
     "typescript": "5.8.3",
     "wrangler": "4.21.x"
   },
-  "private": true,
   "scripts": {
     "cf-typegen": "wrangler types",
     "check": "tsc && wrangler deploy --dry-run",

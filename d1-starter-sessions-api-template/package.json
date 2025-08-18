@@ -1,7 +1,7 @@
 {
   "name": "d1-starter-sessions-api",
   "description": "D1 starter template using the Sessions API for read replication.",
-  "version": "0.0.0",
+  "private": true,
   "cloudflare": {
     "label": "Worker + D1 Database",
     "products": [

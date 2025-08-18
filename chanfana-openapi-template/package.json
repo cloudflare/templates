@@ -1,6 +1,7 @@
 {
   "name": "chanfana-openapi-template",
   "description": "Complete backend API template using Hono + Chanfana + D1 + Vitest.",
+  "private": true,
   "cloudflare": {
     "label": "Backend OpenAPI Template",
     "products": [

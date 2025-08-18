@@ -1,7 +1,7 @@
 {
   "name": "react-postgres-fullstack-template",
   "description": "Deploy your own library of books using Postgres and Workers.",
-  "version": "0.0.0",
+  "private": true,
   "cloudflare": {
     "label": "React + Postgres Fullstack App",
     "products": [
@@ -47,7 +47,6 @@
     "vite": "^6.0.0",
     "wrangler": "4.21.x"
   },
-  "private": true,
   "scripts": {
     "build": "vite build",
     "cf-typegen": "wrangler types",

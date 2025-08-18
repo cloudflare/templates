@@ -1,6 +1,7 @@
 {
   "name": "next-starter-template",
   "description": "Build a full-stack web application with Next.js.",
+  "private": true,
   "cloudflare": {
     "label": "Next.js Framework Starter",
     "products": [
@@ -31,7 +32,6 @@
     "typescript": "5.8.3",
     "wrangler": "4.21.x"
   },
-  "private": true,
   "scripts": {
     "build": "next build",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",

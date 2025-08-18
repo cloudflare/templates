@@ -1,6 +1,7 @@
 {
   "name": "remix-starter-template",
   "description": "Build a full-stack web application with Remix.",
+  "private": true,
   "cloudflare": {
     "label": "Remix Framework Starter",
     "products": [
@@ -45,7 +46,6 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "private": true,
   "scripts": {
     "build": "remix vite:build",
     "cf-typegen": "wrangler types",
