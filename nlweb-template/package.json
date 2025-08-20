@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@types/markdown-it": "^14.1.2",
-    "agents": "^0.0.109",
+    "agents": "^0.0.113",
     "markdown-it": "^14.1.0",
     "markdown-to-text": "^0.1.1"
   },
@@ -26,10 +26,9 @@
       "AutoRag"
     ],
     "categories": [],
-    "docs_url": "https://developers.cloudflare.com/containers/",
-    "preview_image_url": "https://imagedelivery.net/_yJ02hpOMj_EnGvsU2aygw/5aba1fb7-b937-46fd-fa67-138221082200/public",
-    "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-    ]
+    "docs_url": "https://github.com/nlweb-ai/NLWeb",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/2a5c7efe-4251-4572-bb33-4061e5f3c800/public",
+    "icon_urls": [],
+    "publish": false
   }
 }
