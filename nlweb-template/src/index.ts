@@ -9,7 +9,6 @@ export default {
 		}
 
 		if (url.pathname === "/mcp") {
-      console.log(env.RAG_ID)
 			return NLWebMcp.serve("/mcp").fetch(request, env, {
 				...ctx,
 				props: {
@@ -26,7 +25,11 @@ export default {
 			});
 		}
 		if (url.pathname === "/") {
-			return env.ASSETS.fetch(request);
+      const response = await env.ASSETS.fetch(request)
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set("Access-Control-Allow-Methods", "GET, OPTIONS")
+      response.headers.set(	"Access-Control-Allow-Headers", "Content-Type")
+			return response;
 		}
 
 		return new Response("Not Found!", {
