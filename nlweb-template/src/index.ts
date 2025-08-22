@@ -29,12 +29,14 @@ async function getNlWebResponse(request: Request, env: Env, ctx: ExecutionContex
 
 export default {
   async fetch(request, env, ctx) {
+    const url = new URL(request.url);
     const response = await getNlWebResponse(request, env, ctx);
 
     const newResponse = new Response(response.body, response);
     newResponse.headers.set("Access-Control-Allow-Origin", "*");
     newResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type");
+    newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, mcp-session-id, mcp-protocol-version");
+    newResponse.headers.set("Access-Control-Expose-Headers", "Content-Type, mcp-session-id, mcp-protocol-version");
     return newResponse;
   }
 } satisfies ExportedHandler<Env>;
