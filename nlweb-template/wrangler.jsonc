@@ -4,16 +4,16 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-05-23",
   "compatibility_flags": ["nodejs_compat"],
-  "account_id": "03edf871695d6beacf406d630950ac4e",
   "observability": {
     "enabled": true
   },
   "assets": {
     "directory": "./public",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": true
   },
   "vars": {
-    "RAG_ID": "jolly-night-28f3"
+    "RAG_ID": "my-autorag-id"
   },
   "ai": {
     "binding": "AI"

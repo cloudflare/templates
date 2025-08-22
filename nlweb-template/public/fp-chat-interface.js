@@ -608,26 +608,26 @@ class ModernChatInterface {
 
         } else if (data.message_type === 'api_key') {
           // Handle API key configuration EARLY to ensure it's available for maps
-          console.log('=== API KEY MESSAGE RECEIVED ===');
-          console.log('API key message:', data);
-          console.log('Before setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY);
+          //console.log('=== API KEY MESSAGE RECEIVED ===');
+          //console.log('API key message:', data);
+          //console.log('Before setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY);
           if (data.key_name === 'google_maps' && data.key_value) {
             // Store the Google Maps API key globally
             window.GOOGLE_MAPS_API_KEY = data.key_value;
-            console.log('Google Maps API key set from server:', data.key_value.substring(0, 10) + '...');
-            console.log('After setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY.substring(0, 10) + '...');
+            //console.log('Google Maps API key set from server:', data.key_value.substring(0, 10) + '...');
+            //console.log('After setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY.substring(0, 10) + '...');
             // Verify it's actually set
-            console.log('Verification - window.GOOGLE_MAPS_API_KEY exists?', !!window.GOOGLE_MAPS_API_KEY);
-            console.log('Verification - typeof window.GOOGLE_MAPS_API_KEY:', typeof window.GOOGLE_MAPS_API_KEY);
+            //console.log('Verification - window.GOOGLE_MAPS_API_KEY exists?', !!window.GOOGLE_MAPS_API_KEY);
+            //console.log('Verification - typeof window.GOOGLE_MAPS_API_KEY:', typeof window.GOOGLE_MAPS_API_KEY);
           } else {
-            console.log('API key message not for google_maps or no value');
-            console.log('key_name:', data.key_name, 'has value?', !!data.key_value);
+            //console.log('API key message not for google_maps or no value');
+            //console.log('key_name:', data.key_name, 'has value?', !!data.key_value);
           }
           
         } else if (data.message_type === 'chart_result') {
           // Handle chart result (web components)
-          console.log('=== Chart Result Handler Called ===');
-          console.log('Received chart data:', data);
+          //console.log('=== Chart Result Handler Called ===');
+          //console.log('Received chart data:', data);
           
           if (data.html) {
             // Create container for the chart
@@ -647,7 +647,7 @@ class ModernChatInterface {
               // Clone the element to ensure we get all attributes
               const clonedElement = element.cloneNode(true);
               chartContainer.appendChild(clonedElement);
-              console.log('Added web component:', clonedElement.tagName, clonedElement.outerHTML);
+              //console.log('Added web component:', clonedElement.tagName, clonedElement.outerHTML);
             });
             
             // If no datacommons elements found, try to add the raw HTML (excluding scripts)
@@ -662,24 +662,24 @@ class ModernChatInterface {
             textDiv.innerHTML = messageContent + this.renderItems(allResults);
             textDiv.appendChild(chartContainer);
             
-            console.log('Chart container appended to message with', datacommonsElements.length, 'web components');
+            //console.log('Chart container appended to message with', datacommonsElements.length, 'web components');
             
             // Force re-initialization of Data Commons components if available
             if (window.datacommons && window.datacommons.init) {
               setTimeout(() => {
                 window.datacommons.init();
-                console.log('Data Commons re-initialized');
+                //console.log('Data Commons re-initialized');
               }, 100);
             }
           }
 
         } else if (data.message_type === 'results_map') {
           // Handle results map
-          console.log('=== RESULTS_MAP MESSAGE RECEIVED ===');
-          console.log('Message data:', JSON.stringify(data, null, 2));
+          //console.log('=== RESULTS_MAP MESSAGE RECEIVED ===');
+          //console.log('Message data:', JSON.stringify(data, null, 2));
           
           if (data.locations && Array.isArray(data.locations) && data.locations.length > 0) {
-            console.log('Creating map with locations:', data.locations);
+            //console.log('Creating map with locations:', data.locations);
             
             // Create container for the map
             const mapContainer = document.createElement('div');
@@ -708,12 +708,12 @@ class ModernChatInterface {
             contentDiv.innerHTML = messageContent + this.renderItems(allResults);
             textDiv.appendChild(contentDiv);
             
-            console.log('Map container appended, calling MapDisplay.initializeResultsMap');
+            //console.log('Map container appended, calling MapDisplay.initializeResultsMap');
             
             // Initialize the map using the imported MapDisplay class
             MapDisplay.initializeResultsMap(mapDiv, data.locations);
           } else {
-            console.log('No valid locations data in results_map message');
+            //console.log('No valid locations data in results_map message');
           }
 
         } else if (data.message_type === 'complete') {
@@ -741,7 +741,7 @@ class ModernChatInterface {
     };
     
     this.eventSource.onopen = () => {
-      console.log('EventSource connection opened');
+      //console.log('EventSource connection opened');
     };
     
     // Add current query to prevQueries after sending (keep last 10)

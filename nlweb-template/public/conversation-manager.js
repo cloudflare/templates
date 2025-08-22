@@ -4,7 +4,7 @@ class ConversationManager {
   }
 
   async loadConversations(selectedSite, elements) {
-    console.log('ConversationManager: Loading conversations for site:', selectedSite);
+    //console.log('ConversationManager: Loading conversations for site:', selectedSite);
     
     // Check if user is logged in
     const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
@@ -33,7 +33,7 @@ class ConversationManager {
           // Also check localStorage for any unsaved conversations
           this.mergeLocalConversations(selectedSite);
           
-          console.log('Loaded', this.conversations.length, 'conversations from server');
+          //console.log('Loaded', this.conversations.length, 'conversations from server');
         } else {
           console.error('Failed to load conversations from server:', response.status);
           // Fall back to localStorage
@@ -55,11 +55,11 @@ class ConversationManager {
     if (saved) {
       try {
         const allConversations = JSON.parse(saved);
-        console.log('ConversationManager: Found', allConversations.length, 'stored conversations');
+        //console.log('ConversationManager: Found', allConversations.length, 'stored conversations');
         
         // Filter out empty conversations
         let filteredConversations = allConversations.filter(conv => conv.messages && conv.messages.length > 0);
-        console.log('ConversationManager: After filtering empty conversations:', filteredConversations.length);
+        //console.log('ConversationManager: After filtering empty conversations:', filteredConversations.length);
         
         // If a specific site is selected, filter by site
         if (selectedSite && selectedSite !== 'all') {
@@ -67,7 +67,7 @@ class ConversationManager {
             conv.site === selectedSite || 
             (conv.siteInfo && conv.siteInfo.site === selectedSite)
           );
-          console.log('ConversationManager: After filtering by site', selectedSite, ':', filteredConversations.length);
+          //console.log('ConversationManager: After filtering by site', selectedSite, ':', filteredConversations.length);
         }
         
         this.conversations = filteredConversations;
@@ -78,7 +78,7 @@ class ConversationManager {
         this.conversations = [];
       }
     } else {
-      console.log('ConversationManager: No stored conversations found');
+      //console.log('ConversationManager: No stored conversations found');
       this.conversations = [];
     }
   }
@@ -207,7 +207,7 @@ class ConversationManager {
       
       if (conversationsToMigrate.length === 0) return;
       
-      console.log('Migrating', conversationsToMigrate.length, 'conversation entries to server');
+      //console.log('Migrating', conversationsToMigrate.length, 'conversation entries to server');
       
       // Send to server
       const baseUrl = window.location.origin === 'file://' ? 'http://localhost:8000' : '';
@@ -223,7 +223,7 @@ class ConversationManager {
       });
       
       if (response.ok) {
-        console.log('Successfully migrated conversations to server');
+        //console.log('Successfully migrated conversations to server');
         // Clear local storage after successful migration
         localStorage.removeItem('nlweb-modern-conversations');
       } else {
@@ -326,7 +326,7 @@ class ConversationManager {
     
     // Only show conversations that have messages
     const conversationsWithContent = this.conversations.filter(conv => conv.messages && conv.messages.length > 0);
-    console.log('Updating conversations list with', conversationsWithContent.length, 'conversations');
+    //console.log('Updating conversations list with', conversationsWithContent.length, 'conversations');
     
     // Group conversations by site
     const conversationsBySite = {};
