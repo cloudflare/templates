@@ -11,8 +11,8 @@ import { ConversationManager } from './conversation-manager.js';
 
 class ModernChatInterface {
   constructor(options = {}) {
-    console.log('ModernChatInterface constructor called with options:', options);
-    
+    //console.log('ModernChatInterface constructor called with options:', options);
+
     // Initialize properties
     this.conversationManager = new ConversationManager();
     this.currentConversationId = null;
@@ -66,17 +66,17 @@ class ModernChatInterface {
       // After loading conversations, decide what to show
       if (!this.options.skipAutoInit) {
         const conversations = this.conversationManager.getConversations();
-        console.log('Loaded conversations:', conversations.length);
-        
+        //console.log('Loaded conversations:', conversations.length);
+
         // Always show centered input for new page loads to match user expectation
-        console.log('Showing centered input for new page load');
+        //console.log('Showing centered input for new page load');
         this.showCenteredInput();
       }
     }).catch(error => {
       console.error('Error loading conversations:', error);
       // Show centered input as fallback
       if (!this.options.skipAutoInit) {
-        console.log('Error loading conversations, showing centered input as fallback');
+        //console.log('Error loading conversations, showing centered input as fallback');
         this.showCenteredInput();
       }
     });
@@ -245,7 +245,7 @@ class ModernChatInterface {
       }
     } else {
       // Show the default centered input
-      console.log('Showing centered input from createNewChat');
+      //console.log('Showing centered input from createNewChat');
       this.showCenteredInput();
     }
     
@@ -311,9 +311,9 @@ class ModernChatInterface {
       if (this.elements.chatTitle) {
         this.elements.chatTitle.textContent = conversation.title;
       }
-      
-      console.log('Set conversation title:', conversation.title, 'for conversation:', conversation.id);
-      
+
+      //console.log('Set conversation title:', conversation.title, 'for conversation:', conversation.id);
+
       // Also update in conversationManager to ensure it's saved
       this.conversationManager.updateConversation(conversation.id, { title: conversation.title });
     }
@@ -479,7 +479,9 @@ class ModernChatInterface {
     }
     
     // Create event source with full URL
-    const baseUrl = window.location.origin === 'file://' ? 'http://localhost:8000' : '';
+    let baseUrl = window.location.origin === 'file://' ? 'http://localhost:8000' : '';
+    baseUrl = sessionStorage.getItem('nlweb-endpoint') ?? baseUrl;
+
     const url = `${baseUrl}/ask?${params.toString()}`;
     
     
@@ -621,20 +623,20 @@ class ModernChatInterface {
 
         } else if (data.message_type === 'api_key') {
           // Handle API key configuration EARLY to ensure it's available for maps
-          console.log('=== API KEY MESSAGE RECEIVED ===');
-          console.log('API key message:', data);
-          console.log('Before setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY);
+          //console.log('=== API KEY MESSAGE RECEIVED ===');
+          //console.log('API key message:', data);
+          //console.log('Before setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY);
           if (data.key_name === 'google_maps' && data.key_value) {
             // Store the Google Maps API key globally
             window.GOOGLE_MAPS_API_KEY = data.key_value;
-            console.log('Google Maps API key set from server:', data.key_value.substring(0, 10) + '...');
-            console.log('After setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY.substring(0, 10) + '...');
+            //console.log('Google Maps API key set from server:', data.key_value.substring(0, 10) + '...');
+            //console.log('After setting - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY.substring(0, 10) + '...');
             // Verify it's actually set
-            console.log('Verification - window.GOOGLE_MAPS_API_KEY exists?', !!window.GOOGLE_MAPS_API_KEY);
-            console.log('Verification - typeof window.GOOGLE_MAPS_API_KEY:', typeof window.GOOGLE_MAPS_API_KEY);
+            //console.log('Verification - window.GOOGLE_MAPS_API_KEY exists?', !!window.GOOGLE_MAPS_API_KEY);
+            //console.log('Verification - typeof window.GOOGLE_MAPS_API_KEY:', typeof window.GOOGLE_MAPS_API_KEY);
           } else {
-            console.log('API key message not for google_maps or no value');
-            console.log('key_name:', data.key_name, 'has value?', !!data.key_value);
+            //console.log('API key message not for google_maps or no value');
+            //console.log('key_name:', data.key_name, 'has value?', !!data.key_value);
           }
           
         } else if (data.message_type === 'nlws') {
@@ -655,9 +657,9 @@ class ModernChatInterface {
           
         } else if (data.message_type === 'chart_result') {
           // Handle chart result (web components)
-          console.log('=== Chart Result Handler Called ===');
-          console.log('Received chart data:', data);
-          
+          //console.log('=== Chart Result Handler Called ===');
+          //console.log('Received chart data:', data);
+
           if (data.html) {
             // Create container for the chart
             const chartContainer = document.createElement('div');
@@ -676,7 +678,7 @@ class ModernChatInterface {
               // Clone the element to ensure we get all attributes
               const clonedElement = element.cloneNode(true);
               chartContainer.appendChild(clonedElement);
-              console.log('Added web component:', clonedElement.tagName, clonedElement.outerHTML);
+              //console.log('Added web component:', clonedElement.tagName, clonedElement.outerHTML);
             });
             
             // If no datacommons elements found, try to add the raw HTML (excluding scripts)
@@ -690,26 +692,26 @@ class ModernChatInterface {
             // Append the chart to the message content
             textDiv.innerHTML = messageContent + this.renderItems(allResults);
             textDiv.appendChild(chartContainer);
-            
-            console.log('Chart container appended to message with', datacommonsElements.length, 'web components');
-            
+
+            //console.log('Chart container appended to message with', datacommonsElements.length, 'web components');
+
             // Force re-initialization of Data Commons components if available
             if (window.datacommons && window.datacommons.init) {
               setTimeout(() => {
                 window.datacommons.init();
-                console.log('Data Commons re-initialized');
+                //console.log('Data Commons re-initialized');
               }, 100);
             }
           }
 
         } else if (data.message_type === 'results_map') {
           // Handle results map
-          console.log('=== RESULTS_MAP MESSAGE RECEIVED ===');
-          console.log('Message data:', JSON.stringify(data, null, 2));
-          
+          //console.log('=== RESULTS_MAP MESSAGE RECEIVED ===');
+          //console.log('Message data:', JSON.stringify(data, null, 2));
+
           if (data.locations && Array.isArray(data.locations) && data.locations.length > 0) {
-            console.log('Creating map with locations:', data.locations);
-            
+            //console.log('Creating map with locations:', data.locations);
+
             // Create container for the map
             const mapContainer = document.createElement('div');
             mapContainer.className = 'results-map-container';
@@ -736,13 +738,13 @@ class ModernChatInterface {
             const contentDiv = document.createElement('div');
             contentDiv.innerHTML = messageContent + this.renderItems(allResults);
             textDiv.appendChild(contentDiv);
-            
-            console.log('Map container appended, calling MapDisplay.initializeResultsMap');
-            
+
+            //console.log('Map container appended, calling MapDisplay.initializeResultsMap');
+
             // Initialize the map using the imported MapDisplay class
             MapDisplay.initializeResultsMap(mapDiv, data.locations);
           } else {
-            console.log('No valid locations data in results_map message');
+            //console.log('No valid locations data in results_map message');
           }
 
         } else if (data.message_type === 'complete') {
@@ -770,7 +772,7 @@ class ModernChatInterface {
     };
     
     this.eventSource.onopen = () => {
-      console.log('EventSource connection opened');
+      //console.log('EventSource connection opened');
     };
     
     // prevQueries already updated above before sending the request
@@ -1419,7 +1421,7 @@ class ModernChatInterface {
   }
   
   showCenteredInput() {
-    console.log('showCenteredInput called');
+    //console.log('showCenteredInput called');
     // Remove any existing centered input first
     const existingCentered = document.querySelector('.centered-input-container');
     if (existingCentered) {
@@ -1428,10 +1430,10 @@ class ModernChatInterface {
     
     // Hide the normal chat input area
     const chatInputContainer = document.querySelector('.chat-input-container');
-    console.log('Found chat input container:', !!chatInputContainer);
+    //console.log('Found chat input container:', !!chatInputContainer);
     if (chatInputContainer) {
       chatInputContainer.style.display = 'none';
-      console.log('Hidden chat input container');
+      //console.log('Hidden chat input container');
     }
     
     // Create centered input container
@@ -1984,10 +1986,10 @@ export { ModernChatInterface };
 // Initialize when DOM is ready (only if not imported as module)
 if (typeof window !== 'undefined' && !window.ModernChatInterfaceExported) {
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded - initializing ModernChatInterface');
+    //console.log('DOMContentLoaded - initializing ModernChatInterface');
     try {
       new ModernChatInterface();
-      console.log('ModernChatInterface initialized successfully');
+      //console.log('ModernChatInterface initialized successfully');
     } catch (error) {
       console.error('Error initializing ModernChatInterface:', error);
     }

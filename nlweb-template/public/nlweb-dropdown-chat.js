@@ -21,7 +21,11 @@ export class NLWebDropdownChat {
             cssPrefix: config.cssPrefix || 'nlweb-dropdown',
             ...config
         };
-        
+
+        if (config.endpoint) {
+            sessionStorage.setItem('nlweb-endpoint', config.endpoint);
+        }
+
         this.init();
     }
     

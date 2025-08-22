@@ -10,22 +10,22 @@ export class MapDisplay {
    * @param {Array} locations - Array of location objects with title and address
    */
   static initializeResultsMap(mapDiv, locations) {
-    console.log('=== initializeResultsMap Called ===');
-    console.log('mapDiv:', mapDiv);
-    console.log('locations:', locations);
-    console.log('window.GOOGLE_MAPS_API_KEY at map init time:', window.GOOGLE_MAPS_API_KEY);
-    console.log('typeof window.GOOGLE_MAPS_API_KEY:', typeof window.GOOGLE_MAPS_API_KEY);
-    console.log('window.GOOGLE_MAPS_API_KEY === undefined?', window.GOOGLE_MAPS_API_KEY === undefined);
+    //console.log('=== initializeResultsMap Called ===');
+    //console.log('mapDiv:', mapDiv);
+    //console.log('locations:', locations);
+    //console.log('window.GOOGLE_MAPS_API_KEY at map init time:', window.GOOGLE_MAPS_API_KEY);
+    //console.log('typeof window.GOOGLE_MAPS_API_KEY:', typeof window.GOOGLE_MAPS_API_KEY);
+    //console.log('window.GOOGLE_MAPS_API_KEY === undefined?', window.GOOGLE_MAPS_API_KEY === undefined);
     
     // Check if API key is configured
     const apiKey = window.GOOGLE_MAPS_API_KEY || 
                   document.body.getAttribute('data-google-maps-api-key') || 
                   'YOUR_API_KEY';
     
-    console.log('API Key resolution:');
-    console.log('  - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY);
-    console.log('  - data-google-maps-api-key:', document.body.getAttribute('data-google-maps-api-key'));
-    console.log('  - Final apiKey:', apiKey);
+    //console.log('API Key resolution:');
+    //console.log('  - window.GOOGLE_MAPS_API_KEY:', window.GOOGLE_MAPS_API_KEY);
+    //console.log('  - data-google-maps-api-key:', document.body.getAttribute('data-google-maps-api-key'));
+    //console.log('  - Final apiKey:', apiKey);
     
     if (apiKey === 'YOUR_API_KEY' || !apiKey || apiKey === 'GOOGLE_MAPS_API_KEY') {
       console.warn('Google Maps API key not configured, showing location list instead');
@@ -36,7 +36,7 @@ export class MapDisplay {
     
     // Check if Google Maps API is loaded
     if (typeof google === 'undefined' || !google.maps) {
-      console.log('Google Maps API not loaded, loading now...');
+      //console.log('Google Maps API not loaded, loading now...');
       this.loadGoogleMapsAPI(apiKey).then(() => {
         this.createMap(mapDiv, locations);
       }).catch(error => {
@@ -96,7 +96,7 @@ export class MapDisplay {
    * @param {Array} locations - Array of location objects
    */
   static createMap(mapDiv, locations) {
-    console.log('=== createMap Called ===');
+    //console.log('=== createMap Called ===');
     
     // Initialize the map
     const map = new google.maps.Map(mapDiv, {
@@ -119,7 +119,7 @@ export class MapDisplay {
         cleanAddress = cleanAddress.split(', {')[0];
       }
       
-      console.log(`Geocoding location ${index + 1}: ${cleanAddress}`);
+      //console.log(`Geocoding location ${index + 1}: ${cleanAddress}`);
       
       // Use setTimeout to avoid rate limiting
       setTimeout(() => {
@@ -183,8 +183,8 @@ export class MapDisplay {
    * @param {Array} locations - Array of location objects with title and address
    */
   static showLocationList(mapDiv, locations) {
-    console.log('=== showLocationList Called ===');
-    console.log('Number of locations:', locations.length);
+    //console.log('=== showLocationList Called ===');
+    //console.log('Number of locations:', locations.length);
     
     mapDiv.style.height = 'auto';
     mapDiv.innerHTML = '';
@@ -273,6 +273,6 @@ export class MapDisplay {
     
     mapDiv.appendChild(listContainer);
     
-    console.log('Location list created and appended successfully');
+    //console.log('Location list created and appended successfully');
   }
 }
