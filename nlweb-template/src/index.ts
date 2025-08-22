@@ -33,7 +33,6 @@ async function getNlWebResponse(
 
 export default {
   async fetch(request, env, ctx) {
-    const url = new URL(request.url);
     const response = await getNlWebResponse(request, env, ctx);
 
     const newResponse = new Response(response.body, response);
