@@ -37,9 +37,18 @@ export default {
 
     const newResponse = new Response(response.body, response);
     newResponse.headers.set("Access-Control-Allow-Origin", "*");
-    newResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type, mcp-session-id, mcp-protocol-version");
-    newResponse.headers.set("Access-Control-Expose-Headers", "Content-Type, mcp-session-id, mcp-protocol-version");
+    newResponse.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS",
+    );
+    newResponse.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, mcp-session-id, mcp-protocol-version",
+    );
+    newResponse.headers.set(
+      "Access-Control-Expose-Headers",
+      "Content-Type, mcp-session-id, mcp-protocol-version",
+    );
     return newResponse;
   },
 } satisfies ExportedHandler<Env>;
