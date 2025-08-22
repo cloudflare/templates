@@ -1,7 +1,6 @@
 {
   "name": "nlweb-template",
   "description": "Build Nl Web components with Cloudflare Workers.",
-  "version": "0.0.0",
   "private": true,
   "scripts": {
     "deploy": "wrangler deploy",
@@ -14,10 +13,12 @@
     "wrangler": "^4.25.0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
     "@types/markdown-it": "^14.1.2",
     "agents": "^0.0.113",
     "markdown-it": "^14.1.0",
-    "markdown-to-text": "^0.1.1"
+    "markdown-to-text": "^0.1.1",
+    "zod": "^4.0.17"
   },
   "cloudflare": {
     "label": "NL Web Starter",
