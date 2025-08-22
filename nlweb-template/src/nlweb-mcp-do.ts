@@ -7,37 +7,42 @@ export class NLWebMcp extends McpAgent<Env> {
   server = new McpServer({ name: "Demo", version: "1.0.0" });
 
   async init() {
-    console.log('props:', this.props)
-    console.log(JSON.stringify(this.props))
+    console.log("props:", this.props);
+    console.log(JSON.stringify(this.props));
     this.server.tool(
       "ask",
       {
         query: z.string(),
         sites: z.array(z.string()).optional(),
-        generate_mode: z.enum(["list", "summarize", "generate", "none"]).optional().default("list")
+        generate_mode: z
+          .enum(["list", "summarize", "generate", "none"])
+          .optional()
+          .default("list"),
       },
       async ({ query, sites, generate_mode }) => {
-
-        if (!this.props.ragId || typeof this.props.ragId !== 'string') {
+        if (!this.props.ragId || typeof this.props.ragId !== "string") {
           return {
-            content: [{ type: "text", text: 'Missing rag id' }],
-            isError: true
-          }
+            content: [{ type: "text", text: "Missing rag id" }],
+            isError: true,
+          };
         }
 
-
-        const res = await handleDefault(this.env.AI.autorag(this.props.ragId), { query, generate_mode }, this.env)
+        const res = await handleDefault(
+          this.env.AI.autorag(this.props.ragId),
+          { query, generate_mode },
+          this.env,
+        );
         const parsed = await res.json();
 
         if (res.status === 400) {
           return {
             content: [{ type: "text", text: JSON.stringify(parsed) }],
-            isError: true
-          }
+            isError: true,
+          };
         }
         return {
-          content: [{ type: "text", text: JSON.stringify(parsed) }]
-        }
+          content: [{ type: "text", text: JSON.stringify(parsed) }],
+        };
       },
     );
   }

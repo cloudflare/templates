@@ -1,7 +1,11 @@
 import { handleAsk } from "./ask";
 import { NLWebMcp } from "./nlweb-mcp-do";
 
-async function getNlWebResponse(request: Request, env: Env, ctx: ExecutionContext) {
+async function getNlWebResponse(
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+) {
   const url = new URL(request.url);
   if (url.pathname === "/ask") {
     return handleAsk(request, env, env.RAG_ID, ctx);
@@ -11,8 +15,8 @@ async function getNlWebResponse(request: Request, env: Env, ctx: ExecutionContex
     return NLWebMcp.serve("/mcp").fetch(request, env, {
       ...ctx,
       props: {
-        ragId: env.RAG_ID
-      }
+        ragId: env.RAG_ID,
+      },
     });
   }
 
@@ -20,7 +24,7 @@ async function getNlWebResponse(request: Request, env: Env, ctx: ExecutionContex
     const url = new URL(request.url);
     return Response.json({
       "message-type": "sites",
-      sites: [url.hostname]
+      sites: [url.hostname],
     });
   }
 
@@ -33,10 +37,13 @@ export default {
 
     const newResponse = new Response(response.body, response);
     newResponse.headers.set("Access-Control-Allow-Origin", "*");
-    newResponse.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    newResponse.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS",
+    );
     newResponse.headers.set("Access-Control-Allow-Headers", "Content-Type");
     return newResponse;
-  }
+  },
 } satisfies ExportedHandler<Env>;
 
 export { NLWebMcp };

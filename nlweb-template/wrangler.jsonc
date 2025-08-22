@@ -19,17 +19,17 @@
     "binding": "AI"
   },
   "migrations": [
-		{
-			"new_sqlite_classes": ["NLWebMcp"],
-			"tag": "v1"
-		}
-	],
+    {
+      "new_sqlite_classes": ["NLWebMcp"],
+      "tag": "v1"
+    }
+  ],
   "durable_objects": {
-		"bindings": [
-			{
-				"class_name": "NLWebMcp",
-				"name": "MCP_OBJECT"
-			}
-		]
-	}
+    "bindings": [
+      {
+        "class_name": "NLWebMcp",
+        "name": "MCP_OBJECT"
+      }
+    ]
+  }
 }
