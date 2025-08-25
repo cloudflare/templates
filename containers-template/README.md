@@ -8,7 +8,7 @@
 
 This is a [Container](https://developers.cloudflare.com/containers/) starter template.
 
-It demonstrates basic Container coniguration, launching and routing to individual container, load balancing over multiple container, running basic hooks on container status changes.
+It demonstrates basic Container configuration, launching and routing to individual container, load balancing over multiple container, running basic hooks on container status changes.
 
 <!-- dash-content-end -->
 

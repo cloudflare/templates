@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nl-web",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-05-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "vars": {
+    "RAG_ID": "my-autorag-id"
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "migrations": [
+    {
+      "new_sqlite_classes": ["NLWebMcp"],
+      "tag": "v1"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "NLWebMcp",
+        "name": "MCP_OBJECT"
+      }
+    ]
+  }
+}
