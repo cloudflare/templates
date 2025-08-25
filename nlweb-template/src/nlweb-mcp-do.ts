@@ -13,13 +13,13 @@ export class NLWebMcp extends McpAgent<Env> {
       "ask",
       {
         query: z.string(),
-        sites: z.array(z.string()).optional(),
+        // sites: z.array(z.string()).optional(),
         generate_mode: z
           .enum(["list", "summarize", "generate", "none"])
           .optional()
           .default("list"),
       },
-      async ({ query, sites, generate_mode }) => {
+      async ({ query, generate_mode }) => {
         if (!this.props.ragId || typeof this.props.ragId !== "string") {
           return {
             content: [{ type: "text", text: "Missing rag id" }],

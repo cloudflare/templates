@@ -57,7 +57,7 @@ class ModernChatInterface {
   init() {
     // Initialize default values
     this.selectedSite = this.options.site || "all";
-    this.selectedMode = this.options.mode || "list"; // Default generate_mode
+    this.selectedMode = this.options.mode || "summarize"; // Default generate_mode
 
     // Load saved conversations (async operation)
     this.conversationManager

@@ -377,7 +377,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: var(--transition);
-  display: inline-block;
+  display: none;
 }
 
 .message-debug-icon:hover {

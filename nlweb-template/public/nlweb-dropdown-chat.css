@@ -78,9 +78,9 @@
   left: -5px;
   top: 0;
   bottom: 0;
-  width: 5px;
+  width: 0px;
   background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   border-radius: 8px 0 0 8px;
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -93,6 +93,7 @@
 .nlweb-dropdown-conversations-panel.show {
   width: 250px;
   left: -250px;
+  border: 1px solid #ddd;
 }
 
 .nlweb-dropdown-conversations-list {
