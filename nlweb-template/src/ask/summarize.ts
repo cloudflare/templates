@@ -3,21 +3,21 @@ import type { ResultBatch, MessageResponse } from "./types";
 import { MODEL } from "../config";
 
 export const summarize = async ({
-	query,
-	answers,
-	ai,
+  query,
+  answers,
+  ai,
 }: {
-	query: string;
-	answers: ResultBatch["results"];
-	ai: Ai;
+  query: string;
+  answers: ResultBatch["results"];
+  ai: Ai;
 }) => {
-	let response: any
-	try {
-		response = await ai.run(MODEL, {
-			messages: [
-				{
-					role: "user",
-					content: `	You are a helpful AI assistant specialized in answering questions using retrieved list of results. 
+  let response: any;
+  try {
+    response = await ai.run(MODEL, {
+      messages: [
+        {
+          role: "user",
+          content: `	You are a helpful AI assistant specialized in answering questions using retrieved list of results. 
 								Your task is to provide accurate, relevant answers based on the matched content provided.
 								You will receive a user question and a set of results relevant to this query.
 
@@ -41,50 +41,49 @@ export const summarize = async ({
 
 								The user's question is: ${query}. 
 								The items are: ${JSON.stringify(answers)}.`,
-				},
-			]
+        },
+      ],
     });
   } catch (e) {
-		throw new Error(`${MODEL}: ${(e as Error).message}`)
-	}
+    throw new Error(`${MODEL}: ${(e as Error).message}`);
+  }
 
-	return response.response;
+  return response.response;
 };
 
 export const summarizeStreaming = async ({
-	query,
-	answers,
-	stream,
-	ai,
+  query,
+  answers,
+  stream,
+  ai,
 }: {
-	query: string;
-	answers: ResultBatch["results"];
-	stream?: StreamingWrapper;
-	ai: Ai;
+  query: string;
+  answers: ResultBatch["results"];
+  stream?: StreamingWrapper;
+  ai: Ai;
 }) => {
-	try {
+  try {
+    const summary = await summarize({
+      query,
+      answers,
+      ai,
+    });
 
-		const summary = await summarize({
-            query,
-            answers,
-            ai,
-        })
-
-		await stream?.writeStream({
-			message_type: "summary",
-			message: summary,
-			query_id: "",
-		} satisfies MessageResponse);
-	} catch (error) {
-		await stream?.writeStream({
-				message_type: "error",
-				message: (error as Error).message
-		})
-		await stream?.writeStream({
-			message_type: "summary",
-			message: (error as Error).message,
-			query_id: "",
-		})
-		console.error((error as Error).message);
-	}
+    await stream?.writeStream({
+      message_type: "summary",
+      message: summary,
+      query_id: "",
+    } satisfies MessageResponse);
+  } catch (error) {
+    await stream?.writeStream({
+      message_type: "error",
+      message: (error as Error).message,
+    });
+    await stream?.writeStream({
+      message_type: "summary",
+      message: (error as Error).message,
+      query_id: "",
+    });
+    console.error((error as Error).message);
+  }
 };
