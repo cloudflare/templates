@@ -2,7 +2,7 @@ import type { StreamingWrapper } from "./stream-wrapper";
 import type { ResultBatch, MessageResponse } from "./types";
 import { MODEL } from "../config";
 
-export const summarize = async ({
+export const summarize = ({
   query,
   answers,
   ai,
@@ -11,9 +11,10 @@ export const summarize = async ({
   answers: ResultBatch["results"];
   ai: Ai;
 }) => {
-  let response: any;
   try {
-    response = await ai.run(MODEL, {
+    // @ts-ignore
+    return ai.run(MODEL, {
+      stream: true,
       messages: [
         {
           role: "user",
@@ -47,8 +48,6 @@ export const summarize = async ({
   } catch (e) {
     throw new Error(`${MODEL}: ${(e as Error).message}`);
   }
-
-  return response.response;
 };
 
 export const summarizeStreaming = async ({
@@ -62,18 +61,57 @@ export const summarizeStreaming = async ({
   stream?: StreamingWrapper;
   ai: Ai;
 }) => {
-  try {
-    const summary = await summarize({
+    const aiStream = await summarize({
       query,
       answers,
       ai,
     });
 
-    await stream?.writeStream({
-      message_type: "summary",
-      message: summary,
-      query_id: "",
-    } satisfies MessageResponse);
+    const reader = aiStream.getReader();
+    const decoder = new TextDecoder();
+    let buffer: any = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // Keep last line as it may be incomplete
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (data.response) {
+              await stream?.writeStream({
+                message_type: "summary",
+                message: data.response,
+                query_id: "",
+              } satisfies MessageResponse);
+            }
+          } catch (e) {}
+        }
+      }
+    }
+
+    // Process any remaining buffer
+    if (buffer.startsWith('data: ')) {
+      try {
+        const data = JSON.parse(buffer.slice(6));
+        if (data.response) {
+            await stream?.writeStream({
+              message_type: "summary",
+              message: data.response,
+              query_id: "",
+            } satisfies MessageResponse);
+        }
+      } catch (e) {
+        console.warn('Error parsing final buffer:', e);
+      }
+    }
+
+  try {
   } catch (error) {
     await stream?.writeStream({
       message_type: "error",

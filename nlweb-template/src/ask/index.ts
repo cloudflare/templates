@@ -178,8 +178,6 @@ const handleStreaming = async (
             })),
           };
 
-          await wrapper.writeStream(result);
-
           if (params.generate_mode === "summarize") {
             await summarizeStreaming({
               query: params.query,
@@ -188,6 +186,8 @@ const handleStreaming = async (
               answers: result.results,
             });
           }
+
+          await wrapper.writeStream(result);
         } catch (error) {
           await wrapper.writeStream({
             message_type: "error",
