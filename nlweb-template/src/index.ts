@@ -36,6 +36,12 @@ async function getNlWebResponse(
     });
   }
 
+  if (url.pathname === "/version") {
+    return Response.json({
+      version: '1.0.0',
+    })
+  }
+
   if (url.pathname === "/sites") {
     const url = new URL(request.url);
     return Response.json({
