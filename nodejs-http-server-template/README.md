@@ -1,6 +1,12 @@
 # Node.js HTTP Server Template for Cloudflare Workers
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/nodejs-http-server-template)
+
+<!-- dash-content-start -->
+
 A simple Node.js HTTP server template using the built-in `node:http` module, designed to run on Cloudflare Workers.
+
+<!-- dash-content-end -->
 
 ## Quick Start
 
