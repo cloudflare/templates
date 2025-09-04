@@ -61,55 +61,55 @@ export const summarizeStreaming = async ({
   stream?: StreamingWrapper;
   ai: Ai;
 }) => {
-    const aiStream = await summarize({
-      query,
-      answers,
-      ai,
-    });
+  const aiStream = await summarize({
+    query,
+    answers,
+    ai,
+  });
 
-    const reader = aiStream.getReader();
-    const decoder = new TextDecoder();
-    let buffer: any = '';
+  const reader = aiStream.getReader();
+  const decoder = new TextDecoder();
+  let buffer: any = "";
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
 
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop(); // Keep last line as it may be incomplete
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop(); // Keep last line as it may be incomplete
 
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const data = JSON.parse(line.slice(6));
-            if (data.response) {
-              await stream?.writeStream({
-                message_type: "summary",
-                message: data.response,
-                query_id: "",
-              } satisfies MessageResponse);
-            }
-          } catch (e) {}
-        }
-      }
-    }
-
-    // Process any remaining buffer
-    if (buffer.startsWith('data: ')) {
-      try {
-        const data = JSON.parse(buffer.slice(6));
-        if (data.response) {
+    for (const line of lines) {
+      if (line.startsWith("data: ")) {
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.response) {
             await stream?.writeStream({
               message_type: "summary",
               message: data.response,
               query_id: "",
             } satisfies MessageResponse);
-        }
-      } catch (e) {
-        console.warn('Error parsing final buffer:', e);
+          }
+        } catch (e) {}
       }
     }
+  }
+
+  // Process any remaining buffer
+  if (buffer.startsWith("data: ")) {
+    try {
+      const data = JSON.parse(buffer.slice(6));
+      if (data.response) {
+        await stream?.writeStream({
+          message_type: "summary",
+          message: data.response,
+          query_id: "",
+        } satisfies MessageResponse);
+      }
+    } catch (e) {
+      console.warn("Error parsing final buffer:", e);
+    }
+  }
 
   try {
   } catch (error) {

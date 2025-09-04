@@ -20,7 +20,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-} 
+}
 
 body {
   font-family:
@@ -53,11 +53,10 @@ body {
 
 /* Page-specific styles for chat pages */
 
-
 .app-container {
   display: flex;
   height: 100vh;
-    font-family:
+  font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial,
     sans-serif;
   background-color: var(--nl-web-bg-primary);

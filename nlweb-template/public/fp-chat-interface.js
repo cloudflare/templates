@@ -539,11 +539,13 @@ class ModernChatInterface {
         // Handle different message types
         if (data.message_type === "summary" && data.message) {
           messageContent += data.message;
-          textDiv.innerHTML = this.markdownToHtml(messageContent) + this.renderItems(allResults);
+          textDiv.innerHTML =
+            this.markdownToHtml(messageContent) + this.renderItems(allResults);
         } else if (data.message_type === "result_batch" && data.results) {
           // Accumulate all results instead of replacing
           allResults = allResults.concat(data.results);
-          textDiv.innerHTML = this.markdownToHtml(messageContent) + this.renderItems(allResults);
+          textDiv.innerHTML =
+            this.markdownToHtml(messageContent) + this.renderItems(allResults);
         } else if (data.message_type === "intermediate_message") {
           // Handle intermediate messages with temp_intermediate class
           const tempContainer = document.createElement("div");
@@ -561,7 +563,8 @@ class ModernChatInterface {
           }
 
           // Update textDiv to include existing content plus the temp container
-          textDiv.innerHTML = this.markdownToHtml(messageContent) + this.renderItems(allResults);
+          textDiv.innerHTML =
+            this.markdownToHtml(messageContent) + this.renderItems(allResults);
           textDiv.appendChild(tempContainer);
         } else if (data.message_type === "ask_user" && data.message) {
           messageContent += data.message + "\n";
@@ -811,15 +814,15 @@ class ModernChatInterface {
 
   markdownToHtml(markdown) {
     return markdown
-      .replace(/^# (.*)$/gm, '<h1>$1</h1>')
-      .replace(/^## (.*)$/gm, '<h2>$1</h2>')
-      .replace(/\*\*(.*)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.*)\*/g, '<em>$1</em>')
-      .replace(/^- (.*)$/gm, '<ul><li>$1</li></ul>')
+      .replace(/^# (.*)$/gm, "<h1>$1</h1>")
+      .replace(/^## (.*)$/gm, "<h2>$1</h2>")
+      .replace(/\*\*(.*)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*)\*/g, "<em>$1</em>")
+      .replace(/^- (.*)$/gm, "<ul><li>$1</li></ul>")
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
-      .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
-      .replace(/\n/g, '<br>')
-      .replace(/<\/ul>\n<ul>/g, ''); // Merge consecutive unordered lists
+      .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+      .replace(/\n/g, "<br>")
+      .replace(/<\/ul>\n<ul>/g, ""); // Merge consecutive unordered lists
   }
 
   renderItems(items) {
