@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "typescript": "5.9.2",
-    "wrangler": "4.33.x"
+    "wrangler": "^4.34.0"
   },
   "scripts": {
     "cf-typegen": "wrangler types",
