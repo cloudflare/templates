@@ -1,12 +1,25 @@
 import { handleAsk } from "./ask";
 import { NLWebMcp } from "./nlweb-mcp-do";
 
+const RATE_LIMITED_ROUTES = new Set(["/ask", "/mcp"]);
+
 async function getNlWebResponse(
   request: Request,
   env: Env,
   ctx: ExecutionContext,
 ) {
   const url = new URL(request.url);
+
+  if (RATE_LIMITED_ROUTES.has(url.pathname)) {
+    const clientIP = request.headers.get("CF-Connecting-IP");
+    const rateLimitKey = `rate-limit-${clientIP}`;
+
+    const { success } = await env.RATE_LIMITER.limit({ key: rateLimitKey });
+    if (!success) {
+      return new Response("Rate limit exceeded", { status: 429 });
+    }
+  }
+
   if (url.pathname === "/ask") {
     return handleAsk(request, env, env.RAG_ID, ctx);
   }
@@ -17,6 +30,12 @@ async function getNlWebResponse(
       props: {
         ragId: env.RAG_ID,
       },
+    });
+  }
+
+  if (url.pathname === "/version") {
+    return Response.json({
+      version: "1.0.0",
     });
   }
 

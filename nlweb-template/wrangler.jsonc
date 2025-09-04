@@ -18,6 +18,19 @@
   "ai": {
     "binding": "AI"
   },
+  "unsafe": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER",
+        "type": "ratelimit",
+        "namespace_id": "100",
+        "simple": {
+          "limit": 15,
+          "period": 60
+        }
+      }
+    ]
+  },
   "migrations": [
     {
       "new_sqlite_classes": ["NLWebMcp"],
