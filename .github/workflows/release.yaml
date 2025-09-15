@@ -13,7 +13,7 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}-upload
       cancel-in-progress: true
     env:
-      TEMPLATES_API_CLIENT_ID: ${{ secrets.TEMPLATES_API_CLIENT_ID }}
+      TEMPLATES_API_CLIENT_ID: ${{ vars.TEMPLATES_API_CLIENT_ID }}
       TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4

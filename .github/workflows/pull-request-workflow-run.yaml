@@ -20,7 +20,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TEMPLATES_API_CLIENT_ID: ${{ secrets.TEMPLATES_API_CLIENT_ID }}
+      TEMPLATES_API_CLIENT_ID: ${{ vars.TEMPLATES_API_CLIENT_ID }}
       TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
     steps:
       - uses: actions/checkout@v4
