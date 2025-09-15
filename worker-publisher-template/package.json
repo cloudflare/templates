@@ -32,6 +32,6 @@
 		"wrangler": "^4.29.1"
 	},
 	"dependencies": {
-		"cloudflare": "^4.5.0"
+		"cloudflare": "5.1.0"
 	}
 }
