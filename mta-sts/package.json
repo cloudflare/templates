@@ -1,6 +1,5 @@
 {
 	"name": "mta-sts",
-	"version": "1.0.0",
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
@@ -9,5 +8,18 @@
 	},
 	"devDependencies": {
 		"wrangler": "^4.37.1"
+	},
+	"cloudflare": {
+		"label": "MTA-STS",
+		"products": [
+			"Workers",
+		],
+		"categories": [
+			"static"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers/",
+		"icon_urls": [],
+		"preview_image_url": "https://fast.image.delivery/nnoriwy.png",
+		"publish": true
 	}
 }
