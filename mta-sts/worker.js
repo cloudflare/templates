@@ -61,7 +61,7 @@ export default {
         : [];
 
     // Enforce RFC rule: mx required when mode is enforce/testing
-    if ((mode === 'enforce' || mode === 'testing') && mxList.length === 0) {
+    if ((mode === 'enforce' || mode === 'testing') && mxLines.length === 0) {
       const h = new Headers({ ...defaultHeaders });
       return new Response(
         'Misconfigured Worker: MX_HOSTS required when MODE is "enforce" or "testing".',
