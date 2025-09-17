@@ -5,7 +5,6 @@ export default {
 
     const defaultHeaders = {
       'Content-Type': 'text/plain; charset=utf-8',
-      'X-Content-Type-Options': 'nosniff',
       // Optional
       'Strict-Transport-Security': 'max-age=31536000',
     };
@@ -57,7 +56,7 @@ export default {
             .split(/[, \s]+/)
             .map((s) => s.trim())
             .filter(Boolean)
-			.map((mx) => `mx: ${mx}`)
+            .map((mx) => `mx: ${mx}`)
         : [];
 
     // Enforce RFC rule: mx required when mode is enforce/testing
@@ -78,34 +77,12 @@ export default {
     ];
     const body = lines.join('\n') + '\n'; // add newline at end of file
 
-    // ETag + conditional requests (304)
-    const etag = await sha256Etag(body);
-    const headers = new Headers({
-      ...defaultHeaders,
-      // Keep resource cache modest; independent from policy TTL
-      'Cache-Control': 'public, max-age=3600',
-      'ETag': etag,
-    });
+    const headers = new Headers(defaultHeaders);
 
-    const ifNoneMatch = request.headers.get('If-None-Match');
-    if (ifNoneMatch && ifNoneMatch === etag) {
-      return new Response(null, { status: 304, headers });
-    }
-
-    // HEAD => headers only
-    if (method === 'HEAD') {
-      return new Response(null, { status: 200, headers });
+    if (method == 'HEAD') {
+        return new Response(null, { status: 200, headers });
     }
 
     return new Response(body, { status: 200, headers });
   },
 };
-
-async function sha256Etag(text) {
-  const data = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest('SHA-256', data);
-  const hex = [...new Uint8Array(digest)]
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-  return `"${hex}"`;
-}
