@@ -13,7 +13,7 @@
     ],
     "docs_url": "https://developers.cloudflare.com/kv/",
     "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/455c3006-4114-43f6-57f7-70eee0b2e000/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/04b42d40-456d-49df-88a9-f6274a68fe00/public",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/04b42d40-456d-49df-88a9-f6274a68fe00/preview",
     "publish": true
   },
   "dependencies": {

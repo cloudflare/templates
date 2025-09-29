@@ -11,7 +11,7 @@
     "categories": [],
     "docs_url": "https://developers.cloudflare.com/workers/",
     "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c2a0b13a-8cd1-464a-561b-3a7371c7c700/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/661a4884-fb10-4867-7b4e-b72763d12100/public",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/661a4884-fb10-4867-7b4e-b72763d12100/preview",
     "publish": true
   },
   "dependencies": {
