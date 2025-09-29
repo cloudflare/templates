@@ -9,10 +9,8 @@
 			"Workers for Platforms"
 		],
 		"categories": [],
-		"icon_urls": [
-			"https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-		],
-		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/d7679f4e-00b3-40ca-b19b-701d3e794700/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/b1123d34-c3a4-446c-6574-8b67c7ac4400/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5012f8d4-59bc-4f1d-fb7e-7e6269d3da00/public",
 		"publish": true,
 		"bindings": {
 			"READONLY": {

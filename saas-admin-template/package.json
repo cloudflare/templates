@@ -9,12 +9,9 @@
       "D1"
     ],
     "categories": [],
-    "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c6fc5da3-1e0a-4608-b2f1-9628577ec800/public",
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-    ],
     "docs_url": "https://developers.cloudflare.com/workers/",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/0f9ff766-eb55-4eee-1ad6-efeb981fe800/public",
+    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c2a0b13a-8cd1-464a-561b-3a7371c7c700/public",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/661a4884-fb10-4867-7b4e-b72763d12100/public",
     "publish": true
   },
   "dependencies": {
