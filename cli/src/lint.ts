@@ -288,6 +288,7 @@ function lintPackageJson(
       categories?: string[];
       icon_urls?: string[];
       preview_image_url?: string;
+      preview_icon_url?: string;
     };
   };
 
@@ -324,6 +325,10 @@ function lintPackageJson(
     // Ensure a preview image URL is set
     if (!pkg.cloudflare.preview_image_url) {
       problems.push('"cloudflare.preview_image_url" must be defined');
+    }
+    // Ensure preview_icon_url is set
+    if (!pkg.cloudflare.preview_icon_url) {
+      problems.push('"cloudflare.preview_icon_url" must be defined');
     }
   }
 
