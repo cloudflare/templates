@@ -15,8 +15,8 @@
       "storage"
     ],
     "docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cd71c67a-253f-477d-022c-2f90cb4b3d00/public",
-    "icon_urls": [],
+    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/21ab216a-ae9d-42c3-34dd-469867499b00/public",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/babfc407-4e95-4fd3-867c-58da60030500/preview",
     "publish": true
   },
   "dependencies": {
