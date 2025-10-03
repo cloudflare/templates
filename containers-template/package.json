@@ -1,5 +1,5 @@
 {
-  "name": "containers",
+  "name": "containers-template",
   "description": "Build a Container-enabled Worker",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "wrangler": "^4.25.0"
   },
   "dependencies": {
-    "@cloudflare/containers": "^0.0.19",
+    "@cloudflare/containers": "^0.0.28",
     "hono": "4.8.2"
   },
   "cloudflare": {

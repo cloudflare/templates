@@ -118,8 +118,8 @@ importers:
   containers-template:
     dependencies:
       '@cloudflare/containers':
-        specifier: ^0.0.19
-        version: 0.0.19
+        specifier: ^0.0.28
+        version: 0.0.28
       hono:
         specifier: 4.8.2
         version: 4.8.2
@@ -1601,8 +1601,8 @@ packages:
   '@capsizecss/unpack@2.4.0':
     resolution: {integrity: sha512-GrSU71meACqcmIUxPYOJvGKF0yryjN/L1aCuE9DViCTJI7bfkjgYDPD1zbNDcINJwSSP6UaBZY9GAbYDO7re0Q==}
 
-  '@cloudflare/containers@0.0.19':
-    resolution: {integrity: sha512-3Atns+EiKk9xW3aHG3KdTMbkCz4vkf71314CDJpc/h6MiCIUW8Ub5tPbCcdR3NxpZe2sgD1v1zEVPQjgZ5bKXw==}
+  '@cloudflare/containers@0.0.28':
+    resolution: {integrity: sha512-wzR9UWcGvZ9znd4elkXklilPcHX6srncsjSkx696SZRZyTygNbWsLlHegvc1C+e9gn28HRZU3dLiAzXiC9IY1w==}
 
   '@cloudflare/kv-asset-handler@0.1.3':
     resolution: {integrity: sha512-FNcunDuTmEfQTLRLtA6zz+buIXUHj1soPvSWzzQFBC+n2lsy+CGf/NIrR3SEPCmsVNQj70/Jx2lViCpq+09YpQ==}
@@ -11110,7 +11110,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@cloudflare/containers@0.0.19': {}
+  '@cloudflare/containers@0.0.28': {}
 
   '@cloudflare/kv-asset-handler@0.1.3':
     dependencies:
