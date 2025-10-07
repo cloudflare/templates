@@ -1,36 +1,36 @@
 {
-  "name": "multiplayer-globe-template",
-  "description": "Display website visitor locations in real-time using Durable Objects and PartyKit.",
-  "private": true,
-  "cloudflare": {
-    "label": "Multiplayer Globe App",
-    "products": [
-      "Workers",
-      "Durable Objects"
-    ],
-    "categories": [],
-    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/f8d14336-3d79-4ff0-7612-93c3ed829600/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/18d0f27e-e1e9-4910-d68e-f330e9456100/preview",
-    "publish": true
-  },
-  "dependencies": {
-    "cobe": "0.6.3",
-    "partyserver": "0.0.66",
-    "partysocket": "1.1.3",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "esbuild": "0.25.2",
-    "typescript": "5.8.3",
-    "wrangler": "4.21.x"
-  },
-  "scripts": {
-    "cf-typegen": "wrangler types ./src/server/worker-configuration.d.ts",
-    "check": "tsc --project src/client && tsc --project src/server && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev"
-  }
+	"name": "multiplayer-globe-template",
+	"description": "Display website visitor locations in real-time using Durable Objects and PartyKit.",
+	"private": true,
+	"cloudflare": {
+		"label": "Multiplayer Globe App",
+		"products": [
+			"Workers",
+			"Durable Objects"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/f8d14336-3d79-4ff0-7612-93c3ed829600/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/18d0f27e-e1e9-4910-d68e-f330e9456100/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"cobe": "0.6.3",
+		"partyserver": "0.0.66",
+		"partysocket": "1.1.3",
+		"react": "^18.0.0",
+		"react-dom": "^18.0.0"
+	},
+	"devDependencies": {
+		"@types/react": "^18.0.0",
+		"@types/react-dom": "^18.0.0",
+		"esbuild": "0.25.2",
+		"typescript": "5.8.3",
+		"wrangler": "4.21.x"
+	},
+	"scripts": {
+		"cf-typegen": "wrangler types ./src/server/worker-configuration.d.ts",
+		"check": "tsc --project src/client && tsc --project src/server && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev"
+	}
 }
