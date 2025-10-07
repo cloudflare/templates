@@ -40,6 +40,7 @@ const CHECKS = {
   "wrangler.json": [lintWranglerJson],
   "README.md": [lintReadme],
   "package.json": [lintPackageJson],
+  ".gitignore": [lintGitIgnore],
 };
 const TARGET_COMPATIBILITY_DATE = "2025-04-01";
 const DASH_CONTENT_START_MARKER = "<!-- dash-content-start -->";
@@ -329,6 +330,29 @@ function lintPackageJson(
     // Ensure preview_icon_url is set
     if (!pkg.cloudflare.preview_icon_url) {
       problems.push('"cloudflare.preview_icon_url" must be defined');
+    }
+  }
+
+  return problems;
+}
+
+function lintGitIgnore(
+  template: Template,
+  filePath: string,
+  fix: boolean,
+): string[] {
+  if (!fs.existsSync(filePath)) {
+    return [`Expected ${filePath} to exist.`];
+  }
+
+  const contents = fs.readFileSync(filePath, { encoding: "utf-8" });
+  const EXPECTED_LINES = [/^(\/)?node_modules/gm, /^(\/)?\.wrangler/gm];
+
+  const problems: string[] = [];
+
+  for (const expectedLine of EXPECTED_LINES) {
+    if (!contents.match(expectedLine)) {
+      problems.push(`Expected ${expectedLine} to exist in ${filePath}`);
     }
   }
 

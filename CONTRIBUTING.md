@@ -28,6 +28,7 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 | _if publish=true_ | `cloudflare.products`          | List 3 or fewer products featured in your example                                                                                                                                                                                                     | ["D1", "Durable Objects"]                                                                                |
 | ❌                | `cloudflare.categories`        | String(s) that map to filter(s) in the template gallery view                                                                                                                                                                                          | ["starter", "storage"]                                                                                   |
 | _if publish=true_ | `cloudflare.preview_image_url` | 16:9 aspect screenshot of the template application                                                                                                                                                                                                    | (Link will be provided during PR review)                                                                 |
+| _if publish=true_ | `cloudflare.preview_icon_url`  | 16:9 aspect icon of the template application                                                                                                                                                                                                          | (Link will be provided during PR review)                                                                 |
 | ❌                | `cloudflare.publish`           | Boolean to opt-in for display in the Cloudflare Dashboard - leave out unless requested by the Cloudflare team                                                                                                                                         | (Primarily for internal contributor use)                                                                 |
 
 ### Best Practices: `package.json`
@@ -40,6 +41,9 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
 - **`cloudflare.preview_image_url`**
   - Can only be provided by a Cloudflare team member. Image files for icons and preview images are stored in the Cloudflare Templates CF account.
   - Preview image should be a screenshot of the application running in-browser.
+- **`cloudflare.preview_icon_url`**
+  - Can only be provided by a Cloudflare team member. Image files for icons and preview images are stored in the Cloudflare Templates CF account.
+  - Preview icon should be an SVG representing the application.
 
 ### `package-lock.json`
 
@@ -51,18 +55,18 @@ To generate a `package-lock.json` for your template, run this command in the roo
 pnpm fix:lockfiles
 ```
 
-### README.md content
+### `README.md` content
 
-Every ReadMe should include a “getting started” section that provides guidance for running the application locally, directions for installing any third-party tokens, and a description of the application’s functionality. You should also include a screenshot and/or live deployment of the application.
+Every `README.md` should include a “getting started” section that provides guidance for running the application locally, directions for installing any third-party tokens, and a description of the application’s functionality. You should also include a screenshot and/or live deployment of the application.
 
-A portion of your template’s README.md file will be displayed on the Template Details Page in the Cloudflare Dashboard to provide the user with additional information about the template.
+A portion of your template’s `README.md` file will be displayed on the Template Details Page in the Cloudflare Dashboard to provide the user with additional information about the template.
 
 - ✅ This section _should_ include: Key features of the template, which bindings and frameworks the template uses, and a short description of how the template application works.
-- ❌ This section _should not_ include: Project bootstrapping instructions, shell commands, or additional images (but these things should still be included in the longer project ReadMe).
+- ❌ This section _should not_ include: Project bootstrapping instructions, shell commands, or additional images (but these things should still be included in the longer project's `README.md`).
 
 You can designate the block of content to display by wrapping it in a markdown comment like so:
 
-```md template/readme.md
+```md template/README.md
 This content will NOT be included in the Template Details Page
 
 <!-- dash-content-start -->
@@ -73,6 +77,271 @@ This content will be included in Template Details Page
 
 This content will NOT be included in the Template Details Page
 ```
+
+### `.gitignore`
+
+Create a `.gitignore` file in your template folder. You should default to using the following:
+
+<details>
+<summary>Default `.gitignore`</summary>
+<!-- prettier-ignore-start -->
+
+```txt
+# Created by https://www.toptal.com/developers/gitignore/api/macos,node,git
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,node,git
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs generated by jscoverage/JSCover
+lib-cov
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Bower dependency directory (https://bower.io/)
+bower_components
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Snowpack dependency directory (https://snowpack.dev/)
+web_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+out
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Gatsby files
+.cache/
+# Comment in the public line in if your project uses Gatsby and not Next.js
+# https://nextjs.org/blog/next-9-1#public-directory-support
+# public
+
+# vuepress build output
+.vuepress/dist
+
+# vuepress v2.x temp and cache directory
+.temp
+
+# Docusaurus cache and generated files
+.docusaurus
+
+# Serverless directories
+.serverless/
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+### Node Patch ###
+# Serverless Webpack directories
+.webpack/
+
+# Optional stylelint cache
+
+# SvelteKit build / generate output
+.svelte-kit
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,node,git
+
+### Wrangler ###
+.wrangler/
+.env*
+!.env.example
+.dev.vars*
+!.dev.vars.example
+```
+
+<!-- prettier-ignore-end -->
+</details>
+
+You may also want to append additional blocks if using other common frameworks/tools:
+
+<details>
+<summary>Astro</summary>
+<!-- prettier-ignore-start -->
+
+```txt
+### Astro ###
+.astro/
+```
+
+<!-- prettier-ignore-end -->
+</details>
+
+<details>
+<summary>OpenNext</summary>
+<!-- prettier-ignore-start -->
+
+```txt
+### OpenNext ###
+.open-next/
+next-env.d.ts
+```
+
+<!-- prettier-ignore-end -->
+</details>
+
+<details>
+<summary>React Router</summary>
+<!-- prettier-ignore-start -->
+
+```txt
+### React Router ###
+.react-router/
+/build/
+```
+
+<!-- prettier-ignore-end -->
+</details>
+
+<details>
+<summary>Remix</summary>
+<!-- prettier-ignore-start -->
+
+```txt
+### Remix ###
+/build/
+```
+
+<!-- prettier-ignore-end -->
+</details>
 
 ### Worker secrets, environment variables, and Secrets Store secrets
 
@@ -178,9 +447,10 @@ The above requirements, distilled into checklist form:
 
 - [ ] Confirm your template directory ends in `-template`
 - [ ] Confirm your template is working as expected, both locally and deployed
-- [ ] Write a clear, concise, and helpful ReadMe - Use a developer-oriented tone; provide neither too much nor too little detail
+- [ ] Write a clear, concise, and helpful `README.md` - Use a developer-oriented tone; provide neither too much nor too little detail
 - [ ] Designate which section of content should be displayed in the Cloudflare Dashboard by wrapping it in \<!-- dash-content-start --> and \<!-- dash-content-end -->
-- [ ] Include a link to the publicly-accessible deployed preview in your ReadMe
+- [ ] Create a `.gitignore` file in your template directory
+- [ ] Include a link to the publicly-accessible deployed preview in your `README.md`
 - [ ] Include the most up-to-date package lock file
 - [ ] Add Playwright E2E tests covering critical user paths
 - [ ] Open a PR against the public repository's main branch
@@ -189,5 +459,7 @@ The above requirements, distilled into checklist form:
 
 These checklist items are enforced by our CI/CD pipeline:
 
-- [ ] Include required metadata in package.json (name, description, cloudflare.label, cloudflare.products, cloudflare.preview_image_url)
-- [ ] Include a preview image of the application (16:9 aspect ratio, >=500px width) in your template assets
+- [ ] Existance of `.gitignore` file
+- [ ] Required metadata in `package.json` (`name`, `description`, `cloudflare.label`, `cloudflare.products`)
+- [ ] Include a preview image of the application (16:9 aspect ratio, >=500px width) in `cloudflare.preview_image_url`
+- [ ] Include a preview icon for the application (16:9 aspect ratio, SVG) in `cloudflare.preview_icon_url`

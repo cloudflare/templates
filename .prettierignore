@@ -6,6 +6,7 @@ env.d.ts
 .open-next
 .astro
 .react-router
+*/build/
 
 pnpm-lock.yaml
 templates.json
