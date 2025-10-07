@@ -3,22 +3,22 @@ import type { ResultBatch, MessageResponse } from "./types";
 import { MODEL } from "../config";
 
 export const summarize = ({
-  query,
-  answers,
-  ai,
+	query,
+	answers,
+	ai,
 }: {
-  query: string;
-  answers: ResultBatch["results"];
-  ai: Ai;
+	query: string;
+	answers: ResultBatch["results"];
+	ai: Ai;
 }) => {
-  try {
-    // @ts-ignore
-    return ai.run(MODEL, {
-      stream: true,
-      messages: [
-        {
-          role: "user",
-          content: `	You are a helpful AI assistant specialized in answering questions using retrieved list of results. 
+	try {
+		// @ts-ignore
+		return ai.run(MODEL, {
+			stream: true,
+			messages: [
+				{
+					role: "user",
+					content: `	You are a helpful AI assistant specialized in answering questions using retrieved list of results. 
 								Your task is to provide accurate, relevant answers based on the matched content provided.
 								You will receive a user question and a set of results relevant to this query.
 
@@ -42,86 +42,86 @@ export const summarize = ({
 
 								The user's question is: ${query}. 
 								The items are: ${JSON.stringify(answers)}.`,
-        },
-      ],
-    });
-  } catch (e) {
-    throw new Error(`${MODEL}: ${(e as Error).message}`);
-  }
+				},
+			],
+		});
+	} catch (e) {
+		throw new Error(`${MODEL}: ${(e as Error).message}`);
+	}
 };
 
 export const summarizeStreaming = async ({
-  query,
-  answers,
-  stream,
-  ai,
+	query,
+	answers,
+	stream,
+	ai,
 }: {
-  query: string;
-  answers: ResultBatch["results"];
-  stream?: StreamingWrapper;
-  ai: Ai;
+	query: string;
+	answers: ResultBatch["results"];
+	stream?: StreamingWrapper;
+	ai: Ai;
 }) => {
-  const aiStream = await summarize({
-    query,
-    answers,
-    ai,
-  });
+	const aiStream = await summarize({
+		query,
+		answers,
+		ai,
+	});
 
-  const reader = aiStream.getReader();
-  const decoder = new TextDecoder();
-  let buffer: any = "";
+	const reader = aiStream.getReader();
+	const decoder = new TextDecoder();
+	let buffer: any = "";
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
+	while (true) {
+		const { done, value } = await reader.read();
+		if (done) break;
 
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split("\n");
-    buffer = lines.pop(); // Keep last line as it may be incomplete
+		buffer += decoder.decode(value, { stream: true });
+		const lines = buffer.split("\n");
+		buffer = lines.pop(); // Keep last line as it may be incomplete
 
-    for (const line of lines) {
-      if (line.startsWith("data: ")) {
-        try {
-          const data = JSON.parse(line.slice(6));
-          if (data.response) {
-            await stream?.writeStream({
-              message_type: "summary",
-              message: data.response,
-              query_id: "",
-            } satisfies MessageResponse);
-          }
-        } catch (e) {}
-      }
-    }
-  }
+		for (const line of lines) {
+			if (line.startsWith("data: ")) {
+				try {
+					const data = JSON.parse(line.slice(6));
+					if (data.response) {
+						await stream?.writeStream({
+							message_type: "summary",
+							message: data.response,
+							query_id: "",
+						} satisfies MessageResponse);
+					}
+				} catch (e) {}
+			}
+		}
+	}
 
-  // Process any remaining buffer
-  if (buffer.startsWith("data: ")) {
-    try {
-      const data = JSON.parse(buffer.slice(6));
-      if (data.response) {
-        await stream?.writeStream({
-          message_type: "summary",
-          message: data.response,
-          query_id: "",
-        } satisfies MessageResponse);
-      }
-    } catch (e) {
-      console.warn("Error parsing final buffer:", e);
-    }
-  }
+	// Process any remaining buffer
+	if (buffer.startsWith("data: ")) {
+		try {
+			const data = JSON.parse(buffer.slice(6));
+			if (data.response) {
+				await stream?.writeStream({
+					message_type: "summary",
+					message: data.response,
+					query_id: "",
+				} satisfies MessageResponse);
+			}
+		} catch (e) {
+			console.warn("Error parsing final buffer:", e);
+		}
+	}
 
-  try {
-  } catch (error) {
-    await stream?.writeStream({
-      message_type: "error",
-      message: (error as Error).message,
-    });
-    await stream?.writeStream({
-      message_type: "summary",
-      message: (error as Error).message,
-      query_id: "",
-    });
-    console.error((error as Error).message);
-  }
+	try {
+	} catch (error) {
+		await stream?.writeStream({
+			message_type: "error",
+			message: (error as Error).message,
+		});
+		await stream?.writeStream({
+			message_type: "summary",
+			message: (error as Error).message,
+			query_id: "",
+		});
+		console.error((error as Error).message);
+	}
 };

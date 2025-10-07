@@ -1,83 +1,83 @@
 {
-  "dependencyTypes": ["dev", "prod"],
-  "semverGroups": [
-    {
-      "label": "don't pin @cloudflare/workers-types",
-      "dependencies": ["@cloudflare/workers-types"],
-      "packages": ["**"],
-      "range": "^"
-    },
-    {
-      "label": "pin all deps",
-      "dependencies": ["**"],
-      "packages": ["**"],
-      "range": ""
-    }
-  ],
-  "versionGroups": [
-    {
-      "label": "Allow vite 5 for Remix templates",
-      "packages": ["remix-starter-template", "to-do-list-kv-template"],
-      "dependencies": ["vite"],
-      "pinVersion": "5.4.14"
-    },
-    {
-      "label": "Allow React 19 for specific templates",
-      "packages": [
-        "react-router-starter-template",
-        "saas-admin-starter-template"
-      ],
-      "dependencies": [
-        "react",
-        "react-dom",
-        "@types/react",
-        "@types/react-dom"
-      ],
-      "pinVersion": "^19.0.0"
-    },
-    {
-      "label": "Keep React 18 for other templates",
-      "packages": [
-        "durable-chat-template",
-        "multiplayer-globe-template",
-        "remix-starter-template",
-        "to-do-list-kv-template"
-      ],
-      "dependencies": [
-        "react",
-        "react-dom",
-        "@types/react",
-        "@types/react-dom"
-      ],
-      "pinVersion": "^18.0.0"
-    },
-    {
-      "label": "Allow tailwind 3.x for some templates",
-      "packages": [
-        "saas-admin-template",
-        "to-do-list-kv-template",
-        "remix-starter-template"
-      ],
-      "dependencies": ["tailwindcss"],
-      "pinVersion": "^3.4.0"
-    },
-    {
-      "label": "Allow Wrangler 3.x for react router/remix templates",
-      "packages": ["remix-starter-template", "to-do-list-kv-template"],
-      "dependencies": ["wrangler"],
-      "pinVersion": "^3.114.4"
-    },
-    {
-      "label": "Set wrangler 4.21.x for everywhere",
-      "packages": ["*"],
-      "dependencies": ["wrangler"],
-      "pinVersion": "4.21.x"
-    },
-    {
-      "label": "Set vite to v6",
-      "packages": ["*"],
-      "dependencies": ["vite"],
-      "pinVersion": "^6.0.0"
-    }
-  ]
+	"dependencyTypes": ["dev", "prod"],
+	"semverGroups": [
+		{
+			"label": "don't pin @cloudflare/workers-types",
+			"dependencies": ["@cloudflare/workers-types"],
+			"packages": ["**"],
+			"range": "^"
+		},
+		{
+			"label": "pin all deps",
+			"dependencies": ["**"],
+			"packages": ["**"],
+			"range": ""
+		}
+	],
+	"versionGroups": [
+		{
+			"label": "Allow vite 5 for Remix templates",
+			"packages": ["remix-starter-template", "to-do-list-kv-template"],
+			"dependencies": ["vite"],
+			"pinVersion": "5.4.14"
+		},
+		{
+			"label": "Allow React 19 for specific templates",
+			"packages": [
+				"react-router-starter-template",
+				"saas-admin-starter-template"
+			],
+			"dependencies": [
+				"react",
+				"react-dom",
+				"@types/react",
+				"@types/react-dom"
+			],
+			"pinVersion": "^19.0.0"
+		},
+		{
+			"label": "Keep React 18 for other templates",
+			"packages": [
+				"durable-chat-template",
+				"multiplayer-globe-template",
+				"remix-starter-template",
+				"to-do-list-kv-template"
+			],
+			"dependencies": [
+				"react",
+				"react-dom",
+				"@types/react",
+				"@types/react-dom"
+			],
+			"pinVersion": "^18.0.0"
+		},
+		{
+			"label": "Allow tailwind 3.x for some templates",
+			"packages": [
+				"saas-admin-template",
+				"to-do-list-kv-template",
+				"remix-starter-template"
+			],
+			"dependencies": ["tailwindcss"],
+			"pinVersion": "^3.4.0"
+		},
+		{
+			"label": "Allow Wrangler 3.x for react router/remix templates",
+			"packages": ["remix-starter-template", "to-do-list-kv-template"],
+			"dependencies": ["wrangler"],
+			"pinVersion": "^3.114.4"
+		},
+		{
+			"label": "Set wrangler 4.21.x for everywhere",
+			"packages": ["*"],
+			"dependencies": ["wrangler"],
+			"pinVersion": "4.21.x"
+		},
+		{
+			"label": "Set vite to v6",
+			"packages": ["*"],
+			"dependencies": ["vite"],
+			"pinVersion": "^6.0.0"
+		}
+	]
 }

@@ -36,8 +36,8 @@ import { createServer } from "node:http";
 import { httpServerHandler } from "cloudflare:node";
 
 const server = createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Hello from Node.js HTTP server!");
+	res.writeHead(200, { "Content-Type": "text/plain" });
+	res.end("Hello from Node.js HTTP server!");
 });
 
 server.listen(8080);
