@@ -1,5 +1,20 @@
-# Created by https://www.toptal.com/developers/gitignore/api/node,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,macos
+# Created by https://www.toptal.com/developers/gitignore/api/macos,node,git
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,node,git
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
 
 ### macOS ###
 # General
@@ -9,6 +24,7 @@
 
 # Icon must end with two \r
 Icon
+
 
 # Thumbnails
 ._*
@@ -28,6 +44,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
 
 ### Node ###
 # Logs
@@ -73,10 +93,6 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-
-# Moved from ./templates for ignoring all locks in templates
-templates/**/*-lock.*
-templates/**/*.lock
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -173,17 +189,18 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# End of https://www.toptal.com/developers/gitignore/api/node,macos
+# End of https://www.toptal.com/developers/gitignore/api/macos,node,git
 
-# Wrangler output
+### Wrangler ###
 .wrangler/
-build/
+.env*
+!.env.example
+.dev.vars*
+!.dev.vars.example
 
-# Turbo output
+### Turbo ###
 .turbo/
 
-# Playwright
+### Playwright ###
 /test-results/
 /playwright-report/
-/blob-report/
-/playwright/.cache/

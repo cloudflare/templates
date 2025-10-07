@@ -11,13 +11,14 @@ The following selections do not need to be completed if this PR only contains ch
 
 - Template Metadata
   - [ ] template directory ends with `-template`
-  - [ ] "cloudflare" section of package.json is populated
+  - [ ] "cloudflare" section of `package.json` is populated
   - [ ] template preview image uploaded to Images
   - [ ] README is populated and uses `<!-- dash-content-start -->` and `<!-- dash-content-end -->` to designate the Dash readme preview
-  - [ ] package.json contains a `deploy` command
-  - [ ] package.json contains `private: true` and no `version` field
+  - [ ] `.gitignore` file exists
+  - [ ] `package.json` contains a `deploy` command
+  - [ ] `package.json` contains `private: true` and no `version` field
 
-## Example package.json
+## Example `package.json`
 
 ```json
 "private": true,
