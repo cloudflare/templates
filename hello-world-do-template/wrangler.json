@@ -6,9 +6,7 @@
   "upload_source_maps": true,
   "migrations": [
     {
-      "new_sqlite_classes": [
-        "MyDurableObject"
-      ],
+      "new_sqlite_classes": ["MyDurableObject"],
       "tag": "v1"
     }
   ],

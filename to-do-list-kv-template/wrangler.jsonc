@@ -7,9 +7,7 @@
   "assets": {
     "directory": "./build/client"
   },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },

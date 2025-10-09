@@ -3,9 +3,7 @@
   "name": "containers-template",
   "main": "src/index.ts",
   "compatibility_date": "2025-10-08",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },
@@ -26,9 +24,7 @@
   },
   "migrations": [
     {
-      "new_sqlite_classes": [
-        "MyContainer"
-      ],
+      "new_sqlite_classes": ["MyContainer"],
       "tag": "v1"
     }
   ],

@@ -3,9 +3,7 @@
   "name": "react-router-postgres-ssr-template",
   "compatibility_date": "2025-10-08",
   "main": "./api/index.js",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {},
   // "hyperdrive": [
   //   {
