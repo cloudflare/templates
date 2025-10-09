@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
-  getTemplates,
+  getAllTemplates,
   readJson,
   readJsonC,
   readToml,
@@ -19,7 +19,7 @@ export type LintConfig = {
 const integrationsPlatCategories = ["starter", "storage", "ai"];
 
 export function lint(config: LintConfig) {
-  const templates = getTemplates(config.templateDirectory);
+  const templates = getAllTemplates(config.templateDirectory);
   const results = templates.flatMap((template) =>
     lintTemplate(template, config.fix),
   );
@@ -42,7 +42,7 @@ const CHECKS = {
   "package.json": [lintPackageJson],
   ".gitignore": [lintGitIgnore],
 };
-const TARGET_COMPATIBILITY_DATE = "2025-04-01";
+const TARGET_COMPATIBILITY_DATE = "2025-10-08";
 const DASH_CONTENT_START_MARKER = "<!-- dash-content-start -->";
 const DASH_CONTENT_END_MARKER = "<!-- dash-content-end -->";
 
@@ -290,6 +290,7 @@ function lintPackageJson(
       icon_urls?: string[];
       preview_image_url?: string;
       preview_icon_url?: string;
+      publish?: boolean;
     };
   };
 
@@ -323,13 +324,16 @@ function lintPackageJson(
           );
       });
     }
-    // Ensure a preview image URL is set
-    if (!pkg.cloudflare.preview_image_url) {
-      problems.push('"cloudflare.preview_image_url" must be defined');
-    }
-    // Ensure preview_icon_url is set
-    if (!pkg.cloudflare.preview_icon_url) {
-      problems.push('"cloudflare.preview_icon_url" must be defined');
+    // Only require preview URLs for published templates
+    if (pkg.cloudflare.publish === true) {
+      // Ensure a preview image URL is set
+      if (!pkg.cloudflare.preview_image_url) {
+        problems.push('"cloudflare.preview_image_url" must be defined');
+      }
+      // Ensure preview_icon_url is set
+      if (!pkg.cloudflare.preview_icon_url) {
+        problems.push('"cloudflare.preview_icon_url" must be defined');
+      }
     }
   }
 

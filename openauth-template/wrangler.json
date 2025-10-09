@@ -1,5 +1,5 @@
 {
-  "compatibility_date": "2025-04-01",
+  "compatibility_date": "2025-10-08",
   "main": "src/index.ts",
   "name": "openauth-template",
   "upload_source_maps": true,
@@ -19,5 +19,7 @@
   "observability": {
     "enabled": true
   },
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
 }

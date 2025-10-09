@@ -1,12 +1,11 @@
 /**
  * For more details on how to configure Wrangler, refer to:
  * https://developers.cloudflare.com/workers/wrangler/configuration/
- */
-{
+ */{
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "d1-starter-sessions-api",
+  "name": "d1-starter-sessions-api-template",
   "main": "src/index.ts",
-  "compatibility_date": "2025-03-17",
+  "compatibility_date": "2025-10-08",
   "observability": {
     "enabled": true
   },
@@ -25,5 +24,6 @@
       "database_name": "d1-starter-sessions-api",
       "database_id": "3690f364-3425-4fab-8eb7-c74c5717578a"
     }
-  ]
+  ],
+  "upload_source_maps": true
 }

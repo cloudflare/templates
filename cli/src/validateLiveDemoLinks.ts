@@ -1,4 +1,4 @@
-import { getTemplates } from "./util";
+import { getPublishedTemplates } from "./util";
 import MarkdownError from "./MarkdownError";
 
 export type ValidateLiveDemoLinksConfig = {
@@ -8,7 +8,7 @@ export type ValidateLiveDemoLinksConfig = {
 export async function validateLiveDemoLinks({
   templateDirectory,
 }: ValidateLiveDemoLinksConfig) {
-  const templates = getTemplates(templateDirectory);
+  const templates = getPublishedTemplates(templateDirectory);
   const successes: string[] = [];
   const errors: string[] = [];
   let numBadStatuses = 0;

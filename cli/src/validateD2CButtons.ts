@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { getTemplates } from "./util";
+import { getAllTemplates } from "./util";
 import MarkdownError from "./MarkdownError";
 
 export type ValidateD2CButtonsConfig = {
@@ -10,7 +10,7 @@ export type ValidateD2CButtonsConfig = {
 export async function validateD2CButtons({
   templateDirectory,
 }: ValidateD2CButtonsConfig) {
-  const templates = getTemplates(templateDirectory);
+  const templates = getAllTemplates(templateDirectory);
   const successes: string[] = [];
   const errors: string[] = [];
   let numBadStatuses = 0;

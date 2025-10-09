@@ -41,13 +41,13 @@ export const ALLOWED_DIRECTORIES = [
   "test-results",
 ];
 
-export function getTemplates(templateDirectory: string): Template[] {
+export function getAllTemplates(templateDirectory: string): Template[] {
   if (path.basename(templateDirectory).endsWith(TEMPLATE_DIRECTORY_SUFFIX)) {
     // If the specified path is a template directory, just return that.
     const templatePath = templateDirectory;
     const packageJsonPath = path.join(templatePath, "package.json");
 
-    if (!isDashTemplate(packageJsonPath)) {
+    if (!fs.existsSync(packageJsonPath)) {
       return [];
     }
 
@@ -81,18 +81,31 @@ export function getTemplates(templateDirectory: string): Template[] {
     .filter((name) =>
       fs.statSync(path.join(templateDirectory, name)).isDirectory(),
     )
+    .filter((name) => name.endsWith(TEMPLATE_DIRECTORY_SUFFIX))
     .filter((name) => {
       const packageJsonPath = path.join(
         templateDirectory,
         name,
         "package.json",
       );
-      return isDashTemplate(packageJsonPath);
+      return fs.existsSync(packageJsonPath);
     })
     .map((name) => ({
       name,
       path: path.join(templateDirectory, name),
     }));
+}
+
+export function getPublishedTemplates(templateDirectory: string): Template[] {
+  return getAllTemplates(templateDirectory).filter((template) => {
+    const packageJsonPath = path.join(template.path, "package.json");
+    return isDashTemplate(packageJsonPath);
+  });
+}
+
+// Deprecated: Use getAllTemplates() or getPublishedTemplates() instead
+export function getTemplates(templateDirectory: string): Template[] {
+  return getPublishedTemplates(templateDirectory);
 }
 
 export function collectTemplateFiles(

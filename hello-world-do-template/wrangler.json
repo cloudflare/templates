@@ -2,11 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "hello-world-do-template",
   "main": "src/index.ts",
-  "compatibility_date": "2025-04-01",
+  "compatibility_date": "2025-10-08",
   "upload_source_maps": true,
   "migrations": [
     {
-      "new_sqlite_classes": ["MyDurableObject"],
+      "new_sqlite_classes": [
+        "MyDurableObject"
+      ],
       "tag": "v1"
     }
   ],

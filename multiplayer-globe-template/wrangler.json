@@ -1,10 +1,12 @@
 {
-  "compatibility_date": "2025-04-01",
+  "compatibility_date": "2025-10-08",
   "main": "src/server/index.ts",
   "name": "multiplayer-globe-template",
   "migrations": [
     {
-      "new_sqlite_classes": ["Globe"],
+      "new_sqlite_classes": [
+        "Globe"
+      ],
       "tag": "v1"
     }
   ],

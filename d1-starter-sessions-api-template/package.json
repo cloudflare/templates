@@ -1,5 +1,5 @@
 {
-  "name": "d1-starter-sessions-api",
+  "name": "d1-starter-sessions-api-template",
   "description": "D1 starter template using the Sessions API for read replication.",
   "private": true,
   "cloudflare": {

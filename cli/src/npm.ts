@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import MarkdownError from "./MarkdownError";
-import { getTemplates } from "./util";
+import { getAllTemplates } from "./util";
 
 export type NpmLockfilesConfig = {
   templateDirectory: string;
@@ -19,7 +19,7 @@ export async function generateNpmLockfiles({
 }: NpmLockfilesConfig): Promise<void> {
   const repoRoot = path.resolve(templateDirectory);
   const config = await new TemplatesConfig(repoRoot).load();
-  const templates = getTemplates(templateDirectory);
+  const templates = getAllTemplates(templateDirectory);
 
   for (const { name } of templates) {
     echo(chalk.blue(`Updating template: ${chalk.grey(name)}`));
@@ -58,7 +58,7 @@ export async function lintNpmLockfiles({
 }: NpmLockfilesConfig): Promise<void> {
   const repoRoot = path.resolve(templateDirectory);
   const config = await new TemplatesConfig(repoRoot).load();
-  const templates = getTemplates(templateDirectory);
+  const templates = getAllTemplates(templateDirectory);
 
   const errors: string[] = [];
   for (const { name } of templates) {
