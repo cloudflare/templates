@@ -1,6 +1,6 @@
 import "zx/globals";
 import subprocess from "node:child_process";
-import { getTemplates } from "./util";
+import { getPublishedTemplates } from "./util";
 
 export type DeployLiveDemosConfig = {
   templateDirectory: string;
@@ -29,7 +29,7 @@ function runCommand(command: string, cwd: string) {
 export default async function deployLiveDemos({
   templateDirectory,
 }: DeployLiveDemosConfig) {
-  const templates = getTemplates(templateDirectory);
+  const templates = getPublishedTemplates(templateDirectory);
   await Promise.all(
     templates.map(({ path: templatePath }) => {
       runCommand("npm install", templatePath);

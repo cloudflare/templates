@@ -1,8 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nl-web",
+  "name": "nlweb-template",
   "main": "src/index.ts",
-  "compatibility_date": "2025-05-23",
+  "compatibility_date": "2025-10-08",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
@@ -44,5 +44,6 @@
         "name": "MCP_OBJECT"
       }
     ]
-  }
+  },
+  "upload_source_maps": true
 }

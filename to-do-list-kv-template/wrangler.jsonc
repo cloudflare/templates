@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "to-do-list-kv-template",
-  "compatibility_date": "2025-04-01",
+  "compatibility_date": "2025-10-08",
   "upload_source_maps": true,
   "main": "./server.ts",
   "assets": {

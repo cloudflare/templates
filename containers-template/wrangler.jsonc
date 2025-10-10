@@ -1,8 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "hello-containers",
+  "name": "containers-template",
   "main": "src/index.ts",
-  "compatibility_date": "2025-05-23",
+  "compatibility_date": "2025-10-08",
   "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
@@ -27,5 +27,6 @@
       "new_sqlite_classes": ["MyContainer"],
       "tag": "v1"
     }
-  ]
+  ],
+  "upload_source_maps": true
 }

@@ -53,6 +53,30 @@
     },
     "worker-publisher-template": {
       "package_json_hash": "4c0f37fb9c0a0ac9a81932c28c986ed6b522d5ac"
+    },
+    "containers-template": {
+      "package_json_hash": "535cadc832f5d2567899a3999a50b5c024859afb"
+    },
+    "d1-starter-sessions-api-template": {
+      "package_json_hash": "788bca8e9c0fc50fbbcc784fa2f7cca624c6728d"
+    },
+    "hello-world-do-template": {
+      "package_json_hash": "bc815b5982dcf1925415ecc67ae5355fa9fcfd5a"
+    },
+    "mysql-hyperdrive-template": {
+      "package_json_hash": "fc395739872c9dbba7eec0fa1feaefbb1ca5587b"
+    },
+    "nlweb-template": {
+      "package_json_hash": "35149b5e1edd920e67da6f6c9e2b64b38ae4c674"
+    },
+    "nodejs-http-server-template": {
+      "package_json_hash": "f9f2bab3eccfb29fdedfa4c7aec4e87c5dde1c22"
+    },
+    "postgres-hyperdrive-template": {
+      "package_json_hash": "2e7533818cf4fc7083fe38dca55d4de3d81aab23"
+    },
+    "react-router-postgres-ssr-template": {
+      "package_json_hash": "d2f48bc639efccc606908b8a718999c61f5d7b98"
     }
   }
 }

@@ -1,6 +1,6 @@
 # React Router 7 + PostgreSQL + Hyperdrive on Cloudflare Workers
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?https://github.com/cloudflare/templates/tree/staging/react-router-postgres-ssr-template)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-postgres-ssr-template)
 
 <!-- dash-content-start -->
 

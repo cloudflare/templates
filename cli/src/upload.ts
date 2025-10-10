@@ -1,7 +1,7 @@
 import {
   collectTemplateFiles,
   fetchWithRetries,
-  getTemplates,
+  getPublishedTemplates,
   handleCloudflareResponse,
   SeedRepo,
 } from "./util";
@@ -20,7 +20,7 @@ export type UploadConfig = {
 };
 
 export async function upload(config: UploadConfig) {
-  const templates = getTemplates(config.templateDirectory);
+  const templates = getPublishedTemplates(config.templateDirectory);
   const formData = templates.reduce((body, template) => {
     const files = collectTemplateFiles(template.path, !!config.seedRepo);
     console.info(`Uploading ${template.path}:`);
