@@ -12,93 +12,93 @@
  */
 
 export class NLWebDropdownChat {
-  constructor(config = {}) {
-    this.config = {
-      containerId: config.containerId || "nlweb-search-container",
-      site: config.site || "all",
-      placeholder: config.placeholder || "Ask a question...",
-      endpoint: config.endpoint || window.location.origin,
-      cssPrefix: config.cssPrefix || "nlweb-dropdown",
-      ...config,
-    };
+	constructor(config = {}) {
+		this.config = {
+			containerId: config.containerId || "nlweb-search-container",
+			site: config.site || "all",
+			placeholder: config.placeholder || "Ask a question...",
+			endpoint: config.endpoint || window.location.origin,
+			cssPrefix: config.cssPrefix || "nlweb-dropdown",
+			...config,
+		};
 
-    if (config.endpoint) {
-      sessionStorage.setItem("nlweb-endpoint", config.endpoint);
-    }
+		if (config.endpoint) {
+			sessionStorage.setItem("nlweb-endpoint", config.endpoint);
+		}
 
-    this.init();
-  }
+		this.init();
+	}
 
-  async init() {
-    // Create the HTML structure
-    this.createDOM();
+	async init() {
+		// Create the HTML structure
+		this.createDOM();
 
-    // Get references to elements
-    this.searchInput = this.container.querySelector(
-      `.${this.config.cssPrefix}-search-input`,
-    );
-    this.dropdownResults = this.container.querySelector(
-      `.${this.config.cssPrefix}-results`,
-    );
-    this.messagesContainer = this.container.querySelector(
-      `.${this.config.cssPrefix}-messages-container`,
-    );
-    this.dropdownConversationsList = this.container.querySelector(
-      `.${this.config.cssPrefix}-conversations-list`,
-    );
-    this.dropdownConversationsPanel = this.container.querySelector(
-      `.${this.config.cssPrefix}-conversations-panel`,
-    );
-    this.historyIcon = this.container.querySelector(
-      `.${this.config.cssPrefix}-history-icon`,
-    );
-    this.rememberedList = this.container.querySelector(
-      `.${this.config.cssPrefix}-remembered-list`,
-    );
+		// Get references to elements
+		this.searchInput = this.container.querySelector(
+			`.${this.config.cssPrefix}-search-input`,
+		);
+		this.dropdownResults = this.container.querySelector(
+			`.${this.config.cssPrefix}-results`,
+		);
+		this.messagesContainer = this.container.querySelector(
+			`.${this.config.cssPrefix}-messages-container`,
+		);
+		this.dropdownConversationsList = this.container.querySelector(
+			`.${this.config.cssPrefix}-conversations-list`,
+		);
+		this.dropdownConversationsPanel = this.container.querySelector(
+			`.${this.config.cssPrefix}-conversations-panel`,
+		);
+		this.historyIcon = this.container.querySelector(
+			`.${this.config.cssPrefix}-history-icon`,
+		);
+		this.rememberedList = this.container.querySelector(
+			`.${this.config.cssPrefix}-remembered-list`,
+		);
 
-    // Import required modules
-    try {
-      const [
-        { JsonRenderer },
-        { TypeRendererFactory },
-        { RecipeRenderer },
-        { ModernChatInterface },
-      ] = await Promise.all([
-        import(`${this.config.endpoint}/json-renderer.js`),
-        import(`${this.config.endpoint}/type-renderers.js`),
-        import(`${this.config.endpoint}/recipe-renderer.js`),
-        import(`${this.config.endpoint}/fp-chat-interface-snippet.js`),
-      ]);
+		// Import required modules
+		try {
+			const [
+				{ JsonRenderer },
+				{ TypeRendererFactory },
+				{ RecipeRenderer },
+				{ ModernChatInterface },
+			] = await Promise.all([
+				import(`${this.config.endpoint}/json-renderer.js`),
+				import(`${this.config.endpoint}/type-renderers.js`),
+				import(`${this.config.endpoint}/recipe-renderer.js`),
+				import(`${this.config.endpoint}/fp-chat-interface-snippet.js`),
+			]);
 
-      // Initialize JSON renderer
-      this.jsonRenderer = new JsonRenderer();
-      TypeRendererFactory.registerAll(this.jsonRenderer);
-      TypeRendererFactory.registerRenderer(RecipeRenderer, this.jsonRenderer);
+			// Initialize JSON renderer
+			this.jsonRenderer = new JsonRenderer();
+			TypeRendererFactory.registerAll(this.jsonRenderer);
+			TypeRendererFactory.registerRenderer(RecipeRenderer, this.jsonRenderer);
 
-      // Initialize chat interface after a short delay
-      setTimeout(() => {
-        this.initializeChatInterface(ModernChatInterface);
-        // Load remembered items after chat interface is initialized
-        this.updateRememberedItems();
-      }, 100);
-    } catch (error) {
-      console.error("Failed to load NLWeb dependencies:", error);
-    }
-  }
+			// Initialize chat interface after a short delay
+			setTimeout(() => {
+				this.initializeChatInterface(ModernChatInterface);
+				// Load remembered items after chat interface is initialized
+				this.updateRememberedItems();
+			}, 100);
+		} catch (error) {
+			console.error("Failed to load NLWeb dependencies:", error);
+		}
+	}
 
-  createDOM() {
-    // Get container
-    this.container = document.getElementById(this.config.containerId);
-    if (!this.container) {
-      console.error(`Container with id "${this.config.containerId}" not found`);
-      return;
-    }
+	createDOM() {
+		// Get container
+		this.container = document.getElementById(this.config.containerId);
+		if (!this.container) {
+			console.error(`Container with id "${this.config.containerId}" not found`);
+			return;
+		}
 
-    // Add container class
-    this.container.classList.add(`${this.config.cssPrefix}-container`);
+		// Add container class
+		this.container.classList.add(`${this.config.cssPrefix}-container`);
 
-    // Create HTML structure
-    this.container.innerHTML = `
+		// Create HTML structure
+		this.container.innerHTML = `
             <div class="${this.config.cssPrefix}-search-wrapper">
                 <svg class="${this.config.cssPrefix}-history-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -165,395 +165,395 @@ export class NLWebDropdownChat {
                 <div id="send-button"></div>
             </div>
         `;
-  }
+	}
 
-  initializeChatInterface(ModernChatInterface) {
-    // Create chat interface instance
-    this.chatInterface = new ModernChatInterface({ skipAutoInit: true });
+	initializeChatInterface(ModernChatInterface) {
+		// Create chat interface instance
+		this.chatInterface = new ModernChatInterface({ skipAutoInit: true });
 
-    // Set the site
-    this.chatInterface.selectedSite = this.config.site;
+		// Set the site
+		this.chatInterface.selectedSite = this.config.site;
 
-    // Override methods to work with our structure
-    this.setupChatInterfaceOverrides();
+		// Override methods to work with our structure
+		this.setupChatInterfaceOverrides();
 
-    // Initialize event handlers
-    this.setupEventHandlers();
+		// Initialize event handlers
+		this.setupEventHandlers();
 
-    // Create initial chat
-    this.chatInterface.createNewChat(null, this.config.site);
-  }
+		// Create initial chat
+		this.chatInterface.createNewChat(null, this.config.site);
+	}
 
-  setupChatInterfaceOverrides() {
-    // Override createNewChat to ensure site is set
-    const originalCreateNewChat = this.chatInterface.createNewChat.bind(
-      this.chatInterface,
-    );
-    this.chatInterface.createNewChat = (searchInputId, site) => {
-      originalCreateNewChat(searchInputId, site || this.config.site);
+	setupChatInterfaceOverrides() {
+		// Override createNewChat to ensure site is set
+		const originalCreateNewChat = this.chatInterface.createNewChat.bind(
+			this.chatInterface,
+		);
+		this.chatInterface.createNewChat = (searchInputId, site) => {
+			originalCreateNewChat(searchInputId, site || this.config.site);
 
-      const conversation =
-        this.chatInterface.conversationManager.findConversation(
-          this.chatInterface.currentConversationId,
-        );
-      if (conversation) {
-        if (!conversation.site) {
-          conversation.site = this.config.site;
-        }
-        if (!conversation.timestamp) {
-          conversation.timestamp = Date.now();
-        }
-        this.chatInterface.conversationManager.saveConversations();
-      }
-    };
+			const conversation =
+				this.chatInterface.conversationManager.findConversation(
+					this.chatInterface.currentConversationId,
+				);
+			if (conversation) {
+				if (!conversation.site) {
+					conversation.site = this.config.site;
+				}
+				if (!conversation.timestamp) {
+					conversation.timestamp = Date.now();
+				}
+				this.chatInterface.conversationManager.saveConversations();
+			}
+		};
 
-    // Override sendMessage to show dropdown
-    const originalSendMessage = this.chatInterface.sendMessage.bind(
-      this.chatInterface,
-    );
-    this.chatInterface.sendMessage = (message) => {
-      this.showDropdown();
-      originalSendMessage(message);
+		// Override sendMessage to show dropdown
+		const originalSendMessage = this.chatInterface.sendMessage.bind(
+			this.chatInterface,
+		);
+		this.chatInterface.sendMessage = (message) => {
+			this.showDropdown();
+			originalSendMessage(message);
 
-      const chatInputContainer = this.container.querySelector(
-        `.${this.config.cssPrefix}-chat-input-container`,
-      );
-      if (chatInputContainer) {
-        chatInputContainer.style.display = "block";
-      }
+			const chatInputContainer = this.container.querySelector(
+				`.${this.config.cssPrefix}-chat-input-container`,
+			);
+			if (chatInputContainer) {
+				chatInputContainer.style.display = "block";
+			}
 
-      this.updateConversationsList();
-    };
+			this.updateConversationsList();
+		};
 
-    // Override addMessage
-    const originalAddMessage = this.chatInterface.addMessage.bind(
-      this.chatInterface,
-    );
-    this.chatInterface.addMessage = (content, type) => {
-      originalAddMessage(content, type);
+		// Override addMessage
+		const originalAddMessage = this.chatInterface.addMessage.bind(
+			this.chatInterface,
+		);
+		this.chatInterface.addMessage = (content, type) => {
+			originalAddMessage(content, type);
 
-      // Access conversations through conversationManager
-      const conversation =
-        this.chatInterface.conversationManager.findConversation(
-          this.chatInterface.currentConversationId,
-        );
-      if (conversation) {
-        if (conversation.site !== this.config.site) {
-          conversation.site = this.config.site;
-        }
-        if (!conversation.timestamp) {
-          conversation.timestamp = Date.now();
-        }
-        this.chatInterface.conversationManager.saveConversations();
-      }
-    };
+			// Access conversations through conversationManager
+			const conversation =
+				this.chatInterface.conversationManager.findConversation(
+					this.chatInterface.currentConversationId,
+				);
+			if (conversation) {
+				if (conversation.site !== this.config.site) {
+					conversation.site = this.config.site;
+				}
+				if (!conversation.timestamp) {
+					conversation.timestamp = Date.now();
+				}
+				this.chatInterface.conversationManager.saveConversations();
+			}
+		};
 
-    // Override endStreaming
-    const originalEndStreaming = this.chatInterface.endStreaming.bind(
-      this.chatInterface,
-    );
-    this.chatInterface.endStreaming = () => {
-      originalEndStreaming();
-      this.dropdownResults.classList.add("loaded");
-      // Update remembered items after streaming ends
-      this.updateRememberedItems();
-    };
+		// Override endStreaming
+		const originalEndStreaming = this.chatInterface.endStreaming.bind(
+			this.chatInterface,
+		);
+		this.chatInterface.endStreaming = () => {
+			originalEndStreaming();
+			this.dropdownResults.classList.add("loaded");
+			// Update remembered items after streaming ends
+			this.updateRememberedItems();
+		};
 
-    // Override addRememberedItem if it exists
-    if (this.chatInterface.addRememberedItem) {
-      const originalAddRememberedItem =
-        this.chatInterface.addRememberedItem.bind(this.chatInterface);
-      this.chatInterface.addRememberedItem = (item) => {
-        originalAddRememberedItem(item);
-        this.updateRememberedItems();
-      };
-    }
-  }
+		// Override addRememberedItem if it exists
+		if (this.chatInterface.addRememberedItem) {
+			const originalAddRememberedItem =
+				this.chatInterface.addRememberedItem.bind(this.chatInterface);
+			this.chatInterface.addRememberedItem = (item) => {
+				originalAddRememberedItem(item);
+				this.updateRememberedItems();
+			};
+		}
+	}
 
-  setupEventHandlers() {
-    // Search input
-    this.searchInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        this.handleSearch();
-      }
-    });
+	setupEventHandlers() {
+		// Search input
+		this.searchInput.addEventListener("keypress", (e) => {
+			if (e.key === "Enter") {
+				e.preventDefault();
+				this.handleSearch();
+			}
+		});
 
-    // History icon
-    if (this.historyIcon) {
-      this.historyIcon.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.toggleConversationsPanel();
-      });
-    }
+		// History icon
+		if (this.historyIcon) {
+			this.historyIcon.addEventListener("click", (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				this.toggleConversationsPanel();
+			});
+		}
 
-    // Chat input and send button
-    const chatInput = this.container.querySelector(
-      `.${this.config.cssPrefix}-chat-input`,
-    );
-    const sendButton = this.container.querySelector(
-      `.${this.config.cssPrefix}-send-button`,
-    );
+		// Chat input and send button
+		const chatInput = this.container.querySelector(
+			`.${this.config.cssPrefix}-chat-input`,
+		);
+		const sendButton = this.container.querySelector(
+			`.${this.config.cssPrefix}-send-button`,
+		);
 
-    if (chatInput && sendButton) {
-      // Override the chat interface elements
-      this.chatInterface.elements.chatInput = chatInput;
-      this.chatInterface.elements.sendButton = sendButton;
+		if (chatInput && sendButton) {
+			// Override the chat interface elements
+			this.chatInterface.elements.chatInput = chatInput;
+			this.chatInterface.elements.sendButton = sendButton;
 
-      sendButton.addEventListener("click", () => {
-        const message = chatInput.value.trim();
-        if (message) {
-          this.chatInterface.sendMessage(message);
-          chatInput.value = "";
-          chatInput.style.height = "auto";
-        }
-      });
+			sendButton.addEventListener("click", () => {
+				const message = chatInput.value.trim();
+				if (message) {
+					this.chatInterface.sendMessage(message);
+					chatInput.value = "";
+					chatInput.style.height = "auto";
+				}
+			});
 
-      chatInput.addEventListener("keypress", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          sendButton.click();
-        }
-      });
+			chatInput.addEventListener("keypress", (e) => {
+				if (e.key === "Enter" && !e.shiftKey) {
+					e.preventDefault();
+					sendButton.click();
+				}
+			});
 
-      // Auto-resize
-      chatInput.addEventListener("input", () => {
-        chatInput.style.height = "auto";
-        chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + "px";
-      });
-    }
+			// Auto-resize
+			chatInput.addEventListener("input", () => {
+				chatInput.style.height = "auto";
+				chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + "px";
+			});
+		}
 
-    // Click outside to close
-    document.addEventListener("click", (e) => {
-      if (!this.container.contains(e.target)) {
-        this.closeDropdown();
-      }
-    });
+		// Click outside to close
+		document.addEventListener("click", (e) => {
+			if (!this.container.contains(e.target)) {
+				this.closeDropdown();
+			}
+		});
 
-    // Escape key to close
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        this.closeDropdown();
-      }
-    });
-  }
+		// Escape key to close
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") {
+				this.closeDropdown();
+			}
+		});
+	}
 
-  handleSearch() {
-    const query = this.searchInput.value.trim();
-    if (!query) return;
+	handleSearch() {
+		const query = this.searchInput.value.trim();
+		if (!query) return;
 
-    this.searchInput.value = "";
-    this.showDropdown();
+		this.searchInput.value = "";
+		this.showDropdown();
 
-    if (!this.chatInterface.currentConversationId) {
-      this.chatInterface.createNewChat(null, this.config.site);
-    }
+		if (!this.chatInterface.currentConversationId) {
+			this.chatInterface.createNewChat(null, this.config.site);
+		}
 
-    this.chatInterface.sendMessage(query);
-  }
+		this.chatInterface.sendMessage(query);
+	}
 
-  toggleConversationsPanel() {
-    if (!this.dropdownResults.classList.contains("show")) {
-      this.showDropdown();
-    }
+	toggleConversationsPanel() {
+		if (!this.dropdownResults.classList.contains("show")) {
+			this.showDropdown();
+		}
 
-    this.dropdownConversationsPanel.classList.toggle("show");
+		this.dropdownConversationsPanel.classList.toggle("show");
 
-    if (this.dropdownConversationsPanel.classList.contains("show")) {
-      this.updateConversationsList();
-      this.updateRememberedItems();
-    }
-  }
+		if (this.dropdownConversationsPanel.classList.contains("show")) {
+			this.updateConversationsList();
+			this.updateRememberedItems();
+		}
+	}
 
-  updateConversationsList() {
-    this.dropdownConversationsList.innerHTML = "";
+	updateConversationsList() {
+		this.dropdownConversationsList.innerHTML = "";
 
-    const allConversations =
-      this.chatInterface.conversationManager.getConversations();
-    const siteConversations = allConversations.filter(
-      (conv) =>
-        conv.site === this.config.site &&
-        conv.messages &&
-        conv.messages.length > 0,
-    );
+		const allConversations =
+			this.chatInterface.conversationManager.getConversations();
+		const siteConversations = allConversations.filter(
+			(conv) =>
+				conv.site === this.config.site &&
+				conv.messages &&
+				conv.messages.length > 0,
+		);
 
-    siteConversations.sort((a, b) => {
-      const timeA = a.timestamp || 0;
-      const timeB = b.timestamp || 0;
-      return timeB - timeA;
-    });
+		siteConversations.sort((a, b) => {
+			const timeA = a.timestamp || 0;
+			const timeB = b.timestamp || 0;
+			return timeB - timeA;
+		});
 
-    siteConversations.forEach((conv) => {
-      const item = document.createElement("div");
-      item.className = `${this.config.cssPrefix}-conversation-item`;
-      if (conv.id === this.chatInterface.currentConversationId) {
-        item.classList.add("active");
-      }
+		siteConversations.forEach((conv) => {
+			const item = document.createElement("div");
+			item.className = `${this.config.cssPrefix}-conversation-item`;
+			if (conv.id === this.chatInterface.currentConversationId) {
+				item.classList.add("active");
+			}
 
-      const title = document.createElement("div");
-      title.className = `${this.config.cssPrefix}-conversation-title`;
-      title.textContent = conv.title;
-      item.appendChild(title);
+			const title = document.createElement("div");
+			title.className = `${this.config.cssPrefix}-conversation-title`;
+			title.textContent = conv.title;
+			item.appendChild(title);
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.className = `${this.config.cssPrefix}-conversation-delete`;
-      deleteBtn.innerHTML = "×";
-      deleteBtn.title = "Delete conversation";
-      deleteBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        this.deleteConversation(conv.id);
-      });
-      item.appendChild(deleteBtn);
+			const deleteBtn = document.createElement("button");
+			deleteBtn.className = `${this.config.cssPrefix}-conversation-delete`;
+			deleteBtn.innerHTML = "×";
+			deleteBtn.title = "Delete conversation";
+			deleteBtn.addEventListener("click", (e) => {
+				e.stopPropagation();
+				this.deleteConversation(conv.id);
+			});
+			item.appendChild(deleteBtn);
 
-      item.addEventListener("click", (e) => {
-        e.stopPropagation();
-        this.chatInterface.conversationManager.loadConversation(
-          conv.id,
-          this.chatInterface,
-        );
+			item.addEventListener("click", (e) => {
+				e.stopPropagation();
+				this.chatInterface.conversationManager.loadConversation(
+					conv.id,
+					this.chatInterface,
+				);
 
-        const firstUserMessage = conv.messages.find((m) => m.type === "user");
-        if (firstUserMessage) {
-          this.searchInput.value = firstUserMessage.content;
-        }
+				const firstUserMessage = conv.messages.find((m) => m.type === "user");
+				if (firstUserMessage) {
+					this.searchInput.value = firstUserMessage.content;
+				}
 
-        this.dropdownConversationsList
-          .querySelectorAll(`.${this.config.cssPrefix}-conversation-item`)
-          .forEach((i) => {
-            i.classList.remove("active");
-          });
-        item.classList.add("active");
-      });
+				this.dropdownConversationsList
+					.querySelectorAll(`.${this.config.cssPrefix}-conversation-item`)
+					.forEach((i) => {
+						i.classList.remove("active");
+					});
+				item.classList.add("active");
+			});
 
-      this.dropdownConversationsList.appendChild(item);
-    });
+			this.dropdownConversationsList.appendChild(item);
+		});
 
-    if (siteConversations.length === 0) {
-      const emptyMessage = document.createElement("div");
-      emptyMessage.className = `${this.config.cssPrefix}-empty-conversations`;
-      emptyMessage.textContent = "No past conversations";
-      this.dropdownConversationsList.appendChild(emptyMessage);
-    }
-  }
+		if (siteConversations.length === 0) {
+			const emptyMessage = document.createElement("div");
+			emptyMessage.className = `${this.config.cssPrefix}-empty-conversations`;
+			emptyMessage.textContent = "No past conversations";
+			this.dropdownConversationsList.appendChild(emptyMessage);
+		}
+	}
 
-  deleteConversation(conversationId) {
-    // Use conversationManager's deleteConversation method
-    this.chatInterface.conversationManager.deleteConversation(
-      conversationId,
-      this.chatInterface,
-    );
+	deleteConversation(conversationId) {
+		// Use conversationManager's deleteConversation method
+		this.chatInterface.conversationManager.deleteConversation(
+			conversationId,
+			this.chatInterface,
+		);
 
-    if (this.chatInterface.currentConversationId === conversationId) {
-      this.chatInterface.createNewChat(null, this.config.site);
-    }
+		if (this.chatInterface.currentConversationId === conversationId) {
+			this.chatInterface.createNewChat(null, this.config.site);
+		}
 
-    this.updateConversationsList();
-  }
+		this.updateConversationsList();
+	}
 
-  showDropdown() {
-    this.dropdownResults.classList.add("show");
-    this.dropdownResults.classList.remove("loaded");
+	showDropdown() {
+		this.dropdownResults.classList.add("show");
+		this.dropdownResults.classList.remove("loaded");
 
-    // Update messages container reference
-    this.chatInterface.elements.messagesContainer = this.messagesContainer;
-  }
+		// Update messages container reference
+		this.chatInterface.elements.messagesContainer = this.messagesContainer;
+	}
 
-  closeDropdown() {
-    this.dropdownResults.classList.remove("show");
-    this.dropdownConversationsPanel.classList.remove("show");
+	closeDropdown() {
+		this.dropdownResults.classList.remove("show");
+		this.dropdownConversationsPanel.classList.remove("show");
 
-    const chatInputContainer = this.container.querySelector(
-      `.${this.config.cssPrefix}-chat-input-container`,
-    );
-    if (chatInputContainer) {
-      chatInputContainer.style.display = "none";
-    }
+		const chatInputContainer = this.container.querySelector(
+			`.${this.config.cssPrefix}-chat-input-container`,
+		);
+		if (chatInputContainer) {
+			chatInputContainer.style.display = "none";
+		}
 
-    if (this.messagesContainer) {
-      const closeButton = this.messagesContainer.querySelector(
-        `.${this.config.cssPrefix}-close`,
-      );
-      this.messagesContainer.innerHTML = "";
-      if (closeButton) {
-        this.messagesContainer.appendChild(closeButton);
-      }
-    }
+		if (this.messagesContainer) {
+			const closeButton = this.messagesContainer.querySelector(
+				`.${this.config.cssPrefix}-close`,
+			);
+			this.messagesContainer.innerHTML = "";
+			if (closeButton) {
+				this.messagesContainer.appendChild(closeButton);
+			}
+		}
 
-    if (this.chatInterface) {
-      this.chatInterface.createNewChat(null, this.config.site);
-    }
-  }
+		if (this.chatInterface) {
+			this.chatInterface.createNewChat(null, this.config.site);
+		}
+	}
 
-  // Public API methods
-  search(query) {
-    this.searchInput.value = query;
-    this.handleSearch();
-  }
+	// Public API methods
+	search(query) {
+		this.searchInput.value = query;
+		this.handleSearch();
+	}
 
-  setQuery(query) {
-    this.searchInput.value = query;
-  }
+	setQuery(query) {
+		this.searchInput.value = query;
+	}
 
-  setSite(site) {
-    this.config.site = site;
-    if (this.chatInterface) {
-      this.chatInterface.selectedSite = site;
-    }
-  }
+	setSite(site) {
+		this.config.site = site;
+		if (this.chatInterface) {
+			this.chatInterface.selectedSite = site;
+		}
+	}
 
-  updateRememberedItems() {
-    if (!this.rememberedList || !this.chatInterface) return;
+	updateRememberedItems() {
+		if (!this.rememberedList || !this.chatInterface) return;
 
-    this.rememberedList.innerHTML = "";
+		this.rememberedList.innerHTML = "";
 
-    // Get remembered items from chat interface
-    const rememberedItems = this.chatInterface.rememberedItems || [];
+		// Get remembered items from chat interface
+		const rememberedItems = this.chatInterface.rememberedItems || [];
 
-    if (rememberedItems.length === 0) {
-      const emptyMessage = document.createElement("div");
-      emptyMessage.className = `${this.config.cssPrefix}-empty-remembered`;
-      emptyMessage.textContent = "No remembered items";
-      this.rememberedList.appendChild(emptyMessage);
-      return;
-    }
+		if (rememberedItems.length === 0) {
+			const emptyMessage = document.createElement("div");
+			emptyMessage.className = `${this.config.cssPrefix}-empty-remembered`;
+			emptyMessage.textContent = "No remembered items";
+			this.rememberedList.appendChild(emptyMessage);
+			return;
+		}
 
-    // Display each remembered item
-    rememberedItems.forEach((item, index) => {
-      const itemElement = document.createElement("div");
-      itemElement.className = `${this.config.cssPrefix}-remembered-item`;
+		// Display each remembered item
+		rememberedItems.forEach((item, index) => {
+			const itemElement = document.createElement("div");
+			itemElement.className = `${this.config.cssPrefix}-remembered-item`;
 
-      const itemContent = document.createElement("div");
-      itemContent.className = `${this.config.cssPrefix}-remembered-content`;
-      itemContent.textContent = item;
-      itemElement.appendChild(itemContent);
+			const itemContent = document.createElement("div");
+			itemContent.className = `${this.config.cssPrefix}-remembered-content`;
+			itemContent.textContent = item;
+			itemElement.appendChild(itemContent);
 
-      const removeBtn = document.createElement("button");
-      removeBtn.className = `${this.config.cssPrefix}-remembered-remove`;
-      removeBtn.innerHTML = "×";
-      removeBtn.title = "Remove from memory";
-      removeBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        this.removeRememberedItem(index);
-      });
-      itemElement.appendChild(removeBtn);
+			const removeBtn = document.createElement("button");
+			removeBtn.className = `${this.config.cssPrefix}-remembered-remove`;
+			removeBtn.innerHTML = "×";
+			removeBtn.title = "Remove from memory";
+			removeBtn.addEventListener("click", (e) => {
+				e.stopPropagation();
+				this.removeRememberedItem(index);
+			});
+			itemElement.appendChild(removeBtn);
 
-      this.rememberedList.appendChild(itemElement);
-    });
-  }
+			this.rememberedList.appendChild(itemElement);
+		});
+	}
 
-  removeRememberedItem(index) {
-    if (this.chatInterface && this.chatInterface.removeRememberedItem) {
-      this.chatInterface.removeRememberedItem(
-        this.chatInterface.rememberedItems[index],
-      );
-    }
-  }
+	removeRememberedItem(index) {
+		if (this.chatInterface && this.chatInterface.removeRememberedItem) {
+			this.chatInterface.removeRememberedItem(
+				this.chatInterface.rememberedItems[index],
+			);
+		}
+	}
 
-  destroy() {
-    // Clean up event listeners and DOM
-    if (this.container) {
-      this.container.innerHTML = "";
-    }
-  }
+	destroy() {
+		// Clean up event listeners and DOM
+		if (this.container) {
+			this.container.innerHTML = "";
+		}
+	}
 }

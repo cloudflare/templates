@@ -1,48 +1,48 @@
 {
-  "name": "react-router-hono-fullstack-template",
-  "description": "A modern full-stack template powered by Cloudflare Workers, using Hono for backend APIs, React Router for frontend routing, and shadcn/ui for beautiful, accessible components styled with Tailwind CSS",
-  "private": true,
-  "type": "module",
-  "cloudflare": {
-    "label": "React Router + Hono Fullstack App",
-    "products": [
-      "Workers"
-    ],
-    "categories": [
-      "starter"
-    ],
-    "docs_url": "https://developers.cloudflare.com/workers",
-    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/d3db20ee-c3bf-4b5c-f1ed-d86021359e00/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/56caa8a9-d3ab-4ac6-32a9-6a5fc686e000/preview",
-    "publish": true
-  },
-  "dependencies": {
-    "hono": "4.8.2",
-    "isbot": "5.1.26",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-router": "7.6.3"
-  },
-  "devDependencies": {
-    "@cloudflare/vite-plugin": "1.7.5",
-    "@cloudflare/workers-types": "^4.20250425.0",
-    "@react-router/dev": "7.6.3",
-    "@tailwindcss/vite": "4.1.4",
-    "@types/node": "24.0.4",
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
-    "tailwindcss": "4.1.1",
-    "typescript": "5.8.3",
-    "vite": "^6.0.0",
-    "vite-tsconfig-paths": "5.1.4",
-    "wrangler": "4.21.x"
-  },
-  "scripts": {
-    "build": "react-router build",
-    "cf-typegen": "wrangler types",
-    "deploy": "npm run build && wrangler deploy",
-    "dev": "react-router dev",
-    "preview": "npm run build && vite preview",
-    "typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
-  }
+	"name": "react-router-hono-fullstack-template",
+	"description": "A modern full-stack template powered by Cloudflare Workers, using Hono for backend APIs, React Router for frontend routing, and shadcn/ui for beautiful, accessible components styled with Tailwind CSS",
+	"private": true,
+	"type": "module",
+	"cloudflare": {
+		"label": "React Router + Hono Fullstack App",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"starter"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/d3db20ee-c3bf-4b5c-f1ed-d86021359e00/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/56caa8a9-d3ab-4ac6-32a9-6a5fc686e000/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"hono": "4.8.2",
+		"isbot": "5.1.26",
+		"react": "19.0.0",
+		"react-dom": "19.0.0",
+		"react-router": "7.6.3"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.7.5",
+		"@cloudflare/workers-types": "^4.20250425.0",
+		"@react-router/dev": "7.6.3",
+		"@tailwindcss/vite": "4.1.4",
+		"@types/node": "24.0.4",
+		"@types/react": "19.0.10",
+		"@types/react-dom": "19.0.4",
+		"tailwindcss": "4.1.1",
+		"typescript": "5.8.3",
+		"vite": "^6.0.0",
+		"vite-tsconfig-paths": "5.1.4",
+		"wrangler": "4.21.x"
+	},
+	"scripts": {
+		"build": "react-router build",
+		"cf-typegen": "wrangler types",
+		"deploy": "npm run build && wrangler deploy",
+		"dev": "react-router dev",
+		"preview": "npm run build && vite preview",
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+	}
 }

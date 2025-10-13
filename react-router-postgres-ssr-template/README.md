@@ -113,8 +113,8 @@ Hyperdrive is Cloudflare's database connector that provides optimized connection
    ```javascript
    // Example from this project
    if (c.env.HYPERDRIVE) {
-     const sql = postgres(c.env.HYPERDRIVE.connectionString);
-     // Use SQL client
+   	const sql = postgres(c.env.HYPERDRIVE.connectionString);
+   	// Use SQL client
    }
    ```
 
