@@ -2,7 +2,7 @@
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "worker-publisher-template",
 	"main": "./src/index.ts",
-	"compatibility_date": "2025-10-08",
+	"compatibility_date": "2025-04-01",
 	"upload_source_maps": true,
 	"dispatch_namespaces": [
 		{
