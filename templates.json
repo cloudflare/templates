@@ -55,28 +55,28 @@
       "package_json_hash": "4c0f37fb9c0a0ac9a81932c28c986ed6b522d5ac"
     },
     "containers-template": {
-      "package_json_hash": "535cadc832f5d2567899a3999a50b5c024859afb"
+      "package_json_hash": "daad08c20bce71750713bad2276aa33d9cdf829b"
     },
     "d1-starter-sessions-api-template": {
-      "package_json_hash": "788bca8e9c0fc50fbbcc784fa2f7cca624c6728d"
+      "package_json_hash": "245de6745f216fff9e9121b393ca9cc2a2fea2b9"
     },
     "hello-world-do-template": {
-      "package_json_hash": "bc815b5982dcf1925415ecc67ae5355fa9fcfd5a"
+      "package_json_hash": "993c9863a2fe638fb845f53eea37cd6c79f75c76"
     },
     "mysql-hyperdrive-template": {
-      "package_json_hash": "fc395739872c9dbba7eec0fa1feaefbb1ca5587b"
+      "package_json_hash": "daf1a7db77dbedd2a153eb9961a6db20b18e0dd7"
     },
     "nlweb-template": {
-      "package_json_hash": "35149b5e1edd920e67da6f6c9e2b64b38ae4c674"
+      "package_json_hash": "42e85ed25a632a9e4d035a250a356e35095b3ec0"
     },
     "nodejs-http-server-template": {
-      "package_json_hash": "f9f2bab3eccfb29fdedfa4c7aec4e87c5dde1c22"
+      "package_json_hash": "30b99c8fe25b6c7360d496b49e951df9813129ea"
     },
     "postgres-hyperdrive-template": {
-      "package_json_hash": "2e7533818cf4fc7083fe38dca55d4de3d81aab23"
+      "package_json_hash": "6ed6e9f11e0b008b9429082a724567b6dc78e94e"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "d2f48bc639efccc606908b8a718999c61f5d7b98"
+      "package_json_hash": "fa522a1710c99972d76a0f15ee82a7fd848b5551"
     }
   }
 }

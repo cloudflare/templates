@@ -1,5 +1,5 @@
 {
-	"compatibility_date": "2025-04-01",
+	"compatibility_date": "2025-10-08",
 	"main": "src/index.ts",
 	"name": "r2-explorer-template",
 	"assets": {
