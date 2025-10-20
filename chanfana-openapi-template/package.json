@@ -1,39 +1,39 @@
 {
-  "name": "chanfana-openapi-template",
-  "description": "Complete backend API template using Hono + Chanfana + D1 + Vitest.",
-  "private": true,
-  "cloudflare": {
-    "label": "Backend OpenAPI Template",
-    "products": [
-      "Workers",
-      "D1"
-    ],
-    "categories": [
-      "storage"
-    ],
-    "docs_url": "https://chanfana.com",
-    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1b2805d9-e7fb-4576-5176-6b409e251800/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cbde46cf-20fa-4548-7f70-1ae8c2f48900/preview",
-    "publish": true
-  },
-  "scripts": {
-    "cf-typegen": "wrangler types",
-    "deploy": "wrangler deploy",
-    "dev": "pnpm seedLocalDb && wrangler dev",
-    "predeploy": "wrangler d1 migrations apply DB --remote",
-    "seedLocalDb": "wrangler d1 migrations apply DB --local",
-    "schema": "npx chanfana",
-    "test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
-  },
-  "dependencies": {
-    "chanfana": "2.8.1",
-    "hono": "4.8.2",
-    "zod": "3.25.67"
-  },
-  "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.44",
-    "@types/node": "24.0.4",
-    "typescript": "5.8.3",
-    "wrangler": "4.21.x"
-  }
+	"name": "chanfana-openapi-template",
+	"description": "Complete backend API template using Hono + Chanfana + D1 + Vitest.",
+	"private": true,
+	"cloudflare": {
+		"label": "Backend OpenAPI Template",
+		"products": [
+			"Workers",
+			"D1"
+		],
+		"categories": [
+			"storage"
+		],
+		"docs_url": "https://chanfana.com",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1b2805d9-e7fb-4576-5176-6b409e251800/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cbde46cf-20fa-4548-7f70-1ae8c2f48900/preview",
+		"publish": true
+	},
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"deploy": "wrangler deploy",
+		"dev": "pnpm seedLocalDb && wrangler dev",
+		"predeploy": "wrangler d1 migrations apply DB --remote",
+		"seedLocalDb": "wrangler d1 migrations apply DB --local",
+		"schema": "npx chanfana",
+		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
+	},
+	"dependencies": {
+		"chanfana": "2.8.1",
+		"hono": "4.8.2",
+		"zod": "3.25.67"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.8.44",
+		"@types/node": "24.0.4",
+		"typescript": "5.8.3",
+		"wrangler": "4.21.x"
+	}
 }

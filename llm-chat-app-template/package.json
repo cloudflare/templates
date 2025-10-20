@@ -1,36 +1,36 @@
 {
-  "name": "llm-chat-app-template",
-  "description": "A simple chat application powered by Cloudflare Workers AI",
-  "private": true,
-  "cloudflare": {
-    "label": "LLM Chat App",
-    "products": [
-      "Workers",
-      "Workers AI",
-      "AI Gateway"
-    ],
-    "categories": [
-      "ai"
-    ],
-    "docs_url": "https://developers.cloudflare.com/workers-ai/",
-    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/a974bd55-20c6-4656-fa29-1551d43ddc00/public",
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/65dd8441-89d3-491d-c5a1-0a000d070700/preview",
-    "publish": true
-  },
-  "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "0.8.44",
-    "@cloudflare/workers-types": "^4.20250425.0",
-    "@types/node": "24.0.4",
-    "typescript": "5.8.3",
-    "vitest": "3.2.4",
-    "wrangler": "4.21.x"
-  },
-  "scripts": {
-    "cf-typegen": "wrangler types",
-    "check": "tsc --noEmit && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
-    "test": "vitest"
-  }
+	"name": "llm-chat-app-template",
+	"description": "A simple chat application powered by Cloudflare Workers AI",
+	"private": true,
+	"cloudflare": {
+		"label": "LLM Chat App",
+		"products": [
+			"Workers",
+			"Workers AI",
+			"AI Gateway"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers-ai/",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/a974bd55-20c6-4656-fa29-1551d43ddc00/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/65dd8441-89d3-491d-c5a1-0a000d070700/preview",
+		"publish": true
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.8.44",
+		"@cloudflare/workers-types": "^4.20250425.0",
+		"@types/node": "24.0.4",
+		"typescript": "5.8.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.21.x"
+	},
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest"
+	}
 }

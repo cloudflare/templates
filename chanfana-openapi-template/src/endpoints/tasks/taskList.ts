@@ -3,10 +3,10 @@ import { HandleArgs } from "../../types";
 import { TaskModel } from "./base";
 
 export class TaskList extends D1ListEndpoint<HandleArgs> {
-  _meta = {
-    model: TaskModel,
-  };
+	_meta = {
+		model: TaskModel,
+	};
 
-  searchFields = ["name", "slug", "description"];
-  defaultOrderBy = "id DESC";
+	searchFields = ["name", "slug", "description"];
+	defaultOrderBy = "id DESC";
 }

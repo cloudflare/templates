@@ -1,6 +1,6 @@
 # React Router 7 + PostgreSQL + Hyperdrive on Cloudflare Workers
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?https://github.com/cloudflare/templates/tree/staging/react-router-postgres-ssr-template)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-postgres-ssr-template)
 
 <!-- dash-content-start -->
 
@@ -113,8 +113,8 @@ Hyperdrive is Cloudflare's database connector that provides optimized connection
    ```javascript
    // Example from this project
    if (c.env.HYPERDRIVE) {
-     const sql = postgres(c.env.HYPERDRIVE.connectionString);
-     // Use SQL client
+   	const sql = postgres(c.env.HYPERDRIVE.connectionString);
+   	// Use SQL client
    }
    ```
 
