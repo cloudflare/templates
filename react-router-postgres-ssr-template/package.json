@@ -36,7 +36,7 @@
 		"@react-router/dev": "7.6.3",
 		"@types/node": "24.0.4",
 		"autoprefixer": "10.4.21",
-		"hono": "4.8.2",
+		"hono": "4.10.2",
 		"postgres": "3.4.5",
 		"vite": "^6.0.0",
 		"wrangler": "4.21.x"
