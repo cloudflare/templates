@@ -2,6 +2,9 @@ import { issuer } from "@openauthjs/openauth";
 import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
+import { CodeProvider } from "@openauthjs/openauth/provider/code";
+import { CodeUI } from "@openauthjs/openauth/ui/code";
+import { GoogleProvider } from "@openauthjs/openauth/provider/google";
 import { createSubjects } from "@openauthjs/openauth/subject";
 import { object, string } from "valibot";
 
@@ -43,6 +46,24 @@ export default {
 			}),
 			subjects,
 			providers: {
+				google: GoogleProvider({
+					clientID: env.GOOGLE_CLIENT_ID || "",
+					clientSecret: env.GOOGLE_CLIENT_SECRET || "",
+				}),
+				code: CodeProvider(
+					CodeUI({
+						// eslint-disable-next-line @typescript-eslint/require-await
+						sendCode: async (email, code) => {
+							// This is where you would email the verification code to the
+							// user, e.g. using Resend:
+							// https://resend.com/docs/send-with-cloudflare-workers
+							console.log(`Sending code ${code} to ${email}`);
+						},
+						copy: {
+							code_input_label: "Code (check Worker logs)",
+						},
+					}),
+				),
 				password: PasswordProvider(
 					PasswordUI({
 						// eslint-disable-next-line @typescript-eslint/require-await
@@ -69,8 +90,21 @@ export default {
 				},
 			},
 			success: async (ctx, value) => {
+				// Handle different provider response types
+				let email: string;
+
+				if ("email" in value && typeof value.email === "string") {
+					// Password and Code providers return email directly
+					email = value.email;
+				} else if ("claims" in value && value.claims && typeof value.claims === "object" && "email" in value.claims) {
+					// Google provider returns claims object with email
+					email = value.claims.email as string;
+				} else {
+					throw new Error("Unable to extract email from authentication response");
+				}
+
 				return ctx.subject("user", {
-					id: await getOrCreateUser(env, value.email),
+					id: await getOrCreateUser(env, email),
 				});
 			},
 		}).fetch(request, env, ctx);
