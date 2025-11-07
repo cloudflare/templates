@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { apiKey } from "better-auth/plugins";
 import { Kysely } from "kysely";
 import { D1Dialect } from "kysely-d1";
 
@@ -31,6 +32,17 @@ export function createAuth(db: D1Database, baseURL: string, secret: string) {
 				maxAge: 5 * 60, // 5 minutes
 			},
 		},
+		plugins: [
+			apiKey({
+				// Default rate limit: 1000 requests per day (can be overridden per key)
+				rateLimit: {
+					window: 60 * 60 * 24, // 24 hours in seconds
+					max: 1000, // 1000 requests per day
+				},
+				// Keys expire after 90 days by default (can be overridden per key)
+				expiresIn: 60 * 60 * 24 * 90, // 90 days in seconds
+			}),
+		],
 		advanced: {
 			generateId: false, // Use database auto-increment
 		},

@@ -1,5 +1,5 @@
 ---
-import { BadgeDollarSign, CalendarSync, User } from 'lucide-react';
+import { BadgeDollarSign, CalendarSync, User, Key } from 'lucide-react';
 import Layout from '@/layouts/Layout.astro';
 import { APIDocumentation } from '@/components/admin/api-documentation';
 import { Label } from '@/components/ui/label';
@@ -19,6 +19,10 @@ const customers = await customerService.getAll();
 const subscriptions = await subscriptionService.getAll();
 const customerSubscriptions = await customerSubscriptionService.getAll();
 
+// Get API keys count
+const apiKeysResult = await DB.prepare('SELECT COUNT(*) as count FROM apiKey').first();
+const apiKeysCount = apiKeysResult?.count || 0;
+
 const data = [
   {
     name: 'Customers',
@@ -36,6 +40,12 @@ const data = [
     name: 'Customer Subscriptions',
     value: customerSubscriptions.length,
     icon: CalendarSync
+  },
+  {
+    name: 'API Keys',
+    value: apiKeysCount,
+    icon: Key,
+    href: '/admin/api-keys'
   }
 ]
 ---

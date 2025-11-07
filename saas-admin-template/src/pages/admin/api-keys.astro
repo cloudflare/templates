@@ -1,0 +1,11 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { ApiKeysManager } from '@/components/admin/api-keys-manager';
+import '@/styles/globals.css';
+---
+
+<Layout title="API Keys - SaaS Admin">
+  <div class="container mx-auto py-8">
+    <ApiKeysManager client:load />
+  </div>
+</Layout>
