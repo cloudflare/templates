@@ -1,0 +1,30 @@
+---
+import AdminApp from '../components/editor/AdminApp';
+
+// TODO: Add authentication check here
+// For now, this is open - you should add BetterAuth or another auth solution
+
+const title = 'Blog Admin';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{title}</title>
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<AdminApp client:load />
+	</body>
+</html>

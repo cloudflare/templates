@@ -7,6 +7,20 @@
 		"directory": "./dist",
 		"binding": "ASSETS"
 	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "astro-blog-db",
+			"database_id": "preview",
+			"migrations_dir": "migrations"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "DRAFTS",
+			"id": "preview"
+		}
+	],
 	"observability": {
 		"enabled": true
 	},

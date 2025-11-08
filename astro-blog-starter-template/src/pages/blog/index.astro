@@ -3,12 +3,11 @@ import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
+import { getAllPublishedPosts } from '../../lib/posts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+// Get both static and dynamic posts
+const posts = await getAllPublishedPosts(Astro.locals.runtime);
 ---
 
 <!doctype html>
@@ -93,8 +92,8 @@ const posts = (await getCollection('blog')).sort(
 					{
 						posts.map((post) => (
 							<li>
-								<a href={`/blog/${post.id}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
+								<a href={`/blog/${post.slug}/`}>
+									{post.data.heroImage && <img width={720} height={360} src={post.data.heroImage} alt="" />}
 									<h4 class="title">{post.data.title}</h4>
 									<p class="date">
 										<FormattedDate date={post.data.pubDate} />

@@ -17,6 +17,9 @@ Features:
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
 - ✅ Built-in Observability logging
+- ✅ **NEW: Web-based blog post editor with BlockNote**
+- ✅ **NEW: D1 database for dynamic posts**
+- ✅ **NEW: KV-powered auto-save drafts**
 
 <!-- dash-content-end -->
 
@@ -29,6 +32,115 @@ npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-start
 ```
 
 A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+
+## ✍️ Blog Post Editor
+
+This template now includes a powerful web-based blog post editor powered by [BlockNote](https://www.blocknotejs.org/), the open-source Notion-style editor.
+
+### Features
+
+- **Notion-style editing**: Rich text editor with blocks, slash commands, and drag-and-drop
+- **Auto-save**: Drafts automatically saved to Cloudflare KV every 2 seconds
+- **D1 database storage**: Published posts stored in Cloudflare D1 for dynamic rendering
+- **Dual-mode blog**: Supports both static markdown posts and dynamic database posts
+- **Full CRUD**: Create, read, update, and delete posts through the web interface
+
+### Setup
+
+1. **Initialize the database**:
+   ```bash
+   npm run db:init
+   ```
+
+2. **Start development**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Access the admin panel**:
+   Navigate to `http://localhost:4321/admin` to create and manage posts.
+
+### Admin Interface
+
+The admin interface (`/admin`) provides:
+- Post list with status indicators (draft/published)
+- Create new posts with BlockNote editor
+- Edit existing posts
+- Delete posts with confirmation
+- Auto-save functionality (drafts saved to KV)
+- Publish/unpublish toggle
+
+### Database Schema
+
+The blog uses Cloudflare D1 with the following schema:
+
+```sql
+CREATE TABLE posts (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    content TEXT NOT NULL,        -- BlockNote JSON
+    slug TEXT UNIQUE NOT NULL,
+    hero_image TEXT,
+    pub_date TEXT NOT NULL,
+    updated_date TEXT,
+    status TEXT NOT NULL,          -- 'draft' or 'published'
+    author TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+```
+
+### API Endpoints
+
+- `GET /api/posts` - List all posts
+- `POST /api/posts` - Create a new post
+- `GET /api/posts/[id]` - Get a specific post
+- `PUT /api/posts/[id]` - Update a post
+- `DELETE /api/posts/[id]` - Delete a post
+- `POST /api/drafts/[postId]` - Save draft (auto-save)
+- `GET /api/drafts/[postId]` - Retrieve draft
+
+### Production Deployment
+
+When deploying to production, you'll need to create the D1 database:
+
+```bash
+# Create production database
+wrangler d1 create astro-blog-db
+
+# Update wrangler.json with the database_id from the output above
+
+# Apply migrations
+wrangler d1 migrations apply astro-blog-db --remote
+```
+
+### Security Note
+
+⚠️ **IMPORTANT**: The `/admin` route is currently **not protected** by authentication. Before deploying to production, you should:
+
+1. Add authentication using [BetterAuth](https://www.better-auth.com/) or another auth solution
+2. Protect the `/admin` route and API endpoints
+3. Add user roles and permissions as needed
+
+Example using middleware to protect routes:
+
+```typescript
+// src/middleware.ts
+export function onRequest({ request, locals }, next) {
+  const url = new URL(request.url);
+
+  // Protect admin routes
+  if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/api')) {
+    // TODO: Add authentication check here
+    // if (!isAuthenticated) {
+    //   return Response.redirect('/login');
+    // }
+  }
+
+  return next();
+}
+```
 
 ## 🚀 Project Structure
 

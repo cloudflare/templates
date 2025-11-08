@@ -1,21 +1,41 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+import { getPostBySlug as getDbPostBySlug, renderBlockNoteToHTML } from '../../lib/posts';
 
-export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+// This page now works in SSR mode to support both static and dynamic posts
+const { slug } = Astro.params;
+
+// Try to find a static post first
+const staticPosts = await getCollection('blog');
+const staticPost = staticPosts.find(p => p.id === slug);
+
+let Content: any;
+let postData: any;
+let htmlContent: string | null = null;
+
+if (staticPost) {
+	// Render static markdown post
+	const rendered = await render(staticPost);
+	Content = rendered.Content;
+	postData = staticPost.data;
+} else {
+	// Try to load from database
+	const dbPost = await getDbPostBySlug(slug!, Astro.locals.runtime);
+
+	if (!dbPost) {
+		return Astro.redirect('/404');
+	}
+
+	postData = dbPost.data;
+	htmlContent = renderBlockNoteToHTML(dbPost.content!);
 }
-type Props = CollectionEntry<'blog'>;
-
-const post = Astro.props;
-const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data}>
-	<Content />
+<BlogPost {...postData}>
+	{Content ? (
+		<Content />
+	) : (
+		<div set:html={htmlContent} />
+	)}
 </BlogPost>
