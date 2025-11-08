@@ -2,6 +2,7 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import SearchBox from '../../components/SearchBox';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import FormattedDate from '../../components/FormattedDate.astro';
 import { getAllPublishedPosts } from '../../lib/posts';
@@ -88,6 +89,7 @@ const posts = await getAllPublishedPosts(Astro.locals.runtime);
 		<Header />
 		<main>
 			<section>
+				<SearchBox client:load />
 				<ul>
 					{
 						posts.map((post) => (

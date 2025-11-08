@@ -20,6 +20,10 @@ Features:
 - ✅ **NEW: Web-based blog post editor with BlockNote**
 - ✅ **NEW: D1 database for dynamic posts**
 - ✅ **NEW: KV-powered auto-save drafts**
+- ✅ **NEW: One-time admin registration & authentication**
+- ✅ **NEW: Tags/categories system with autocomplete**
+- ✅ **NEW: Full-text search functionality**
+- ✅ **NEW: Live preview mode in editor**
 
 <!-- dash-content-end -->
 
@@ -100,6 +104,48 @@ CREATE TABLE posts (
 - `DELETE /api/posts/[id]` - Delete a post
 - `POST /api/drafts/[postId]` - Save draft (auto-save)
 - `GET /api/drafts/[postId]` - Retrieve draft
+- `GET /api/tags` - List all tags
+- `GET /api/posts/[id]/tags` - Get tags for a post
+- `PUT /api/posts/[id]/tags` - Set tags for a post
+- `GET /api/search?q=query` - Search posts by title, description, or content
+
+### Tags & Categories
+
+The blog includes a flexible tagging system:
+
+- **Add tags in the editor**: While creating/editing a post, use the tag input field
+- **Autocomplete**: As you type, existing tags will be suggested
+- **Tag management**: Tags are automatically saved when you save the post
+- **Multi-tag support**: Add as many tags as you want (comma or Enter to add)
+- **Tag filtering**: Tags are stored in a separate table for efficient querying
+
+Tags are displayed in the editor and can be used for:
+- Organizing posts by topic
+- Creating category pages
+- Filtering search results
+- Building tag clouds
+
+### Search Functionality
+
+A live search feature is included on the blog index page:
+
+- **Real-time search**: Search updates as you type (300ms debounce)
+- **Full-text search**: Searches across title, description, and content
+- **Results dropdown**: Click any result to navigate to that post
+- **Published posts only**: Only searches published posts (not drafts)
+
+The search box appears at the top of `/blog` and provides instant feedback with matching posts.
+
+### Preview Mode
+
+The editor includes a built-in preview mode:
+
+- **Toggle preview**: Click the "👁 Preview" button in the editor toolbar
+- **Live preview**: See how your post will look before publishing
+- **Switch back**: Click "✏️ Edit" to return to editing
+- **No save required**: Preview updates instantly from editor content
+
+The preview renders BlockNote content as HTML, showing headings, paragraphs, lists, and other formatted content.
 
 ### Production Deployment
 
@@ -115,32 +161,34 @@ wrangler d1 create astro-blog-db
 wrangler d1 migrations apply astro-blog-db --remote
 ```
 
-### Security Note
+### Authentication & Security
 
-⚠️ **IMPORTANT**: The `/admin` route is currently **not protected** by authentication. Before deploying to production, you should:
+✅ **One-Time Admin Registration** is now implemented!
 
-1. Add authentication using [BetterAuth](https://www.better-auth.com/) or another auth solution
-2. Protect the `/admin` route and API endpoints
-3. Add user roles and permissions as needed
+The blog includes a simple but secure authentication system:
 
-Example using middleware to protect routes:
+- **First-time setup**: The first user to register becomes the admin
+- **Registration closes** after the first account is created
+- **Session-based auth**: Secure cookie-based sessions (30-day expiry)
+- **Protected routes**: Middleware automatically protects `/admin` and `/api` endpoints
+- **Password hashing**: SHA-256 password hashing via Web Crypto API
 
-```typescript
-// src/middleware.ts
-export function onRequest({ request, locals }, next) {
-  const url = new URL(request.url);
+#### First Run
 
-  // Protect admin routes
-  if (url.pathname.startsWith('/admin') || url.pathname.startsWith('/api')) {
-    // TODO: Add authentication check here
-    // if (!isAuthenticated) {
-    //   return Response.redirect('/login');
-    // }
-  }
+1. Navigate to `/admin`
+2. You'll see a registration form (only shown if no users exist)
+3. Create your admin account with email and password (min 8 characters)
+4. After registration, you'll be prompted to log in
+5. Registration is now closed - only the admin can access the dashboard
 
-  return next();
-}
+#### Logging Out
+
+Currently, there's no logout button in the UI, but you can log out via:
+```bash
+curl -X POST http://localhost:4321/api/auth/logout
 ```
+
+Or clear your session cookie manually.
 
 ## 🚀 Project Structure
 

@@ -1,8 +1,5 @@
 ---
-import AdminApp from '../components/editor/AdminApp';
-
-// TODO: Add authentication check here
-// For now, this is open - you should add BetterAuth or another auth solution
+import ProtectedAdminApp from '../components/editor/ProtectedAdminApp';
 
 const title = 'Blog Admin';
 ---
@@ -25,6 +22,6 @@ const title = 'Blog Admin';
 		</style>
 	</head>
 	<body>
-		<AdminApp client:load />
+		<ProtectedAdminApp client:load />
 	</body>
 </html>

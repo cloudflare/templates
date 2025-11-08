@@ -252,3 +252,110 @@ export async function deleteDraft(
 ): Promise<void> {
 	await kv.delete(`draft:${postId}`);
 }
+
+// ============================================================================
+// Tag Management
+// ============================================================================
+
+/**
+ * Add a tag to a post
+ */
+export async function addTagToPost(
+	db: D1Database,
+	postId: string,
+	tag: string
+): Promise<void> {
+	await db
+		.prepare('INSERT INTO post_tags (post_id, tag) VALUES (?, ?)')
+		.bind(postId, tag.toLowerCase().trim())
+		.run();
+}
+
+/**
+ * Remove a tag from a post
+ */
+export async function removeTagFromPost(
+	db: D1Database,
+	postId: string,
+	tag: string
+): Promise<void> {
+	await db
+		.prepare('DELETE FROM post_tags WHERE post_id = ? AND tag = ?')
+		.bind(postId, tag.toLowerCase().trim())
+		.run();
+}
+
+/**
+ * Get all tags for a post
+ */
+export async function getPostTags(db: D1Database, postId: string): Promise<string[]> {
+	const result = await db
+		.prepare('SELECT tag FROM post_tags WHERE post_id = ? ORDER BY tag')
+		.bind(postId)
+		.all<{ tag: string }>();
+	return (result.results || []).map(r => r.tag);
+}
+
+/**
+ * Set tags for a post (replaces all existing tags)
+ */
+export async function setPostTags(
+	db: D1Database,
+	postId: string,
+	tags: string[]
+): Promise<void> {
+	// Remove all existing tags
+	await db
+		.prepare('DELETE FROM post_tags WHERE post_id = ?')
+		.bind(postId)
+		.run();
+
+	// Add new tags
+	for (const tag of tags) {
+		if (tag.trim()) {
+			await addTagToPost(db, postId, tag);
+		}
+	}
+}
+
+/**
+ * Get all unique tags across all posts
+ */
+export async function getAllTags(db: D1Database): Promise<string[]> {
+	const result = await db
+		.prepare('SELECT DISTINCT tag FROM post_tags ORDER BY tag')
+		.all<{ tag: string }>();
+	return (result.results || []).map(r => r.tag);
+}
+
+/**
+ * Get posts by tag
+ */
+export async function getPostsByTag(
+	db: D1Database,
+	tag: string,
+	options: { limit?: number; offset?: number } = {}
+): Promise<BlogPost[]> {
+	let query = `
+		SELECT p.* FROM posts p
+		INNER JOIN post_tags pt ON p.id = pt.post_id
+		WHERE pt.tag = ? AND p.status = 'published'
+		ORDER BY p.pub_date DESC
+	`;
+
+	const params: any[] = [tag.toLowerCase().trim()];
+
+	if (options.limit) {
+		query += ' LIMIT ?';
+		params.push(options.limit);
+	}
+
+	if (options.offset) {
+		query += ' OFFSET ?';
+		params.push(options.offset);
+	}
+
+	const stmt = db.prepare(query);
+	const result = await stmt.bind(...params).all<BlogPost>();
+	return result.results || [];
+}

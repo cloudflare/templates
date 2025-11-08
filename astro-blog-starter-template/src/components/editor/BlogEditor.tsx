@@ -16,6 +16,7 @@ export default function BlogEditor({ postId, initialContent, onSave, onChange }:
 	const [isSaving, setIsSaving] = useState(false);
 	const [lastSaved, setLastSaved] = useState<Date | null>(null);
 	const [saveError, setSaveError] = useState<string | null>(null);
+	const [previewMode, setPreviewMode] = useState(false);
 
 	// Parse initial content
 	const getInitialBlocks = (): PartialBlock[] | undefined => {
@@ -88,6 +89,32 @@ export default function BlogEditor({ postId, initialContent, onSave, onChange }:
 		}
 	}, [editor, onSave]);
 
+	// Render blocks as HTML for preview
+	const renderPreview = () => {
+		const blocks = editor.document;
+		return blocks.map((block: any, index: number) => {
+			if (block.type === 'paragraph') {
+				const text = block.content?.map((c: any) => c.text || '').join('') || '';
+				return <p key={index}>{text}</p>;
+			}
+			if (block.type === 'heading') {
+				const level = block.props?.level || 1;
+				const text = block.content?.map((c: any) => c.text || '').join('') || '';
+				const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+				return <HeadingTag key={index}>{text}</HeadingTag>;
+			}
+			if (block.type === 'bulletListItem') {
+				const text = block.content?.map((c: any) => c.text || '').join('') || '';
+				return <li key={index}>{text}</li>;
+			}
+			if (block.type === 'numberedListItem') {
+				const text = block.content?.map((c: any) => c.text || '').join('') || '';
+				return <li key={index}>{text}</li>;
+			}
+			return null;
+		});
+	};
+
 	return (
 		<div className="blog-editor">
 			<div className="editor-toolbar">
@@ -100,18 +127,32 @@ export default function BlogEditor({ postId, initialContent, onSave, onChange }:
 					)}
 					{saveError && <span className="error">{saveError}</span>}
 				</div>
-				<button
-					onClick={handleManualSave}
-					className="save-button"
-				>
-					Save Now
-				</button>
+				<div className="toolbar-actions">
+					<button
+						onClick={() => setPreviewMode(!previewMode)}
+						className="preview-button"
+					>
+						{previewMode ? '✏️ Edit' : '👁 Preview'}
+					</button>
+					<button
+						onClick={handleManualSave}
+						className="save-button"
+					>
+						Save Now
+					</button>
+				</div>
 			</div>
-			<BlockNoteView
-				editor={editor}
-				onChange={handleChange}
-				theme="light"
-			/>
+			{!previewMode ? (
+				<BlockNoteView
+					editor={editor}
+					onChange={handleChange}
+					theme="light"
+				/>
+			) : (
+				<div className="preview-content">
+					{renderPreview()}
+				</div>
+			)}
 			<style>{`
 				.blog-editor {
 					border: 1px solid #e0e0e0;
@@ -140,6 +181,23 @@ export default function BlogEditor({ postId, initialContent, onSave, onChange }:
 				.save-status .error {
 					color: #ef4444;
 				}
+				.toolbar-actions {
+					display: flex;
+					gap: 8px;
+				}
+				.preview-button {
+					padding: 6px 16px;
+					background: white;
+					color: #0066cc;
+					border: 1px solid #0066cc;
+					border-radius: 4px;
+					cursor: pointer;
+					font-size: 14px;
+					font-weight: 500;
+				}
+				.preview-button:hover {
+					background: #f0f9ff;
+				}
 				.save-button {
 					padding: 6px 16px;
 					background: #0066cc;
@@ -152,6 +210,35 @@ export default function BlogEditor({ postId, initialContent, onSave, onChange }:
 				}
 				.save-button:hover {
 					background: #0052a3;
+				}
+				.preview-content {
+					padding: 32px;
+					min-height: 400px;
+					background: white;
+					line-height: 1.8;
+				}
+				.preview-content h1 {
+					font-size: 32px;
+					font-weight: 700;
+					margin: 0 0 16px 0;
+				}
+				.preview-content h2 {
+					font-size: 28px;
+					font-weight: 600;
+					margin: 24px 0 12px 0;
+				}
+				.preview-content h3 {
+					font-size: 24px;
+					font-weight: 600;
+					margin: 20px 0 10px 0;
+				}
+				.preview-content p {
+					margin: 0 0 16px 0;
+					color: #333;
+				}
+				.preview-content li {
+					margin: 0 0 8px 0;
+					color: #333;
 				}
 			`}</style>
 		</div>

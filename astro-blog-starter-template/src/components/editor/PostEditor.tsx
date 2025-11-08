@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import BlogEditor from './BlogEditor';
+import TagInput from './TagInput';
 
 interface Post {
 	id: string;
@@ -25,6 +26,7 @@ export default function PostEditor({ postId, onCancel, onSaved }: PostEditorProp
 	const [heroImage, setHeroImage] = useState('');
 	const [status, setStatus] = useState<'draft' | 'published'>('draft');
 	const [content, setContent] = useState('');
+	const [tags, setTags] = useState<string[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -109,6 +111,25 @@ export default function PostEditor({ postId, onCancel, onSaved }: PostEditorProp
 
 			if (!response.ok) {
 				throw new Error('Failed to save post');
+			}
+
+			const data = await response.json();
+			const savedPostId = postId || data.post?.id;
+
+			// Save tags if post was created/updated
+			if (savedPostId && tags.length > 0) {
+				try {
+					await fetch(`/api/posts/${savedPostId}/tags`, {
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({ tags }),
+					});
+				} catch (tagError) {
+					console.error('Error saving tags:', tagError);
+					// Don't fail the whole save if tags fail
+				}
 			}
 
 			onSaved();
@@ -200,6 +221,8 @@ export default function PostEditor({ postId, onCancel, onSaved }: PostEditorProp
 						/>
 					</div>
 				</div>
+
+				<TagInput postId={postId} onChange={setTags} />
 			</div>
 
 			<div className="content-section">
