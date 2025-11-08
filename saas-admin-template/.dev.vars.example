@@ -1,1 +1,12 @@
+# Admin API Token (for internal admin operations)
 API_TOKEN=your_token_here
+
+# BetterAuth Configuration
+# Generate a secure random string for AUTH_SECRET (at least 32 characters)
+# You can use: openssl rand -base64 32
+AUTH_SECRET=your-secure-random-secret-at-least-32-characters-long
+
+# Google OAuth (optional - for social login)
+# Get these from: https://console.cloud.google.com/apis/credentials
+GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-google-client-secret
