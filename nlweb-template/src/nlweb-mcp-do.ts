@@ -4,13 +4,12 @@ import { z } from "zod";
 import { handleDefault } from "./ask";
 
 export class NLWebMcp extends McpAgent<Env> {
-	server = new McpServer({ name: "Demo", version: "1.0.0" });
+	server = new McpServer({ name: "Search Agent", version: "1.0.0" });
 
 	async init() {
-		console.log("props:", this.props);
-		console.log(JSON.stringify(this.props));
 		this.server.tool(
 			"ask",
+			"Search and retrieve information based on a query.",
 			{
 				query: z.string(),
 				// sites: z.array(z.string()).optional(),
