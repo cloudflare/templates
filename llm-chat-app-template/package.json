@@ -18,8 +18,8 @@
 		"publish": true
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.44",
-		"@cloudflare/workers-types": "^4.20250425.0",
+		"@cloudflare/vitest-pool-workers": "0.10.7",
+		"@cloudflare/workers-types": "^4.20251117.0",
 		"@types/node": "24.0.4",
 		"typescript": "5.8.3",
 		"vitest": "3.2.4",

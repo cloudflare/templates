@@ -26,8 +26,8 @@
 		"react-dom": "^18.0.0"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.44",
-		"@cloudflare/workers-types": "^4.20250425.0",
+		"@cloudflare/vitest-pool-workers": "0.10.7",
+		"@cloudflare/workers-types": "^4.20251117.0",
 		"@remix-run/dev": "2.16.5",
 		"@types/react": "^18.0.0",
 		"@types/react-dom": "^18.0.0",
