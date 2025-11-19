@@ -15,7 +15,7 @@
     "publish": true
   },
   "dependencies": {
-    "@astrojs/cloudflare": "12.6.0",
+    "@astrojs/cloudflare": "12.6.6",
     "@astrojs/react": "4.3.0",
     "@astrojs/tailwind": "6.0.2",
     "@hookform/resolvers": "5.1.1",
