@@ -4,7 +4,7 @@
       "package_json_hash": "d39170e854a03a9b30a7b59aa34e1d271fd28fe9"
     },
     "chanfana-openapi-template": {
-      "package_json_hash": "34d6597b49556f852f0a01fe5ee361e31317ae85"
+      "package_json_hash": "cd66a1b2a298d61f5f167bf6d500ad396d83c935"
     },
     "d1-template": {
       "package_json_hash": "dc7f59b46b6ab2281398b4bc567657c5a2eb4e2c"
@@ -40,7 +40,7 @@
       "package_json_hash": "e4d2fd44d87e7052c5954f653425f5359df8f6de"
     },
     "saas-admin-template": {
-      "package_json_hash": "8de954f5d7c10acf4f3f02e0e0ccc7ed774c72f7"
+      "package_json_hash": "4a0ca1c039fb8aa78f32c6edcdacab3c60e4a725"
     },
     "text-to-image-template": {
       "package_json_hash": "81dda6b0adabae0e28bf15687daad63e4cd4206b"

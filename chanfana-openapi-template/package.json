@@ -28,7 +28,7 @@
 	"dependencies": {
 		"chanfana": "2.8.1",
 		"hono": "4.8.2",
-		"zod": "3.25.67"
+		"zod": "4.1.12"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.8.44",
