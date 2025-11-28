@@ -1,6 +1,5 @@
 {
 	"name": "nodejs-http-server-template",
-	"private": true,
 	"cloudflare": {
 		"label": "Worker Node.js HTTP Server starter",
 		"products": [
@@ -18,18 +17,19 @@
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1b3f0946-a236-4a2c-18e8-c9a27adf2000/public"
 	},
 	"dependencies": {
-		"@types/node": "24.3.0"
+		"@types/node": "24.10.1"
 	},
 	"devDependencies": {
-		"typescript": "5.9.2",
-		"wrangler": "^4.34.0"
+		"typescript": "5.9.3",
+		"wrangler": "4.51.0"
 	},
+	"private": true,
 	"scripts": {
+		"build": "wrangler build",
 		"cf-typegen": "wrangler types",
 		"check": "tsc && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"start": "wrangler dev",
-		"build": "wrangler build"
+		"start": "wrangler dev"
 	}
 }
