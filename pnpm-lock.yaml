@@ -952,8 +952,8 @@ importers:
   worker-publisher-template:
     dependencies:
       cloudflare:
-        specifier: ^4.5.0
-        version: 4.5.0
+        specifier: 5.2.0
+        version: 5.2.0
     devDependencies:
       tsx:
         specifier: ^4.20.4
@@ -5037,8 +5037,8 @@ packages:
     resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
 
-  cloudflare@4.5.0:
-    resolution: {integrity: sha512-fPcbPKx4zF45jBvQ0z7PCdgejVAPBBCZxwqk1k7krQNfpM07Cfj97/Q6wBzvYqlWXx/zt1S9+m8vnfCe06umbQ==}
+  cloudflare@5.2.0:
+    resolution: {integrity: sha512-dVzqDpPFYR9ApEC9e+JJshFJZXcw4HzM8W+3DHzO5oy9+8rLC53G7x6fEf9A7/gSuSCxuvndzui5qJKftfIM9A==}
 
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
@@ -14780,7 +14780,7 @@ snapshots:
 
   clone@2.1.2: {}
 
-  cloudflare@4.5.0:
+  cloudflare@5.2.0:
     dependencies:
       '@types/node': 18.19.122
       '@types/node-fetch': 2.6.13
