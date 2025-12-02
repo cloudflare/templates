@@ -1,7 +1,6 @@
 {
 	"name": "to-do-list-kv-template",
 	"description": "A simple to-do list app built with Cloudflare Workers Assets and Remix.",
-	"private": true,
 	"cloudflare": {
 		"label": "To-Do List App",
 		"products": [
@@ -17,25 +16,25 @@
 		"publish": true
 	},
 	"dependencies": {
-		"@remix-run/cloudflare": "2.16.5",
-		"@remix-run/react": "2.16.5",
-		"@remix-run/server-runtime": "2.16.5",
-		"isbot": "5.1.26",
-		"nanoid": "5.1.5",
+		"@remix-run/cloudflare": "2.17.2",
+		"@remix-run/react": "2.17.2",
+		"@remix-run/server-runtime": "2.17.2",
+		"isbot": "5.1.32",
+		"nanoid": "5.1.6",
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.44",
+		"@cloudflare/vitest-pool-workers": "0.10.11",
 		"@cloudflare/workers-types": "^4.20250425.0",
-		"@remix-run/dev": "2.16.5",
+		"@remix-run/dev": "2.17.2",
 		"@types/react": "^18.0.0",
 		"@types/react-dom": "^18.0.0",
-		"@typescript-eslint/eslint-plugin": "8.35.0",
-		"@typescript-eslint/parser": "8.35.0",
-		"autoprefixer": "10.4.21",
-		"eslint": "9.27.0",
-		"postcss": "8.5.3",
+		"@typescript-eslint/eslint-plugin": "8.48.0",
+		"@typescript-eslint/parser": "8.48.0",
+		"autoprefixer": "10.4.22",
+		"eslint": "9.39.1",
+		"postcss": "8.5.6",
 		"tailwindcss": "^3.4.0",
 		"typescript": "5.8.3",
 		"vite": "5.4.14",
@@ -46,6 +45,7 @@
 	"engines": {
 		"node": ">=20.0.0"
 	},
+	"private": true,
 	"scripts": {
 		"build": "remix vite:build",
 		"cf-typegen": "wrangler types",

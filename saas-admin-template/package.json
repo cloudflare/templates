@@ -1,7 +1,6 @@
 {
   "name": "saas-admin-template",
   "description": "Admin dashboard template built with Astro, shadcn/ui, and Cloudflare's developer stack",
-  "private": true,
   "cloudflare": {
     "label": "SaaS Admin Template",
     "products": [
@@ -15,33 +14,34 @@
     "publish": true
   },
   "dependencies": {
-    "@astrojs/cloudflare": "12.6.0",
-    "@astrojs/react": "4.3.0",
+    "@astrojs/cloudflare": "12.6.12",
+    "@astrojs/react": "4.4.2",
     "@astrojs/tailwind": "6.0.2",
-    "@hookform/resolvers": "5.1.1",
-    "@radix-ui/react-accordion": "1.2.7",
-    "@radix-ui/react-dialog": "1.1.10",
-    "@radix-ui/react-label": "2.1.4",
-    "@radix-ui/react-navigation-menu": "1.2.9",
-    "@radix-ui/react-slot": "1.2.0",
+    "@hookform/resolvers": "5.2.2",
+    "@radix-ui/react-accordion": "1.2.12",
+    "@radix-ui/react-dialog": "1.1.15",
+    "@radix-ui/react-label": "2.1.8",
+    "@radix-ui/react-navigation-menu": "1.2.14",
+    "@radix-ui/react-slot": "1.2.4",
     "@tanstack/react-table": "8.21.3",
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
-    "astro": "5.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "astro": "5.16.2",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
-    "lucide-react": "0.525.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-hook-form": "7.58.1",
-    "tailwind-merge": "3.3.1",
+    "lucide-react": "0.555.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-hook-form": "7.66.1",
+    "tailwind-merge": "3.4.0",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "1.0.7",
-    "zod": "3.25.67"
+    "zod": "4.1.13"
   },
   "devDependencies": {
-    "wrangler": "4.21.x"
+    "wrangler": "4.51.0"
   },
+  "private": true,
   "scripts": {
     "astro": "astro",
     "build": "astro build",

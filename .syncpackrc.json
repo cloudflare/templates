@@ -16,6 +16,22 @@
 	],
 	"versionGroups": [
 		{
+			"label": "Pin Zod 3.x for chanfana template due to chanfana peer dep",
+			"packages": ["chanfana-openapi-template"],
+			"dependencies": ["zod"],
+			"pinVersion": "3.25.67"
+		},
+		{
+			"label": "Pin TypeScript 5.8.3 for templates using typescript-eslint due to peer dep",
+			"packages": [
+				"remix-starter-template",
+				"to-do-list-kv-template",
+				"vite-react-template"
+			],
+			"dependencies": ["typescript"],
+			"pinVersion": "5.8.3"
+		},
+		{
 			"label": "Allow vite 5 for Remix templates",
 			"packages": ["remix-starter-template", "to-do-list-kv-template"],
 			"dependencies": ["vite"],
@@ -62,16 +78,23 @@
 			"pinVersion": "^3.4.0"
 		},
 		{
-			"label": "Allow Wrangler 3.x for react router/remix templates",
+			"label": "Allow Wrangler 3.x for Remix templates due to @remix-run/dev peer dep",
 			"packages": ["remix-starter-template", "to-do-list-kv-template"],
 			"dependencies": ["wrangler"],
 			"pinVersion": "^3.114.4"
 		},
 		{
-			"label": "Set wrangler 4.21.x for everywhere",
-			"packages": ["*"],
-			"dependencies": ["wrangler"],
-			"pinVersion": "4.21.x"
+			"label": "Pin vitest 3.x for templates using @cloudflare/vitest-pool-workers",
+			"packages": [
+				"chanfana-openapi-template",
+				"d1-starter-sessions-api-template",
+				"llm-chat-app-template",
+				"mysql-hyperdrive-template",
+				"postgres-hyperdrive-template",
+				"to-do-list-kv-template"
+			],
+			"dependencies": ["vitest"],
+			"pinVersion": "3.2.4"
 		},
 		{
 			"label": "Set vite to v6",

@@ -1,8 +1,6 @@
 {
 	"name": "react-router-hono-fullstack-template",
 	"description": "A modern full-stack template powered by Cloudflare Workers, using Hono for backend APIs, React Router for frontend routing, and shadcn/ui for beautiful, accessible components styled with Tailwind CSS",
-	"private": true,
-	"type": "module",
 	"cloudflare": {
 		"label": "React Router + Hono Fullstack App",
 		"products": [
@@ -17,26 +15,27 @@
 		"publish": true
 	},
 	"dependencies": {
-		"hono": "4.8.2",
-		"isbot": "5.1.26",
-		"react": "19.0.0",
-		"react-dom": "19.0.0",
-		"react-router": "7.6.3"
+		"hono": "4.10.7",
+		"isbot": "5.1.32",
+		"react": "19.2.0",
+		"react-dom": "19.2.0",
+		"react-router": "7.9.6"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "1.7.5",
+		"@cloudflare/vite-plugin": "1.15.3",
 		"@cloudflare/workers-types": "^4.20250425.0",
-		"@react-router/dev": "7.6.3",
-		"@tailwindcss/vite": "4.1.4",
-		"@types/node": "24.0.4",
-		"@types/react": "19.0.10",
-		"@types/react-dom": "19.0.4",
-		"tailwindcss": "4.1.1",
-		"typescript": "5.8.3",
+		"@react-router/dev": "7.9.6",
+		"@tailwindcss/vite": "4.1.17",
+		"@types/node": "24.10.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"tailwindcss": "4.1.17",
+		"typescript": "5.9.3",
 		"vite": "^6.0.0",
 		"vite-tsconfig-paths": "5.1.4",
-		"wrangler": "4.21.x"
+		"wrangler": "4.51.0"
 	},
+	"private": true,
 	"scripts": {
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
@@ -44,5 +43,6 @@
 		"dev": "react-router dev",
 		"preview": "npm run build && vite preview",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
-	}
+	},
+	"type": "module"
 }

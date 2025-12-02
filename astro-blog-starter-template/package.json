@@ -1,7 +1,6 @@
 {
 	"name": "astro-blog-starter-template",
 	"description": "Build a personal website, blog, or portfolio with Astro.",
-	"private": true,
 	"cloudflare": {
 		"label": "Astro Framework Starter",
 		"products": [
@@ -13,16 +12,17 @@
 		"publish": true
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "12.6.0",
-		"@astrojs/mdx": "4.3.0",
-		"@astrojs/rss": "4.0.11",
-		"@astrojs/sitemap": "3.4.1",
-		"astro": "5.10.1",
-		"typescript": "5.8.3"
+		"@astrojs/cloudflare": "12.6.12",
+		"@astrojs/mdx": "4.3.12",
+		"@astrojs/rss": "4.0.14",
+		"@astrojs/sitemap": "3.6.0",
+		"astro": "5.16.2",
+		"typescript": "5.9.3"
 	},
 	"devDependencies": {
-		"wrangler": "4.21.x"
+		"wrangler": "4.51.0"
 	},
+	"private": true,
 	"scripts": {
 		"astro": "astro",
 		"build": "astro build",

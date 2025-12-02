@@ -1,7 +1,6 @@
 {
 	"name": "chanfana-openapi-template",
 	"description": "Complete backend API template using Hono + Chanfana + D1 + Vitest.",
-	"private": true,
 	"cloudflare": {
 		"label": "Backend OpenAPI Template",
 		"products": [
@@ -16,24 +15,26 @@
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cbde46cf-20fa-4548-7f70-1ae8c2f48900/preview",
 		"publish": true
 	},
+	"dependencies": {
+		"chanfana": "2.8.3",
+		"hono": "4.10.7",
+		"zod": "3.25.67"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.10.11",
+		"@types/node": "24.10.1",
+		"typescript": "5.9.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.51.0"
+	},
+	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
 		"dev": "pnpm seedLocalDb && wrangler dev",
 		"predeploy": "wrangler d1 migrations apply DB --remote",
-		"seedLocalDb": "wrangler d1 migrations apply DB --local",
 		"schema": "npx chanfana",
+		"seedLocalDb": "wrangler d1 migrations apply DB --local",
 		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
-	},
-	"dependencies": {
-		"chanfana": "2.8.1",
-		"hono": "4.8.2",
-		"zod": "3.25.67"
-	},
-	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.44",
-		"@types/node": "24.0.4",
-		"typescript": "5.8.3",
-		"wrangler": "4.21.x"
 	}
 }
