@@ -1,0 +1,32 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "x402-proxy-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true,
+	},
+	"routes": [
+		{
+			"pattern": "your-domain.example.com/*",
+			"zone_name": "example.com",
+		},
+	],
+	"vars": {
+		// Default test wallet address - replace with your own wallet address in production
+		// This is the "dead address" commonly used for testing purposes
+		"WALLET_ADDRESS": "0x000000000000000000000000000000000000dEaD",
+		"FACILITATOR_URL": "https://x402.org/facilitator",
+		"PROTECTED_PATTERNS": ["/premium"],
+		"PAYMENT_CONFIG": {
+			"price": "$0.01",
+			"network": "base-sepolia",
+			"description": "Access to premium content for 1 hour",
+		},
+	},
+	"upload_source_maps": true,
+}
