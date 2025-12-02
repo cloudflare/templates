@@ -48,11 +48,11 @@ export async function deploySnippetToNamespace(opts: {
 				main_module: moduleFileName,
 				bindings,
 			},
-			files: {
-				[moduleFileName]: await toFile(Buffer.from(code), moduleFileName, {
+			files: [
+				await toFile(Buffer.from(code), moduleFileName, {
 					type: "application/javascript+module",
 				}),
-			},
+			],
 		},
 	);
 
