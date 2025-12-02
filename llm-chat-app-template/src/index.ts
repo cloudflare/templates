@@ -67,7 +67,7 @@ async function handleChatRequest(
 			messages.unshift({ role: "system", content: SYSTEM_PROMPT });
 		}
 
-		const response = await env.AI.run(
+		const response = (await env.AI.run(
 			MODEL_ID,
 			{
 				messages,
@@ -75,6 +75,7 @@ async function handleChatRequest(
 			},
 			{
 				returnRawResponse: true,
+				tags: [],
 				// Uncomment to use AI Gateway
 				// gateway: {
 				//   id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID
@@ -82,7 +83,7 @@ async function handleChatRequest(
 				//   cacheTtl: 3600,        // Cache time-to-live in seconds
 				// },
 			},
-		);
+		)) as unknown as Response;
 
 		// Return streaming response
 		return response;

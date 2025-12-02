@@ -1,7 +1,6 @@
 {
 	"name": "vite-react-template",
 	"description": "A template for building a React application with Vite, Hono, and Cloudflare Workers",
-	"private": true,
 	"cloudflare": {
 		"label": "Vite React Template",
 		"products": [
@@ -13,26 +12,27 @@
 		"publish": true
 	},
 	"dependencies": {
-		"hono": "4.8.2",
-		"react": "19.0.0",
-		"react-dom": "19.0.0"
+		"hono": "4.10.7",
+		"react": "19.2.0",
+		"react-dom": "19.2.0"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "1.7.5",
-		"@eslint/js": "9.29.0",
-		"@types/node": "24.0.4",
-		"@types/react": "19.0.10",
-		"@types/react-dom": "19.0.4",
-		"@vitejs/plugin-react": "5.0.0",
-		"eslint": "9.27.0",
-		"eslint-plugin-react-hooks": "5.2.0",
-		"eslint-plugin-react-refresh": "0.4.20",
-		"globals": "16.2.0",
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@eslint/js": "9.39.1",
+		"@types/node": "24.10.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"eslint": "9.39.1",
+		"eslint-plugin-react-hooks": "7.0.1",
+		"eslint-plugin-react-refresh": "0.4.24",
+		"globals": "16.5.0",
 		"typescript": "5.8.3",
-		"typescript-eslint": "8.35.0",
+		"typescript-eslint": "8.48.0",
 		"vite": "^6.0.0",
-		"wrangler": "4.21.x"
+		"wrangler": "4.51.0"
 	},
+	"private": true,
 	"scripts": {
 		"build": "tsc -b && vite build",
 		"cf-typegen": "wrangler types",

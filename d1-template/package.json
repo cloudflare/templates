@@ -1,7 +1,6 @@
 {
 	"name": "d1-template",
 	"description": "Cloudflare's native serverless SQL database.",
-	"private": true,
 	"cloudflare": {
 		"label": "Worker + D1 Database",
 		"products": [
@@ -17,9 +16,10 @@
 		"publish": true
 	},
 	"devDependencies": {
-		"typescript": "5.8.3",
-		"wrangler": "4.21.x"
+		"typescript": "5.9.3",
+		"wrangler": "4.51.0"
 	},
+	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"check": "tsc && wrangler deploy --dry-run",
