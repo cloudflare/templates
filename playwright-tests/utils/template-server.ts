@@ -27,6 +27,7 @@ export interface Template {
 	port: number;
 	devCommand: string;
 	framework: "vite" | "next" | "astro" | "remix" | "wrangler" | "react-router";
+	healthCheckPath?: string; // Optional custom path for server readiness check
 }
 
 export class TemplateServerManager {
@@ -131,12 +132,16 @@ export class TemplateServerManager {
 			port = 5173;
 		}
 
+		// Check for custom health check path in cloudflare config
+		const healthCheckPath = packageJson.cloudflare?.healthCheckPath;
+
 		return {
 			name,
 			path,
 			port,
 			devCommand: scripts.dev,
 			framework,
+			healthCheckPath,
 		};
 	}
 
@@ -173,7 +178,10 @@ export class TemplateServerManager {
 
 		// Wait for server to be ready
 		const baseUrl = `http://localhost:${template.port}`;
-		await this.waitForServer(baseUrl, 30000); // 30 second timeout
+		const healthCheckUrl = template.healthCheckPath
+			? `${baseUrl}${template.healthCheckPath}`
+			: baseUrl;
+		await this.waitForServer(healthCheckUrl, 30000); // 30 second timeout
 
 		console.log(`Server for ${template.name} ready at ${baseUrl}`);
 		return baseUrl;
