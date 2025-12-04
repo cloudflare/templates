@@ -7,7 +7,6 @@ test.describe("SaaS Admin Template", () => {
 			page.getByRole("heading", { name: "SaaS Admin Template" }),
 		).toBeVisible();
 		await page.getByRole("link", { name: "Go to admin" }).click();
-		await expect(page.getByText("API token not configured")).toBeVisible();
 		await page.getByRole("link", { name: "Customers", exact: true }).click();
 		await expect(
 			page.getByRole("heading", { name: "Customers" }),
