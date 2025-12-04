@@ -1,5 +1,6 @@
 import { spawn, ChildProcess } from "child_process";
 import { join } from "path";
+import { existsSync, copyFileSync } from "fs";
 import fetch from "node-fetch";
 
 // Helper function to kill process tree
@@ -167,6 +168,9 @@ export class TemplateServerManager {
 			`Starting server for ${template.name} on port ${template.port}...`,
 		);
 
+		// Copy example env files if they exist
+		this.copyEnvFiles(template.path);
+
 		const server = spawn("npm", ["run", "dev"], {
 			cwd: template.path,
 			stdio: "pipe",
@@ -252,6 +256,23 @@ export class TemplateServerManager {
 			this.stopServer(name),
 		);
 		await Promise.all(promises);
+	}
+
+	private copyEnvFiles(templatePath: string): void {
+		const envFileMappings = [
+			{ example: ".dev.vars.example", target: ".dev.vars" },
+			{ example: ".env.local.example", target: ".env.local" },
+		];
+
+		for (const { example, target } of envFileMappings) {
+			const examplePath = join(templatePath, example);
+			const targetPath = join(templatePath, target);
+
+			if (existsSync(examplePath) && !existsSync(targetPath)) {
+				copyFileSync(examplePath, targetPath);
+				console.log(`Copied ${example} to ${target}`);
+			}
+		}
 	}
 
 	private async waitForServer(url: string, timeout: number): Promise<void> {
