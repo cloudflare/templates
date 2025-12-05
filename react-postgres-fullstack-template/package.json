@@ -50,7 +50,7 @@
 	"scripts": {
 		"build": "vite build",
 		"cf-typegen": "wrangler types",
-		"check": "vite build && wrangler deploy --dry-run",
+		"check": "wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "vite",
 		"lint": "eslint .",

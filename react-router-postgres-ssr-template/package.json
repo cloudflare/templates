@@ -52,7 +52,7 @@
 	"scripts": {
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
-		"check": "npm run build && wrangler deploy --dry-run",
+		"check": "wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "react-router dev",
 		"start": "wrangler dev"

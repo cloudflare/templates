@@ -46,7 +46,7 @@
     "astro": "astro",
     "build": "astro build",
     "cf-typegen": "wrangler types",
-    "check": "npm run build && npm run wrangler:wrapper && wrangler deploy --dry-run",
+    "check": "npm run wrangler:wrapper && wrangler deploy --dry-run",
     "db:migrate": "wrangler d1 migrations apply DB --local",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "deploy": "npm run wrangler:wrapper && wrangler deploy",

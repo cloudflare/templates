@@ -12,8 +12,12 @@
 				"dist/**"
 			]
 		},
-		"check": {},
-		"cf-typegen": {},
+		"check": {
+			"dependsOn": ["build"]
+		},
+		"cf-typegen": {
+			"dependsOn": ["build"]
+		},
 		"deploy": {
 			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"]
 		},
