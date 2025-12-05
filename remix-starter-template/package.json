@@ -47,7 +47,7 @@
 	"scripts": {
 		"build": "remix vite:build",
 		"cf-typegen": "wrangler types",
-		"check": "tsc && remix vite:build && wrangler deploy --dry-run",
+		"check": "tsc && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "remix vite:dev",
 		"lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
