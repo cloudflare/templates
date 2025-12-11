@@ -55,13 +55,12 @@ export class Chat extends Server<Env> {
 		}
 
 		this.ctx.storage.sql.exec(
-			`INSERT INTO messages (id, user, role, content) VALUES ('${
-				message.id
-			}', '${message.user}', '${message.role}', ${JSON.stringify(
-				message.content,
-			)}) ON CONFLICT (id) DO UPDATE SET content = ${JSON.stringify(
-				message.content,
-			)}`,
+			`INSERT INTO messages (id, user, role, content) VALUES (?, ?, ?, ?) ON CONFLICT (id) DO UPDATE SET content = ?`,
+			message.id,
+			message.user,
+			message.role,
+			message.content,
+			message.content,
 		);
 	}
 
