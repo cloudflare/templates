@@ -138,7 +138,9 @@ async function sendMessage() {
 		}
 
 		// Add completed response to chat history
-		chatHistory.push({ role: "assistant", content: responseText });
+		if (responseText.length > 0) {
+            chatHistory.push({ role: "assistant", content: responseText });
+        }
 	} catch (error) {
 		console.error("Error:", error);
 		addMessageToChat(
