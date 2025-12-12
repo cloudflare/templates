@@ -89,7 +89,7 @@ async function handleChatRequest(
 			headers: {
 				"content-type": "text/event-stream; charset=utf-8",
 				"cache-control": "no-cache",
-				"connection": "keep-alive",
+				connection: "keep-alive",
 			},
 		});
 	} catch (error) {
