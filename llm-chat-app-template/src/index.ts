@@ -67,15 +67,15 @@ async function handleChatRequest(
 			messages.unshift({ role: "system", content: SYSTEM_PROMPT });
 		}
 
-		const response = (await env.AI.run(
+		const stream = await env.AI.run(
 			MODEL_ID,
 			{
 				messages,
 				max_tokens: 1024,
+				stream: true,
 			},
 			// @ts-expect-error tags is no longer required
 			{
-				returnRawResponse: true,
 				// Uncomment to use AI Gateway
 				// gateway: {
 				//   id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID
@@ -83,10 +83,15 @@ async function handleChatRequest(
 				//   cacheTtl: 3600,        // Cache time-to-live in seconds
 				// },
 			},
-		)) as unknown as Response;
+		);
 
-		// Return streaming response
-		return response;
+		return new Response(stream, {
+			headers: {
+				"content-type": "text/event-stream; charset=utf-8",
+				"cache-control": "no-cache",
+				"connection": "keep-alive",
+			},
+		});
 	} catch (error) {
 		console.error("Error processing chat request:", error);
 		return new Response(

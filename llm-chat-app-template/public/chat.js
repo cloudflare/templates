@@ -89,12 +89,17 @@ async function sendMessage() {
 		if (!response.ok) {
 			throw new Error("Failed to get response");
 		}
+		if (!response.body) {
+			throw new Error("Response body is null");
+		}
 
 		// Process streaming response
 		const reader = response.body.getReader();
 		const decoder = new TextDecoder();
 		let responseText = "";
+		let buffer = "";
 
+		let sawDone = false;
 		while (true) {
 			const { done, value } = await reader.read();
 
@@ -103,24 +108,43 @@ async function sendMessage() {
 			}
 
 			// Decode chunk
-			const chunk = decoder.decode(value, { stream: true });
+			buffer += decoder.decode(value, { stream: true });
 
-			// Process SSE format
-			const lines = chunk.split("\n");
-			for (const line of lines) {
+			// SSE events are delimited by a blank line
+			let eventEndIndex;
+			while ((eventEndIndex = buffer.indexOf("\n\n")) !== -1) {
+				const rawEvent = buffer.slice(0, eventEndIndex);
+				buffer = buffer.slice(eventEndIndex + 2);
+
+				const lines = rawEvent.split("\n");
+				const dataLines = [];
+				for (const line of lines) {
+					if (line.startsWith("data:")) {
+						dataLines.push(line.slice("data:".length).trimStart());
+					}
+				}
+
+				if (dataLines.length === 0) continue;
+				const data = dataLines.join("\n");
+				if (data === "[DONE]") {
+					sawDone = true;
+					buffer = "";
+					break;
+				}
+
 				try {
-					const jsonData = JSON.parse(line);
-					if (jsonData.response) {
-						// Append new content to existing text
+					const jsonData = JSON.parse(data);
+					if (typeof jsonData.response === "string" && jsonData.response.length > 0) {
 						responseText += jsonData.response;
 						assistantMessageEl.querySelector("p").textContent = responseText;
-
-						// Scroll to bottom
 						chatMessages.scrollTop = chatMessages.scrollHeight;
 					}
 				} catch (e) {
-					console.error("Error parsing JSON:", e);
+					console.error("Error parsing SSE data as JSON:", e, data);
 				}
+			}
+			if (sawDone) {
+				break;
 			}
 		}
 
