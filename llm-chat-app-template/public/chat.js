@@ -108,7 +108,23 @@ async function sendMessage() {
 		while (true) {
 			const { done, value } = await reader.read();
 
-			if (done) {
+if (done) {
+    // Process any remaining complete events in buffer
+    const parsed = consumeSseEvents(buffer + "\n\n");
+    for (const data of parsed.events) {
+        if (data === "[DONE]") {
+            break;
+        }
+        try {
+            const jsonData = JSON.parse(data);
+            if (typeof jsonData.response === "string" && jsonData.response.length > 0) {
+                responseText += jsonData.response;
+                flushAssistantText();
+            }
+        } catch (e) {
+            console.error("Error parsing SSE data as JSON:", e, data);
+        }
+    }
 				break;
 			}
 
