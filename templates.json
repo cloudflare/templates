@@ -80,6 +80,9 @@
     },
     "x402-proxy-template": {
       "package_json_hash": "5f786630dea32450178ac9c92a0ea350f9b75b14"
+    },
+    "workflows-starter-template": {
+      "package_json_hash": "7c0bc9bdd71d606cc85924bb656f59c751f4047c"
     }
   }
 }
