@@ -8401,6 +8401,7 @@ interface AiModels {
     "@cf/meta/llama-3-8b-instruct-awq": BaseAiTextGeneration;
     "@cf/meta/llama-3.1-8b-instruct-fp8": BaseAiTextGeneration;
     "@cf/meta/llama-3.1-8b-instruct-awq": BaseAiTextGeneration;
+    "@cf/meta/llama-3.1-8b-instruct-fast": BaseAiTextGeneration;
     "@cf/meta/llama-3.2-3b-instruct": BaseAiTextGeneration;
     "@cf/meta/llama-3.2-1b-instruct": BaseAiTextGeneration;
     "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b": BaseAiTextGeneration;
