@@ -44,7 +44,7 @@ app.use("*", async (c, next) => {
 
 	// Special handling for built-in endpoints
 	// These are handled by route handlers below, not proxied
-	if (path === "/" || path === "/__x402/health") {
+	if (path === "/__x402/health") {
 		return next(); // Let the route handler below handle it
 	}
 
@@ -147,22 +147,6 @@ app.use("*", async (c, next) => {
 
 	// Not protected - pass through directly to origin
 	return fetch(c.req.raw);
-});
-
-/**
- * Root endpoint - public landing page for the proxy
- * Used to verify the deployed template is working
- */
-app.get("/", (c) => {
-	return c.json({
-		name: "x402-proxy",
-		status: "ok",
-		description: "HTTP 402 payment proxy for protected content",
-		endpoints: {
-			health: "/__x402/health",
-			protected: "/__x402/protected (requires payment)",
-		},
-	});
 });
 
 /**
