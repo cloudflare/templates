@@ -69,6 +69,12 @@
 				max-width: 80%;
 			}
 
+			.message p {
+				white-space: pre-line;
+				margin: 0;
+				overflow-wrap: anywhere;
+			}
+
 			.user-message {
 				background-color: var(--user-msg-bg);
 				align-self: flex-end;
@@ -145,10 +151,7 @@
 		<div class="chat-container">
 			<div id="chat-messages" class="chat-messages">
 				<div class="message assistant-message">
-					<p>
-						Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can
-						I help you today?
-					</p>
+					<p>Hello! I'm an LLM chat app powered by Cloudflare Workers AI. How can I help you today?</p>
 				</div>
 			</div>
 
