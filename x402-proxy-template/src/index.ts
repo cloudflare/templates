@@ -110,8 +110,8 @@ app.use("*", async (c, next) => {
 			return response;
 		}
 
-		// Proxy the authenticated request to origin
-		const originResponse = await fetch(c.req.raw);
+		// TODO: Proxy the authenticated request to your origin
+		// const originResponse = await fetch(c.req.raw);
 
 		// If we generated a JWT token, add it as a cookie to the response
 		if (jwtToken) {
@@ -141,12 +141,23 @@ app.use("*", async (c, next) => {
 			return newResponse;
 		}
 
-		// Otherwise, return origin response as-is
-		return originResponse;
+		// TODO: replace with your origin response
+		// return originResponse;
+		return c.json({
+			status: "authenticated",
+			path,
+			message:
+				"Payment verified. Fetch your protected content from origin here.",
+		});
 	}
 
-	// Not protected - pass through directly to origin
-	return fetch(c.req.raw);
+	// TODO: fetch from your origin here
+	// return fetch(c.req.raw);
+	return c.json({
+		status: "ok",
+		path,
+		message: "Unprotected route. Fetch your content from origin here.",
+	});
 });
 
 /**

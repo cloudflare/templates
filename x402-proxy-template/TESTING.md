@@ -61,15 +61,11 @@ Network: Base Sepolia (testnet)
 
 📤 Step 3: Sending request with payment...
 ✅ Payment successful! Premium content received:
-   Message: Welcome to premium content!
-   Auth method: via payment
    Cookie received: Yes
 
 🍪 Step 4: Testing cookie authentication...
    Waiting 2 seconds...
 ✅ Cookie authentication successful!
-   Message: Welcome to premium content!
-   Auth method: via cookie
    No payment required!
 
 🎉 All tests passed!
@@ -86,11 +82,11 @@ Summary:
 
 ## Manual Testing with curl
 
-### 1. Test the public endpoint
+### 1. Test the health endpoint
 
 ```bash
-curl http://localhost:8787/message
-# Should return: "Hello Hono!"
+curl http://localhost:8787/__x402/health
+# Should return: {"status":"ok","proxy":"x402-proxy","message":"This endpoint is always public",...}
 ```
 
 ### 2. Request protected endpoint without payment
@@ -141,7 +137,7 @@ curl http://localhost:8787/premium \
   -H "Cookie: auth_token=<your-jwt-token>"
 ```
 
-You should receive premium content without being asked for payment!
+You should receive the authenticated response without being asked for payment!
 
 ## Troubleshooting
 

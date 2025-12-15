@@ -11,8 +11,15 @@
 		"enabled": true,
 	},
 	"assets": {
-		"directory": "public"
+		"directory": "public",
 	},
+	// Add your routing configuration
+	// "routes": [
+	// 	{
+	// 		"pattern": "your-domain.example.com/*",
+	// 		"zone_name": "example.com",
+	// 	},
+	// ],
 	"vars": {
 		// Default test wallet address - replace with your own wallet address in production
 		// This is the "dead address" commonly used for testing purposes
