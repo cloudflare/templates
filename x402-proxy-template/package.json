@@ -17,7 +17,7 @@
 	"dependencies": {
 		"@coinbase/x402": "^0.7.1",
 		"hono": "^4.10.4",
-		"x402-hono": "^0.7.1"
+		"x402-hono": "1.0.0"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "^8.46.4",
