@@ -28,7 +28,7 @@
 		"tsx": "^4.20.6",
 		"viem": "^2.38.6",
 		"wrangler": "^4.46.0",
-		"x402": "^0.7.1"
+		"x402": "1.0.1"
 	},
 	"cloudflare": {
 		"label": "x402 Payment-Gated Proxy",
