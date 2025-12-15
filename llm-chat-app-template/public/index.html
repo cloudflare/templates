@@ -69,6 +69,12 @@
 				max-width: 80%;
 			}
 
+			.message p {
+				white-space: pre-line;
+				margin: 0;
+				overflow-wrap: anywhere;
+			}
+
 			.user-message {
 				background-color: var(--user-msg-bg);
 				align-self: flex-end;
@@ -119,9 +125,9 @@
 
 			.typing-indicator {
 				display: none;
-				margin-bottom: 1rem;
 				font-style: italic;
 				color: var(--text-light);
+				padding: 1rem;
 			}
 
 			.typing-indicator.visible {
