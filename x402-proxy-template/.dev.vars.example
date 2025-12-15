@@ -1,0 +1,7 @@
+# Environment variables for local development
+# Copy this file to .dev.vars and fill in your values
+
+# JWT secret for signing authentication tokens
+# Generate a secure random secret with:
+# node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+JWT_SECRET=your-secret-key-here

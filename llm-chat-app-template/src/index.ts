@@ -73,9 +73,9 @@ async function handleChatRequest(
 				messages,
 				max_tokens: 1024,
 			},
+			// @ts-expect-error tags is no longer required
 			{
 				returnRawResponse: true,
-				tags: [],
 				// Uncomment to use AI Gateway
 				// gateway: {
 				//   id: "YOUR_GATEWAY_ID", // Replace with your AI Gateway ID

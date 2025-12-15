@@ -19,7 +19,7 @@
       "package_json_hash": "2cf4a36965b26cb227a0336782992dd6bccac601"
     },
     "next-starter-template": {
-      "package_json_hash": "2154743f202edb9ad0a5d3b07d154d05b7efcb6a"
+      "package_json_hash": "1129571c9b54a012b5ccfa806e82477ea8e1ae80"
     },
     "openauth-template": {
       "package_json_hash": "b1ef890d531247e0fd58f7738e6d0d90495c1052"
@@ -28,10 +28,10 @@
       "package_json_hash": "ee669055ac4b256314e404a34a20ff360036e104"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "a5402e353f4a7962166b867614f70fa574fa3561"
+      "package_json_hash": "f01be61a43b5febe46ea9e08a4f855bcfd13a098"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "27a2d9a2a7a76a2cfa2de61ac6e5e1c1a4b14017"
+      "package_json_hash": "8f89bce29a29b0fd651a1886df72c97e1f8904f0"
     },
     "react-router-starter-template": {
       "package_json_hash": "f3268535772e36c58506bf7d8d0efffeeaa5bb89"
@@ -40,7 +40,7 @@
       "package_json_hash": "3e260017801805f14effca488157f59b74ca4cce"
     },
     "saas-admin-template": {
-      "package_json_hash": "5e7e236b3c7e3f66c920ad9c6d049e5bc90d2833"
+      "package_json_hash": "4092d2066f70809b7f99b2a8202a13588c627ebd"
     },
     "text-to-image-template": {
       "package_json_hash": "8a7632d4d94b6d0f0374685adfea229522c4e2e9"
@@ -49,7 +49,7 @@
       "package_json_hash": "fa076d9f3b21d43285ceaabf4d05491ba611239c"
     },
     "vite-react-template": {
-      "package_json_hash": "ccb3197864025d8dd6be1ac1b9c21bdc1925c1e8"
+      "package_json_hash": "d6112553a8a1513780d024d69af6264118de78d4"
     },
     "worker-publisher-template": {
       "package_json_hash": "8f419c2c34127cac33b6fb19b46fda91a2b6fec9"
@@ -76,7 +76,10 @@
       "package_json_hash": "c7470380f80cc1a2e07834c2c75f452d68849ada"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "77ba35e81ddae51a6e8a6a7406e0a1f022de4069"
+      "package_json_hash": "9a9fed50b01a788a48efecd832d2d761b3d3cf25"
+    },
+    "x402-proxy-template": {
+      "package_json_hash": "5f786630dea32450178ac9c92a0ea350f9b75b14"
     }
   }
 }
