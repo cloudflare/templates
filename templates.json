@@ -19,7 +19,7 @@
       "package_json_hash": "2cf4a36965b26cb227a0336782992dd6bccac601"
     },
     "next-starter-template": {
-      "package_json_hash": "19230576b493c28bf66451ad7878359a3b28f14b"
+      "package_json_hash": "8fd4f943a9dce519a4907fb5656d6fa30ca98797"
     },
     "openauth-template": {
       "package_json_hash": "b1ef890d531247e0fd58f7738e6d0d90495c1052"
@@ -28,10 +28,10 @@
       "package_json_hash": "ee669055ac4b256314e404a34a20ff360036e104"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "8ca2ccc2a7a7f3585a22c9161b5e9e9ee64d653c"
+      "package_json_hash": "c53f55e039c92550a7850f4c41b16f61bf17707e"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "27a2d9a2a7a76a2cfa2de61ac6e5e1c1a4b14017"
+      "package_json_hash": "8f89bce29a29b0fd651a1886df72c97e1f8904f0"
     },
     "react-router-starter-template": {
       "package_json_hash": "17bcb8eb29ebeae38aec464643440b4236d9ae8a"
@@ -40,7 +40,7 @@
       "package_json_hash": "2c3e6130d625d207237b20ee1dc048debe5b47b1"
     },
     "saas-admin-template": {
-      "package_json_hash": "aea1c20751cbbcc76037c4811928170a87e594bc"
+      "package_json_hash": "abb5e75ac0104fe31a6a2c906950cf89d5432300"
     },
     "text-to-image-template": {
       "package_json_hash": "8a7632d4d94b6d0f0374685adfea229522c4e2e9"
@@ -49,7 +49,7 @@
       "package_json_hash": "c6b5d2ecaf5f00d398dc5fcc0768dd5b41ba38e2"
     },
     "vite-react-template": {
-      "package_json_hash": "975958938e44ffc27fd56919bb79bc7a87b326b1"
+      "package_json_hash": "9a242f292e5e518fdaa90e98f55482a30135fea2"
     },
     "worker-publisher-template": {
       "package_json_hash": "8f419c2c34127cac33b6fb19b46fda91a2b6fec9"
@@ -76,7 +76,7 @@
       "package_json_hash": "c7470380f80cc1a2e07834c2c75f452d68849ada"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "44a045c0552459e70a505a0e5d391d97d75ded77"
+      "package_json_hash": "bbdd335de7632f59077ebd66e0fd4ffbe26fd40e"
     },
     "x402-proxy-template": {
       "package_json_hash": "860eeb6e5be5ed3036794a4ede6e55fd6acc4596"

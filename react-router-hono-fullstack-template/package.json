@@ -17,8 +17,8 @@
 	"dependencies": {
 		"hono": "4.10.7",
 		"isbot": "5.1.32",
-		"react": "19.2.0",
-		"react-dom": "19.2.0",
+		"react": "19.2.1",
+		"react-dom": "19.2.1",
 		"react-router": "7.9.6"
 	},
 	"devDependencies": {
