@@ -15,7 +15,7 @@
 		"test:client": "tsx test-client.ts"
 	},
 	"dependencies": {
-		"@coinbase/x402": "^0.7.1",
+		"@coinbase/x402": "2.0.0",
 		"hono": "^4.10.4",
 		"x402-hono": "^0.7.1"
 	},
