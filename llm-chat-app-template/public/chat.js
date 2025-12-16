@@ -117,11 +117,18 @@ async function sendMessage() {
 					}
 					try {
 						const jsonData = JSON.parse(data);
+						// Handle both Workers AI format (response) and OpenAI format (choices[0].delta.content)
+						let content = "";
 						if (
 							typeof jsonData.response === "string" &&
 							jsonData.response.length > 0
 						) {
-							responseText += jsonData.response;
+							content = jsonData.response;
+						} else if (jsonData.choices?.[0]?.delta?.content) {
+							content = jsonData.choices[0].delta.content;
+						}
+						if (content) {
+							responseText += content;
 							flushAssistantText();
 						}
 					} catch (e) {
@@ -143,11 +150,18 @@ async function sendMessage() {
 				}
 				try {
 					const jsonData = JSON.parse(data);
+					// Handle both Workers AI format (response) and OpenAI format (choices[0].delta.content)
+					let content = "";
 					if (
 						typeof jsonData.response === "string" &&
 						jsonData.response.length > 0
 					) {
-						responseText += jsonData.response;
+						content = jsonData.response;
+					} else if (jsonData.choices?.[0]?.delta?.content) {
+						content = jsonData.choices[0].delta.content;
+					}
+					if (content) {
+						responseText += content;
 						flushAssistantText();
 					}
 				} catch (e) {
