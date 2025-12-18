@@ -1,85 +1,85 @@
 {
   "templates": {
     "astro-blog-starter-template": {
-      "package_json_hash": "9f6a0f97709919bf1859310d2ba40b4e5707a876"
+      "package_json_hash": "59f944b24b0dc562bc7d2ed4877c57210d999ff0"
     },
     "chanfana-openapi-template": {
-      "package_json_hash": "f9d0959d80a1d63a1f7b15276934a5ae5cb3e72b"
+      "package_json_hash": "b6b9f39de35e9de6393ff0fca070781fe68b7d9d"
     },
     "d1-template": {
-      "package_json_hash": "f324ddb3b661a89936d4561e2cb3d509a8a662dd"
+      "package_json_hash": "060d4e4035b690f63efe5c30288627f5911c74fd"
     },
     "durable-chat-template": {
-      "package_json_hash": "eca0142908d19ffcbfb3002d059f41907b689d5d"
+      "package_json_hash": "585facc532a188845a30c74d1b6d2b80a181f5dd"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "5da431a6fc497e10109422e8ab5234e99e9a02ae"
+      "package_json_hash": "b18c5c93645f8b1322b65991a706b60d6738cee4"
     },
     "multiplayer-globe-template": {
-      "package_json_hash": "2cf4a36965b26cb227a0336782992dd6bccac601"
+      "package_json_hash": "9b046a12d74cb0f45096e10abdc4d27eb62a0371"
     },
     "next-starter-template": {
-      "package_json_hash": "1129571c9b54a012b5ccfa806e82477ea8e1ae80"
+      "package_json_hash": "9d0de6661271595f395d1c5f2d2d299a03f4c312"
     },
     "openauth-template": {
-      "package_json_hash": "b1ef890d531247e0fd58f7738e6d0d90495c1052"
+      "package_json_hash": "41a1cb3c010b641438f03b2e931d5e9e91dbba83"
     },
     "r2-explorer-template": {
-      "package_json_hash": "ee669055ac4b256314e404a34a20ff360036e104"
+      "package_json_hash": "003e8edfdfe39a0bf6786ac8ca84682d7d583294"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "f01be61a43b5febe46ea9e08a4f855bcfd13a098"
+      "package_json_hash": "0a504d3a1a35e50dab114b7e7bbe918c323131ae"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "8f89bce29a29b0fd651a1886df72c97e1f8904f0"
+      "package_json_hash": "a6c7110ea080155a0ee047ce3e11ba9af92eaf11"
     },
     "react-router-starter-template": {
-      "package_json_hash": "f3268535772e36c58506bf7d8d0efffeeaa5bb89"
+      "package_json_hash": "3721d3b195e4e79c1248b538288081dd4be6aa1e"
     },
     "remix-starter-template": {
-      "package_json_hash": "3e260017801805f14effca488157f59b74ca4cce"
+      "package_json_hash": "d5c2b3fce34750007c39135ca24b0c85ad4ba11c"
     },
     "saas-admin-template": {
-      "package_json_hash": "4092d2066f70809b7f99b2a8202a13588c627ebd"
+      "package_json_hash": "9b100bf1b4ae6274a5134da438b9908ac5f0ba53"
     },
     "text-to-image-template": {
-      "package_json_hash": "8a7632d4d94b6d0f0374685adfea229522c4e2e9"
+      "package_json_hash": "b327c75c369f20464963a88eb00f906b547337ae"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "fa076d9f3b21d43285ceaabf4d05491ba611239c"
+      "package_json_hash": "c772d67d22b2df6f8a9fde620503683d04218d86"
     },
     "vite-react-template": {
-      "package_json_hash": "d6112553a8a1513780d024d69af6264118de78d4"
+      "package_json_hash": "f3fdc2820d5efcac2be316323f9800fd4c31ab28"
     },
     "worker-publisher-template": {
-      "package_json_hash": "8f419c2c34127cac33b6fb19b46fda91a2b6fec9"
+      "package_json_hash": "ccec255928f6ad342a6d79d400275aff643c7c68"
     },
     "containers-template": {
-      "package_json_hash": "857846714273caabac98833dead017caf20e4926"
+      "package_json_hash": "4d4a010fbbe5bb4bc6721232b821620629329afc"
     },
     "d1-starter-sessions-api-template": {
-      "package_json_hash": "dc0df77c45dfe74844c523887fd6ab33a618f8ea"
+      "package_json_hash": "f6115d94b82705898ac133c469008121260f90cb"
     },
     "hello-world-do-template": {
-      "package_json_hash": "3374bc034e00c45fede154a14e4eff10de6081d9"
+      "package_json_hash": "bc0a6ef0b85d083d5e2d63c11ac0e7d8a7059407"
     },
     "mysql-hyperdrive-template": {
-      "package_json_hash": "d6f5365f6aa3b44037fab7e822fa352093415a6a"
+      "package_json_hash": "c6baeb2e2280549c1ec142f268428c6d33d79dac"
     },
     "nlweb-template": {
-      "package_json_hash": "463dcf5d9b5bef1900016567f829c9dbaca21007"
+      "package_json_hash": "af55a1f112c6fd29b269ace734c15e5a73717200"
     },
     "nodejs-http-server-template": {
-      "package_json_hash": "d1bdfb14874c636200bdc9061ba3ba76bd92036a"
+      "package_json_hash": "90a9b96a99c0397bb1d9438bd30e04f1e958cf16"
     },
     "postgres-hyperdrive-template": {
-      "package_json_hash": "c7470380f80cc1a2e07834c2c75f452d68849ada"
+      "package_json_hash": "0eb8668a76f38ab57cba265367c3bb5d163153b3"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "9a9fed50b01a788a48efecd832d2d761b3d3cf25"
+      "package_json_hash": "8971c86d70d5baa0f13e24414f109c9cf1a09bac"
     },
     "x402-proxy-template": {
-      "package_json_hash": "5f786630dea32450178ac9c92a0ea350f9b75b14"
+      "package_json_hash": "64cfb1818392d09d09f8d28c5d7e688971b2fcd6"
     }
   }
 }

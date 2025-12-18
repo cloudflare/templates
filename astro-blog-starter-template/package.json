@@ -20,7 +20,7 @@
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
-		"wrangler": "4.51.0"
+		"wrangler": "4.55.0"
 	},
 	"private": true,
 	"scripts": {
