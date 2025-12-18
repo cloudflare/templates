@@ -9,6 +9,9 @@
 		"categories": [
 			"starter"
 		],
+		"publish": true,
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5d7612fc-782c-4a5f-6f69-d2994e887800/preview",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/9b1345c4-7bfe-4be2-89fd-80cd59985e00/public",
 		"healthCheckPath": "/__x402/health",
 		"bindings": {
 			"JWT_SECRET": {

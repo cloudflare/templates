@@ -72,7 +72,11 @@ export interface ProtectedRouteConfig {
 export function createProtectedRoute(config: ProtectedRouteConfig) {
 	return async (c: Context<AppContext>, next: Next) => {
 		// Get the route path from the request context
-		const routePath = c.req.path;
+		// Normalize the path by removing trailing slashes (except for root "/")
+		// This matches how x402's findMatchingRoute normalizes incoming request paths
+		const rawPath = c.req.path;
+		const routePath =
+			rawPath.length > 1 ? rawPath.replace(/\/+$/, "") : rawPath;
 
 		// Create payment middleware dynamically with wallet address from env
 		const paymentMw = paymentMiddleware(
