@@ -46,6 +46,8 @@ export async function generateNpmLockfiles({
 		})`npm install --no-audit --progress=false --package-lock-only`;
 
 		if (hasNodeModules) {
+			// npm may create a new node_modules directory, remove it before restoring the original
+			await fs.rm("./node_modules", { recursive: true, force: true });
 			await fs.move("./._node_modules", "./node_modules");
 		}
 	}

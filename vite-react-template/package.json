@@ -30,7 +30,7 @@
 		"typescript": "5.8.3",
 		"typescript-eslint": "8.48.0",
 		"vite": "^6.0.0",
-		"wrangler": "4.55.0"
+		"wrangler": "4.56.0"
 	},
 	"private": true,
 	"scripts": {
