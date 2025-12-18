@@ -35,14 +35,19 @@ export async function generateNpmLockfiles({
 
 		await fs.rm("./package-lock.json", { force: true });
 		// Rename node_modules to prevent npm from using it's contents in the lockfile
-		await fs.move("./node_modules", "./._node_modules");
+		const hasNodeModules = await fs.pathExists("./node_modules");
+		if (hasNodeModules) {
+			await fs.move("./node_modules", "./._node_modules");
+		}
 
 		await $({
 			verbose: true,
 			stdio: "inherit",
 		})`npm install --no-audit --progress=false --package-lock-only`;
 
-		await fs.move("./._node_modules", "./node_modules");
+		if (hasNodeModules) {
+			await fs.move("./._node_modules", "./node_modules");
+		}
 	}
 
 	await config.save();
