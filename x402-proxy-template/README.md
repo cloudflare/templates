@@ -129,6 +129,73 @@ The proxy is configured via environment variables in `wrangler.jsonc`:
 | `PAYMENT_CONFIG.price`       | Cost per access                               | `"$0.01"`                                        |
 | `PAYMENT_CONFIG.network`     | Blockchain network                            | `"base-sepolia"` (testnet) or `"base"` (mainnet) |
 | `PAYMENT_CONFIG.description` | What the payment grants                       | `"Access for 1 hour"`                            |
+| `ORIGIN_URL`                 | (Optional) External origin URL for proxying   | `"https://origin.example.com"`                   |
+
+#### Proxy Modes
+
+The proxy supports two modes for routing requests to your backend. Choose based on your architecture:
+
+##### DNS-Based Mode (Default)
+
+**Best for:** Traditional backend servers (VMs, containers, other hosting providers)
+
+When `ORIGIN_URL` is **not set**, requests are forwarded to the origin server defined in your Cloudflare DNS records.
+
+**Setup:**
+
+1. Add a DNS record in Cloudflare pointing to your origin server:
+   - Type: `A` (for IP address) or `CNAME` (for hostname)
+   - Name: `api` (or your subdomain)
+   - Content: Your origin server IP or hostname
+   - Proxy status: **Proxied** (orange cloud)
+
+2. Configure a route in `wrangler.jsonc`:
+
+   ```jsonc
+   "routes": [
+     { "pattern": "api.example.com/*", "zone_name": "example.com" }
+   ]
+   ```
+
+3. Deploy. The proxy will forward requests to your origin server automatically.
+
+```
+User → api.example.com → x402 Proxy → Origin Server (via DNS)
+```
+
+##### External Origin Mode
+
+**Best for:** Another Cloudflare Worker, or any external service with a public URL
+
+When `ORIGIN_URL` **is set**, requests are rewritten to that URL. This lets you proxy to another Worker on a Custom Domain or any external API.
+
+**Setup:**
+
+1. Set `ORIGIN_URL` in `wrangler.jsonc`:
+
+   ```jsonc
+   "vars": {
+     "ORIGIN_URL": "https://my-origin-worker.example.com",
+     // ... other vars
+   }
+   ```
+
+2. If your origin is a Worker, deploy it with a [Custom Domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/).
+
+3. Deploy the proxy. Requests are rewritten to the origin URL while preserving the original `Host` header.
+
+```
+User → api.example.com → x402 Proxy → my-origin-worker.example.com (URL rewrite)
+```
+
+**Why External Origin mode?** Cloudflare routes a hostname to one Worker only. You can't chain Workers on the same hostname via routing. External Origin mode solves this by rewriting the URL to a different hostname where your origin Worker lives.
+
+##### Quick Comparison
+
+| Mode            | `ORIGIN_URL` | Origin Type        | Use Case                                          |
+| --------------- | ------------ | ------------------ | ------------------------------------------------- |
+| DNS-Based       | Not set      | Traditional server | Your backend is a VM, container, or external host |
+| External Origin | Set to URL   | Worker or any URL  | Your backend is another Worker or external API    |
 
 #### Local Development Setup
 
@@ -322,12 +389,14 @@ curl -v http://localhost:8787/__x402/protected
 The worker uses a single catch-all middleware that:
 
 1. **Checks path** against `PROTECTED_PATTERNS`
-2. **For unprotected paths**: Proxies request immediately via `fetch(c.req.raw)`
+2. **For unprotected paths**: Proxies request immediately to origin
 3. **For protected paths**:
    - Checks for valid JWT cookie
    - If no valid cookie, requires x402 payment
    - Issues JWT cookie on successful payment
    - Proxies authenticated request to origin
+
+The proxy mode (DNS-based or External Origin) determines how requests reach your backend. See [Proxy Modes](#proxy-modes) for details.
 
 ### Configuration Examples
 

@@ -31,6 +31,17 @@
 			"network": "base-sepolia",
 			"description": "Access to premium content for 1 hour",
 		},
+		// ORIGIN_URL - Optional. Controls how requests are proxied to your backend.
+		//
+		// Not set (default): DNS-based proxy mode. Requests are forwarded to the
+		// origin server defined in your Cloudflare DNS records. Use this when your
+		// backend is a traditional server (VM, container, etc.).
+		//
+		// Set to a URL: External Origin mode. Requests are rewritten to this URL.
+		// Use this to proxy to another Cloudflare Worker (on a Custom Domain) or
+		// any external service.
+		//
+		// Example: "ORIGIN_URL": "https://my-origin-worker.example.com"
 	},
 	"upload_source_maps": true,
 }

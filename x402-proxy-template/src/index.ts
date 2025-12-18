@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
 import { createProtectedRoute, type ProtectedRouteConfig } from "./auth";
 import { generateJWT } from "./jwt";
-import type { AppContext } from "./env";
+import type { AppContext, Env } from "./env";
 
 const app = new Hono<AppContext>();
 
@@ -11,6 +11,68 @@ const app = new Hono<AppContext>();
  * These are used for testing and don't need to be configured
  */
 const BUILTIN_PROTECTED_PATHS = ["/__x402/protected"];
+
+/**
+ * Proxy a request to the origin server.
+ *
+ * Two modes:
+ * 1. DNS-based (ORIGIN_URL not set): Uses fetch(request) which routes to the
+ *    origin server defined in your DNS records. Best for traditional backends.
+ *
+ * 2. External Origin (ORIGIN_URL set): Rewrites the URL to the specified origin
+ *    while preserving the original Host header. This allows proxying to another
+ *    Worker on a Custom Domain or any external service.
+ */
+async function proxyToOrigin(request: Request, env: Env): Promise<Response> {
+	if (env.ORIGIN_URL) {
+		// External Origin mode: rewrite URL to target origin
+		const originalUrl = new URL(request.url);
+		const targetUrl = new URL(env.ORIGIN_URL);
+
+		const proxiedUrl = new URL(request.url);
+		proxiedUrl.hostname = targetUrl.hostname;
+		proxiedUrl.protocol = targetUrl.protocol;
+		proxiedUrl.port = targetUrl.port;
+
+		const response = await fetch(proxiedUrl, {
+			method: request.method,
+			headers: request.headers, // Preserves original Host header
+			body: request.body,
+			redirect: "manual", // Handle redirects ourselves to rewrite Location headers
+		});
+
+		// Rewrite Location header in redirects to keep user on the proxy domain
+		// We rewrite ALL redirects to stay on the proxy, regardless of where the origin
+		// tries to send the user (e.g., cloudflare.com -> www.cloudflare.com)
+		const location = response.headers.get("Location");
+		if (location) {
+			try {
+				const locationUrl = new URL(location, proxiedUrl);
+
+				// Rewrite the location to point back to the proxy
+				locationUrl.hostname = originalUrl.hostname;
+				locationUrl.protocol = originalUrl.protocol;
+				locationUrl.port = originalUrl.port;
+
+				const newHeaders = new Headers(response.headers);
+				newHeaders.set("Location", locationUrl.toString());
+
+				return new Response(response.body, {
+					status: response.status,
+					statusText: response.statusText,
+					headers: newHeaders,
+				});
+			} catch {
+				// If URL parsing fails, return response as-is
+			}
+		}
+
+		return response;
+	}
+
+	// DNS-based mode: forward request as-is to origin defined in DNS
+	return fetch(request);
+}
 
 /**
  * Helper to check if a path matches any protected pattern
@@ -110,54 +172,32 @@ app.use("*", async (c, next) => {
 			return response;
 		}
 
-		// TODO: Proxy the authenticated request to your origin
-		// const originResponse = await fetch(c.req.raw);
+		// Proxy the authenticated request to origin
+		const originResponse = await proxyToOrigin(c.req.raw, c.env);
 
 		// If we generated a JWT token, add it as a cookie to the response
 		if (jwtToken) {
-			// Use Hono's setCookie to generate the proper Set-Cookie header
-			setCookie(c, "auth_token", jwtToken, {
-				httpOnly: true,
-				secure: true,
-				sameSite: "Strict",
-				maxAge: 3600,
-				path: "/",
-			});
-
 			// Clone the origin response and add our cookie header
 			const newResponse = new Response(originResponse.body, {
 				status: originResponse.status,
 				statusText: originResponse.statusText,
-				headers: originResponse.headers,
+				headers: new Headers(originResponse.headers),
 			});
 
-			// Copy Set-Cookie headers from Hono context to our response
-			// Use getSetCookie() to properly handle multiple Set-Cookie headers
-			const setCookieHeaders = c.res.headers.getSetCookie();
-			for (const cookie of setCookieHeaders) {
-				newResponse.headers.append("Set-Cookie", cookie);
-			}
+			// Add the auth cookie to the response
+			newResponse.headers.append(
+				"Set-Cookie",
+				`auth_token=${jwtToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600; Path=/`
+			);
 
 			return newResponse;
 		}
 
-		// TODO: replace with your origin response
-		// return originResponse;
-		return c.json({
-			status: "authenticated",
-			path,
-			message:
-				"Payment verified. Fetch your protected content from origin here.",
-		});
+		return originResponse;
 	}
 
-	// TODO: fetch from your origin here
-	// return fetch(c.req.raw);
-	return c.json({
-		status: "ok",
-		path,
-		message: "Unprotected route. Fetch your content from origin here.",
-	});
+	// Proxy unprotected routes directly to origin
+	return proxyToOrigin(c.req.raw, c.env);
 });
 
 /**
