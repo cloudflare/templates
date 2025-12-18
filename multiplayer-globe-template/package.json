@@ -24,7 +24,7 @@
 		"@types/react-dom": "^18.0.0",
 		"esbuild": "0.27.0",
 		"typescript": "5.9.3",
-		"wrangler": "4.55.0"
+		"wrangler": "4.56.0"
 	},
 	"private": true,
 	"scripts": {

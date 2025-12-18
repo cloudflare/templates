@@ -38,14 +38,14 @@
 		"hono": "4.11.1",
 		"postgres": "3.4.7",
 		"vite": "^6.0.0",
-		"wrangler": "4.55.0"
+		"wrangler": "4.56.0"
 	},
 	"engines": {
 		"node": ">=20.16.0 || >=22.3.0"
 	},
 	"overrides": {
 		"@react-router/dev": {
-			"wrangler": "^4.2.0"
+			"wrangler": "4.56.0"
 		}
 	},
 	"private": true,
