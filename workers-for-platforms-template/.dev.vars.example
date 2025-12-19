@@ -1,0 +1,7 @@
+# Workers for Platforms Template - Secrets
+# Copy to .dev.vars for local development
+
+# Optional: API token with SSL permissions for custom domain support
+# Create at: https://dash.cloudflare.com/profile/api-tokens
+# Permissions needed: Zone > SSL and Certificates > Edit
+CLOUDFLARE_API_TOKEN=
