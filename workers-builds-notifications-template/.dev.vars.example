@@ -1,0 +1,9 @@
+# Slack incoming webhook URL
+# Get this from: https://api.slack.com/apps → Your App → Incoming Webhooks
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+
+# Cloudflare API token
+# Create at: https://dash.cloudflare.com/profile/api-tokens
+# Select:
+#   - **Edit Cloudflare Workers** template 
+CLOUDFLARE_API_TOKEN=your-api-token-here
