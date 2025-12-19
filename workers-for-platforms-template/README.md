@@ -14,7 +14,7 @@ Build your own website hosting platform using [Cloudflare Workers for Platforms]
 - **Static Site Hosting** - Drag & drop HTML/CSS/JS files with automatic asset handling
 - **Custom Worker Code** - Write dynamic sites with full Workers capabilities
 - **Subdomain Routing** - Each site gets `sitename.yourdomain.com`
-- **Custom Domains** - Users can connect their own domains with automatic SSL
+- **Custom Domains** - Users can connect their own domains with automatic TLS certificates (powered by custom hostnames)
 - **Admin Dashboard** - Manage all sites and monitor deployment status at `/admin`
 
 ## How It Works
@@ -27,7 +27,7 @@ This template demonstrates how to build a multi-tenant platform using Workers fo
 
 3. **Dynamic Routing** - The main Worker routes requests to the appropriate user Worker based on subdomain or custom hostname.
 
-4. **Cloudflare for SaaS** - Enables custom domain support with automatic SSL certificate provisioning.
+4. **Custom Hostnames** - Enables custom domain support with automatic TLS certificate provisioning.
 
 ## Bindings Used
 
@@ -166,7 +166,7 @@ The admin page (`/admin`) shows all projects. Protect it with [Cloudflare Access
 |---------|----------|
 | "Dispatch namespace not found" | Enable Workers for Platforms: [dash.cloudflare.com/?to=/:account/workers-for-platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) |
 | "Custom domain not working" | Check Zone ID and DNS records are correct |
-| "Custom hostnames require additional setup" | Provide `CLOUDFLARE_API_TOKEN` with SSL permissions during deploy, or add it post-deploy as a secret |
+| "Custom hostnames require additional setup" | Custom hostname tokens are auto-provisioned during Deploy to Cloudflare |
 | "404 on deployed sites" | Ensure uploaded files include `index.html` at the root |
 | Database errors | Visit `/admin` to check status, or `/init` to reset |
 
@@ -188,7 +188,7 @@ npx wrangler tail
 ## Learn More
 
 - [Workers for Platforms Docs](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/)
-- [Custom Hostnames (Cloudflare for SaaS)](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/)
+- [Custom Hostnames](https://developers.cloudflare.com/cloudflare-for-platforms/cloudflare-for-saas/)
 - [D1 Database](https://developers.cloudflare.com/d1/)
 - [Hono Framework](https://hono.dev/)
 
