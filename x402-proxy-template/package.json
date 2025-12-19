@@ -1,35 +1,6 @@
 {
 	"name": "x402-proxy-template",
 	"description": "Transparent proxy with payment-gated routes using x402 protocol and stateless JWT authentication",
-	"type": "module",
-	"private": true,
-	"scripts": {
-		"dev": "wrangler dev",
-		"deploy": "wrangler deploy --minify",
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
-		"typecheck": "tsc --noEmit",
-		"format": "prettier --write .",
-		"format:check": "prettier --check .",
-		"lint": "npm run typecheck && npm run format:check && eslint .",
-		"lint:fix": "prettier --write . && eslint . --fix",
-		"test:client": "tsx test-client.ts"
-	},
-	"dependencies": {
-		"@coinbase/x402": "^0.7.1",
-		"hono": "^4.10.4",
-		"x402-hono": "^0.7.1"
-	},
-	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^8.46.4",
-		"@typescript-eslint/parser": "^8.46.4",
-		"eslint": "^9.39.1",
-		"eslint-config-prettier": "^10.1.8",
-		"prettier": "^3.6.2",
-		"tsx": "^4.20.6",
-		"viem": "^2.38.6",
-		"wrangler": "^4.46.0",
-		"x402": "^0.7.1"
-	},
 	"cloudflare": {
 		"label": "x402 Payment-Gated Proxy",
 		"products": [
@@ -44,5 +15,34 @@
 				"description": "Secret key for signing JWT authentication tokens. Generate with `node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"`"
 			}
 		}
-	}
+	},
+	"dependencies": {
+		"@coinbase/x402": "2.0.0",
+		"hono": "4.11.1",
+		"x402-hono": "1.0.0"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "8.50.0",
+		"@typescript-eslint/parser": "8.50.0",
+		"eslint": "9.39.2",
+		"eslint-config-prettier": "10.1.8",
+		"prettier": "3.7.4",
+		"tsx": "4.21.0",
+		"viem": "2.43.1",
+		"wrangler": "4.56.0",
+		"x402": "1.0.1"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"deploy": "wrangler deploy --minify",
+		"dev": "wrangler dev",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"lint": "npm run typecheck && npm run format:check && eslint .",
+		"lint:fix": "prettier --write . && eslint . --fix",
+		"test:client": "tsx test-client.ts",
+		"typecheck": "tsc --noEmit"
+	},
+	"type": "module"
 }
