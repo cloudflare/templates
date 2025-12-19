@@ -1,0 +1,26 @@
+{
+  "name": "workers-builds-notifications-template",
+  "version": "1.0.0",
+  "description": "Send Workers Builds status notifications to Slack, Discord, or any webhook via Event Subscriptions.",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "cf-typegen": "wrangler types"
+  },
+  "cloudflare": {
+    "label": "Workers Builds Notifications",
+    "products": ["Workers Builds", "Queues"],
+    "categories": [],
+    "preview_image_url": "",
+    "publish": true
+  },
+  "devDependencies": {
+    "typescript": "^5.5.2",
+    "vitest": "^2.0.0",
+    "wrangler": "^4.45.0"
+  }
+}
