@@ -18,7 +18,7 @@
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1343611f-f30d-4c8e-4de9-a9bb0f3e7e00/public"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.10.11",
+		"@cloudflare/vitest-pool-workers": "0.11.1",
 		"durable-utils": "0.3.5",
 		"typescript": "5.9.3",
 		"vitest": "3.2.4",

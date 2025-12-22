@@ -20,7 +20,7 @@
 		"react-dom": "^18.0.0"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20250425.0",
+		"@cloudflare/workers-types": "^4.20251221.0",
 		"@remix-run/dev": "2.17.2",
 		"@types/react": "^18.0.0",
 		"@types/react-dom": "^18.0.0",
