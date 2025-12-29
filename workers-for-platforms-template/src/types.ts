@@ -9,13 +9,13 @@ export type ResourceRecord = Record<string, ResourceValues>;
  * Each project corresponds to a Worker script in the dispatch namespace.
  */
 export interface Project {
-  id: string;
-  name: string;
-  subdomain: string;
-  custom_hostname?: string | null; // Optional custom domain like "mystore.com"
-  script_content: string;
-  created_on: string;
-  modified_on: string;
+	id: string;
+	name: string;
+	subdomain: string;
+	custom_hostname?: string | null; // Optional custom domain like "mystore.com"
+	script_content: string;
+	created_on: string;
+	modified_on: string;
 }
 
 /**
@@ -23,5 +23,5 @@ export interface Project {
  * Used for passing context or configuration to dispatched Workers.
  */
 export interface WorkerArgs {
-  [key: string]: unknown;
+	[key: string]: unknown;
 }

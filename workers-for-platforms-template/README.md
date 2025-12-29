@@ -31,10 +31,10 @@ This template demonstrates how to build a multi-tenant platform using Workers fo
 
 ## Bindings Used
 
-| Binding | Product | Purpose |
-|---------|---------|---------|
-| `dispatcher` | Workers for Platforms | Routes requests to user-deployed Workers |
-| `DB` | D1 | Stores project metadata and configuration |
+| Binding      | Product               | Purpose                                   |
+| ------------ | --------------------- | ----------------------------------------- |
+| `dispatcher` | Workers for Platforms | Routes requests to user-deployed Workers  |
+| `DB`         | D1                    | Stores project metadata and configuration |
 
 <!-- dash-content-end -->
 
@@ -48,8 +48,8 @@ Click the **Deploy to Cloudflare** button above. Everything is auto-configured!
 
 If you want to use your own domain instead of `*.workers.dev`:
 
-| Variable | Description |
-|----------|-------------|
+| Variable        | Description                             |
+| --------------- | --------------------------------------- |
 | `CUSTOM_DOMAIN` | Your root domain (e.g., `platform.com`) |
 
 ---
@@ -95,6 +95,7 @@ npm test
 ```
 
 The setup script will:
+
 - Validate your Cloudflare credentials
 - Create the dispatch namespace for Workers for Platforms
 - Auto-create API tokens with correct permissions (if needed)
@@ -111,13 +112,11 @@ To use your own domain instead of `*.workers.dev`:
 
 ```jsonc
 {
-  "vars": {
-    "CUSTOM_DOMAIN": "platform.com"
-  },
-  "routes": [
-    { "pattern": "*/*", "zone_name": "platform.com" }
-  ],
-  "workers_dev": false
+	"vars": {
+		"CUSTOM_DOMAIN": "platform.com",
+	},
+	"routes": [{ "pattern": "*/*", "zone_name": "platform.com" }],
+	"workers_dev": false,
 }
 ```
 
@@ -125,10 +124,10 @@ To use your own domain instead of `*.workers.dev`:
 
 In your Cloudflare DNS settings for `platform.com`:
 
-| Type | Name | Content | Result | Proxy |
-|------|------|---------|--------|-------|
-| A | `*` | `192.0.2.1` | `*.platform.com` | Proxied |
-| A | `my` | `192.0.2.1` | `my.platform.com` | Proxied |
+| Type | Name | Content     | Result            | Proxy   |
+| ---- | ---- | ----------- | ----------------- | ------- |
+| A    | `*`  | `192.0.2.1` | `*.platform.com`  | Proxied |
+| A    | `my` | `192.0.2.1` | `my.platform.com` | Proxied |
 
 > **Note:** The root domain (`platform.com`) is automatically configured when you add a custom domain to your Worker in the Cloudflare dashboard. The `192.0.2.1` is a dummy IP - Cloudflare's proxy handles the actual routing.
 
@@ -162,15 +161,16 @@ The admin page (`/admin`) shows all projects. Protect it with [Cloudflare Access
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| "Dispatch namespace not found" | Enable Workers for Platforms: [dash.cloudflare.com/?to=/:account/workers-for-platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) |
-| "Custom domain not working" | Check Zone ID and DNS records are correct |
-| "Custom hostnames require additional setup" | Custom hostname tokens are auto-provisioned during Deploy to Cloudflare |
-| "404 on deployed sites" | Ensure uploaded files include `index.html` at the root |
-| Database errors | Visit `/admin` to check status, or `/init` to reset |
+| Problem                                     | Solution                                                                                                                                                 |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Dispatch namespace not found"              | Enable Workers for Platforms: [dash.cloudflare.com/?to=/:account/workers-for-platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) |
+| "Custom domain not working"                 | Check Zone ID and DNS records are correct                                                                                                                |
+| "Custom hostnames require additional setup" | Custom hostname tokens are auto-provisioned during Deploy to Cloudflare                                                                                  |
+| "404 on deployed sites"                     | Ensure uploaded files include `index.html` at the root                                                                                                   |
+| Database errors                             | Visit `/admin` to check status, or `/init` to reset                                                                                                      |
 
 **View logs:**
+
 ```bash
 npx wrangler tail
 ```
