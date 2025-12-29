@@ -1,0 +1,50 @@
+{
+	"name": "ai-domain-data-template",
+	"description": "Serve AI Domain Data Standard domain-profile.json files at the edge with built-in validation and CORS support.",
+	"cloudflare": {
+		"label": "AI Domain Data Worker",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"starter"
+		],
+		"bindings": {
+			"AIDD_NAME": {
+				"description": "Your site or organization name (required)"
+			},
+			"AIDD_DESCRIPTION": {
+				"description": "Description of your site or organization (required)"
+			},
+			"AIDD_WEBSITE": {
+				"description": "Your website URL (required)"
+			},
+			"AIDD_CONTACT": {
+				"description": "Contact email or URL (required)"
+			},
+			"AIDD_LOGO": {
+				"description": "Optional logo URL"
+			},
+			"AIDD_ENTITY_TYPE": {
+				"description": "Optional entity type (Organization, Person, Blog, etc.)"
+			},
+			"AIDD_JSONLD": {
+				"description": "Optional JSON-LD object as JSON string"
+			}
+		}
+	},
+	"type": "module",
+	"main": "src/index.ts",
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20241106.0",
+		"typescript": "^5.3.3",
+		"wrangler": "^4.56.0"
+	},
+	"private": true
+}
