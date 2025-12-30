@@ -83,6 +83,9 @@
     },
     "workflows-starter-template": {
       "package_json_hash": "df0c567d4f864f5574dcd1824d6758e918209e79"
+    },
+    "microfrontend-template": {
+      "package_json_hash": "127e944f4aa85b6861c858778cd2efb66ba0ed1e"
     }
   }
 }

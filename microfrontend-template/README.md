@@ -42,6 +42,7 @@ Routes are matched using a **prefix mount** strategy:
 The router rewrites URLs to maintain proper asset resolution across microfrontends:
 
 **Before rewriting:**
+
 ```html
 <!-- Served from /docs mount -->
 <img src="/assets/logo.png" />
@@ -49,6 +50,7 @@ The router rewrites URLs to maintain proper asset resolution across microfronten
 ```
 
 **After rewriting:**
+
 ```html
 <img src="/docs/assets/logo.png" />
 <link rel="stylesheet" href="/docs/static/app.css" />
@@ -70,16 +72,16 @@ In your `wrangler.jsonc` (or `wrangler.toml`), configure service bindings to you
 
 ```jsonc
 {
-  "services": [
-    {
-      "binding": "APP1",           // Binding name used in ROUTES config
-      "service": "my-docs-worker"  // Name of your Worker service
-    },
-    {
-      "binding": "APP2",
-      "service": "my-dashboard-worker"
-    }
-  ]
+	"services": [
+		{
+			"binding": "APP1", // Binding name used in ROUTES config
+			"service": "my-docs-worker", // Name of your Worker service
+		},
+		{
+			"binding": "APP2",
+			"service": "my-dashboard-worker",
+		},
+	],
 }
 ```
 
@@ -89,10 +91,10 @@ Set the `ROUTES` environment variable as a JSON string. You can configure it in 
 
 ```jsonc
 {
-  "vars": {
-    "ROUTES": "{\"smoothTransitions\":true, \"routes\":[{\"binding\": \"APP1\", \"path\": \"/docs\", \"preload\":true}, {\"binding\": \"APP2\", \"path\": \"/dashboard\"}]}",
-    "ASSET_PREFIXES": "[\"/cf-assets/\", \"/media/\"]"
-  }
+	"vars": {
+		"ROUTES": "{\"smoothTransitions\":true, \"routes\":[{\"binding\": \"APP1\", \"path\": \"/docs\", \"preload\":true}, {\"binding\": \"APP2\", \"path\": \"/dashboard\"}]}",
+		"ASSET_PREFIXES": "[\"/cf-assets/\", \"/media/\"]",
+	},
 }
 ```
 
@@ -106,32 +108,34 @@ You can also set these via the Cloudflare Dashboard or Wrangler secrets.
 The `ROUTES` variable can be either:
 
 **Simple array format:**
+
 ```json
 [
-  {"binding": "APP1", "path": "/docs"},
-  {"binding": "APP2", "path": "/dashboard"}
+	{ "binding": "APP1", "path": "/docs" },
+	{ "binding": "APP2", "path": "/dashboard" }
 ]
 ```
 
 **Object format with options:**
+
 ```json
 {
-  "smoothTransitions": true,
-  "routes": [
-    {"binding": "APP1", "path": "/docs", "preload": true},
-    {"binding": "APP2", "path": "/dashboard"}
-  ]
+	"smoothTransitions": true,
+	"routes": [
+		{ "binding": "APP1", "path": "/docs", "preload": true },
+		{ "binding": "APP2", "path": "/dashboard" }
+	]
 }
 ```
 
 ### Route Options
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `binding` | `string` | **Required.** The service binding name (must match a binding in `wrangler.jsonc`) |
-| `path` | `string` | **Required.** Path expression (e.g., `/docs`, `/:tenant/app`, `/api/:path*`) |
-| `preload` | `boolean` | If `true`, preloads this route after DOM loads (only works for static mounts) |
-| `smoothTransitions` | `boolean` | If `true`, injects CSS for smooth view transitions (applies to all routes) |
+| Option              | Type      | Description                                                                       |
+| ------------------- | --------- | --------------------------------------------------------------------------------- |
+| `binding`           | `string`  | **Required.** The service binding name (must match a binding in `wrangler.jsonc`) |
+| `path`              | `string`  | **Required.** Path expression (e.g., `/docs`, `/:tenant/app`, `/api/:path*`)      |
+| `preload`           | `boolean` | If `true`, preloads this route after DOM loads (only works for static mounts)     |
+| `smoothTransitions` | `boolean` | If `true`, injects CSS for smooth view transitions (applies to all routes)        |
 
 ## Path Expression Syntax
 
@@ -176,7 +180,7 @@ Use parentheses to add constraints:
 Use backslash to escape special characters:
 
 ```json
-{"binding": "APP1", "path": "/\\(special\\)"}  // Matches literal "/(special)"
+{ "binding": "APP1", "path": "/\\(special\\)" } // Matches literal "/(special)"
 ```
 
 ### Root Route
@@ -184,7 +188,7 @@ Use backslash to escape special characters:
 Use `/` to handle the root path:
 
 ```json
-{"binding": "APP1", "path": "/"}  // Matches / and serves as fallback for unmatched asset requests
+{ "binding": "APP1", "path": "/" } // Matches / and serves as fallback for unmatched asset requests
 ```
 
 ## Asset URL Rewriting
@@ -205,26 +209,28 @@ You can add custom asset prefixes via the `ASSET_PREFIXES` environment variable 
 
 ```jsonc
 {
-  "vars": {
-    "ASSET_PREFIXES": "[\"/cf-assets/\", \"/media/\", \"/public/\"]",
-    "ROUTES": "[...]"
-  }
+	"vars": {
+		"ASSET_PREFIXES": "[\"/cf-assets/\", \"/media/\", \"/public/\"]",
+		"ROUTES": "[...]",
+	},
 }
 ```
 
 Custom prefixes are **merged** with the default prefixes, so you get both. Duplicates are automatically removed.
 
 **Format:** `ASSET_PREFIXES` must be a JSON array of strings. Each prefix:
+
 - Should start with `/` and end with `/` (will be normalized automatically)
 - Will be matched exactly as specified (case-sensitive)
 - Can include any characters, but regex special characters are escaped
 
 **Example:**
+
 ```jsonc
 {
-  "vars": {
-    "ASSET_PREFIXES": "[\"/cf-assets/\", \"/my-custom-folder/\"]"
-  }
+	"vars": {
+		"ASSET_PREFIXES": "[\"/cf-assets/\", \"/my-custom-folder/\"]",
+	},
 }
 ```
 
@@ -247,10 +253,10 @@ CSS `url()` references to asset paths are automatically rewritten:
 
 ```css
 /* Before: */
-background-image: url('/assets/bg.png');
+background-image: url("/assets/bg.png");
 
 /* After (when served from /docs mount): */
-background-image: url('/docs/assets/bg.png');
+background-image: url("/docs/assets/bg.png");
 ```
 
 ### Favicon Rewriting
@@ -281,11 +287,13 @@ Upstream redirects to `/login` → Router rewrites to `/docs/login` (if mount is
 Cookies set with `Path=/` are automatically rewritten to `Path=/mount/` to prevent cookie collisions between microfrontends:
 
 **Before:**
+
 ```
 Set-Cookie: session=abc123; Path=/
 ```
 
 **After (when mount is `/docs`):**
+
 ```
 Set-Cookie: session=abc123; Path=/docs/
 ```
@@ -306,13 +314,14 @@ For Chromium-based browsers, the router uses the **Speculation Rules API** - a m
 - More efficient than JavaScript-based fetching
 
 **Example injected speculation rules:**
+
 ```json
 {
-  "prefetch": [
-    {
-      "urls": ["/app1", "/app2", "/dashboard"]
-    }
-  ]
+	"prefetch": [
+		{
+			"urls": ["/app1", "/app2", "/dashboard"]
+		}
+	]
 }
 ```
 
@@ -329,18 +338,20 @@ For browsers that don't yet support the Speculation Rules API, the router falls 
 The router automatically detects the browser from the `User-Agent` header and injects the appropriate preload mechanism. No configuration needed!
 
 **Limitations:**
+
 - Only works for **static mounts** (no dynamic parameters)
 - Only preloads routes that are not the current route
 - Static mounts must have `preload: true` in their route configuration
 
 **Example Configuration:**
+
 ```json
 {
-  "routes": [
-    {"binding": "APP1", "path": "/app1", "preload": true},
-    {"binding": "APP2", "path": "/app2", "preload": true},
-    {"binding": "APP3", "path": "/:tenant/dashboard"}  // Cannot preload (dynamic parameter)
-  ]
+	"routes": [
+		{ "binding": "APP1", "path": "/app1", "preload": true },
+		{ "binding": "APP2", "path": "/app2", "preload": true },
+		{ "binding": "APP3", "path": "/:tenant/dashboard" } // Cannot preload (dynamic parameter)
+	]
 }
 ```
 
@@ -352,13 +363,17 @@ When `smoothTransitions: true` is enabled, the router injects CSS for smooth bro
 
 ```css
 @supports (view-transition-name: none) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0.3s;
-    animation-timing-function: ease-in-out;
-  }
-  main { view-transition-name: main-content; }
-  nav { view-transition-name: navigation; }
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation-duration: 0.3s;
+		animation-timing-function: ease-in-out;
+	}
+	main {
+		view-transition-name: main-content;
+	}
+	nav {
+		view-transition-name: navigation;
+	}
 }
 ```
 
@@ -369,29 +384,29 @@ This enables seamless transitions when navigating between microfrontends using t
 ### Basic Setup
 
 **wrangler.jsonc:**
+
 ```jsonc
 {
-  "services": [
-    {"binding": "DOCS", "service": "docs-worker"},
-    {"binding": "DASH", "service": "dashboard-worker"}
-  ],
-  "vars": {
-    "ROUTES": "[{\"binding\": \"DOCS\", \"path\": \"/docs\"}, {\"binding\": \"DASH\", \"path\": \"/dashboard\"}]"
-  }
+	"services": [
+		{ "binding": "DOCS", "service": "docs-worker" },
+		{ "binding": "DASH", "service": "dashboard-worker" },
+	],
+	"vars": {
+		"ROUTES": "[{\"binding\": \"DOCS\", \"path\": \"/docs\"}, {\"binding\": \"DASH\", \"path\": \"/dashboard\"}]",
+	},
 }
 ```
 
 ### Multi-Tenant Setup
 
 **wrangler.jsonc:**
+
 ```jsonc
 {
-  "services": [
-    {"binding": "TENANT_APP", "service": "tenant-worker"}
-  ],
-  "vars": {
-    "ROUTES": "[{\"binding\": \"TENANT_APP\", \"path\": \"/:tenant/app\"}]"
-  }
+	"services": [{ "binding": "TENANT_APP", "service": "tenant-worker" }],
+	"vars": {
+		"ROUTES": "[{\"binding\": \"TENANT_APP\", \"path\": \"/:tenant/app\"}]",
+	},
 }
 ```
 
@@ -400,16 +415,17 @@ Matches `/acme/app`, `/corp/app`, etc.
 ### Advanced Configuration
 
 **wrangler.jsonc:**
+
 ```jsonc
 {
-  "services": [
-    {"binding": "APP1", "service": "app1-worker"},
-    {"binding": "APP2", "service": "app2-worker"},
-    {"binding": "ROOT", "service": "root-worker"}
-  ],
-  "vars": {
-    "ROUTES": "{\"smoothTransitions\":true, \"routes\":[{\"binding\": \"ROOT\", \"path\": \"/\"}, {\"binding\": \"APP1\", \"path\": \"/app1\", \"preload\":true}, {\"binding\": \"APP2\", \"path\": \"/app2\", \"preload\":true}]}"
-  }
+	"services": [
+		{ "binding": "APP1", "service": "app1-worker" },
+		{ "binding": "APP2", "service": "app2-worker" },
+		{ "binding": "ROOT", "service": "root-worker" },
+	],
+	"vars": {
+		"ROUTES": "{\"smoothTransitions\":true, \"routes\":[{\"binding\": \"ROOT\", \"path\": \"/\"}, {\"binding\": \"APP1\", \"path\": \"/app1\", \"preload\":true}, {\"binding\": \"APP2\", \"path\": \"/app2\", \"preload\":true}]}",
+	},
 }
 ```
 
@@ -485,4 +501,3 @@ Contributions are welcome! Please open an issue or pull request.
 ## License
 
 MIT
-
