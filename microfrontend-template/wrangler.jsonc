@@ -1,33 +1,33 @@
 {
-	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "mfe-router",
-	"main": "./index.ts",
-	"compatibility_date": "2025-10-08",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
-	"workers_dev": true,
-    "routes": [
-        {
-            "pattern": "example.com/*",
-            "zone_name": "example.com"
-        }
-	],
-	"services": [
-		{
-			"binding": "APP1",
-			"service": "worker-a"
-		},
-		{
-			"binding": "APP2",
-			"service": "worker-b"
-		}
-	],
-	"vars": {
-        "ROUTES": "{\"smoothTransitions\":true, \"routes\":[{\"binding\": \"APP1\", \"path\": \"/app1\", \"preload\":true}, {\"binding\": \"APP2\", \"path\": \"/app2\"}]}"
-	},
-	"observability": {
-		"enabled": true
-	},
-	"upload_source_maps": true
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "microfrontend-template",
+  "main": "./index.ts",
+  "compatibility_date": "2025-10-08",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "example.com/*",
+      "zone_name": "example.com"
+    }
+  ],
+  "services": [
+    {
+      "binding": "APP1",
+      "service": "worker-a"
+    },
+    {
+      "binding": "APP2",
+      "service": "worker-b"
+    }
+  ],
+  "vars": {
+    "ROUTES": "{\"smoothTransitions\":true, \"routes\":[{\"binding\": \"APP1\", \"path\": \"/app1\", \"preload\":true}, {\"binding\": \"APP2\", \"path\": \"/app2\"}]}"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true
 }
