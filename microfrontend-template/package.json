@@ -1,0 +1,15 @@
+{
+    "name": "mfe-router",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+      "dev": "wrangler dev",
+      "deploy": "wrangler deploy",
+      "types": "tsc --noEmit"
+    },
+    "devDependencies": {
+      "wrangler": "^4.47.0",
+      "typescript": "5.8.3",
+      "@cloudflare/workers-types": "^4.20251128.0"
+    }
+}

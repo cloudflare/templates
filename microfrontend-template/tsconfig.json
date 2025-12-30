@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "target": "ES2022",
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "strict": true,
+      "jsx": "react-jsx",
+      "types": ["@cloudflare/workers-types"],
+      "lib": ["ES2022", "WebWorker"],
+      "noEmit": true,
+      "skipLibCheck": true
+    },
+    "include": ["./index.ts", "./src/**/*"]
+}
