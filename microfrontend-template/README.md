@@ -501,3 +501,5 @@ Contributions are welcome! Please open an issue or pull request.
 ## License
 
 MIT
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/microfrontend-template)
