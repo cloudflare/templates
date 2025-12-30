@@ -1,6 +1,5 @@
 {
 	"name": "microfrontend-template",
-	"version": "0.0.1",
 	"private": true,
 	"cloudflare": {
 		"label": "Microfrontend Router",
