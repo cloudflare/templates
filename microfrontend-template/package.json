@@ -2,6 +2,15 @@
     "name": "mfe-router",
     "version": "0.0.1",
     "private": true,
+    "cloudflare": {
+        "label": "Microfrontend Router",
+        "products": [
+            "Workers"
+        ],
+        "categories": [
+            "starter"
+        ]
+    },
     "scripts": {
       "dev": "wrangler dev",
       "deploy": "wrangler deploy",
