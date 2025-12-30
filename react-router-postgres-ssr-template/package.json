@@ -35,17 +35,17 @@
 		"@react-router/dev": "7.9.6",
 		"@types/node": "24.10.1",
 		"autoprefixer": "10.4.22",
-		"hono": "4.10.7",
+		"hono": "4.11.1",
 		"postgres": "3.4.7",
 		"vite": "^6.0.0",
-		"wrangler": "4.51.0"
+		"wrangler": "4.56.0"
 	},
 	"engines": {
 		"node": ">=20.16.0 || >=22.3.0"
 	},
 	"overrides": {
 		"@react-router/dev": {
-			"wrangler": "^4.2.0"
+			"wrangler": "4.56.0"
 		}
 	},
 	"private": true,

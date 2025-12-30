@@ -39,7 +39,7 @@
     "zod": "4.1.13"
   },
   "devDependencies": {
-    "wrangler": "4.51.0"
+    "wrangler": "4.56.0"
   },
   "private": true,
   "scripts": {
