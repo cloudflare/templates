@@ -4,7 +4,7 @@
       "package_json_hash": "25e0e4962e3260bc8a1def3850555a9209a744c4"
     },
     "chanfana-openapi-template": {
-      "package_json_hash": "77674e6e63c1f9143f16a4cbead752e59ec8b8c8"
+      "package_json_hash": "9d2477d83a8eadf95fcaa5dc49c69c2f634fa847"
     },
     "d1-template": {
       "package_json_hash": "5f252c79fd23cd87ca7f1b52461514097054afe3"
@@ -13,7 +13,7 @@
       "package_json_hash": "4395245b41b747c872870763f2577e779690c567"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "50bde599d80ee9f865a5779895f515a957485a75"
+      "package_json_hash": "d46eb3470310ce71ac430fbecb2a1ebb7eab2d45"
     },
     "multiplayer-globe-template": {
       "package_json_hash": "a31a8a915b64dc04603bee79747ae3ad20683fbd"
@@ -46,7 +46,7 @@
       "package_json_hash": "0fca1a2712b723e66106d967ad9ec13c70db6af6"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "c772d67d22b2df6f8a9fde620503683d04218d86"
+      "package_json_hash": "39e5e64927186c13dda728d1300dbaec3966acd9"
     },
     "vite-react-template": {
       "package_json_hash": "a7464690c8a7dab42b30d555fd1961e6857a9386"
@@ -58,13 +58,13 @@
       "package_json_hash": "d7d2cf49f22bf5dd6c3d8bb37627a6228d13e444"
     },
     "d1-starter-sessions-api-template": {
-      "package_json_hash": "f8dbff650bbded88275301396e58fe401e3f01b6"
+      "package_json_hash": "2ea089c5f099f8646b430c34e76ba1547ccd005c"
     },
     "hello-world-do-template": {
       "package_json_hash": "a1f4856140f823f06ec38603045011569cc57f9d"
     },
     "mysql-hyperdrive-template": {
-      "package_json_hash": "c3f4a9d900622002e8302a9c8113fee163bc926d"
+      "package_json_hash": "d7408352ea25e882501024b0ce6cc74e0a48d798"
     },
     "nlweb-template": {
       "package_json_hash": "2f1f6fc52d66ad14498044669ac39983c1080312"
@@ -73,7 +73,7 @@
       "package_json_hash": "a87a268d11fdcd9f0d655a6ecb205b987f8ddaad"
     },
     "postgres-hyperdrive-template": {
-      "package_json_hash": "f5a38fce59d2c863640f3a19173c9913e9f5b853"
+      "package_json_hash": "449f7dc34db5c7d872b18677f43f337a1b6b335e"
     },
     "react-router-postgres-ssr-template": {
       "package_json_hash": "9dc78284a3d5aaa5fdf89bcddda7ec0b753cf54d"
@@ -82,7 +82,7 @@
       "package_json_hash": "436f521fc7854bc068dc1bc151317042a3e152fb"
     },
     "workflows-starter-template": {
-      "package_json_hash": "df0c567d4f864f5574dcd1824d6758e918209e79"
+      "package_json_hash": "83026d11d67a31205286b71fc57ac8ee4ad84837"
     }
   }
 }
