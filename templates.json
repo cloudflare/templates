@@ -28,7 +28,7 @@
       "package_json_hash": "a9c89dd06c0baa1e907e8fdd4e3e4481c2dca4bf"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "96cd9c56fd934109a356a5de1a630965b3260363"
+      "package_json_hash": "d45fd686c18af487d2006b5415a7f7a30acb4659"
     },
     "react-router-hono-fullstack-template": {
       "package_json_hash": "7d4b67afe295fa4381e500c4698bdb0785040522"
@@ -49,7 +49,7 @@
       "package_json_hash": "c772d67d22b2df6f8a9fde620503683d04218d86"
     },
     "vite-react-template": {
-      "package_json_hash": "a7464690c8a7dab42b30d555fd1961e6857a9386"
+      "package_json_hash": "b15e2aa7b4462cd9ba5137020fb49237be0309b9"
     },
     "worker-publisher-template": {
       "package_json_hash": "db1148380cf994c9e42190b71340e7c1779553e8"
@@ -82,7 +82,7 @@
       "package_json_hash": "436f521fc7854bc068dc1bc151317042a3e152fb"
     },
     "workflows-starter-template": {
-      "package_json_hash": "df0c567d4f864f5574dcd1824d6758e918209e79"
+      "package_json_hash": "b8aef06600553d618d2afd89df8a16f2835505ad"
     }
   }
 }
