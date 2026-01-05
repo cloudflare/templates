@@ -37,7 +37,7 @@
 		"tailwindcss": "^3.4.0",
 		"typescript": "5.8.3",
 		"vite": "5.4.14",
-		"vite-tsconfig-paths": "5.1.4",
+		"vite-tsconfig-paths": "6.0.3",
 		"wrangler": "^3.114.4"
 	},
 	"engines": {
