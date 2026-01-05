@@ -14,7 +14,7 @@
 		"zx": "8.8.5"
 	},
 	"devDependencies": {
-		"@types/node": "24.10.1",
+		"@types/node": "25.0.3",
 		"typescript": "5.9.3"
 	},
 	"private": true,
