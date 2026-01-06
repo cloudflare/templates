@@ -1,6 +1,7 @@
 # x402 Payment-Gated Proxy
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/x402-proxy-template)
+
 A Cloudflare Worker that acts as a transparent proxy with payment-gated access using the [x402 protocol](https://x402.org) and stateless cookie-based authentication.
 
 **Live Demo** - Try the built-in endpoints (other routes will fail as no origin is configured):
@@ -16,11 +17,11 @@ This template implements a **smart proxy** that:
 
 1. **Forwards all requests** to the origin server by default
 2. **Intercepts protected routes** based on configurable patterns
-3. **Requires payment** via cryptocurrency (USDC) for protected routes
+3. **Requires payment** via the x402 protocol for protected routes
 4. **Issues JWT cookies** valid for 1 hour after payment
 5. **Allows access** to protected routes without additional payments during the valid period
 
-> **Note:** This template is configured for Base Sepolia testnet (for testing). For production use, update the network configuration to Base mainnet and use real USDC.
+> **Note:** This template is configured for Base Sepolia testnet. For production, update `NETWORK` in `wrangler.jsonc` to a mainnet network (e.g., `"base"`).
 
 ### Use Cases
 
@@ -107,7 +108,12 @@ Visit `http://localhost:8787` to see the proxy in action.
 - Node.js 18+
 - npm or yarn
 - Cloudflare account (for deployment)
-- Base Sepolia testnet USDC (for testing payments)
+- A wallet address to receive payments (see [Getting a Wallet Address](#getting-a-wallet-address) below)
+- Testnet tokens for testing payments (get from [CDP Faucet](https://docs.cdp.coinbase.com/faucets/introduction/welcome))
+
+### Getting a Wallet Address
+
+You need a wallet address (`PAY_TO`) to receive payments. Any Ethereum-compatible wallet works—use an existing wallet (MetaMask, Coinbase Wallet, etc.) or create one programmatically with [Coinbase Developer Platform](https://docs.cdp.coinbase.com/server-wallets/v2/introduction/quickstart).
 
 ### Installation
 
@@ -121,19 +127,38 @@ npm install
 
 The proxy is configured via environment variables in `wrangler.jsonc`:
 
-| Variable                     | Description                                   | Example                                          |
-| ---------------------------- | --------------------------------------------- | ------------------------------------------------ |
-| `WALLET_ADDRESS`             | Your receiving wallet address for payments    | `"0x..."`                                        |
-| `FACILITATOR_URL`            | x402 facilitator endpoint                     | `"https://x402.org/facilitator"`                 |
-| `PROTECTED_PATTERNS`         | Routes requiring payment (supports wildcards) | `["/premium", "/api/private/*"]`                 |
-| `PAYMENT_CONFIG.price`       | Cost per access                               | `"$0.01"`                                        |
-| `PAYMENT_CONFIG.network`     | Blockchain network                            | `"base-sepolia"` (testnet) or `"base"` (mainnet) |
-| `PAYMENT_CONFIG.description` | What the payment grants                       | `"Access for 1 hour"`                            |
-| `ORIGIN_URL`                 | (Optional) External origin URL for proxying   | `"https://origin.example.com"`                   |
+| Variable             | Required | Description                                    | Example                          |
+| -------------------- | -------- | ---------------------------------------------- | -------------------------------- |
+| `PAY_TO`             | Yes      | Wallet address to receive payments             | `"0x..."`                        |
+| `NETWORK`            | Yes      | Blockchain network for payments                | `"base-sepolia"` or `"base"`     |
+| `JWT_SECRET`         | Yes      | Secret for signing auth tokens (set as secret) | (64 hex chars)                   |
+| `PROTECTED_PATTERNS` | Yes      | Array of route pricing configurations          | See below                        |
+| `ORIGIN_URL`         | No       | External URL to proxy to (if not using DNS)    | `"https://api.example.com"`      |
+| `ORIGIN_SERVICE`     | No       | Service Binding to origin Worker               | Configured in wrangler.jsonc     |
+| `FACILITATOR_URL`    | No       | x402 facilitator endpoint (defaults to CDP)    | `"https://x402.org/facilitator"` |
+
+#### PROTECTED_PATTERNS
+
+Each entry defines a protected route and its payment requirements:
+
+```jsonc
+"PROTECTED_PATTERNS": [
+  {
+    "pattern": "/premium/*",
+    "price": "$0.01",
+    "description": "Access to premium content for 1 hour"
+  },
+  {
+    "pattern": "/api/pro/*",
+    "price": "$0.10",
+    "description": "Pro API access"
+  }
+]
+```
 
 #### Proxy Modes
 
-The proxy supports two modes for routing requests to your backend. Choose based on your architecture:
+The proxy supports three modes for routing requests to your backend. Choose based on your architecture:
 
 ##### DNS-Based Mode (Default)
 
@@ -190,12 +215,37 @@ User → api.example.com → x402 Proxy → my-origin-worker.example.com (URL re
 
 **Why External Origin mode?** Cloudflare routes a hostname to one Worker only. You can't chain Workers on the same hostname via routing. External Origin mode solves this by rewriting the URL to a different hostname where your origin Worker lives.
 
+##### Service Binding Mode
+
+**Best for:** Another Cloudflare Worker in your account (fastest option)
+
+When `ORIGIN_SERVICE` **is bound**, requests are sent directly to the bound Worker with zero network overhead. Both Workers run on the same thread.
+
+**Setup:**
+
+1. Add a service binding in `wrangler.jsonc`:
+
+   ```jsonc
+   "services": [
+     { "binding": "ORIGIN_SERVICE", "service": "my-origin-worker" }
+   ]
+   ```
+
+2. Deploy. The proxy will call the origin Worker directly via the binding.
+
+```
+User → api.example.com → x402 Proxy → Origin Worker (via Service Binding)
+```
+
+**Why Service Binding mode?** [Service Bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) provide the fastest Worker-to-Worker communication with no network hop. The origin Worker doesn't even need a public route.
+
 ##### Quick Comparison
 
-| Mode            | `ORIGIN_URL` | Origin Type        | Use Case                                          |
-| --------------- | ------------ | ------------------ | ------------------------------------------------- |
-| DNS-Based       | Not set      | Traditional server | Your backend is a VM, container, or external host |
-| External Origin | Set to URL   | Worker or any URL  | Your backend is another Worker or external API    |
+| Mode            | Config           | Origin Type           | Use Case                                          |
+| --------------- | ---------------- | --------------------- | ------------------------------------------------- |
+| DNS-Based       | (default)        | Traditional server    | Your backend is a VM, container, or external host |
+| External Origin | `ORIGIN_URL`     | Worker or any URL     | Your backend is another Worker or external API    |
+| Service Binding | `ORIGIN_SERVICE` | Worker (same account) | Fastest option for Worker-to-Worker               |
 
 #### Local Development Setup
 
@@ -266,7 +316,7 @@ The proxy uses a custom JWT implementation built on Web Crypto API:
 
 1. Client requests protected route (e.g., `/premium`) without cookie
 2. Proxy responds with `402 Payment Required` + payment details
-3. Client creates signed payment (USDC on Base Sepolia)
+3. Client creates signed payment via x402
 4. Client retries request with `X-PAYMENT` header
 5. x402 middleware verifies payment via facilitator
 6. Proxy issues JWT cookie + forwards request to origin
@@ -362,7 +412,7 @@ curl -v http://localhost:8787/__x402/protected
 3. **Request with payment (requires x402 SDK):**
    See test-client.ts for implementation example
 
-> **Note:** Automated testing with `npm run test:client` requires a funded wallet with testnet USDC. If you're just evaluating the template, the Playwright tests (`pnpm test:e2e x402-proxy-template` from repo root) cover core functionality without requiring payments.
+> **Note:** Automated testing with `npm run test:client` requires a funded wallet with testnet tokens. If you're just evaluating the template, the Playwright tests (`pnpm test:e2e x402-proxy-template` from repo root) cover core functionality without requiring payments.
 
 ## Project Structure
 
@@ -388,7 +438,7 @@ curl -v http://localhost:8787/__x402/protected
 
 The worker uses a single catch-all middleware that:
 
-1. **Checks path** against `PROTECTED_PATTERNS`
+1. **Checks path** against `PROTECTED_PATTERNS` patterns
 2. **For unprotected paths**: Proxies request immediately to origin
 3. **For protected paths**:
    - Checks for valid JWT cookie
@@ -396,26 +446,54 @@ The worker uses a single catch-all middleware that:
    - Issues JWT cookie on successful payment
    - Proxies authenticated request to origin
 
-The proxy mode (DNS-based or External Origin) determines how requests reach your backend. See [Proxy Modes](#proxy-modes) for details.
+The proxy mode (DNS-based, External Origin, or Service Binding) determines how requests reach your backend. See [Proxy Modes](#proxy-modes) for details.
 
 ### Configuration Examples
 
-**Protect a single route:**
+**Single route with one price:**
 
 ```jsonc
-"PROTECTED_PATTERNS": ["/premium"]
+"PROTECTED_PATTERNS": [
+  {
+    "pattern": "/premium",
+    "price": "$0.01",
+    "description": "Access to premium content for 1 hour"
+  }
+]
 ```
 
-**Protect multiple routes:**
+**Multiple routes with different prices:**
 
 ```jsonc
-"PROTECTED_PATTERNS": ["/premium", "/api/secret", "/dashboard"]
+"PROTECTED_PATTERNS": [
+  {
+    "pattern": "/premium",
+    "price": "$0.01",
+    "description": "Basic premium access"
+  },
+  {
+    "pattern": "/api/pro/*",
+    "price": "$0.10",
+    "description": "Pro API access"
+  },
+  {
+    "pattern": "/dashboard",
+    "price": "$1.00",
+    "description": "Full dashboard access"
+  }
+]
 ```
 
-**Protect all routes under a path:**
+**Wildcard patterns:**
 
 ```jsonc
-"PROTECTED_PATTERNS": ["/api/private/*", "/premium/*"]
+"PROTECTED_PATTERNS": [
+  {
+    "pattern": "/api/private/*",
+    "price": "$0.05",
+    "description": "Private API access"
+  }
+]
 ```
 
 ## Security Considerations
@@ -447,7 +525,7 @@ Cookies are configured with security best practices:
 
 ### Production Deployment
 
-> **Important:** For production, update `PAYMENT_CONFIG.network` in `wrangler.jsonc` from `"base-sepolia"` to `"base"` (mainnet) and use real USDC.
+> **Important:** For production, update `NETWORK` in `wrangler.jsonc` to a mainnet network (e.g., `"base"`).
 
 1. **Set up secrets:**
 
@@ -482,24 +560,36 @@ The project enforces code quality through:
 
 ### Adding New Protected Routes
 
-Simply add the route pattern to `PROTECTED_PATTERNS` in `wrangler.jsonc`:
+Simply add a new entry to `PROTECTED_PATTERNS` in `wrangler.jsonc`:
 
 ```jsonc
 {
 	"vars": {
-		"PROTECTED_PATTERNS": ["/premium", "/api/private/*", "/dashboard"],
-		"PAYMENT_CONFIG": {
-			"price": "$0.01",
-			"network": "base-sepolia",
-			"description": "Access for 1 hour",
-		},
+		"PROTECTED_PATTERNS": [
+			{
+				"pattern": "/premium",
+				"price": "$0.01",
+				"description": "Premium content access",
+			},
+			{
+				"pattern": "/api/private/*",
+				"price": "$0.05",
+				"description": "Private API access",
+			},
+			{
+				"pattern": "/dashboard",
+				"price": "$0.10",
+				"description": "Dashboard access",
+			},
+		],
 	},
 }
 ```
 
 **That's it!** No code changes needed. The proxy will automatically:
 
-- Require payment for these routes
+- Require payment for routes matching any pattern
+- Apply the correct price for each route
 - Issue cookies after payment
 - Forward authenticated requests to your origin server
 
@@ -507,7 +597,7 @@ Simply add the route pattern to `PROTECTED_PATTERNS` in `wrangler.jsonc`:
 
 ### "Invalid payment" error
 
-- Check wallet has enough testnet USDC
+- Check wallet has enough testnet tokens
 - Verify you're on Base Sepolia network
 - Ensure payment amount matches requirement
 
@@ -525,8 +615,10 @@ Simply add the route pattern to `PROTECTED_PATTERNS` in `wrangler.jsonc`:
 ## Resources
 
 - [x402 Protocol Documentation](https://x402.gitbook.io/x402)
+- [x402 GitHub](https://github.com/coinbase/x402) - Open source repository
+- [CDP Server Wallet Quickstart](https://docs.cdp.coinbase.com/server-wallets/v2/introduction/quickstart) - Create wallets programmatically
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
-- [Hono Framework](https://hono.dev/)
+- [Service Bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) - Worker-to-Worker communication
 - [Base Sepolia Testnet](https://docs.base.org/network-information/#base-testnet-sepolia)
 
 ## License

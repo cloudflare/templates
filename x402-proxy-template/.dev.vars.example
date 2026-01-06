@@ -1,4 +1,4 @@
-# Environment variables for local development
+# Secrets for local development (config vars go in wrangler.jsonc)
 # Copy this file to .dev.vars and fill in your values
 
 # JWT secret for signing authentication tokens
