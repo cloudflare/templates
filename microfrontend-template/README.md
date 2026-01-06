@@ -1,6 +1,10 @@
 # Cloudflare Vertical Microfrontend Router
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/microfrontend-template)
+
 A production-ready Cloudflare Workers router that enables **vertical microfrontend architecture** by routing requests to separate Worker services based on path expressions, while handling all the complex URL rewriting needed to make multiple apps appear as a single unified application.
+
+<!-- dash-content-start -->
 
 ## Overview
 
@@ -57,6 +61,8 @@ The router rewrites URLs to maintain proper asset resolution across microfronten
 ```
 
 This ensures assets load correctly even though each microfrontend is deployed separately.
+
+<!-- dash-content-end -->
 
 ## Installation
 
@@ -501,5 +507,3 @@ Contributions are welcome! Please open an issue or pull request.
 ## License
 
 MIT
-
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/microfrontend-template)

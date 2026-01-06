@@ -5,10 +5,10 @@
 		"moduleResolution": "bundler",
 		"strict": true,
 		"jsx": "react-jsx",
-		"types": ["@cloudflare/workers-types"],
+		"types": ["@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],
 		"lib": ["ES2022", "WebWorker"],
 		"noEmit": true,
 		"skipLibCheck": true
 	},
-	"include": ["./index.ts", "./src/**/*"]
+	"include": ["./index.ts", "./src/**/*", "./test/**/*", "./vitest.config.ts"]
 }

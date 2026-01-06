@@ -856,6 +856,16 @@ async function handleMountedApp(
 		}
 	}
 
+	// Serve preload script from the router itself (not from upstream service).
+	// This script is used as a fallback for browsers that don't support Speculation Rules API.
+	// Must be checked BEFORE forwarding to upstream to intercept the request.
+	if (
+		options?.preloadStaticMounts?.length &&
+		forwardUrl.pathname === "/__mf-preload.js"
+	) {
+		return getPreloadScriptResponse(options.preloadStaticMounts);
+	}
+
 	const upstreamResp = await upstream.fetch(
 		new Request(forwardUrl.toString(), request),
 	);
@@ -873,15 +883,6 @@ async function handleMountedApp(
 		rewriteSetCookie(headers, mountActual);
 
 		return new Response(null, { status: upstreamResp.status, headers });
-	}
-
-	// Serve preload script from the router itself (not from upstream service).
-	// This script is used as a fallback for browsers that don't support Speculation Rules API.
-	if (
-		options?.preloadStaticMounts?.length &&
-		forwardUrl.pathname === "/__mf-preload.js"
-	) {
-		return getPreloadScriptResponse(options.preloadStaticMounts);
 	}
 
 	// HTML rewriting: Rewrite asset URLs in attributes and optionally inject CSS/scripts.
