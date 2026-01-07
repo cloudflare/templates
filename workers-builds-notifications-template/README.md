@@ -4,7 +4,7 @@
 
 <!-- dash-content-start -->
 
-Get notified when your Workers Builds complete, fail, or are cancelled. This template uses [Queue Event Subscriptions](https://developers.cloudflare.com/queues/configuration/event-subscriptions/) to consume Workers Builds events and forward them to any webhook — Slack, Discord, or your own endpoint.
+Get notified when your Workers Builds complete, fail, or are cancelled. This template uses [Queue Event Subscriptions](https://developers.cloudflare.com/queues/event-subscriptions/) to consume Workers Builds events and forward them to any webhook — Slack, Discord, or your own endpoint.
 
 ## Features
 
@@ -165,7 +165,7 @@ wrangler queues subscription create builds-event-subscriptions \
   --worker-name [YOUR WORKER NAME HERE]
 ```
 
-> For more details, see [Event Subscriptions Documentation](https://developers.cloudflare.com/queues/configuration/event-subscriptions/)
+> For more details, see [Event Subscriptions Documentation](https://developers.cloudflare.com/queues/event-subscriptions/)
 
 ---
 
@@ -290,6 +290,6 @@ The queue must be created before deploying. See [Step 1: Create a Queue](#1-crea
 
 ## Learn More
 
-- [Queue Event Subscriptions](https://developers.cloudflare.com/queues/configuration/event-subscriptions/)
+- [Queue Event Subscriptions](https://developers.cloudflare.com/queues/event-subscriptions/)
 - [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/)
 - [Cloudflare Queues](https://developers.cloudflare.com/queues/)
