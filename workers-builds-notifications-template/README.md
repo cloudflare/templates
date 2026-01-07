@@ -10,7 +10,7 @@ Get notified when your Workers Builds complete, fail, or are cancelled. This tem
 
 - 🔔 Real time notifications for build success, failure, and cancellation
 - 🔗 Works with any webhook (Slack, Discord, custom endpoints)
-- 📋 Includes build details: project name, status, duration, and other metadata 
+- 📋 Includes build details: project name, status, duration, and other metadata
 - 📜 Optional build logs, preview URL, and live deployment URL fetched via Cloudflare API
 
 ## How It Works
@@ -51,6 +51,7 @@ wrangler queues create builds-event-subscriptions
 ```
 
 > **Note:** The queue name must match what's in `wrangler.jsonc`:
+>
 > ```jsonc
 > "queues": {
 >   "consumers": [
@@ -61,6 +62,7 @@ wrangler queues create builds-event-subscriptions
 >   ]
 > }
 > ```
+>
 > If you use a different queue name, update `wrangler.jsonc` before deploying.
 
 ---
@@ -158,8 +160,9 @@ Subscribe your queue to Workers Builds events.
 
 ```bash
 wrangler queues subscription create builds-event-subscriptions \
-  --source workers-builds \
-  --events build.started,build.succeeded,build.failed
+  --source workersBuilds.worker \
+  --events build.started,build.succeeded,build.failed \
+  --worker-name [YOUR WORKER NAME HERE]
 ```
 
 > For more details, see [Event Subscriptions Documentation](https://developers.cloudflare.com/queues/configuration/event-subscriptions/)
@@ -189,13 +192,13 @@ Trigger a build on any worker in your account. You should see a notification in 
 
 ## Event Types
 
-| Event | Notification |
-|-------|--------------|
-| ✅ Build succeeded (production) | Live Worker URL |
-| ✅ Build succeeded (preview) | Preview URL |
-| ❌ Build failed | Build logs inline |
-| ⚠️ Build cancelled | Build logs inline |
-| 🚀 Build started | Build started |
+| Event                           | Notification      |
+| ------------------------------- | ----------------- |
+| ✅ Build succeeded (production) | Live Worker URL   |
+| ✅ Build succeeded (preview)    | Preview URL       |
+| ❌ Build failed                 | Build logs inline |
+| ⚠️ Build cancelled              | Build logs inline |
+| 🚀 Build started                | Build started     |
 
 ---
 
@@ -203,42 +206,42 @@ Trigger a build on any worker in your account. You should see a notification in 
 
 ```json
 {
-  "type": "cf.workersBuilds.worker.build.succeeded",
-  "source": {
-    "type": "workersBuilds.worker",
-    "workerName": "my-worker"
-  },
-  "payload": {
-    "buildUuid": "build-12345678-90ab-cdef-1234-567890abcdef",
-    "status": "stopped",
-    "buildOutcome": "success",
-    "createdAt": "2025-05-01T02:48:57.132Z",
-    "stoppedAt": "2025-05-01T02:50:15.132Z",
-    "buildTriggerMetadata": {
-      "buildTriggerSource": "push_event",
-      "branch": "main",
-      "commitHash": "abc123def456",
-      "commitMessage": "Fix bug in authentication",
-      "author": "developer@example.com",
-      "repoName": "my-worker-repo",
-      "providerType": "github"
-    }
-  },
-  "metadata": {
-    "accountId": "your-account-id",
-    "eventTimestamp": "2025-05-01T02:48:57.132Z"
-  }
+	"type": "cf.workersBuilds.worker.build.succeeded",
+	"source": {
+		"type": "workersBuilds.worker",
+		"workerName": "my-worker"
+	},
+	"payload": {
+		"buildUuid": "build-12345678-90ab-cdef-1234-567890abcdef",
+		"status": "stopped",
+		"buildOutcome": "success",
+		"createdAt": "2025-05-01T02:48:57.132Z",
+		"stoppedAt": "2025-05-01T02:50:15.132Z",
+		"buildTriggerMetadata": {
+			"buildTriggerSource": "push_event",
+			"branch": "main",
+			"commitHash": "abc123def456",
+			"commitMessage": "Fix bug in authentication",
+			"author": "developer@example.com",
+			"repoName": "my-worker-repo",
+			"providerType": "github"
+		}
+	},
+	"metadata": {
+		"accountId": "your-account-id",
+		"eventTimestamp": "2025-05-01T02:48:57.132Z"
+	}
 }
 ```
 
 ### Event Types Reference
 
-| Event Type | Description |
-|------------|-------------|
-| `cf.workersBuilds.worker.build.started` | Build has started |
-| `cf.workersBuilds.worker.build.succeeded` | Build completed successfully |
-| `cf.workersBuilds.worker.build.failed` | Build failed |
-| `cf.workersBuilds.worker.build.failed` + `buildOutcome: "cancelled"` | Build was cancelled |
+| Event Type                                                           | Description                  |
+| -------------------------------------------------------------------- | ---------------------------- |
+| `cf.workersBuilds.worker.build.started`                              | Build has started            |
+| `cf.workersBuilds.worker.build.succeeded`                            | Build completed successfully |
+| `cf.workersBuilds.worker.build.failed`                               | Build failed                 |
+| `cf.workersBuilds.worker.build.failed` + `buildOutcome: "cancelled"` | Build was cancelled          |
 
 ---
 
@@ -246,18 +249,18 @@ Trigger a build on any worker in your account. You should see a notification in 
 
 ### Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `SLACK_WEBHOOK_URL` | Webhook URL (Slack, Discord, or custom) |
+| Variable               | Description                                           |
+| ---------------------- | ----------------------------------------------------- |
+| `SLACK_WEBHOOK_URL`    | Webhook URL (Slack, Discord, or custom)               |
 | `CLOUDFLARE_API_TOKEN` | API token with Workers Builds and Scripts read access |
 
 ### Queue Settings (wrangler.jsonc)
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `max_batch_size` | 10 | Messages per batch |
-| `max_batch_timeout` | 30 | Seconds to wait for full batch |
-| `max_retries` | 3 | Retry attempts for failed processing |
+| Setting             | Default | Description                          |
+| ------------------- | ------- | ------------------------------------ |
+| `max_batch_size`    | 10      | Messages per batch                   |
+| `max_batch_timeout` | 30      | Seconds to wait for full batch       |
+| `max_retries`       | 3       | Retry attempts for failed processing |
 
 ---
 

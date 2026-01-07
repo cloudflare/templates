@@ -986,6 +986,24 @@ importers:
         specifier: 4.56.0
         version: 4.56.0(@cloudflare/workers-types@4.20251230.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
+  workers-builds-notifications-template:
+    devDependencies:
+      '@cloudflare/vitest-pool-workers':
+        specifier: ^0.11.1
+        version: 0.11.1(@cloudflare/workers-types@4.20251230.0)(@vitest/runner@4.0.14)(@vitest/snapshot@4.0.14)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))
+      '@cloudflare/workers-types':
+        specifier: ^4.20241230.0
+        version: 4.20251230.0
+      typescript:
+        specifier: ^5.5.2
+        version: 5.8.3
+      vitest:
+        specifier: ~3.0.0
+        version: 3.0.9(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)
+      wrangler:
+        specifier: ^4.45.0
+        version: 4.56.0(@cloudflare/workers-types@4.20251230.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
   workflows-starter-template:
     dependencies:
       react:
@@ -1819,6 +1837,13 @@ packages:
 
   '@cloudflare/vitest-pool-workers@0.10.15':
     resolution: {integrity: sha512-eISef+JvqC5xr6WBv2+kc6WEjxuKSrZ1MdMuIwdb4vsh8olqw7WHW5pLBL/UzAhbLVlXaAL1uH9UyxIlFkJe7w==}
+    peerDependencies:
+      '@vitest/runner': 2.0.x - 3.2.x
+      '@vitest/snapshot': 2.0.x - 3.2.x
+      vitest: 2.0.x - 3.2.x
+
+  '@cloudflare/vitest-pool-workers@0.11.1':
+    resolution: {integrity: sha512-2ATtR5pb5Q6R19ByHN/Dbe1JY5JWuqGMz3yI2MusDqPcDvL1o5OPlPKJAXphOMEIilXLeATPYrNamdqLBJu3sg==, tarball: https://registry.npmjs.org/@cloudflare/vitest-pool-workers/-/vitest-pool-workers-0.11.1.tgz}
     peerDependencies:
       '@vitest/runner': 2.0.x - 3.2.x
       '@vitest/snapshot': 2.0.x - 3.2.x
@@ -14265,6 +14290,24 @@ snapshots:
       semver: 7.7.3
       vitest: 3.2.4(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)
       wrangler: 4.54.0(@cloudflare/workers-types@4.20251230.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      zod: 3.25.67
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - bufferutil
+      - utf-8-validate
+
+  '@cloudflare/vitest-pool-workers@0.11.1(@cloudflare/workers-types@4.20251230.0)(@vitest/runner@4.0.14)(@vitest/snapshot@4.0.14)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@3.0.9(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))':
+    dependencies:
+      '@vitest/runner': 4.0.14
+      '@vitest/snapshot': 4.0.14
+      birpc: 0.2.14
+      cjs-module-lexer: 1.4.3
+      devalue: 5.5.0
+      esbuild: 0.27.0
+      miniflare: 4.20251217.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      semver: 7.7.3
+      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)
+      wrangler: 4.56.0(@cloudflare/workers-types@4.20251230.0)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       zod: 3.25.67
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
