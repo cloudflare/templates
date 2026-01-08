@@ -316,7 +316,7 @@ The proxy uses a custom JWT implementation built on Web Crypto API:
 
 1. Client requests protected route (e.g., `/premium`) without cookie
 2. Proxy responds with `402 Payment Required` + payment details
-3. Client creates signed payment via x402
+3. Client creates signed payment (e.g., for USDC on Base Sepolia)
 4. Client retries request with `X-PAYMENT` header
 5. x402 middleware verifies payment via facilitator
 6. Proxy issues JWT cookie + forwards request to origin
@@ -438,7 +438,7 @@ curl -v http://localhost:8787/__x402/protected
 
 The worker uses a single catch-all middleware that:
 
-1. **Checks path** against `PROTECTED_PATTERNS` patterns
+1. **Checks path** against `PROTECTED_PATTERNS`
 2. **For unprotected paths**: Proxies request immediately to origin
 3. **For protected paths**:
    - Checks for valid JWT cookie

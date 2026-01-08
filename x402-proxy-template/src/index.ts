@@ -7,16 +7,22 @@ import type { AppContext, Env } from "./env";
 const app = new Hono<AppContext>();
 
 /**
- * Built-in protected routes that always require payment
+ * Built-in protected paths that always require payment
  * These are used for testing and don't need to be configured
  */
-const BUILTIN_PROTECTED_ROUTES: ProtectedRouteConfig[] = [
+const BUILTIN_PROTECTED_PATHS: ProtectedRouteConfig[] = [
 	{
 		pattern: "/__x402/protected",
 		price: "$0.01",
 		description: "Access to test protected endpoint",
 	},
 ];
+
+/**
+ * Built-in public paths that don't require payment
+ * These are used for testing and don't need to be configured
+ */
+const BUILT_IN_PUBLIC_PATHS = ["/__x402/health", "/__x402/config"];
 
 /**
  * Proxy a request to the origin server.
@@ -109,7 +115,7 @@ function findProtectedRouteConfig(
 	patterns: ProtectedRouteConfig[]
 ): ProtectedRouteConfig | null {
 	// Check built-in protected routes first, then configured patterns
-	const allRoutes = [...BUILTIN_PROTECTED_ROUTES, ...patterns];
+	const allRoutes = [...BUILTIN_PROTECTED_PATHS, ...patterns];
 	return (
 		allRoutes.find((config) => pathMatchesPattern(path, config.pattern)) ?? null
 	);
@@ -126,7 +132,7 @@ app.use("*", async (c, next) => {
 
 	// Special handling for built-in endpoints
 	// These are handled by route handlers below, not proxied
-	if (path === "/__x402/health" || path === "/__x402/config") {
+	if (BUILT_IN_PUBLIC_PATHS.includes(path)) {
 		return next(); // Let the route handler below handle it
 	}
 

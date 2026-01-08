@@ -109,13 +109,13 @@
 		// The facilitator verifies and settles payments on behalf of your server.
 		// Defaults to CDP facilitator if not set.
 		//
-		// Available facilitators:
+		// Example facilitators:
 		//   - CDP (default): https://x402.org/facilitator (Base, Base Sepolia)
 		//   - PayAI: https://facilitator.payai.network (multi-chain)
 		//
 		// See: https://x402.gitbook.io/x402/core-concepts/facilitator
 		//
-		// "FACILITATOR_URL": "https://x402.org/facilitator",
+		"FACILITATOR_URL": "https://x402.org/facilitator",
 	},
 	"upload_source_maps": true,
 }
