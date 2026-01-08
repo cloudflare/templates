@@ -15,7 +15,6 @@
 		"healthCheckPath": "/__x402/health",
 		"bindings": {
 			"JWT_SECRET": {
-				"type": "secret_text",
 				"description": "Secret key for signing JWT authentication tokens. Generate with `node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"`"
 			}
 		}
