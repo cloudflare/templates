@@ -8,10 +8,10 @@ Get notified when your Workers Builds complete, fail, or are cancelled. This tem
 
 ## Features
 
-- 🔔 Real time notifications for build success, failure, and cancellation
+- 🔔 Real-time notifications for build success, failure, and cancellation
 - 🔗 Works with any webhook (Slack, Discord, custom endpoints)
-- 📋 Includes build details: project name, status, duration, and other metadata
-- 📜 Optional build logs, preview URL, and live deployment URL fetched via Cloudflare API
+- 📋 Includes build details: project name, branch, commit, and author
+- 📜 Smart error extraction for failed builds, preview URL and live deployment URL for successful builds
 
 ## How It Works
 
@@ -112,8 +112,10 @@ Modify the payload format in `src/index.ts` to match your webhook's expected for
 ### 4. Create a Cloudflare API Token
 
 1. Go to [Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens)
-2. Click **Create Token**
-3. Select **Edit Cloudflare Workers** template
+2. Click **Create Token** → **Create Custom Token**
+3. Add the following permissions:
+   - **Workers Builds Configuration**: Read
+   - **Workers Scripts**: Read
 4. Click **Continue to summary** → **Create Token**
 5. Copy the token
 
@@ -161,8 +163,8 @@ Subscribe your queue to Workers Builds events.
 ```bash
 wrangler queues subscription create builds-event-subscriptions \
   --source workersBuilds.worker \
-  --events build.started,build.succeeded,build.failed \
-  --worker-name [YOUR WORKER NAME HERE]
+  --events build.succeeded,build.failed \
+  --worker-name <YOUR_CONSUMER_WORKER_NAME>
 ```
 
 > For more details, see [Event Subscriptions Documentation](https://developers.cloudflare.com/queues/event-subscriptions/)
@@ -196,9 +198,10 @@ Trigger a build on any worker in your account. You should see a notification in 
 | ------------------------------- | ----------------- |
 | ✅ Build succeeded (production) | Live Worker URL   |
 | ✅ Build succeeded (preview)    | Preview URL       |
-| ❌ Build failed                 | Build logs inline |
-| ⚠️ Build cancelled              | Build logs inline |
-| 🚀 Build started                | Build started     |
+| ❌ Build failed                 | Error message     |
+| ⚠️ Build cancelled              | Cancellation note |
+
+> **Note:** Build started/queued events are acknowledged but do not send notifications.
 
 ---
 
@@ -249,10 +252,10 @@ Trigger a build on any worker in your account. You should see a notification in 
 
 ### Environment Variables
 
-| Variable               | Description                                           |
-| ---------------------- | ----------------------------------------------------- |
-| `SLACK_WEBHOOK_URL`    | Webhook URL (Slack, Discord, or custom)               |
-| `CLOUDFLARE_API_TOKEN` | API token with Workers Builds and Scripts read access |
+| Variable               | Description                                                                 |
+| ---------------------- | --------------------------------------------------------------------------- |
+| `SLACK_WEBHOOK_URL`    | Webhook URL (Slack, Discord, or custom)                                     |
+| `CLOUDFLARE_API_TOKEN` | API token with Workers Builds Configuration: Read and Workers Scripts: Read |
 
 ### Queue Settings (wrangler.jsonc)
 
@@ -279,7 +282,7 @@ The queue must be created before deploying. See [Step 1: Create a Queue](#1-crea
 ### "Invalid token" error in logs
 
 - Verify `CLOUDFLARE_API_TOKEN` is set in worker settings
-- Ensure token has correct permissions (Edit Cloudflare Workers template)
+- Ensure token has correct permissions (Workers Builds Configuration: Read, Workers Scripts: Read)
 
 ### URLs not appearing
 
