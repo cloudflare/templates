@@ -15,7 +15,6 @@
 	"assets": {
 		"directory": "public",
 	},
-
 	// =========================================================================
 	// ROUTES - Where x402-proxy intercepts requests
 	// =========================================================================
@@ -28,7 +27,6 @@
 	// 		"zone_name": "example.com",
 	// 	},
 	// ],
-
 	// =========================================================================
 	// SERVICE BINDING - If your origin is another Cloudflare Worker
 	// =========================================================================
@@ -42,7 +40,6 @@
 	// 		"service": "my-origin-worker",
 	// 	},
 	// ],
-
 	"vars": {
 		// =====================================================================
 		// PAY_TO - Your wallet address to receive payments (REQUIRED)
@@ -54,7 +51,6 @@
 		// sent there are unrecoverable but allow testing the flow.
 		//
 		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
-
 		// =====================================================================
 		// NETWORK - Blockchain network for payments (REQUIRED)
 		// =====================================================================
@@ -65,7 +61,6 @@
 		// Supported networks: https://x402.org
 		//
 		"NETWORK": "base-sepolia",
-
 		// =====================================================================
 		// PROTECTED_PATTERNS - Routes requiring payment (REQUIRED)
 		// =====================================================================
@@ -84,7 +79,6 @@
 				"description": "Access to premium content for 1 hour",
 			},
 		],
-
 		// =====================================================================
 		// ORIGIN_URL - External origin URL (OPTIONAL)
 		// =====================================================================
@@ -102,7 +96,6 @@
 		// over both ORIGIN_URL and DNS-based routing.
 		//
 		// "ORIGIN_URL": "https://my-backend.example.com",
-
 		// =====================================================================
 		// FACILITATOR_URL - Payment verification service (OPTIONAL)
 		// =====================================================================
