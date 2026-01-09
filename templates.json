@@ -84,8 +84,11 @@
     "workflows-starter-template": {
       "package_json_hash": "df0c567d4f864f5574dcd1824d6758e918209e79"
     },
-    "workers-for-platforms-template": {
-      "package_json_hash": "5c1f3b30be19e75e129da91985e1fb3f5d899099"
+    "microfrontend-template": {
+      "package_json_hash": "2025452f6c9e9011a8ed2681ff2f348f4b16908c"
+    },
+    "workers-builds-notifications-template": {
+      "package_json_hash": "7a93751a69e03ceed9c79190f02f28e9a2ef983f"
     }
   }
 }

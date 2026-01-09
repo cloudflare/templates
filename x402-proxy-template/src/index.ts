@@ -10,20 +10,41 @@ const app = new Hono<AppContext>();
  * Built-in protected paths that always require payment
  * These are used for testing and don't need to be configured
  */
-const BUILTIN_PROTECTED_PATHS = ["/__x402/protected"];
+const BUILTIN_PROTECTED_PATHS: ProtectedRouteConfig[] = [
+	{
+		pattern: "/__x402/protected",
+		price: "$0.01",
+		description: "Access to test protected endpoint",
+	},
+];
+
+/**
+ * Built-in public paths that don't require payment
+ * These are used for testing and don't need to be configured
+ */
+const BUILT_IN_PUBLIC_PATHS = ["/__x402/health", "/__x402/config"];
 
 /**
  * Proxy a request to the origin server.
  *
- * Two modes:
- * 1. DNS-based (ORIGIN_URL not set): Uses fetch(request) which routes to the
- *    origin server defined in your DNS records. Best for traditional backends.
+ * Three modes:
+ * 1. Service Binding (ORIGIN_SERVICE bound): Calls the bound Worker directly.
+ *    Best for Worker-to-Worker communication within the same account.
+ *    No network hop, faster than URL-based approaches.
  *
  * 2. External Origin (ORIGIN_URL set): Rewrites the URL to the specified origin
  *    while preserving the original Host header. This allows proxying to another
  *    Worker on a Custom Domain or any external service.
+ *
+ * 3. DNS-based (default): Uses fetch(request) which routes to the origin server
+ *    defined in your DNS records. Best for traditional backends.
  */
 async function proxyToOrigin(request: Request, env: Env): Promise<Response> {
+	// Service Binding: call the bound Worker directly (highest priority)
+	if (env.ORIGIN_SERVICE) {
+		return env.ORIGIN_SERVICE.fetch(request);
+	}
+
 	if (env.ORIGIN_URL) {
 		// External Origin mode: rewrite URL to target origin
 		const originalUrl = new URL(request.url);
@@ -75,24 +96,29 @@ async function proxyToOrigin(request: Request, env: Env): Promise<Response> {
 }
 
 /**
- * Helper to check if a path matches any protected pattern
- * Includes both built-in protected paths and configured patterns
+ * Check if a path matches a route pattern
+ * Supports exact matches and prefix matches with /* wildcard
  */
-function isProtectedPath(path: string, patterns: string[]): boolean {
-	// Check built-in protected paths first
-	if (BUILTIN_PROTECTED_PATHS.includes(path)) {
-		return true;
+function pathMatchesPattern(path: string, pattern: string): boolean {
+	if (pattern.endsWith("/*")) {
+		return path.startsWith(pattern.slice(0, -2));
 	}
+	return path === pattern;
+}
 
-	// Then check configured patterns
-	return patterns.some((pattern) => {
-		// Simple pattern matching - exact match or prefix match with /*
-		if (pattern.endsWith("/*")) {
-			const prefix = pattern.slice(0, -2);
-			return path.startsWith(prefix);
-		}
-		return path === pattern;
-	});
+/**
+ * Helper to find the protected route config for a given path
+ * Includes both built-in protected routes and configured patterns
+ */
+function findProtectedRouteConfig(
+	path: string,
+	patterns: ProtectedRouteConfig[]
+): ProtectedRouteConfig | null {
+	// Check built-in protected routes first, then configured patterns
+	const allRoutes = [...BUILTIN_PROTECTED_PATHS, ...patterns];
+	return (
+		allRoutes.find((config) => pathMatchesPattern(path, config.pattern)) ?? null
+	);
 }
 
 /**
@@ -106,12 +132,13 @@ app.use("*", async (c, next) => {
 
 	// Special handling for built-in endpoints
 	// These are handled by route handlers below, not proxied
-	if (path === "/__x402/health") {
+	if (BUILT_IN_PUBLIC_PATHS.includes(path)) {
 		return next(); // Let the route handler below handle it
 	}
 
 	// Check if this path is protected (including /__x402/protected)
-	if (isProtectedPath(path, protectedPatterns)) {
+	const protectedConfig = findProtectedRouteConfig(path, protectedPatterns);
+	if (protectedConfig) {
 		// Ensure JWT_SECRET is configured before processing protected routes
 		if (!c.env.JWT_SECRET) {
 			return c.json(
@@ -123,17 +150,8 @@ app.use("*", async (c, next) => {
 			);
 		}
 
-		// Apply authentication middleware for protected routes
-		const paymentConfig = c.env.PAYMENT_CONFIG || {
-			price: "$0.01",
-			network: "base-sepolia",
-			description: "Access to premium content for 1 hour",
-		};
-
 		// Use the protected route middleware
-		const protectedMiddleware = createProtectedRoute(
-			paymentConfig as ProtectedRouteConfig
-		);
+		const protectedMiddleware = createProtectedRoute(protectedConfig);
 		let jwtToken = "";
 
 		const result = await protectedMiddleware(c, async () => {
@@ -230,6 +248,20 @@ app.get("/__x402/health", (c) => {
 		proxy: "x402-proxy",
 		message: "This endpoint is always public",
 		timestamp: Date.now(),
+	});
+});
+
+/**
+ * Config status endpoint - shows current configuration (no secrets exposed)
+ * Useful for debugging and verifying deployment
+ */
+app.get("/__x402/config", (c) => {
+	return c.json({
+		network: c.env.NETWORK,
+		payTo: c.env.PAY_TO ? `***${c.env.PAY_TO.slice(-6)}` : null,
+		hasOriginUrl: !!c.env.ORIGIN_URL,
+		hasOriginService: !!c.env.ORIGIN_SERVICE,
+		protectedPatterns: c.env.PROTECTED_PATTERNS?.map((p) => p.pattern) || [],
 	});
 });
 

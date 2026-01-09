@@ -16,6 +16,8 @@ export interface Env extends CloudflareBindings {
 	 * Use this to proxy to another Worker on a Custom Domain or any external service.
 	 */
 	ORIGIN_URL?: string;
+	/** Optional: Service Binding to origin Worker */
+	ORIGIN_SERVICE?: Fetcher;
 }
 
 /** Full app context type for Hono */

@@ -5,7 +5,7 @@
 import { Context, Next, MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 import { verifyJWT } from "./jwt";
-import { paymentMiddleware, type Network } from "x402-hono";
+import { paymentMiddleware } from "x402-hono";
 import type { AppContext } from "./env";
 
 /**
@@ -53,10 +53,10 @@ export function requirePaymentOrCookie(paymentMw: MiddlewareHandler) {
  * Configuration for a protected route that requires payment
  */
 export interface ProtectedRouteConfig {
+	/** Route pattern to protect (e.g., "/premium", "/api/paid/*") */
+	pattern: string;
 	/** Price in USD (e.g. "$0.01") */
 	price: string;
-	/** Blockchain network */
-	network: Network;
 	/** Human-readable description of what the payment is for */
 	description: string;
 }
@@ -78,21 +78,24 @@ export function createProtectedRoute(config: ProtectedRouteConfig) {
 		const routePath =
 			rawPath.length > 1 ? rawPath.replace(/\/+$/, "") : rawPath;
 
-		// Create payment middleware dynamically with wallet address from env
+		// Create payment middleware dynamically with config from env
+		// Facilitator is optional - x402 uses its own default when not provided
+		const facilitator = c.env.FACILITATOR_URL
+			? { url: c.env.FACILITATOR_URL }
+			: undefined;
+
 		const paymentMw = paymentMiddleware(
-			c.env.WALLET_ADDRESS as `0x${string}`,
+			c.env.PAY_TO as `0x${string}`,
 			{
 				[routePath]: {
 					price: config.price,
-					network: config.network,
+					network: c.env.NETWORK,
 					config: {
 						description: config.description,
 					},
 				},
 			},
-			{
-				url: c.env.FACILITATOR_URL,
-			}
+			facilitator
 		);
 
 		// Apply the combined auth/payment middleware
