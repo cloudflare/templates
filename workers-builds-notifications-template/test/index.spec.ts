@@ -231,7 +231,6 @@ describe("Workers Builds Notifications", () => {
 			const payload = slackPayloads[0];
 			expect(payload.blocks[0].text.text).toContain("Preview Deploy");
 		});
-
 	});
 
 	// =========================================================================

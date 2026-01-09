@@ -117,9 +117,7 @@ function buildSuccessMessage(
 		: previewUrl
 			? "View Preview"
 			: "View Build";
-	const buttonUrl = isProduction
-		? liveUrl || dashUrl
-		: previewUrl || dashUrl;
+	const buttonUrl = isProduction ? liveUrl || dashUrl : previewUrl || dashUrl;
 
 	const blocks: KnownBlock[] = [
 		buildSectionBlock(`✅  *${title}*\n*${workerName}*`, buttonText, buttonUrl),
