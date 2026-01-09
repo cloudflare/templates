@@ -14,7 +14,7 @@
 		"publish": false
 	},
 	"dependencies": {
-		"@modelcontextprotocol/sdk": "1.23.0",
+		"@modelcontextprotocol/sdk": "1.25.2",
 		"@types/markdown-it": "14.1.2",
 		"agents": "0.2.25",
 		"markdown-it": "14.1.0",
