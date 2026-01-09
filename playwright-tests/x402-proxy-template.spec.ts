@@ -67,6 +67,8 @@ test.describe("x402 Payment-Gated Proxy Template", () => {
 		const paymentOption = json.accepts[0];
 		expect(paymentOption.network).toBe("base-sepolia");
 		expect(paymentOption.resource).toContain("/__x402/protected");
-		expect(paymentOption.description).toContain("Access to premium content");
+		expect(paymentOption.description).toContain(
+			"Access to test protected endpoint",
+		);
 	});
 });
