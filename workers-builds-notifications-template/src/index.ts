@@ -11,6 +11,14 @@
  * @see https://developers.cloudflare.com/queues/event-subscriptions/
  */
 
+import type {
+	SectionBlock,
+	ContextBlock,
+	KnownBlock,
+	MrkdwnElement,
+	Button,
+} from "@slack/types";
+
 // =============================================================================
 // CONFIGURATION
 // =============================================================================
@@ -60,7 +68,7 @@ export interface CloudflareEvent {
 // HELPER FUNCTIONS
 // =============================================================================
 
-function getCommitUrl(event: CloudflareEvent): string | null {
+export function getCommitUrl(event: CloudflareEvent): string | null {
 	const meta = event.payload?.buildTriggerMetadata;
 	if (!meta?.repoName || !meta?.commitHash || !meta?.providerAccountName)
 		return null;
@@ -74,14 +82,43 @@ function getCommitUrl(event: CloudflareEvent): string | null {
 	return null;
 }
 
-function isProductionBranch(branch: string | undefined): boolean {
+export function isProductionBranch(branch: string | undefined): boolean {
 	if (!branch) return true;
 	return ["main", "master", "production", "prod"].includes(
 		branch.toLowerCase(),
 	);
 }
 
-function extractBuildError(logs: string[]): string {
+export function extractAuthorName(author: string | undefined): string | null {
+	if (!author) return null;
+	if (author.includes("@")) {
+		const name = author.split("@")[0];
+		return name || author; // Fallback to full author if split yields empty string
+	}
+	return author;
+}
+
+// Build status helper to avoid duplication
+export interface BuildStatus {
+	isSucceeded: boolean;
+	isFailed: boolean;
+	isCancelled: boolean;
+}
+
+export function getBuildStatus(event: CloudflareEvent): BuildStatus {
+	const buildOutcome = event.payload?.buildOutcome;
+	const isCancelled =
+		buildOutcome === "canceled" ||
+		buildOutcome === "cancelled" ||
+		event.type?.includes("canceled") ||
+		event.type?.includes("cancelled");
+	const isFailed = event.type?.includes("failed") && !isCancelled;
+	const isSucceeded = event.type?.includes("succeeded");
+
+	return { isSucceeded, isFailed, isCancelled };
+}
+
+export function extractBuildError(logs: string[]): string {
 	if (!logs || logs.length === 0) {
 		return "No logs available";
 	}
@@ -177,6 +214,32 @@ function extractBuildError(logs: string[]): string {
 	return "Build failed";
 }
 
+// Slack payload type
+interface SlackPayload {
+	blocks: KnownBlock[];
+}
+
+// API response types
+interface BuildDetailsResponse {
+	result?: {
+		preview_url?: string;
+	};
+}
+
+interface SubdomainResponse {
+	result?: {
+		subdomain?: string;
+	};
+}
+
+interface LogsResponse {
+	result?: {
+		lines?: [number, string][];
+		truncated?: boolean;
+		cursor?: string;
+	};
+}
+
 function getDashboardUrl(event: CloudflareEvent): string | null {
 	const accountId = event.metadata?.accountId;
 	const buildUuid = event.payload?.buildUuid;
@@ -195,52 +258,20 @@ function buildSlackBlocks(
 	previewUrl: string | null,
 	liveUrl: string | null,
 	logs: string[],
-) {
+): SlackPayload {
 	const workerName = event.source?.workerName || "Worker";
-	const buildOutcome = event.payload?.buildOutcome;
 	const meta = event.payload?.buildTriggerMetadata;
 	const dashUrl = getDashboardUrl(event);
 	const commitUrl = getCommitUrl(event);
-
-	const isCancelled =
-		buildOutcome === "canceled" ||
-		buildOutcome === "cancelled" ||
-		event.type?.includes("canceled") ||
-		event.type?.includes("cancelled");
-	const isFailed = event.type?.includes("failed") && !isCancelled;
-	const isSucceeded = event.type?.includes("succeeded");
+	const status = getBuildStatus(event);
 	const isProduction = isProductionBranch(meta?.branch);
 
-	// ===================
-	// SUCCESS: Production
-	// ===================
-	if (isSucceeded && isProduction) {
-		const blocks: any[] = [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: `✅  *Production Deploy*\n*${workerName}*`,
-				},
-				accessory:
-					liveUrl || dashUrl
-						? {
-								type: "button",
-								text: {
-									type: "plain_text",
-									text: liveUrl ? "View Worker" : "View Build",
-								},
-								url: liveUrl || dashUrl,
-							}
-						: undefined,
-			},
-		];
-
-		// Metadata in context block - separated with bullets
-		const contextElements: any[] = [];
+	// Helper to build context elements (reduces duplication)
+	function buildContextElements(): MrkdwnElement[] {
+		const elements: MrkdwnElement[] = [];
 
 		if (meta?.branch) {
-			contextElements.push({
+			elements.push({
 				type: "mrkdwn",
 				text: `*Branch:* \`${meta.branch}\``,
 			});
@@ -248,22 +279,64 @@ function buildSlackBlocks(
 
 		if (meta?.commitHash) {
 			const commitText = meta.commitHash.substring(0, 7);
-			contextElements.push({
+			elements.push({
 				type: "mrkdwn",
 				text: `*Commit:* ${commitUrl ? `<${commitUrl}|${commitText}>` : `\`${commitText}\``}`,
 			});
 		}
 
-		if (meta?.author) {
-			const authorName = meta.author.includes("@")
-				? meta.author.split("@")[0]
-				: meta.author;
-			contextElements.push({ type: "mrkdwn", text: `*Author:* ${authorName}` });
+		const authorName = extractAuthorName(meta?.author);
+		if (authorName) {
+			elements.push({ type: "mrkdwn", text: `*Author:* ${authorName}` });
 		}
 
-		// Always add context block even if only partial metadata
+		return elements;
+	}
+
+	// Helper to build section block with optional button accessory
+	function buildSectionBlock(
+		text: string,
+		buttonText?: string,
+		buttonUrl?: string | null,
+		buttonStyle?: Button["style"],
+	): SectionBlock {
+		const block: SectionBlock = {
+			type: "section",
+			text: { type: "mrkdwn", text },
+		};
+
+		if (buttonText && buttonUrl) {
+			block.accessory = {
+				type: "button",
+				text: { type: "plain_text", text: buttonText },
+				url: buttonUrl,
+				...(buttonStyle && { style: buttonStyle }),
+			};
+		}
+
+		return block;
+	}
+
+	// Helper to build context block
+	function buildContextBlock(elements: MrkdwnElement[]): ContextBlock {
+		return { type: "context", elements };
+	}
+
+	// ===================
+	// SUCCESS: Production
+	// ===================
+	if (status.isSucceeded && isProduction) {
+		const blocks: KnownBlock[] = [
+			buildSectionBlock(
+				`✅  *Production Deploy*\n*${workerName}*`,
+				liveUrl ? "View Worker" : dashUrl ? "View Build" : undefined,
+				liveUrl || dashUrl,
+			),
+		];
+
+		const contextElements = buildContextElements();
 		if (contextElements.length > 0) {
-			blocks.push({ type: "context", elements: contextElements });
+			blocks.push(buildContextBlock(contextElements));
 		}
 
 		return { blocks };
@@ -272,55 +345,18 @@ function buildSlackBlocks(
 	// =================
 	// SUCCESS: Preview
 	// =================
-	if (isSucceeded && !isProduction) {
-		const blocks: any[] = [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: `✅  *Preview Deploy*\n*${workerName}*`,
-				},
-				accessory:
-					previewUrl || dashUrl
-						? {
-								type: "button",
-								text: {
-									type: "plain_text",
-									text: previewUrl ? "View Preview" : "View Build",
-								},
-								url: previewUrl || dashUrl,
-							}
-						: undefined,
-			},
+	if (status.isSucceeded && !isProduction) {
+		const blocks: KnownBlock[] = [
+			buildSectionBlock(
+				`✅  *Preview Deploy*\n*${workerName}*`,
+				previewUrl ? "View Preview" : dashUrl ? "View Build" : undefined,
+				previewUrl || dashUrl,
+			),
 		];
 
-		// Metadata in context block
-		const contextElements: any[] = [];
-
-		if (meta?.branch) {
-			contextElements.push({
-				type: "mrkdwn",
-				text: `*Branch:* \`${meta.branch}\``,
-			});
-		}
-
-		if (meta?.commitHash) {
-			const commitText = meta.commitHash.substring(0, 7);
-			contextElements.push({
-				type: "mrkdwn",
-				text: `*Commit:* ${commitUrl ? `<${commitUrl}|${commitText}>` : `\`${commitText}\``}`,
-			});
-		}
-
-		if (meta?.author) {
-			const authorName = meta.author.includes("@")
-				? meta.author.split("@")[0]
-				: meta.author;
-			contextElements.push({ type: "mrkdwn", text: `*Author:* ${authorName}` });
-		}
-
+		const contextElements = buildContextElements();
 		if (contextElements.length > 0) {
-			blocks.push({ type: "context", elements: contextElements });
+			blocks.push(buildContextBlock(contextElements));
 		}
 
 		return { blocks };
@@ -329,60 +365,27 @@ function buildSlackBlocks(
 	// =========
 	// FAILED
 	// =========
-	if (isFailed) {
+	if (status.isFailed) {
 		const error = extractBuildError(logs);
 
-		const blocks: any[] = [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: `❌  *Build Failed*\n*${workerName}*`,
-				},
-				accessory: dashUrl
-					? {
-							type: "button",
-							text: { type: "plain_text", text: "View Logs" },
-							url: dashUrl,
-							style: "danger",
-						}
-					: undefined,
-			},
+		const blocks: KnownBlock[] = [
+			buildSectionBlock(
+				`❌  *Build Failed*\n*${workerName}*`,
+				dashUrl ? "View Logs" : undefined,
+				dashUrl,
+				"danger",
+			),
 		];
 
-		// Metadata in context block
-		const contextElements: any[] = [];
-		if (meta?.branch) {
-			contextElements.push({
-				type: "mrkdwn",
-				text: `*Branch:* \`${meta.branch}\``,
-			});
-		}
-		if (meta?.commitHash) {
-			const commitText = meta.commitHash.substring(0, 7);
-			contextElements.push({
-				type: "mrkdwn",
-				text: `*Commit:* ${commitUrl ? `<${commitUrl}|${commitText}>` : `\`${commitText}\``}`,
-			});
-		}
-		if (meta?.author) {
-			const authorName = meta.author.includes("@")
-				? meta.author.split("@")[0]
-				: meta.author;
-			contextElements.push({ type: "mrkdwn", text: `*Author:* ${authorName}` });
-		}
-
+		const contextElements = buildContextElements();
 		if (contextElements.length > 0) {
-			blocks.push({ type: "context", elements: contextElements });
+			blocks.push(buildContextBlock(contextElements));
 		}
 
 		// Error message
 		blocks.push({
 			type: "section",
-			text: {
-				type: "mrkdwn",
-				text: `\`\`\`${error}\`\`\``,
-			},
+			text: { type: "mrkdwn", text: `\`\`\`${error}\`\`\`` },
 		});
 
 		return { blocks };
@@ -391,48 +394,18 @@ function buildSlackBlocks(
 	// ===========
 	// CANCELLED
 	// ===========
-	if (isCancelled) {
-		const blocks: any[] = [
-			{
-				type: "section",
-				text: {
-					type: "mrkdwn",
-					text: `⚠️  *Build Cancelled*\n*${workerName}*`,
-				},
-				accessory: dashUrl
-					? {
-							type: "button",
-							text: { type: "plain_text", text: "View Build" },
-							url: dashUrl,
-						}
-					: undefined,
-			},
+	if (status.isCancelled) {
+		const blocks: KnownBlock[] = [
+			buildSectionBlock(
+				`⚠️  *Build Cancelled*\n*${workerName}*`,
+				dashUrl ? "View Build" : undefined,
+				dashUrl,
+			),
 		];
 
-		// Metadata in context block
-		const contextElements: any[] = [];
-		if (meta?.branch) {
-			contextElements.push({
-				type: "mrkdwn",
-				text: `*Branch:* \`${meta.branch}\``,
-			});
-		}
-		if (meta?.commitHash) {
-			const commitText = meta.commitHash.substring(0, 7);
-			contextElements.push({
-				type: "mrkdwn",
-				text: `*Commit:* ${commitUrl ? `<${commitUrl}|${commitText}>` : `\`${commitText}\``}`,
-			});
-		}
-		if (meta?.author) {
-			const authorName = meta.author.includes("@")
-				? meta.author.split("@")[0]
-				: meta.author;
-			contextElements.push({ type: "mrkdwn", text: `*Author:* ${authorName}` });
-		}
-
+		const contextElements = buildContextElements();
 		if (contextElements.length > 0) {
-			blocks.push({ type: "context", elements: contextElements });
+			blocks.push(buildContextBlock(contextElements));
 		}
 
 		return { blocks };
@@ -455,6 +428,9 @@ function buildSlackBlocks(
 // MAIN HANDLER
 // =============================================================================
 
+// Maximum pages to fetch for logs (prevents infinite loops if API misbehaves)
+const MAX_LOG_PAGES = 50;
+
 export default {
 	async queue(batch: MessageBatch<CloudflareEvent>, env: Env): Promise<void> {
 		if (!env.SLACK_WEBHOOK_URL) {
@@ -475,19 +451,13 @@ export default {
 					continue;
 				}
 
+				// Skip started/queued events - no notification needed
 				if (event.type.includes("started") || event.type.includes("queued")) {
 					message.ack();
 					continue;
 				}
 
-				const isSucceeded = event.type.includes("succeeded");
-				const isFailed = event.type.includes("failed");
-				const buildOutcome = event.payload.buildOutcome;
-				const isCancelled =
-					buildOutcome === "canceled" ||
-					buildOutcome === "cancelled" ||
-					event.type?.includes("canceled") ||
-					event.type?.includes("cancelled");
+				const status = getBuildStatus(event);
 				const workerName =
 					event.source?.workerName ||
 					event.payload.buildTriggerMetadata?.repoName;
@@ -496,8 +466,9 @@ export default {
 				let previewUrl: string | null = null;
 				let liveUrl: string | null = null;
 
+				// Fetch URLs for successful builds
 				if (
-					isSucceeded &&
+					status.isSucceeded &&
 					workerName &&
 					accountId &&
 					env.CLOUDFLARE_API_TOKEN
@@ -511,7 +482,7 @@ export default {
 								},
 							},
 						);
-						const buildData: any = await buildRes.json();
+						const buildData: BuildDetailsResponse = await buildRes.json();
 
 						if (buildData.result?.preview_url) {
 							previewUrl = buildData.result.preview_url;
@@ -524,7 +495,7 @@ export default {
 									},
 								},
 							);
-							const subData: any = await subRes.json();
+							const subData: SubdomainResponse = await subRes.json();
 							if (subData.result?.subdomain) {
 								liveUrl = `https://${workerName}.${subData.result.subdomain}.workers.dev`;
 							}
@@ -534,11 +505,18 @@ export default {
 					}
 				}
 
+				// Fetch logs for failed builds
 				let logs: string[] = [];
 
-				if (isFailed && !isCancelled && accountId && env.CLOUDFLARE_API_TOKEN) {
+				if (
+					status.isFailed &&
+					!status.isCancelled &&
+					accountId &&
+					env.CLOUDFLARE_API_TOKEN
+				) {
 					try {
 						let cursor: string | null = null;
+						let pageCount = 0;
 
 						do {
 							const logsEndpoint = `https://api.cloudflare.com/client/v4/accounts/${accountId}/builds/builds/${event.payload.buildUuid}/logs${cursor ? `?cursor=${cursor}` : ""}`;
@@ -548,19 +526,24 @@ export default {
 									Authorization: `Bearer ${env.CLOUDFLARE_API_TOKEN}`,
 								},
 							});
-							const logsData: any = await logsRes.json();
+							const logsData: LogsResponse = await logsRes.json();
 
-							if (logsData.result?.lines?.length > 0) {
-								const lines = logsData.result.lines.map(
-									(l: [number, string]) => l[1],
-								);
+							if (logsData.result?.lines && logsData.result.lines.length > 0) {
+								const lines = logsData.result.lines.map((l) => l[1]);
 								logs = logs.concat(lines);
 							}
 
 							cursor = logsData.result?.truncated
-								? logsData.result?.cursor
+								? (logsData.result?.cursor ?? null)
 								: null;
-						} while (cursor);
+							pageCount++;
+						} while (cursor && pageCount < MAX_LOG_PAGES);
+
+						if (pageCount >= MAX_LOG_PAGES) {
+							console.warn(
+								`Reached max log pages (${MAX_LOG_PAGES}) for build ${event.payload.buildUuid}`,
+							);
+						}
 					} catch (error) {
 						console.error("Failed to fetch logs:", error);
 					}

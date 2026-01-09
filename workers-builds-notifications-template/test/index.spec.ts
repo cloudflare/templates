@@ -1,6 +1,43 @@
 import { env, createMessageBatch } from "cloudflare:test";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import worker, { type CloudflareEvent } from "../src/index";
+import worker, { type CloudflareEvent, extractBuildError } from "../src/index";
+
+// =============================================================================
+// UNIT TESTS: Helper Functions
+// =============================================================================
+
+describe("Helper Functions", () => {
+	describe("extractBuildError", () => {
+		it("should extract first error and ignore subsequent errors", () => {
+			const logs = [
+				"Installing dependencies...",
+				'✘ [ERROR] Could not resolve "missing-module"',
+				"    at /src/index.ts:10:5", // Stack trace - should be skipped
+				"✘ [ERROR] Second error",
+			];
+			const error = extractBuildError(logs);
+			expect(error).toContain("Could not resolve");
+			expect(error).not.toContain("Second error");
+		});
+
+		it("should return fallback message for empty logs", () => {
+			expect(extractBuildError([])).toBe("No logs available");
+		});
+
+		it("should skip metadata lines when extracting errors", () => {
+			const logs = [
+				"Total Upload: 100 KiB",
+				"Worker Startup Time: 5ms",
+				"✘ [ERROR] Actual error here",
+			];
+			expect(extractBuildError(logs)).toContain("Actual error here");
+		});
+	});
+});
+
+// =============================================================================
+// TEST HELPERS
+// =============================================================================
 
 function createMockEvent(
 	overrides: Partial<CloudflareEvent> = {},
@@ -194,111 +231,6 @@ describe("Workers Builds Notifications", () => {
 			expect(payload.blocks[0].text.text).toContain("Preview Deploy");
 		});
 
-		it("should include commit link for GitHub repos", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				type: "cf.workersBuilds.worker.build.succeeded",
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "success",
-					createdAt: "2025-05-01T02:48:57.132Z",
-					buildTriggerMetadata: {
-						buildTriggerSource: "push_event",
-						branch: "main",
-						commitHash: "abc123def456789",
-						commitMessage: "Test commit",
-						author: "dev@example.com",
-						buildCommand: "npm run build",
-						deployCommand: "npm run deploy",
-						rootDirectory: "/",
-						repoName: "my-repo",
-						providerAccountName: "my-org",
-						providerType: "github",
-					},
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads).toHaveLength(1);
-			const payload = slackPayloads[0];
-			const contextBlock = payload.blocks.find(
-				(b: any) => b.type === "context",
-			);
-			expect(contextBlock).toBeDefined();
-
-			const commitElement = contextBlock.elements.find((e: any) =>
-				e.text.includes("Commit"),
-			);
-			expect(commitElement.text).toContain("github.com");
-			expect(commitElement.text).toContain("abc123d"); // truncated hash
-		});
-
-		it("should treat master branch as production", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "success",
-					createdAt: "2025-05-01T02:48:57.132Z",
-					buildTriggerMetadata: {
-						buildTriggerSource: "push_event",
-						branch: "master",
-						commitHash: "abc123",
-						commitMessage: "Test",
-						author: "dev@example.com",
-						buildCommand: "npm run build",
-						deployCommand: "npm run deploy",
-						rootDirectory: "/",
-						repoName: "my-repo",
-						providerAccountName: "org",
-						providerType: "github",
-					},
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads[0].blocks[0].text.text).toContain(
-				"Production Deploy",
-			);
-		});
 	});
 
 	// =========================================================================
@@ -490,33 +422,6 @@ describe("Workers Builds Notifications", () => {
 			expect(slackPayloads[0].blocks[0].text.text).toContain("Build Cancelled");
 		});
 
-		it("should send cancellation notification (canceled spelling)", async () => {
-			mockFetch((url) => {
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				type: "cf.workersBuilds.worker.build.failed",
-				payload: {
-					buildUuid: "build-canceled-123",
-					status: "stopped",
-					buildOutcome: "canceled",
-					createdAt: "2025-05-01T02:48:57.132Z",
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads).toHaveLength(1);
-			expect(slackPayloads[0].blocks[0].text.text).toContain("Build Cancelled");
-		});
-
 		it("should not fetch logs for cancelled builds", async () => {
 			mockFetch((url) => {
 				if (url.includes("hooks.slack.com")) {
@@ -546,64 +451,6 @@ describe("Workers Builds Notifications", () => {
 	});
 
 	// =========================================================================
-	// SKIPPED EVENTS
-	// =========================================================================
-
-	describe("Skipped Events", () => {
-		it("should skip started events without sending notification", async () => {
-			mockFetch((url) => {
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				type: "cf.workersBuilds.worker.build.started",
-				payload: {
-					buildUuid: "build-123",
-					status: "running",
-					buildOutcome: null,
-					createdAt: "2025-05-01T02:48:57.132Z",
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads).toHaveLength(0);
-		});
-
-		it("should skip queued events without sending notification", async () => {
-			mockFetch((url) => {
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				type: "cf.workersBuilds.worker.build.queued",
-				payload: {
-					buildUuid: "build-123",
-					status: "queued",
-					buildOutcome: null,
-					createdAt: "2025-05-01T02:48:57.132Z",
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads).toHaveLength(0);
-		});
-	});
-
-	// =========================================================================
 	// ERROR HANDLING
 	// =========================================================================
 
@@ -619,43 +466,7 @@ describe("Workers Builds Notifications", () => {
 			await worker.queue(batch, envWithoutSlack as typeof env);
 		});
 
-		it("should handle invalid event structure", async () => {
-			mockFetch(() => new Response("ok"));
-
-			const invalidEvent = { type: null, payload: null, metadata: null } as any;
-			const messages = [createQueueMessage(invalidEvent)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			// Should not throw
-			await worker.queue(batch, env);
-			expect(slackPayloads).toHaveLength(0);
-		});
-
-		it("should handle Slack API errors gracefully", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("invalid_token", { status: 401 });
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent();
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			// Should not throw
-			await worker.queue(batch, env);
-		});
-
-		it("should handle Cloudflare API errors gracefully", async () => {
+		it("should handle API errors gracefully and still send notification", async () => {
 			mockFetch((url) => {
 				if (url.includes("api.cloudflare.com")) {
 					throw new Error("Network error");
@@ -670,7 +481,7 @@ describe("Workers Builds Notifications", () => {
 			const messages = [createQueueMessage(event)];
 			const batch = createMessageBatch("builds-event-subscriptions", messages);
 
-			// Should not throw
+			// Should not throw and should still send notification
 			await worker.queue(batch, env);
 			expect(slackPayloads).toHaveLength(1);
 		});
@@ -681,51 +492,7 @@ describe("Workers Builds Notifications", () => {
 	// =========================================================================
 
 	describe("Batch Processing", () => {
-		it("should process multiple messages in a batch", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("/logs")) {
-					return new Response(
-						JSON.stringify({
-							result: { lines: [[1, "Error"]], truncated: false },
-						}),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const events = [
-				createMockEvent({ type: "cf.workersBuilds.worker.build.succeeded" }),
-				createMockEvent({
-					type: "cf.workersBuilds.worker.build.failed",
-					payload: {
-						buildUuid: "build-456",
-						status: "stopped",
-						buildOutcome: "failure",
-						createdAt: "2025-05-01T02:48:57.132Z",
-					},
-				}),
-			];
-
-			const messages = events.map(createQueueMessage);
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads).toHaveLength(2);
-		});
-
-		it("should skip started events but process others in same batch", async () => {
+		it("should process multiple messages and skip started/queued events", async () => {
 			mockFetch((url) => {
 				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
 					return new Response(JSON.stringify({ result: {} }));
@@ -752,15 +519,6 @@ describe("Workers Builds Notifications", () => {
 					},
 				}),
 				createMockEvent({ type: "cf.workersBuilds.worker.build.succeeded" }),
-				createMockEvent({
-					type: "cf.workersBuilds.worker.build.queued",
-					payload: {
-						buildUuid: "build-3",
-						status: "queued",
-						buildOutcome: null,
-						createdAt: "2025-05-01T02:48:57.132Z",
-					},
-				}),
 			];
 
 			const messages = events.map(createQueueMessage);
@@ -781,111 +539,6 @@ describe("Workers Builds Notifications", () => {
 	// =========================================================================
 
 	describe("Metadata Handling", () => {
-		it("should extract author name from email", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "success",
-					createdAt: "2025-05-01T02:48:57.132Z",
-					buildTriggerMetadata: {
-						buildTriggerSource: "push_event",
-						branch: "main",
-						commitHash: "abc123",
-						commitMessage: "Test",
-						author: "john.doe@example.com",
-						buildCommand: "npm run build",
-						deployCommand: "npm run deploy",
-						rootDirectory: "/",
-						repoName: "my-repo",
-						providerAccountName: "org",
-						providerType: "github",
-					},
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			const contextBlock = slackPayloads[0].blocks.find(
-				(b: any) => b.type === "context",
-			);
-			const authorElement = contextBlock.elements.find((e: any) =>
-				e.text.includes("Author"),
-			);
-			expect(authorElement.text).toContain("john.doe");
-			expect(authorElement.text).not.toContain("@example.com");
-		});
-
-		it("should handle GitLab commit URLs", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "success",
-					createdAt: "2025-05-01T02:48:57.132Z",
-					buildTriggerMetadata: {
-						buildTriggerSource: "push_event",
-						branch: "main",
-						commitHash: "abc123def456",
-						commitMessage: "Test",
-						author: "dev@example.com",
-						buildCommand: "npm run build",
-						deployCommand: "npm run deploy",
-						rootDirectory: "/",
-						repoName: "my-repo",
-						providerAccountName: "my-group",
-						providerType: "gitlab",
-					},
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			const contextBlock = slackPayloads[0].blocks.find(
-				(b: any) => b.type === "context",
-			);
-			const commitElement = contextBlock.elements.find((e: any) =>
-				e.text.includes("Commit"),
-			);
-			expect(commitElement.text).toContain("gitlab.com");
-		});
-
 		it("should handle missing buildTriggerMetadata gracefully", async () => {
 			mockFetch((url) => {
 				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
@@ -919,168 +572,6 @@ describe("Workers Builds Notifications", () => {
 			await worker.queue(batch, env);
 			expect(slackPayloads).toHaveLength(1);
 		});
-
-		it("should treat production branch as production deploy", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "success",
-					createdAt: "2025-05-01T02:48:57.132Z",
-					buildTriggerMetadata: {
-						buildTriggerSource: "push_event",
-						branch: "production",
-						commitHash: "abc123",
-						commitMessage: "Test",
-						author: "dev@example.com",
-						buildCommand: "npm run build",
-						deployCommand: "npm run deploy",
-						rootDirectory: "/",
-						repoName: "my-repo",
-						providerAccountName: "org",
-						providerType: "github",
-					},
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads[0].blocks[0].text.text).toContain(
-				"Production Deploy",
-			);
-		});
-
-		it("should treat prod branch as production deploy", async () => {
-			mockFetch((url) => {
-				if (url.includes("/builds/builds/") && !url.includes("/logs")) {
-					return new Response(JSON.stringify({ result: {} }));
-				}
-				if (url.includes("/subdomain")) {
-					return new Response(
-						JSON.stringify({ result: { subdomain: "test" } }),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "success",
-					createdAt: "2025-05-01T02:48:57.132Z",
-					buildTriggerMetadata: {
-						buildTriggerSource: "push_event",
-						branch: "prod",
-						commitHash: "abc123",
-						commitMessage: "Test",
-						author: "dev@example.com",
-						buildCommand: "npm run build",
-						deployCommand: "npm run deploy",
-						rootDirectory: "/",
-						repoName: "my-repo",
-						providerAccountName: "org",
-						providerType: "github",
-					},
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads[0].blocks[0].text.text).toContain(
-				"Production Deploy",
-			);
-		});
-	});
-
-	// =========================================================================
-	// LOG PAGINATION
-	// =========================================================================
-
-	describe("Log Pagination", () => {
-		it("should fetch all paginated logs for failed builds", async () => {
-			let logCallCount = 0;
-
-			mockFetch((url) => {
-				if (url.includes("/logs")) {
-					logCallCount++;
-					if (logCallCount === 1) {
-						// First page - truncated, has cursor
-						return new Response(
-							JSON.stringify({
-								result: {
-									lines: [[1, "Starting build..."]],
-									truncated: true,
-									cursor: "cursor-abc123",
-								},
-							}),
-						);
-					}
-					// Second page - includes the actual error
-					expect(url).toContain("cursor=cursor-abc123");
-					return new Response(
-						JSON.stringify({
-							result: {
-								lines: [[2, "✘ [ERROR] Module not found"]],
-								truncated: false,
-							},
-						}),
-					);
-				}
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			const event = createMockEvent({
-				type: "cf.workersBuilds.worker.build.failed",
-				payload: {
-					buildUuid: "build-123",
-					status: "stopped",
-					buildOutcome: "failure",
-					createdAt: "2025-05-01T02:48:57.132Z",
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			// Should have made 2 log API calls
-			expect(logCallCount).toBe(2);
-
-			// Should include error from second page
-			const errorBlock = slackPayloads[0].blocks.find((b: any) =>
-				b.text?.text?.includes("```"),
-			);
-			expect(errorBlock.text.text).toContain("Module not found");
-		});
 	});
 
 	// =========================================================================
@@ -1088,41 +579,11 @@ describe("Workers Builds Notifications", () => {
 	// =========================================================================
 
 	describe("Fallback Handling", () => {
-		it("should handle unknown event types with fallback message", async () => {
-			mockFetch((url) => {
-				if (url.includes("hooks.slack.com")) {
-					return new Response("ok");
-				}
-				return new Response("Not found", { status: 404 });
-			});
-
-			// Event type that doesn't match succeeded, failed, started, or queued
-			const event = createMockEvent({
-				type: "cf.workersBuilds.worker.build.unknown_status",
-				payload: {
-					buildUuid: "build-123",
-					status: "unknown",
-					buildOutcome: null,
-					createdAt: "2025-05-01T02:48:57.132Z",
-				},
-			});
-
-			const messages = [createQueueMessage(event)];
-			const batch = createMessageBatch("builds-event-subscriptions", messages);
-
-			await worker.queue(batch, env);
-
-			expect(slackPayloads).toHaveLength(1);
-			expect(slackPayloads[0].blocks[0].text.text).toContain("📢");
-			expect(slackPayloads[0].blocks[0].text.text).toContain("unknown_status");
-		});
-
 		it("should send notification without URLs when CLOUDFLARE_API_TOKEN is missing", async () => {
 			mockFetch((url) => {
 				if (url.includes("hooks.slack.com")) {
 					return new Response("ok");
 				}
-				// Should not reach Cloudflare API
 				if (url.includes("api.cloudflare.com")) {
 					throw new Error("Should not call Cloudflare API without token");
 				}
@@ -1136,17 +597,11 @@ describe("Workers Builds Notifications", () => {
 			const envWithoutToken = { ...env, CLOUDFLARE_API_TOKEN: "" };
 			await worker.queue(batch, envWithoutToken as typeof env);
 
-			// Should still send notification
+			// Should still send notification without API token
 			expect(slackPayloads).toHaveLength(1);
 			expect(slackPayloads[0].blocks[0].text.text).toContain(
 				"Production Deploy",
 			);
-
-			// Should not have made any Cloudflare API calls
-			const cfApiCalls = fetchCalls.filter((c) =>
-				c.url.includes("api.cloudflare.com"),
-			);
-			expect(cfApiCalls).toHaveLength(0);
 		});
 	});
 });

@@ -358,18 +358,17 @@
 						</tr>
 						<tr>
 							<td><span class="event-icon">❌</span> Build failed</td>
-							<td>Build logs inline</td>
+							<td>Error message extracted from logs</td>
 						</tr>
 						<tr>
-							<td><span class="event-icon">⚠️</span> Build canceled</td>
-							<td>Build logs inline</td>
-						</tr>
-						<tr>
-							<td><span class="event-icon">🚀</span> Build started</td>
-							<td>Build started notification</td>
+							<td><span class="event-icon">⚠️</span> Build cancelled</td>
+							<td>Cancellation note</td>
 						</tr>
 					</tbody>
 				</table>
+				<p style="margin-top: 1rem; font-size: 0.875rem; color: var(--gray-600);">
+					<strong>Note:</strong> Build started/queued events are acknowledged but do not send notifications.
+				</p>
 			</section>
 
 			<section class="section">
