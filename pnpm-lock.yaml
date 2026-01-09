@@ -994,6 +994,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20241230.0
         version: 4.20251230.0
+      '@slack/types':
+        specifier: ^2.19.0
+        version: 2.19.0
       typescript:
         specifier: ^5.5.2
         version: 5.8.3
@@ -4827,6 +4830,10 @@ packages:
   '@sindresorhus/merge-streams@2.3.0':
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
+
+  '@slack/types@2.19.0':
+    resolution: {integrity: sha512-7+QZ38HGcNh/b/7MpvPG6jnw7mliV6UmrquJLqgdxkzJgQEYUcEztvFWRU49z0x4vthF0ixL5lTK601AXrS8IA==}
+    engines: {node: '>= 12.13.0', npm: '>= 6.12.0'}
 
   '@smithy/abort-controller@2.2.0':
     resolution: {integrity: sha512-wRlta7GuLWpTqtFfGo+nZyOO1vEvewdNR1R4rTxpC8XU6vG/NDyrFBhwLZsqg1NUoR1noVaXJPC/7ZK47QCySw==}
@@ -17197,6 +17204,8 @@ snapshots:
   '@sindresorhus/is@7.1.1': {}
 
   '@sindresorhus/merge-streams@2.3.0': {}
+
+  '@slack/types@2.19.0': {}
 
   '@smithy/abort-controller@2.2.0':
     dependencies:
