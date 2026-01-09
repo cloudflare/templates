@@ -1,6 +1,6 @@
 {
 	"name": "workers-for-platforms-template",
-	"version": "1.0.0",
+	"private": true,
 	"description": "Build your own website hosting platform with Workers for Platforms. Users can create and deploy sites through a simple web interface.",
 	"license": "Apache-2.0",
 	"engines": {
