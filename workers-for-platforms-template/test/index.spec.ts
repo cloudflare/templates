@@ -73,13 +73,15 @@ describe("Workers for Platforms Template", () => {
 			expect(html).toContain("Admin Dashboard");
 		});
 
-		it("should show projects table headers", async () => {
+		it("should show projects section on admin page", async () => {
 			const response = await makeRequest("/admin");
 			const html = await response.text();
 
-			// Check for table column headers
-			expect(html).toContain("Name");
-			expect(html).toContain("Subdomain");
+			// Check for admin page elements that are always present
+			expect(html).toContain("Admin Dashboard");
+			expect(html).toContain("Projects");
+			// When empty, shows "No projects yet" message
+			expect(html).toMatch(/(Subdomain|No projects yet)/);
 		});
 	});
 

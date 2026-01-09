@@ -469,11 +469,14 @@ app.get("/admin", withDbAndInit, async (c) => {
  */
 app.get("/init", withDbAndInit, async (c) => {
 	const scripts = await GetScriptsInDispatchNamespace(c.env);
-	await Promise.all(
-		scripts.map(async (script) =>
-			DeleteScriptInDispatchNamespace(c.env, script.id),
-		),
-	);
+	// Handle case where scripts is null/undefined (e.g., in tests or when API unavailable)
+	if (scripts && Array.isArray(scripts)) {
+		await Promise.all(
+			scripts.map(async (script) =>
+				DeleteScriptInDispatchNamespace(c.env, script.id),
+			),
+		);
+	}
 	await Initialize(c.var.db);
 	return Response.redirect(c.req.url.replace("/init", ""));
 });

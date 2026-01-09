@@ -11,6 +11,9 @@ export default defineWorkersConfig({
 					bindings: {
 						DISPATCH_NAMESPACE_NAME: "test-namespace",
 						CUSTOM_DOMAIN: "",
+						// Required for API calls - mock values for testing
+						ACCOUNT_ID: "test-account-id",
+						DISPATCH_NAMESPACE_API_TOKEN: "test-api-token",
 					},
 				},
 			},
