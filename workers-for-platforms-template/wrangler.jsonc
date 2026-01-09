@@ -30,7 +30,7 @@
 		{
 			"binding": "DB",
 			"database_name": "workers-for-platforms-template",
-			"database_id": "placeholder-will-be-auto-provisioned"
+			"database_id": "39f0ae3f-5dbc-4357-aa4d-bc52ce832621"
 		}
 	],
 	// Environment variables
