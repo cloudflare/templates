@@ -31,10 +31,8 @@ This template demonstrates how to build a multi-tenant platform using Workers fo
 
 ## Bindings Used
 
-| Binding      | Product               | Purpose                                   |
-| ------------ | --------------------- | ----------------------------------------- |
-| `dispatcher` | Workers for Platforms | Routes requests to user-deployed Workers  |
-| `DB`         | D1                    | Stores project metadata and configuration |
+- **dispatcher** (Workers for Platforms) - Routes requests to user-deployed Workers
+- **DB** (D1) - Stores project metadata and configuration
 
 <!-- dash-content-end -->
 
