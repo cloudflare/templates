@@ -1,4 +1,4 @@
-# Workers for Platforms Website Builder
+# Website Builder
 
 Build your own website hosting platform using [Cloudflare Workers for Platforms](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/). Users can create and deploy websites through a simple web interface.
 

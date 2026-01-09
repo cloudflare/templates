@@ -27,7 +27,7 @@
 		"workers-qb": "^0.1.1"
 	},
 	"cloudflare": {
-		"label": "Workers for Platforms Website Builder",
+		"label": "Website Builder",
 		"products": [
 			"Workers",
 			"Workers for Platforms",

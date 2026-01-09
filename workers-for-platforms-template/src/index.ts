@@ -2,7 +2,7 @@
 // Licensed under the APACHE LICENSE, VERSION 2.0 license found in the LICENSE file or at http://www.apache.org/licenses/LICENSE-2.0
 
 /**
- * Workers for Platforms Website Builder
+ * Website Builder
  *
  * This template demonstrates how to build a multi-tenant website hosting platform
  * using Cloudflare Workers for Platforms. Key concepts:
