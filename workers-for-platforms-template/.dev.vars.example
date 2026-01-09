@@ -1,0 +1,4 @@
+# Workers for Platforms Template - Secrets
+# Copy to .dev.vars for local development
+
+# No secrets required - all necessary tokens are auto-provisioned during Deploy to Cloudflare
