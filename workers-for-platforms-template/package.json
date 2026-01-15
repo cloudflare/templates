@@ -23,7 +23,7 @@
 		"test:watch": "vitest"
 	},
 	"dependencies": {
-		"hono": "^4.2.1",
+		"hono": "^4.11.4",
 		"workers-qb": "^0.1.1"
 	},
 	"cloudflare": {
