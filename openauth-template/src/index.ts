@@ -39,7 +39,8 @@ export default {
 		// The real OpenAuth server code starts here:
 		return issuer({
 			storage: CloudflareStorage({
-				namespace: env.AUTH_STORAGE,
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				namespace: env.AUTH_STORAGE as any,
 			}),
 			subjects,
 			providers: {
