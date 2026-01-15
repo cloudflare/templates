@@ -1,0 +1,26 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { CustomerService } from "@/lib/services/customer";
+
+const { API_TOKEN, DB } = Astro.locals.runtime.env;
+
+const customerService = new CustomerService(DB);
+const customers = await customerService.getAll();
+
+import { CustomersTable } from '@/components/admin/customers-table';
+import { CreateCustomerButton } from '@/components/admin/create-customer';
+---
+
+<Layout title="Customers">
+  {customers.length ? (
+    <CustomersTable data={customers} />
+  ) : (
+    <p class="font-medium text-muted-foreground">
+      No customers yet. Try creating one using the API or by selecting "Create New Customer" above.
+    </p>
+  )}
+
+  <div slot="actions">
+    <CreateCustomerButton apiToken={API_TOKEN} client:only="react" />
+  </div>
+</Layout>

@@ -1,0 +1,29 @@
+# runs additional checks that can block the PR, but still allow preview links to be generated
+name: "Pull Request Supplemental Checks"
+
+on:
+  pull_request: # this action runs in an untrusted but secure context with no secrets
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  supplemental-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-check
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Validate live demo links
+        run: pnpm -w validate-live-demo-links
+
+      - name: Validate Deploy to Cloudflare buttons
+        run: pnpm -w validate-d2c-buttons
+
+      - name: Validate version and private package.json
+        run: pnpm -w validate-version-private-package-json

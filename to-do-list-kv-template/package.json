@@ -1,0 +1,63 @@
+{
+	"name": "to-do-list-kv-template",
+	"description": "A simple to-do list app built with Cloudflare Workers Assets and Remix.",
+	"cloudflare": {
+		"label": "To-Do List App",
+		"products": [
+			"Workers",
+			"KV"
+		],
+		"categories": [
+			"storage"
+		],
+		"docs_url": "https://developers.cloudflare.com/kv/",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/455c3006-4114-43f6-57f7-70eee0b2e000/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/04b42d40-456d-49df-88a9-f6274a68fe00/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"@remix-run/cloudflare": "2.17.2",
+		"@remix-run/react": "2.17.2",
+		"@remix-run/server-runtime": "2.17.2",
+		"isbot": "5.1.32",
+		"nanoid": "5.1.6",
+		"react": "^18.0.0",
+		"react-dom": "^18.0.0"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.10.11",
+		"@cloudflare/workers-types": "^4.20250425.0",
+		"@remix-run/dev": "2.17.2",
+		"@types/react": "^18.0.0",
+		"@types/react-dom": "^18.0.0",
+		"@typescript-eslint/eslint-plugin": "8.50.0",
+		"@typescript-eslint/parser": "8.50.0",
+		"autoprefixer": "10.4.22",
+		"eslint": "9.39.2",
+		"postcss": "8.5.6",
+		"tailwindcss": "^3.4.0",
+		"typescript": "5.8.3",
+		"vite": "5.4.14",
+		"vite-tsconfig-paths": "5.1.4",
+		"vitest": "3.2.4",
+		"wrangler": "^3.114.4"
+	},
+	"engines": {
+		"node": ">=20.0.0"
+	},
+	"private": true,
+	"scripts": {
+		"build": "remix vite:build",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && remix vite:build && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "remix vite:dev",
+		"lint": "eslint --ignore-pattern .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+		"preview": "npm run build && wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest",
+		"typecheck": "tsc"
+	},
+	"sideEffects": false,
+	"type": "module"
+}

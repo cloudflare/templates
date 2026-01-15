@@ -1,0 +1,53 @@
+name: Main
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  check-and-deploy-main:
+    name: Check and Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency: templates-check-and-deploy-main
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TEMPLATES_API_CLIENT_ID: ${{ vars.TEMPLATES_API_CLIENT_ID }}
+      TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: pnpm -w check
+      - run: pnpm -w test
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        shell: bash
+
+      - name: Run e2e tests
+        run: pnpm test:e2e
+
+      - name: Deploy live demos
+        run: pnpm -w deploy-live-demos
+
+      - name: Validate live demo links
+        run: pnpm -w validate-live-demo-links
+
+      - name: Run live e2e tests
+        run: pnpm test:e2e:live
+
+      - name: Compute short hash
+        run: |
+          full_sha="${{ github.sha }}"
+          short_sha="${full_sha:0:7}"
+          echo "SHA_SHORT=$short_sha" >> $GITHUB_ENV
+
+      - name: Deploy to staging
+        run: |
+          pnpm run upload . \
+            --staging \
+            --repoFullName ${{ github.repository }} \
+            --branch ${{ github.ref_name }} \
+            --hash $SHA_SHORT

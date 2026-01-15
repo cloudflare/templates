@@ -1,0 +1,56 @@
+{
+	"name": "templates",
+	"dependencies": {
+		"node-fetch": "3.3.2"
+	},
+	"devDependencies": {
+		"@playwright/test": "1.57.0",
+		"@types/node": "24.10.1",
+		"cli": "workspace:*",
+		"prettier": "3.7.4",
+		"syncpack": "13.0.4",
+		"turbo": "2.6.1",
+		"vitest": "4.0.14"
+	},
+	"engines": {
+		"node": ">=20.16.0 || >=22.3.0"
+	},
+	"packageManager": "pnpm@10.2.0",
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild",
+			"sharp",
+			"workerd"
+		]
+	},
+	"scripts": {
+		"check": "pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",
+		"check:deps": "syncpack lint",
+		"check:lockfiles": "templates lint-npm-lockfiles .",
+		"check:prettier": "prettier . --check",
+		"check:templates": "templates lint .",
+		"check:turbo": "turbo run check cf-typegen --force",
+		"deploy": "turbo run deploy",
+		"deploy-live-demos": "templates deploy-live-demos .",
+		"fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:turbo && pnpm run fix:prettier",
+		"fix:deps": "syncpack format && syncpack fix-mismatches",
+		"fix:lockfiles": "templates generate-npm-lockfiles .",
+		"fix:prettier": "prettier . --write",
+		"fix:templates": "templates lint . --fix",
+		"fix:turbo": "turbo run cf-typegen --force",
+		"info:deps": "templates deps-info",
+		"postinstall": "turbo run build && templates setup-hooks",
+		"preview": "templates preview",
+		"test": "turbo run test -- --passWithNoTests",
+		"test:cli": "vitest",
+		"test:e2e": "playwright test",
+		"test:e2e:codegen": "playwright codegen",
+		"test:e2e:live": "PLAYWRIGHT_USE_LIVE=true playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"update:deps": "templates deps-update",
+		"upload": "templates upload",
+		"validate-d2c-buttons": "templates validate-d2c-buttons",
+		"validate-live-demo-links": "templates validate-live-demo-links",
+		"validate-version-private-package-json": "templates validate-version-private-package-json"
+	}
+}

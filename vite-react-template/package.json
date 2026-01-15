@@ -1,0 +1,46 @@
+{
+	"name": "vite-react-template",
+	"description": "A template for building a React application with Vite, Hono, and Cloudflare Workers",
+	"cloudflare": {
+		"label": "Vite React Template",
+		"products": [
+			"Workers"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/532a5378-9717-4964-385b-5fafd2160200/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/ec7f4be5-d1d6-4e94-0851-126341745400/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"hono": "4.11.1",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@eslint/js": "9.39.1",
+		"@types/node": "24.10.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"eslint": "9.39.2",
+		"eslint-plugin-react-hooks": "7.0.1",
+		"eslint-plugin-react-refresh": "0.4.24",
+		"globals": "16.5.0",
+		"typescript": "5.8.3",
+		"typescript-eslint": "8.48.0",
+		"vite": "^6.0.0",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc -b && vite build",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && vite build && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "vite",
+		"lint": "eslint .",
+		"preview": "npm run build && vite preview"
+	},
+	"type": "module"
+}

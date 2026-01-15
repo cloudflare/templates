@@ -1,0 +1,26 @@
+{
+	"$schema": "https://turbo.build/schema.json",
+	"tasks": {
+		"build": {
+			"outputs": [
+				".astro/**",
+				".next/**",
+				".open-next/**",
+				".react-router/**",
+				".wrangler/**",
+				"build/**",
+				"dist/**"
+			]
+		},
+		"check": {
+			"dependsOn": ["build"]
+		},
+		"cf-typegen": {
+			"dependsOn": ["build"]
+		},
+		"deploy": {
+			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"]
+		},
+		"test": {}
+	}
+}

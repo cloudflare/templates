@@ -1,0 +1,32 @@
+{
+	"name": "openauth-template",
+	"description": "Deploy an OpenAuth server on Cloudflare Workers.",
+	"cloudflare": {
+		"label": "OpenAuth Server",
+		"products": [
+			"Workers",
+			"D1",
+			"KV"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5764e3ad-0e07-4873-1139-39ba4e6ab200/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/40ce8067-10e9-4bc8-d296-fe18b3c05d00/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"@openauthjs/openauth": "0.4.3",
+		"valibot": "1.2.0"
+	},
+	"devDependencies": {
+		"typescript": "5.9.3",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"predeploy": "wrangler d1 migrations apply AUTH_DB --remote"
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"compatibility_date": "2025-10-08",
+	"main": "src/server/index.ts",
+	"name": "multiplayer-globe-template",
+	"migrations": [
+		{
+			"new_sqlite_classes": ["Globe"],
+			"tag": "v1"
+		}
+	],
+	"assets": {
+		"directory": "public"
+	},
+	"build": {
+		"command": "npx esbuild src/client/index.tsx --bundle --outdir=public/dist --splitting --sourcemap --format=esm"
+	},
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "Globe",
+				"name": "Globe"
+			}
+		]
+	},
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true
+}

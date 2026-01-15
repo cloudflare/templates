@@ -1,0 +1,28 @@
+{
+	"name": "text-to-image-template",
+	"description": "Generate images based on text prompts.",
+	"cloudflare": {
+		"label": "Text to Image App",
+		"products": [
+			"Workers",
+			"AI"
+		],
+		"categories": [
+			"ai"
+		],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/42670a6d-609c-418a-4619-6287b3faa100/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5381ef7e-92d8-423a-56e4-56e0b32b3300/preview",
+		"publish": true
+	},
+	"devDependencies": {
+		"typescript": "5.9.3",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev"
+	}
+}

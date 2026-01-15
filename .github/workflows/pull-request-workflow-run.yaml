@@ -1,0 +1,80 @@
+name: "Pull Request Workflow Run"
+
+on:
+  workflow_run: # this action runs in a trusted context, but passed info from the "Pull Request" untrusted workflow
+    workflows: ["Pull Request"]
+    types:
+      - completed
+
+permissions:
+  pull-requests: write
+
+env:
+  PR_ID_FILE: "_pr_id.txt"
+  PREVIEW_DIR: "_preview-templates"
+  ALLOW_PREVIEW_LABEL: "allow preview"
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      TEMPLATES_API_CLIENT_ID: ${{ vars.TEMPLATES_API_CLIENT_ID }}
+      TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Download PR ID
+        uses: actions/download-artifact@v4
+        with:
+          name: pr_id
+          github-token: ${{ env.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - shell: bash
+        run: |
+          value=`cat ${{ env.PR_ID_FILE }}`
+          echo PR_ID=$value >> $GITHUB_ENV
+
+      - name: "Download pull request info"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: process.env.PR_ID,
+            })
+            const allowPreview = pr.labels?.find((label) => label.name == process.env.ALLOW_PREVIEW_LABEL)
+            fs.appendFileSync(process.env.GITHUB_ENV, `PR_REPOSITORY=${pr.head.repo.full_name}\n`)
+            fs.appendFileSync(process.env.GITHUB_ENV, `PR_REF=${pr.head.ref}\n`)
+            fs.appendFileSync(process.env.GITHUB_ENV, `PR_SHA_SHORT=${pr.head.sha.slice(0, 7)}\n`)
+            if (allowPreview) {
+              fs.appendFileSync(process.env.GITHUB_ENV, 'PR_ALLOW_PREVIEW=true\n')
+            }
+      - name: "Dependency info"
+        run: pnpm -w info:deps --pr $PR_ID
+
+        #
+        # Note: Checking out the source of the PR means checking out untrusted code.
+        # We shouldn't run any tests or package installs past this point.
+        # Simply checking out to fetch the files is reasonable, however.
+        # https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/
+        #
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.PR_REPOSITORY }}
+          ref: ${{ env.PR_REF }}
+          path: ${{ env.PREVIEW_DIR }}
+          persist-credentials: "false"
+
+      - name: "Make preview"
+        run: |
+          pnpm -w preview $PREVIEW_DIR \
+            --repoFullName $PR_REPOSITORY \
+            --branch $PR_REF \
+            --pr $PR_ID \
+            --hash $PR_SHA_SHORT

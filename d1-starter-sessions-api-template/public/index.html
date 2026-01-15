@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>D1 Sessions API</title>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.red.min.css"
+		/>
+		<meta name="color-scheme" content="light dark" />
+		<script type="module">
+			import { h, render } from "https://esm.sh/preact@10.25.4";
+			import {
+				useState,
+				useEffect,
+				useRef,
+			} from "https://esm.sh/preact@10.25.4/hooks";
+			import htm from "https://esm.sh/htm@3.1.1";
+
+			// Initialize htm with Preact
+			const html = htm.bind(h);
+
+			const fetchWorker = async (method, url, body, bookmark) => {
+				const now = Date.now();
+				return fetch(url, {
+					method,
+					body: body ? JSON.stringify(body) : undefined,
+					headers: {
+						"Content-Type": "application/json",
+						"x-d1-bookmark": bookmark,
+					},
+				}).then((resp) => {
+					return resp.json().then((json) => {
+						if (!resp.ok) {
+							console.error(`fetch failed with error: ${json.error}`);
+						}
+						if (!json.sessionBookmark) {
+							json.sessionBookmark = resp.headers.get("x-d1-bookmark") ?? "";
+						}
+						return { ...json, browserLatency: Date.now() - now, now };
+					});
+				});
+			};
+
+			const highlightedRowStyle = {
+				fontStyle: "italic",
+				fontWeight: "bolder",
+				border: "2px solid #D93526", // pico-color-red-500
+			};
+
+			const Latencies = ({
+				d1Latency,
+				browserLatency,
+				servedByRegion,
+				servedByPrimary,
+			}) => {
+				console.log({
+					d1Latency,
+					browserLatency,
+					servedByRegion,
+					servedByPrimary,
+				});
+				if (!d1Latency || !browserLatency) {
+					return null;
+				}
+				return html`
+					<section>
+						<h4>Request metadata</h4>
+						<dl class="grid">
+							<div>
+								<dt>D1 Latency RTT (Worker ➜ D1 Database)</dt>
+								<dd>${Number(d1Latency).toFixed(0)}ms</dd>
+							</div>
+
+							<div>
+								<dt>E2E Latency RTT (Browser ➜ Worker ➜ D1 Database)</dt>
+								<dd>${Number(browserLatency).toFixed(0)}ms</dd>
+							</div>
+
+							${servedByRegion
+								? html`
+										<div>
+											<dt>Served by Region</dt>
+											<dd>
+												${servedByRegion.toUpperCase()}
+												(${servedByPrimary ? "primary" : "replica"})
+											</dd>
+										</div>
+									`
+								: null}
+						</dl>
+					</section>
+				`;
+			};
+
+			const Demo1 = () => {
+				const containerRef = useRef(null);
+				const mutRef = useRef({});
+				const [primaryRegion, setPrimaryRegion] = useState(null);
+				const [result, setResult] = useState(null);
+
+				const listOrders = () => {
+					const bookmark = result
+						? result.sessionBookmark
+						: "first-unconstrained";
+					fetchWorker("GET", "/api/orders", null, bookmark).then((json) => {
+						if (
+							(mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0
+						) {
+							// Skip any update since it's an older bookmark than the current one.
+							return;
+						}
+						mutRef.bookmark = json.sessionBookmark;
+						setResult(json);
+					});
+				};
+
+				const createOrder = () => {
+					const bookmark = mutRef.bookmark ?? "first-unconstrained";
+					fetchWorker(
+						"POST",
+						"/api/orders",
+						{
+							customerId: containerRef.current.querySelector(
+								"input[name='customerId']",
+							).value,
+							orderId: crypto.randomUUID(),
+							quantity: Math.ceil(Math.random() * 100),
+						},
+						bookmark,
+					).then((json) => {
+						if (
+							(mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0
+						) {
+							// Skip any update since it's an older bookmark than the current one.
+							return;
+						}
+						mutRef.bookmark = json.sessionBookmark;
+						setResult(json);
+					});
+				};
+
+				const resetTables = () => {
+					const bookmark = mutRef.bookmark ?? "first-unconstrained";
+					fetchWorker("POST", "/api/reset", null, bookmark).then((json) => {
+						setResult(json);
+					});
+				};
+
+				useEffect(async () => {
+					const json = await fetchWorker(
+						"GET",
+						"/api/orders",
+						null,
+						"first-primary",
+					);
+					setPrimaryRegion(json.servedByRegion);
+					if ((mutRef.bookmark ?? "").localeCompare(json.sessionBookmark) > 0) {
+						// Skip any update since it's an older bookmark than the current one.
+						return;
+					}
+					mutRef.bookmark = json.sessionBookmark;
+					setResult(json);
+				}, []);
+
+				console.log(result);
+
+				return html`
+					<div ref=${containerRef}>
+						<section>
+							<h4>Actions</h4>
+							<div class="grid">
+								<input name="customerId" value="customer-id-1" type="text" />
+								<input
+									type="button"
+									onClick=${(e) => createOrder()}
+									value="Create order & List"
+								/>
+								<input
+									type="button"
+									onClick=${(e) => listOrders()}
+									value="List orders"
+								/>
+								<input
+									type="button"
+									onClick=${(e) => resetTables()}
+									value="Reset"
+								/>
+							</div>
+							<ul style="font-size: 0.8em">
+								<li>
+									<strong>Create order & List:</strong> 1 write query to the
+									primary followed by 1 read query to a replica.
+								</li>
+								<li>
+									<strong>List orders:</strong> 1 read query to a replica.
+								</li>
+								<li><strong>Reset:</strong> 1 write query to the primary.</li>
+								${primaryRegion
+									? html`<li>
+											<strong>Primary database region:</strong> ${primaryRegion}
+										</li>`
+									: null}
+							</ul>
+						</section>
+
+						<${Latencies} ...${result} />
+
+						<section id="rows">
+							<h4>Orders</h4>
+							<div class="overflow-auto">
+								<table class="striped">
+									<thead>
+										<tr>
+											<th scope="col">Customer ID</th>
+											<th scope="col">Order ID</th>
+											<th>Quantity</th>
+										</tr>
+									</thead>
+									<tbody>
+										${!Array.isArray(result?.results)
+											? html`<tr>
+													<td colspan="3">
+														Use the buttons above to load existing orders or
+														create new ones.
+													</td>
+												</tr>`
+											: result.results.length > 0
+												? result.results.reverse().map((row, idx) => {
+														return html`<tr key=${`${row.now}`}>
+															<td>${row.customerId}</td>
+															<td>${row.orderId}</td>
+															<td>${row.quantity}</td>
+														</tr>`;
+													})
+												: html`<tr>
+														<td colspan="3">No orders yet.</td>
+													</tr>`}
+									</tbody>
+								</table>
+							</div>
+						</section>
+					</div>
+				`;
+			};
+
+			const Demos = () => {
+				return html`
+					<div>
+						<section>
+							<header class="grid">
+								<h1>D1 Sessions API</h1>
+							</header>
+						</section>
+
+						<section><${Demo1} /></section>
+
+						<hr />
+
+						<small
+							>(<a
+								href="https://github.com/cloudflare/templates/tree/main/d1-starter-sessions-api-template"
+								target="_blank"
+								>Demo source code</a
+							>)</small
+						>
+					</div>
+				`;
+			};
+
+			render(html`<${Demos} />`, document.getElementById("app"));
+		</script>
+	</head>
+
+	<body>
+		<main class="container-fluid" id="app"></main>
+	</body>
+</html>

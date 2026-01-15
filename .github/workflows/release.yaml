@@ -1,0 +1,26 @@
+name: "Release"
+
+on:
+  release:
+    types:
+      - released
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-upload
+      cancel-in-progress: true
+    env:
+      TEMPLATES_API_CLIENT_ID: ${{ vars.TEMPLATES_API_CLIENT_ID }}
+      TEMPLATES_API_CLIENT_SECRET: ${{ secrets.TEMPLATES_API_CLIENT_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: Make templates live and publicly accessible in the dash
+        run: |
+          pnpm run upload . \
+            --repoFullName ${{ github.repository }} \
+            --branch ${{ github.ref_name }}

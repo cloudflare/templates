@@ -1,0 +1,60 @@
+{
+	"name": "react-postgres-fullstack-template",
+	"description": "Deploy your own library of books using Postgres and Workers.",
+	"cloudflare": {
+		"label": "React + Postgres Fullstack App",
+		"products": [
+			"Workers",
+			"Hyperdrive",
+			"Workers Static Assets",
+			"Smart Placement"
+		],
+		"categories": [
+			"starter",
+			"storage"
+		],
+		"docs_url": "https://developers.cloudflare.com/hyperdrive/get-started/",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/21ab216a-ae9d-42c3-34dd-469867499b00/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/babfc407-4e95-4fd3-867c-58da60030500/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"@tailwindcss/postcss": "4.1.17",
+		"react": "19.2.1",
+		"react-dom": "19.2.1",
+		"react-router": "7.9.6",
+		"react-router-dom": "7.9.6",
+		"tailwindcss": "4.1.17"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@eslint/js": "9.39.1",
+		"@neondatabase/serverless": "1.0.2",
+		"@types/node": "24.10.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"autoprefixer": "10.4.22",
+		"eslint": "9.39.2",
+		"eslint-plugin-react": "7.37.5",
+		"eslint-plugin-react-hooks": "7.0.1",
+		"eslint-plugin-react-refresh": "0.4.24",
+		"globals": "16.5.0",
+		"hono": "4.11.1",
+		"postcss": "8.5.6",
+		"postgres": "3.4.7",
+		"vite": "^6.0.0",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"cf-typegen": "wrangler types",
+		"check": "vite build && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "vite",
+		"lint": "eslint .",
+		"preview": "vite preview"
+	},
+	"type": "module"
+}

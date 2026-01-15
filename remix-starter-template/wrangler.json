@@ -1,0 +1,12 @@
+{
+	"name": "remix-starter-template",
+	"compatibility_date": "2025-10-08",
+	"main": "./server.ts",
+	"assets": {
+		"directory": "./build/client"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true
+}

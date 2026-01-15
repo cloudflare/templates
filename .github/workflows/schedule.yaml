@@ -1,0 +1,19 @@
+name: "Update Dependencies"
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"
+  workflow_dispatch: # allows us to trigger this manually
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+
+      - name: "Process and update dependencies"
+        run: pnpm -w update:deps --actor ${{ github.actor }}

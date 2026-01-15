@@ -1,0 +1,43 @@
+{
+	"name": "next-starter-template",
+	"description": "Build a full-stack web application with Next.js.",
+	"cloudflare": {
+		"label": "Next.js Framework Starter",
+		"products": [
+			"Workers"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/05eee9e0-2c04-48fd-11bf-84e65f839000/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/4e913a56-fd99-4372-0586-9f1364173100/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"@opennextjs/cloudflare": "1.14.0",
+		"next": "16.0.7",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "3",
+		"@tailwindcss/postcss": "4.1.17",
+		"@types/node": "24.10.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"eslint": "9.39.2",
+		"eslint-config-next": "16.0.7",
+		"tailwindcss": "4.1.17",
+		"typescript": "5.9.3",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"build": "next build",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
+		"check": "npm run build && tsc",
+		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+		"dev": "next dev",
+		"lint": "next lint",
+		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+		"start": "next start"
+	}
+}

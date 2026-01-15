@@ -1,0 +1,58 @@
+{
+  "name": "saas-admin-template",
+  "description": "Admin dashboard template built with Astro, shadcn/ui, and Cloudflare's developer stack",
+  "cloudflare": {
+    "label": "SaaS Admin Template",
+    "products": [
+      "Workers",
+      "D1"
+    ],
+    "categories": [],
+    "docs_url": "https://developers.cloudflare.com/workers/",
+    "preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c2a0b13a-8cd1-464a-561b-3a7371c7c700/public",
+    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/661a4884-fb10-4867-7b4e-b72763d12100/preview",
+    "publish": true
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "12.6.12",
+    "@astrojs/react": "4.4.2",
+    "@astrojs/tailwind": "6.0.2",
+    "@hookform/resolvers": "5.2.2",
+    "@radix-ui/react-accordion": "1.2.12",
+    "@radix-ui/react-dialog": "1.1.15",
+    "@radix-ui/react-label": "2.1.8",
+    "@radix-ui/react-navigation-menu": "1.2.14",
+    "@radix-ui/react-slot": "1.2.4",
+    "@tanstack/react-table": "8.21.3",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "astro": "5.16.2",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "0.555.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "react-hook-form": "7.66.1",
+    "tailwind-merge": "3.4.0",
+    "tailwindcss": "^3.4.0",
+    "tailwindcss-animate": "1.0.7",
+    "zod": "4.1.13"
+  },
+  "devDependencies": {
+    "wrangler": "4.56.0"
+  },
+  "private": true,
+  "scripts": {
+    "astro": "astro",
+    "build": "astro build",
+    "cf-typegen": "wrangler types",
+    "check": "npm run build && npm run wrangler:wrapper && wrangler deploy --dry-run",
+    "db:migrate": "wrangler d1 migrations apply DB --local",
+    "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
+    "deploy": "npm run wrangler:wrapper && wrangler deploy",
+    "dev": "npm run db:migrate && npm run build && npm run wrangler:wrapper && npx wrangler dev --port 4321",
+    "predeploy": "npm run db:migrate:remote",
+    "preview": "npm run build && npm run wrangler:wrapper && wrangler dev",
+    "wrangler:wrapper": "cp src/workflows/wrapper.js dist/index.js"
+  }
+}

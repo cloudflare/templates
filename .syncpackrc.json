@@ -1,0 +1,106 @@
+{
+	"dependencyTypes": ["dev", "prod"],
+	"semverGroups": [
+		{
+			"label": "don't pin @cloudflare/workers-types",
+			"dependencies": ["@cloudflare/workers-types"],
+			"packages": ["**"],
+			"range": "^"
+		},
+		{
+			"label": "pin all deps",
+			"dependencies": ["**"],
+			"packages": ["**"],
+			"range": ""
+		}
+	],
+	"versionGroups": [
+		{
+			"label": "Pin Zod 3.x for chanfana template due to chanfana peer dep",
+			"packages": ["chanfana-openapi-template"],
+			"dependencies": ["zod"],
+			"pinVersion": "3.25.67"
+		},
+		{
+			"label": "Pin TypeScript 5.8.3 for templates using typescript-eslint due to peer dep",
+			"packages": [
+				"remix-starter-template",
+				"to-do-list-kv-template",
+				"vite-react-template"
+			],
+			"dependencies": ["typescript"],
+			"pinVersion": "5.8.3"
+		},
+		{
+			"label": "Allow vite 5 for Remix templates",
+			"packages": ["remix-starter-template", "to-do-list-kv-template"],
+			"dependencies": ["vite"],
+			"pinVersion": "5.4.14"
+		},
+		{
+			"label": "Allow React 19 for specific templates",
+			"packages": [
+				"react-router-starter-template",
+				"saas-admin-starter-template"
+			],
+			"dependencies": [
+				"react",
+				"react-dom",
+				"@types/react",
+				"@types/react-dom"
+			],
+			"pinVersion": "^19.0.0"
+		},
+		{
+			"label": "Keep React 18 for other templates",
+			"packages": [
+				"durable-chat-template",
+				"multiplayer-globe-template",
+				"remix-starter-template",
+				"to-do-list-kv-template"
+			],
+			"dependencies": [
+				"react",
+				"react-dom",
+				"@types/react",
+				"@types/react-dom"
+			],
+			"pinVersion": "^18.0.0"
+		},
+		{
+			"label": "Allow tailwind 3.x for some templates",
+			"packages": [
+				"saas-admin-template",
+				"to-do-list-kv-template",
+				"remix-starter-template"
+			],
+			"dependencies": ["tailwindcss"],
+			"pinVersion": "^3.4.0"
+		},
+		{
+			"label": "Allow Wrangler 3.x for Remix templates due to @remix-run/dev peer dep",
+			"packages": ["remix-starter-template", "to-do-list-kv-template"],
+			"dependencies": ["wrangler"],
+			"pinVersion": "^3.114.4"
+		},
+		{
+			"label": "Pin vitest 3.x for templates using @cloudflare/vitest-pool-workers",
+			"packages": [
+				"chanfana-openapi-template",
+				"d1-starter-sessions-api-template",
+				"llm-chat-app-template",
+				"mysql-hyperdrive-template",
+				"postgres-hyperdrive-template",
+				"to-do-list-kv-template"
+			],
+			"dependencies": ["vitest"],
+			"pinVersion": "3.2.4"
+		},
+		{
+			"label": "Set vite to v6",
+			"packages": ["*"],
+			"dependencies": ["vite"],
+			"pinVersion": "^6.0.0"
+		}
+	]
+}

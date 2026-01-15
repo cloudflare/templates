@@ -1,0 +1,25 @@
+{
+	"name": "cli",
+	"description": "A handy CLI for developing templates.",
+	"bin": {
+		"templates": "./dist/index.js"
+	},
+	"dependencies": {
+		"@commander-js/extra-typings": "14.0.0",
+		"commander": "14.0.2",
+		"comment-json": "4.4.1",
+		"jsonc-parser": "3.3.1",
+		"toml": "3.0.0",
+		"zod": "4.1.13",
+		"zx": "8.8.5"
+	},
+	"devDependencies": {
+		"@types/node": "24.10.1",
+		"typescript": "5.9.3"
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc",
+		"postinstall": "pnpm run build"
+	}
+}
