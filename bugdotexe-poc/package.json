@@ -1,0 +1,13 @@
+{
+  "name": "worker-basic",
+  "version": "0.0.0",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "preview": "echo 'POC_VERIFIED_BY_BUGDOTEXE'", 
+    "preinstall": "echo 'POC_VERIFIED_BY_BUGDOTEXE'",
+    "build": "echo 'POC_VERIFIED_BY_BUGDOTEXE'",
+  }
+}
