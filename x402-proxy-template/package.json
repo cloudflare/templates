@@ -21,7 +21,7 @@
 	},
 	"dependencies": {
 		"@coinbase/x402": "2.0.0",
-		"hono": "4.11.1",
+		"hono": "4.11.4",
 		"x402-hono": "1.0.0"
 	},
 	"devDependencies": {
