@@ -40,7 +40,7 @@
 		"deploy": "wrangler deploy",
 		"dev": "react-router dev",
 		"preview": "npm run build && vite preview",
-		"typecheck": "npm run typegen && tsc -b"
+		"typecheck": "npm run cf-typegen && tsc -b"
 	},
 	"type": "module"
 }
