@@ -1,7 +1,7 @@
 {
   "templates": {
     "astro-blog-starter-template": {
-      "package_json_hash": "25e0e4962e3260bc8a1def3850555a9209a744c4"
+      "package_json_hash": "2786f6e50f4fa275dba3e8b8580f56271b59f801"
     },
     "chanfana-openapi-template": {
       "package_json_hash": "77674e6e63c1f9143f16a4cbead752e59ec8b8c8"
@@ -40,7 +40,7 @@
       "package_json_hash": "d5c2b3fce34750007c39135ca24b0c85ad4ba11c"
     },
     "saas-admin-template": {
-      "package_json_hash": "88736c48ae7b306ad9ad5efd2bde04488ada7a6f"
+      "package_json_hash": "8b47a4a7b6a812c99302288c294a03380721df55"
     },
     "text-to-image-template": {
       "package_json_hash": "0fca1a2712b723e66106d967ad9ec13c70db6af6"
@@ -83,6 +83,15 @@
     },
     "workflows-starter-template": {
       "package_json_hash": "df0c567d4f864f5574dcd1824d6758e918209e79"
+    },
+    "workers-for-platforms-template": {
+      "package_json_hash": "723a6160ab15ad05c1fd6d3b00f3f57d66536fd5"
+    },
+    "microfrontend-template": {
+      "package_json_hash": "2025452f6c9e9011a8ed2681ff2f348f4b16908c"
+    },
+    "workers-builds-notifications-template": {
+      "package_json_hash": "7a93751a69e03ceed9c79190f02f28e9a2ef983f"
     }
   }
 }
