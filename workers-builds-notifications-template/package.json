@@ -29,6 +29,6 @@
 		"@slack/types": "^2.19.0",
 		"typescript": "^5.5.2",
 		"vitest": "~3.0.0",
-		"wrangler": "^4.45.0"
+		"wrangler": "^4.59.1"
 	}
 }
