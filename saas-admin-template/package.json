@@ -39,7 +39,7 @@
     "zod": "4.1.13"
   },
   "devDependencies": {
-    "wrangler": "4.56.0"
+    "wrangler": "4.59.1"
   },
   "engines": {
     "node": ">=22"
