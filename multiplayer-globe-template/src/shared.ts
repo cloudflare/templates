@@ -1,6 +1,5 @@
-// Messages that we'll send to the client
+// Messages sent from server to client
 
-// Representing a person's position
 export type Position = {
 	lat: number;
 	lng: number;
@@ -9,10 +8,18 @@ export type Position = {
 
 export type OutgoingMessage =
 	| {
+			type: "room-info";
+			room: string;
+	  }
+	| {
 			type: "add-marker";
 			position: Position;
 	  }
 	| {
 			type: "remove-marker";
 			id: string;
+	  }
+	| {
+			type: "error";
+			message: string;
 	  };

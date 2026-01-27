@@ -5,60 +5,63 @@ import { createRoot } from "react-dom/client";
 import createGlobe from "cobe";
 import usePartySocket from "partysocket/react";
 
-// The type of messages we'll be receiving from the server
 import type { OutgoingMessage } from "../shared";
-import type { LegacyRef } from "react";
 
-function App() {
-	// A reference to the canvas element where we'll render the globe
-	const canvasRef = useRef<HTMLCanvasElement>();
-	// The number of markers we're currently displaying
+function Globe({ onShuffle }: { onShuffle: () => void }) {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const [counter, setCounter] = useState(0);
-	// A map of marker IDs to their positions
-	// Note that we use a ref because the globe's `onRender` callback
-	// is called on every animation frame, and we don't want to re-render
-	// the component on every frame.
+	// A map of marker IDs to their positions.
+	// We use a ref because the globe's `onRender` callback is called on every
+	// animation frame, and we don't want to re-render the component each time.
 	const positions = useRef<
-		Map<
-			string,
-			{
-				location: [number, number];
-				size: number;
-			}
-		>
+		Map<string, { location: [number, number]; size: number }>
 	>(new Map());
-	// Connect to the PartyServer server
+
 	const socket = usePartySocket({
 		room: "default",
 		party: "globe",
 		onMessage(evt) {
-			const message = JSON.parse(evt.data as string) as OutgoingMessage;
-			if (message.type === "add-marker") {
-				// Add the marker to our map
+			if (typeof evt.data !== "string") {
+				return;
+			}
+			let message: OutgoingMessage;
+			try {
+				message = JSON.parse(evt.data) as OutgoingMessage;
+			} catch {
+				console.warn("Failed to parse WebSocket message");
+				return;
+			}
+
+			if (message.type === "room-info") {
+				// Server confirms which shard we connected to
+			} else if (message.type === "add-marker") {
 				positions.current.set(message.position.id, {
 					location: [message.position.lat, message.position.lng],
 					size: message.position.id === socket.id ? 0.1 : 0.05,
 				});
-				// Update the counter
 				setCounter((c) => c + 1);
-			} else {
-				// Remove the marker from our map
-				positions.current.delete(message.id);
-				// Update the counter
-				setCounter((c) => c - 1);
+			} else if (message.type === "remove-marker") {
+				// Only decrement counter if the marker actually existed
+				if (positions.current.delete(message.id)) {
+					setCounter((c) => c - 1);
+				}
+			} else if (message.type === "error") {
+				console.error("Server error:", message.message);
 			}
 		},
 	});
 
 	useEffect(() => {
-		// The angle of rotation of the globe
-		// We'll update this on every frame to make the globe spin
-		let phi = 0;
+		const canvas = canvasRef.current;
+		if (!canvas) {
+			return;
+		}
 
-		const globe = createGlobe(canvasRef.current as HTMLCanvasElement, {
+		let phi = 0;
+		const globe = createGlobe(canvas, {
 			devicePixelRatio: 2,
-			width: 400 * 2,
-			height: 400 * 2,
+			width: 600 * 2,
+			height: 600 * 2,
 			phi: 0,
 			theta: 0,
 			dark: 1,
@@ -89,31 +92,62 @@ function App() {
 	}, []);
 
 	return (
-		<div className="App">
+		<div
+			className="App"
+			style={{
+				height: "calc(100vh - 40px)",
+				display: "flex",
+				flexDirection: "column",
+				alignItems: "center",
+			}}
+		>
 			<h1>Where's everyone at?</h1>
+			<p style={{ marginTop: 0, opacity: 0.7 }}>
+				Real-time multiplayer-like coordination built on{" "}
+				<a href="https://github.com/cloudflare/templates/tree/main/multiplayer-globe-template">
+					Cloudflare Durable Objects
+				</a>
+			</p>
 			{counter !== 0 ? (
 				<p>
-					<b>{counter}</b> {counter === 1 ? "person" : "people"} connected.
+					<b>{counter}</b> {counter === 1 ? "person" : "people"} connected to
+					your{" "}
+					<a
+						href="#"
+						onClick={(e) => {
+							e.preventDefault();
+							onShuffle();
+						}}
+					>
+						shard
+					</a>
+					.
 				</p>
 			) : (
 				<p>&nbsp;</p>
 			)}
 
-			{/* The canvas where we'll render the globe */}
 			<canvas
-				ref={canvasRef as LegacyRef<HTMLCanvasElement>}
-				style={{ width: 400, height: 400, maxWidth: "100%", aspectRatio: 1 }}
+				ref={canvasRef}
+				style={{ width: 600, height: 600, maxWidth: "90vw", aspectRatio: 1 }}
 			/>
 
-			{/* Let's give some credit */}
-			<p>
-				Powered by <a href="https://cobe.vercel.app/">🌏 Cobe</a>,{" "}
+			<p style={{ marginTop: "auto" }}>
+				Powered by <a href="https://cobe.vercel.app/">Cobe</a>,{" "}
 				<a href="https://www.npmjs.com/package/phenomenon">Phenomenon</a> and{" "}
-				<a href="https://npmjs.com/package/partyserver/">🎈 PartyServer</a>
+				<a href="https://npmjs.com/package/partyserver/">PartyServer</a>
 			</p>
 		</div>
 	);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-createRoot(document.getElementById("root")!).render(<App />);
+// App wrapper that remounts Globe component to force reconnection to a new shard
+function App() {
+	const [key, setKey] = useState(0);
+	return <Globe key={key} onShuffle={() => setKey((k) => k + 1)} />;
+}
+
+const root = document.getElementById("root");
+if (root) {
+	createRoot(root).render(<App />);
+}
