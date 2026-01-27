@@ -104,7 +104,7 @@ function Globe({ onShuffle }: { onShuffle: () => void }) {
 			<h1>Where's everyone at?</h1>
 			<p style={{ marginTop: 0, opacity: 0.7 }}>
 				Real-time multiplayer-like coordination built on{" "}
-				<a href="https://github.com/cloudflare/templates/tree/main/multiplayer-globe-template">
+				<a href="https://workers.cloudflare.com/product/durable-objects/">
 					Cloudflare Durable Objects
 				</a>
 			</p>
@@ -135,7 +135,10 @@ function Globe({ onShuffle }: { onShuffle: () => void }) {
 			<p style={{ marginTop: "auto" }}>
 				Powered by <a href="https://cobe.vercel.app/">Cobe</a>,{" "}
 				<a href="https://www.npmjs.com/package/phenomenon">Phenomenon</a> and{" "}
-				<a href="https://npmjs.com/package/partyserver/">PartyServer</a>
+				<a href="https://npmjs.com/package/partyserver/">PartyServer</a>.{" "}
+				<a href="https://github.com/cloudflare/templates/tree/main/multiplayer-globe-template">
+					Code
+				</a>
 			</p>
 		</div>
 	);
