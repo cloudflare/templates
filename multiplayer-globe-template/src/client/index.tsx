@@ -137,7 +137,7 @@ function Globe({ onShuffle }: { onShuffle: () => void }) {
 				<a href="https://www.npmjs.com/package/phenomenon">Phenomenon</a> and{" "}
 				<a href="https://npmjs.com/package/partyserver/">PartyServer</a>.{" "}
 				<a href="https://github.com/cloudflare/templates/tree/main/multiplayer-globe-template">
-					Code
+					Source code
 				</a>
 			</p>
 		</div>
