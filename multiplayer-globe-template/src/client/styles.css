@@ -14,6 +14,7 @@ body {
 	background-color: black;
 	text-align: center;
 	padding-top: 40px;
+	margin: 0;
 }
 
 h1,
@@ -30,7 +31,7 @@ h6 {
 }
 
 #app {
-	padding: 1rem;
+	padding: 0;
 }
 
 h1 {
