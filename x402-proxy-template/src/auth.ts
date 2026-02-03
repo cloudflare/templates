@@ -59,6 +59,12 @@ export interface ProtectedRouteConfig {
 	price: string;
 	/** Human-readable description of what the payment is for */
 	description: string;
+	/**
+	 * Bot Management Filtering (optional)
+	 * Requires Bot Management for Enterprise. See src/bot-management/ for details.
+	 */
+	bot_score_threshold?: number;
+	except_detection_ids?: number[];
 }
 
 /**
