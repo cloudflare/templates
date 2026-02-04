@@ -43,7 +43,17 @@ export function hasBotManagementException(
 		return false;
 	}
 
-	const botScore = botManagement.score ?? 99; // Default to human if no score
+	const botScore = botManagement.score;
+
+	// No score available = can't evaluate, require payment (safe default)
+	if (botScore === undefined || botScore === null) {
+		console.warn(
+			"[x402-proxy] Bot Management data available but score is missing. " +
+				"Falling back to payment requirement."
+		);
+		return false;
+	}
+
 	const detectionIds = botManagement.detectionIds ?? [];
 
 	// Check 1: Is this a human? (bot score ABOVE threshold)
