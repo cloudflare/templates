@@ -6,43 +6,7 @@ Context for AI coding agents to help users set up x402-proxy for payment-gated c
 
 A Cloudflare Worker that adds payment gating to any origin using the x402 protocol. Users pay to access protected routes, then get a JWT cookie valid for 1 hour.
 
----
-
-## Deployment Modes
-
-There are three deployment modes. The choice depends on your origin and whether an existing worker already owns the target domain.
-
-### 1. Standard Proxy Mode (DNS-Based)
-
-- x402-proxy owns the route (e.g., `api.example.com/*`)
-- All traffic flows through x402-proxy
-- Protected paths require payment, others pass through to DNS origin
-- **Use when:** Origin is a traditional server (VM, container) with DNS pointing to it
-
-```
-User → x402-proxy (owns route) → Origin Server (via Cloudflare DNS)
-```
-
-### 2. External Origin Mode
-
-- x402-proxy owns the route and proxies to an external URL
-- No code changes needed to the existing worker/service
-- **Use when:** Origin is an external API, or an existing worker you don't want to modify
-
-```
-User → x402-proxy (owns route) → External Service (via ORIGIN_URL)
-```
-
-### 3. Service Binding Mode
-
-- x402-proxy calls the origin worker directly via [Service Binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/)
-- Zero network overhead - both workers run on the same thread
-- Origin worker doesn't need a public route
-- **Use when:** Origin is another Worker in your account and you want optimal performance
-
-```
-User → x402-proxy (owns route) → Origin Worker (via Service Binding)
-```
+**With Bot Management Filtering:** Requires Bot Management for Enterprise to enable bot filtering. With it enabled, x402-proxy can implement "default closed" - humans pass through free, only bots must pay. This is optional and enhances the base functionality.
 
 ---
 
@@ -58,39 +22,125 @@ npx wrangler whoami
 
 If not logged in, guide them to run `npx wrangler login`.
 
-### Step 2: Discover Existing Workers
+If they have multiple accounts, note them for Step 2.
 
-```bash
-npx wrangler deployments list
+---
+
+### Step 2: Select Domain
+
+Ask: **"Which domain do you want to add payment gating to?"**
+
+If the user has multiple Cloudflare accounts (from Step 1), also ask: **"Which account is this domain on?"**
+
+**Save the domain** - it scopes everything that follows.
+
+---
+
+### Step 3: Check for Bot Management (Optional Enhancement)
+
+Ask: **"Do you have Bot Management enabled on `{domain}`?"**
+
+Explain why you're asking:
+
+> With Bot Management, x402-proxy can implement "default closed" - blocking bot traffic by score threshold while letting humans through automatically. You can also make specific exceptions for bots like Googlebot or verified AI crawlers.
+>
+> Without Bot Management, x402-proxy still works perfectly - it just charges for protected routes without distinguishing between bots and humans. All traffic to protected routes must pay.
+
+| Answer  | Effect                                            |
+| ------- | ------------------------------------------------- |
+| **Yes** | Enable Bot Management Filtering prompts in Step 4 |
+| **No**  | Skip threshold/exception prompts in Step 4        |
+
+---
+
+### Step 4: Configure Protected Paths (Iterative)
+
+Ask: **"What path on `{domain}` do you want to charge for?"**
+
+If the user provides multiple paths at once, queue them and configure each in sequence.
+
+**For EACH path, ask:**
+
+#### 4.1 Price
+
+Ask: **"What price (in USD) for `{path}`?"**
+
+Format: `$0.01`, `$0.10`, `$1.00`, etc.
+
+#### 4.2 Description
+
+Ask: **"What description for `{path}`?"** (shown to users explaining what they're paying for)
+
+Example: "Access to premium content for 1 hour"
+
+---
+
+#### If User Has Bot Management (from Step 3):
+
+Continue with these additional prompts:
+
+#### 4.3 Bot Score Threshold
+
+Ask: **"What bot score threshold for `{path}`?"**
+
+**ALWAYS offer exactly these three options:**
+
+| Option               | Threshold | What it means                                                  |
+| -------------------- | --------- | -------------------------------------------------------------- |
+| **1**                | 1         | Very strict - only verified humans pass free                   |
+| **2**                | 2         | Strict - only clear human traffic passes free                  |
+| **30 (Recommended)** | 30        | Balanced - likely automated traffic must pay, humans pass free |
+
+**Recommended: 30** - This is the typical starting point that blocks likely-automated traffic while letting humans through free.
+
+#### 4.4 Bot Exceptions
+
+Ask: **"Any bots that should get FREE access to `{path}`?"**
+
+**Offer these preset options:**
+
+| Preset                    | Bots Included                                                            | Use When                     |
+| ------------------------- | ------------------------------------------------------------------------ | ---------------------------- |
+| **Googlebot + BingBot**   | Googlebot, BingBot                                                       | Allow major crawlers         |
+| **Above + AI assistants** | Above + ChatGPT-User, Claude-User, Perplexity-User, Meta-ExternalFetcher | Allow AI assistant citations |
+| **None**                  | (empty)                                                                  | All bots must pay            |
+
+If the user selects a preset or names specific bots:
+
+1. Look up each bot name in the Bot Registry (see below)
+2. Resolve to detection IDs
+3. Write to config with inline comments
+
+**Example resolution:**
+
+- User says: "Googlebot and BingBot"
+- Agent looks up: Googlebot → 120623194, BingBot → 117479730
+- Config output:
+
+```jsonc
+"except_detection_ids": [
+  120623194,  // Googlebot
+  117479730   // BingBot
+]
 ```
 
-This shows what workers are already deployed in the account.
+---
 
-### Step 3: Check Existing Routes
+#### After Configuring Each Path
 
-```bash
-npx wrangler routes list --zone <domain>
-```
+Ask: **"Any more paths on `{domain}` to protect?"**
 
-This reveals if another worker already owns routes on that domain.
+- If **yes** → repeat Step 4 for the next path
+- If **no** → continue to Step 5
 
-**Decision guide:**
+---
 
-| Situation                                   | Recommended Mode       |
-| ------------------------------------------- | ---------------------- |
-| Origin is traditional server (VM/container) | Standard Proxy Mode    |
-| Origin is external API or service           | External Origin Mode   |
-| Origin is another Worker in your account    | Service Binding Mode   |
-| Existing worker owns `domain/*`             | External Origin Mode\* |
+### Step 5: Wallet & Network Configuration
 
-\*For existing workers with source code available, you can use Service Binding Mode for better performance.
+Ask these together:
 
-### Step 4: Gather Required Config
-
-1. **Wallet address (PAY_TO)?** - Where payments go
-2. **Which paths need payment?** - e.g., `/premium/*`, `/api/paid/*`
-3. **Price for each path?** - e.g., `$0.01`, `$0.10`
-4. **Network?** - `base-sepolia` (testing) or `base` (production)
+1. **"What wallet address should receive payments (PAY_TO)?"**
+2. **"Which network: `base-sepolia` (testing) or `base` (production)?"**
 
 #### If User Doesn't Have a Wallet Address
 
@@ -105,160 +155,326 @@ For production, they'll need a real wallet:
 
 ---
 
-## Standard Proxy Mode Setup
+## Deployment Phase
 
-Use this when no existing worker owns the target domain.
+Now that configuration is complete, discover infrastructure and deploy.
 
-### Step 1: Configure wrangler.jsonc
+### Step 6: Discover Existing Workers & Routes
+
+```bash
+npx wrangler deployments list
+npx wrangler routes list --zone {domain}
+```
+
+This reveals:
+
+- What workers are already deployed
+- If another worker owns routes on the target domain
+
+**Determine deployment mode:**
+
+| Situation                                   | Recommended Mode       |
+| ------------------------------------------- | ---------------------- |
+| Origin is traditional server (VM/container) | Standard Proxy Mode    |
+| Origin is external API or service           | External Origin Mode   |
+| Origin is another Worker in your account    | Service Binding Mode   |
+| Existing worker owns `domain/*`             | External Origin Mode\* |
+
+\*For existing workers with source code available, you can use Service Binding Mode for better performance.
+
+---
+
+### Step 7: Generate wrangler.jsonc
+
+Based on gathered information, generate the complete configuration.
+
+**Example - Basic (no Bot Management Filtering):**
 
 ```jsonc
 {
-	"routes": [{ "pattern": "api.example.com/*", "zone_name": "example.com" }],
+	"routes": [
+		{ "pattern": "example.com/premium/*", "zone_name": "example.com" },
+	],
 	"vars": {
 		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
 		"NETWORK": "base-sepolia",
 		"PROTECTED_PATTERNS": [
 			{
 				"pattern": "/premium/*",
-				"price": "$0.01",
-				"description": "Premium access for 1 hour",
+				"price": "$0.10",
+				"description": "Access to premium content for 1 hour",
 			},
 		],
 	},
 }
 ```
 
-### Step 2: Set JWT Secret
+**Example - With Bot Management Filtering:**
+
+Requires Bot Management for Enterprise to enable bot filtering.
+
+```jsonc
+{
+	"routes": [
+		{ "pattern": "example.com/premium/*", "zone_name": "example.com" },
+	],
+	"vars": {
+		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
+		"NETWORK": "base-sepolia",
+		"PROTECTED_PATTERNS": [
+			{
+				"pattern": "/premium/*",
+				"price": "$0.10",
+				"description": "Access to premium content for 1 hour",
+				"bot_score_threshold": 30,
+				"except_detection_ids": [
+					120623194, // Googlebot
+					117479730, // BingBot
+				],
+			},
+		],
+	},
+}
+```
+
+---
+
+### Step 8: Set JWT Secret
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))" | npx wrangler secret put JWT_SECRET
 ```
 
-### Step 3: Deploy
+---
+
+### Step 9: Deploy
 
 ```bash
 npm run deploy
 ```
 
-### Step 4: Verify
+---
+
+### Step 10: Verify
 
 ```bash
-curl https://api.example.com/__x402/health
+curl https://{domain}/__x402/health
 # Should return: {"status":"ok","timestamp":...}
+
+curl https://{domain}/__x402/config
+# Should show protected patterns and Bot Management Filtering status
 ```
 
 ---
 
-## External Origin Mode Setup
+## Deployment Modes
 
-Use this when an existing worker already owns the domain and you don't want to modify its code.
+### Standard Proxy Mode (DNS-Based)
 
-### Step 1: Find the Existing Worker's workers.dev URL
+- x402-proxy owns the route (e.g., `api.example.com/*`)
+- All traffic flows through x402-proxy
+- Protected paths require payment, others pass through to DNS origin
+- **Use when:** Origin is a traditional server (VM, container) with DNS pointing to it
 
-```bash
-npx wrangler deployments list
+```
+User → x402-proxy (owns route) → Origin Server (via Cloudflare DNS)
 ```
 
-Look for the existing worker's name. Its URL will be: `https://<worker-name>.<account>.workers.dev`
+### External Origin Mode
 
-### Step 2: Remove the Route from the Existing Worker
+- x402-proxy owns the route and proxies to an external URL
+- No code changes needed to the existing worker/service
+- **Use when:** Origin is an external API, or an existing worker you don't want to modify
 
-Edit the existing worker's `wrangler.toml` or `wrangler.jsonc` to remove/comment out the route, then redeploy it:
-
-```bash
-npx wrangler deploy
+```
+User → x402-proxy (owns route) → External Service (via ORIGIN_URL)
 ```
 
-The worker is now only accessible via its `workers.dev` URL.
-
-### Step 3: Configure x402-proxy with ORIGIN_URL
+**Setup:** Add `ORIGIN_URL` to vars:
 
 ```jsonc
-{
-	"routes": [{ "pattern": "api.example.com/*", "zone_name": "example.com" }],
-	"vars": {
-		"ORIGIN_URL": "https://my-existing-worker.myaccount.workers.dev",
-		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
-		"NETWORK": "base-sepolia",
-		"PROTECTED_PATTERNS": [
-			{
-				"pattern": "/premium/*",
-				"price": "$0.01",
-				"description": "Premium access for 1 hour",
-			},
-		],
-	},
-}
+"ORIGIN_URL": "https://my-existing-worker.myaccount.workers.dev"
 ```
 
-### Step 4: Set JWT Secret and Deploy
+### Service Binding Mode
 
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))" | npx wrangler secret put JWT_SECRET
-npm run deploy
+- x402-proxy calls the origin worker directly via [Service Binding](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/)
+- Zero network overhead - both workers run on the same thread
+- Origin worker doesn't need a public route
+- **Use when:** Origin is another Worker in your account and you want optimal performance
+
+```
+User → x402-proxy (owns route) → Origin Worker (via Service Binding)
 ```
 
-### Step 5: Verify
+**Setup:** Add services binding:
 
-```bash
-curl https://api.example.com/__x402/health
-curl https://api.example.com/premium/content  # Should return 402
-curl https://api.example.com/public/content   # Should proxy to original worker
+```jsonc
+"services": [{ "binding": "ORIGIN_SERVICE", "service": "my-origin-worker" }]
 ```
 
 ---
 
-## Service Binding Mode Setup
+## Bot Management Filtering Reference
 
-Use this when the origin is another Worker in your account and you want the fastest possible performance.
+Requires Bot Management for Enterprise to enable bot filtering. When enabled, users can configure payment exemptions based on bot score and detection IDs.
 
-### Step 1: Ensure Origin Worker is Deployed
+### How It Works
 
-The origin worker must be deployed to your account. It doesn't need any routes - Service Bindings work without public access.
-
-```bash
-npx wrangler deployments list
+```
+Request arrives at protected route
+         │
+         ▼
+    Bot Management Filtering configured?
+    ┌────────┴────────┐
+   No                Yes
+    │                 │
+    ▼                 ▼
+ All traffic    Check bot score & exceptions
+ must pay            │
+                ┌────┴────┐
+                │         │
+           Human OR    Bot (not excepted)
+           Excepted Bot     │
+                │           ▼
+                ▼      Check cookie/payment
+           Pass FREE        │
+           to origin   Valid? → Proxy + set cookie
+                       Invalid? → Return 402
 ```
 
-### Step 2: Configure x402-proxy with Service Binding
+### Bot Score Threshold Reference
+
+| Threshold | Meaning                                                | Use Case                                 |
+| --------- | ------------------------------------------------------ | ---------------------------------------- |
+| **1**     | Very strict - only verified humans pass free           | Maximum monetization                     |
+| **2**     | Strict - only clear human traffic passes free          | High-value APIs                          |
+| **30**    | Balanced - likely automated must pay, humans pass free | **Recommended** - typical starting point |
+
+### Bot Registry Reference
+
+When configuring bot exceptions, use this registry to resolve bot names to detection IDs.
+
+**Included operators:** Google, Microsoft, OpenAI, Anthropic, Perplexity, Meta
+
+For additional bots, users can find detection IDs in the Cloudflare dashboard:
+AI Crawl Control → Crawlers → Actions menu → Copy detection ID
+
+#### Google
+
+| Bot Name              | Detection ID | Notes              |
+| --------------------- | ------------ | ------------------ |
+| Googlebot             | 120623194    | Google Search      |
+| Google-CloudVertexBot | 133730073    | Google AI training |
+
+#### Microsoft
+
+| Bot Name | Detection ID | Notes          |
+| -------- | ------------ | -------------- |
+| BingBot  | 117479730    | Microsoft Bing |
+
+#### OpenAI
+
+| Bot Name      | Detection ID | Notes                  |
+| ------------- | ------------ | ---------------------- |
+| GPTBot        | 123815556    | OpenAI training        |
+| ChatGPT-User  | 132995013    | ChatGPT browsing mode  |
+| ChatGPT agent | 129220581    | ChatGPT agents/plugins |
+| OAI-SearchBot | 126255384    | OpenAI SearchGPT       |
+
+#### Anthropic (Heuristics IDs)
+
+| Bot Name         | Heuristics ID | Notes              |
+| ---------------- | ------------- | ------------------ |
+| ClaudeBot        | 33563859      | Anthropic training |
+| Claude-SearchBot | 33564301      | Anthropic search   |
+| Claude-User      | 33564303      | Claude web access  |
+
+#### Perplexity (Heuristics IDs)
+
+| Bot Name        | Heuristics ID | Notes              |
+| --------------- | ------------- | ------------------ |
+| PerplexityBot   | 33563889      | Perplexity search  |
+| Perplexity-User | 33564371      | Perplexity answers |
+
+#### Meta
+
+| Bot Name             | Detection ID           | Notes             |
+| -------------------- | ---------------------- | ----------------- |
+| Meta-ExternalAgent   | 124581738              | Meta AI training  |
+| Meta-ExternalFetcher | 132272919              | Meta AI assistant |
+| FacebookBot          | (heuristics: 33563972) | Meta crawling     |
+
+### Example Preset
 
 ```jsonc
+"except_detection_ids": [
+  120623194,  // Googlebot
+  117479730,  // BingBot
+  132995013,  // ChatGPT-User
+  33564303    // Claude-User
+]
+```
+
+### Finding Custom Detection IDs
+
+If a bot isn't in the registry, the user can find its detection ID in the dashboard:
+
+1. Go to **AI Crawl Control** in Cloudflare dashboard
+2. Navigate to **Crawlers**
+3. Find the crawler in the list
+4. Click the **three dot menu** in the Actions column
+5. Copy the detection ID
+
+---
+
+## Configuration Reference
+
+### Required Variables
+
+| Variable             | Description                                      |
+| -------------------- | ------------------------------------------------ |
+| `PAY_TO`             | Wallet address to receive payments               |
+| `NETWORK`            | `"base-sepolia"` (test) or `"base"` (production) |
+| `JWT_SECRET`         | Secret for signing tokens (64 hex chars)         |
+| `PROTECTED_PATTERNS` | Array of protected route configurations          |
+
+### Protected Pattern Schema
+
+```typescript
 {
-	"routes": [{ "pattern": "api.example.com/*", "zone_name": "example.com" }],
-	"services": [{ "binding": "ORIGIN_SERVICE", "service": "my-origin-worker" }],
-	"vars": {
-		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
-		"NETWORK": "base-sepolia",
-		"PROTECTED_PATTERNS": [
-			{
-				"pattern": "/premium/*",
-				"price": "$0.01",
-				"description": "Premium access for 1 hour",
-			},
-		],
-	},
+  pattern: string;              // Route to protect (e.g., "/premium/*")
+  price: string;                // Price in USD (e.g., "$0.01")
+  description: string;          // Shown to users
+  // Bot Management Filtering (optional)
+  bot_score_threshold?: number; // 1, 2, or 30
+  except_detection_ids?: number[]; // Bot detection IDs to allow free
 }
 ```
 
-**Key points:**
+### Optional Variables
 
-- `binding`: Must be `"ORIGIN_SERVICE"` (this is what x402-proxy looks for)
-- `service`: The deployed name of your origin worker
+| Variable          | Description                                         |
+| ----------------- | --------------------------------------------------- |
+| `ORIGIN_URL`      | External URL to proxy to (for External Origin Mode) |
+| `ORIGIN_SERVICE`  | Service Binding to origin Worker                    |
+| `FACILITATOR_URL` | Payment facilitator (defaults to CDP)               |
 
-### Step 3: Set JWT Secret and Deploy
+### Debug Endpoints
 
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))" | npx wrangler secret put JWT_SECRET
-npm run deploy
-```
+- `/__x402/health` - Health check
+- `/__x402/config` - Current config (no secrets exposed, shows Bot Management Filtering status)
+- `/__x402/protected` - Test payment flow ($0.01)
 
-### Step 4: Verify
+### Origin Auto-Detection
 
-```bash
-curl https://api.example.com/__x402/health
-curl https://api.example.com/__x402/config
-# Should show: "hasOriginService": true
-```
+x402-proxy automatically detects how to reach the origin:
+
+| Priority | Config Present           | How it works                      |
+| -------- | ------------------------ | --------------------------------- |
+| 1        | `ORIGIN_SERVICE` binding | Calls bound Worker directly       |
+| 2        | `ORIGIN_URL` set         | Rewrites URL to that origin       |
+| 3        | Neither                  | Uses `fetch()` via Cloudflare DNS |
 
 ---
 
@@ -289,43 +505,6 @@ See [Workers Routes documentation](https://developers.cloudflare.com/workers/con
 1. Deploy new worker (without routes) and verify it works via `workers.dev`
 2. Delete route from old worker
 3. Immediately redeploy new worker with routes
-
----
-
-## Configuration Reference
-
-### Required Variables
-
-| Variable             | Description                                      |
-| -------------------- | ------------------------------------------------ |
-| `PAY_TO`             | Wallet address to receive payments               |
-| `NETWORK`            | `"base-sepolia"` (test) or `"base"` (production) |
-| `JWT_SECRET`         | Secret for signing tokens (64 hex chars)         |
-| `PROTECTED_PATTERNS` | Array of `{pattern, price, description}`         |
-
-### Optional Variables
-
-| Variable          | Description                                         |
-| ----------------- | --------------------------------------------------- |
-| `ORIGIN_URL`      | External URL to proxy to (for External Origin Mode) |
-| `ORIGIN_SERVICE`  | Service Binding to origin Worker                    |
-| `FACILITATOR_URL` | Payment facilitator (defaults to CDP)               |
-
-### Debug Endpoints
-
-- `/__x402/health` - Health check
-- `/__x402/config` - Current config (no secrets exposed)
-- `/__x402/protected` - Test payment flow ($0.01)
-
-### Origin Auto-Detection
-
-x402-proxy automatically detects how to reach the origin:
-
-| Priority | Config Present           | How it works                      |
-| -------- | ------------------------ | --------------------------------- |
-| 1        | `ORIGIN_SERVICE` binding | Calls bound Worker directly       |
-| 2        | `ORIGIN_URL` set         | Rewrites URL to that origin       |
-| 3        | Neither                  | Uses `fetch()` via Cloudflare DNS |
 
 ---
 
@@ -394,6 +573,30 @@ The template includes static assets in the `public/` directory for standalone de
 // "assets": { "directory": "public" },
 ```
 
+### Bot Management Filtering: "cf.botManagement not available"
+
+This warning appears in logs when Bot Management Filtering is configured but Bot Management data isn't present in the request.
+
+**Causes:**
+
+- Bot Management for Enterprise is not enabled
+- Request is from local development (Bot Management not available locally)
+
+**Fix:**
+
+- Enable Bot Management for Enterprise in the Cloudflare dashboard
+- For local testing, the warning is expected - filtering will work after deployment
+
+### Bot Management Filtering: Humans still getting 402
+
+Check that:
+
+1. `bot_score_threshold` is set (e.g., 30)
+2. The request actually has a bot score > threshold
+3. Bot Management for Enterprise is enabled
+
+Use `npx wrangler tail` to see bot scores in logs after deployment.
+
 ---
 
 ## Testing Locally
@@ -407,31 +610,7 @@ curl http://localhost:8787/__x402/health      # Should return 200
 curl http://localhost:8787/__x402/protected   # Should return 402
 ```
 
----
-
-## Architecture
-
-```
-User Request → x402-proxy (owns route)
-                    |
-              Is path in PROTECTED_PATTERNS?
-              /              \
-            No               Yes
-             |                |
-       Proxy to          Check cookie/payment
-       origin                 |
-                       Valid? → Proxy + set cookie
-                       Invalid? → Return 402
-```
-
-**Cookie flow after payment:**
-
-1. User requests protected path without valid cookie
-2. x402-proxy returns 402 with payment requirements
-3. User submits payment via X-PAYMENT header
-4. x402 middleware verifies payment with facilitator
-5. x402-proxy generates JWT, sets cookie, proxies to origin
-6. Subsequent requests include cookie - no payment needed for 1 hour
+**Note:** Bot Management data is not available in local development. Bot Management Filtering will only work after deployment to Cloudflare.
 
 ---
 
@@ -446,6 +625,12 @@ Before running `npm run deploy`, verify:
 - [ ] `PROTECTED_PATTERNS` configured with correct paths and prices
 - [ ] `routes` configured with correct pattern and zone_name
 
+**If using Bot Management Filtering:**
+
+- [ ] Bot Management for Enterprise is enabled
+- [ ] `bot_score_threshold` is set on relevant patterns (typically 30)
+- [ ] `except_detection_ids` are resolved from bot names
+
 ---
 
 ## Additional Resources
@@ -454,3 +639,5 @@ Before running `npm run deploy`, verify:
 - [Service Bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) - Worker-to-Worker communication
 - [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) - Alternative to routes
 - [Wrangler Commands](https://developers.cloudflare.com/workers/wrangler/commands/) - CLI reference for discovery
+- [x402 Protocol](https://x402.org) - Payment protocol specification
+- [Bot Management](https://developers.cloudflare.com/bots/) - Cloudflare Bot Management documentation

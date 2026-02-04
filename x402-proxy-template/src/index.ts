@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
 import { createProtectedRoute, type ProtectedRouteConfig } from "./auth";
 import { generateJWT } from "./jwt";
+import { hasBotManagementException } from "./bot-management";
 import type { AppContext, Env } from "./env";
 
 const app = new Hono<AppContext>();
@@ -139,6 +140,14 @@ app.use("*", async (c, next) => {
 	// Check if this path is protected (including /__x402/protected)
 	const protectedConfig = findProtectedRouteConfig(path, protectedPatterns);
 	if (protectedConfig) {
+		// Bot Management Filtering: check if request has exception (human or excepted bot)
+		if (hasBotManagementException(c.req.raw, protectedConfig)) {
+			if (path === "/__x402/protected") {
+				return next();
+			}
+			return proxyToOrigin(c.req.raw, c.env);
+		}
+
 		// Ensure JWT_SECRET is configured before processing protected routes
 		if (!c.env.JWT_SECRET) {
 			return c.json(
@@ -256,12 +265,27 @@ app.get("/__x402/health", (c) => {
  * Useful for debugging and verifying deployment
  */
 app.get("/__x402/config", (c) => {
+	const patterns = (c.env.PROTECTED_PATTERNS || []) as ProtectedRouteConfig[];
+	const botFilteringEnabled = patterns.some(
+		(p) => p.bot_score_threshold !== undefined
+	);
+
 	return c.json({
 		network: c.env.NETWORK,
 		payTo: c.env.PAY_TO ? `***${c.env.PAY_TO.slice(-6)}` : null,
 		hasOriginUrl: !!c.env.ORIGIN_URL,
 		hasOriginService: !!c.env.ORIGIN_SERVICE,
-		protectedPatterns: c.env.PROTECTED_PATTERNS?.map((p) => p.pattern) || [],
+		protectedPatterns: patterns.map((p) => ({
+			pattern: p.pattern,
+			botManagementFiltering:
+				p.bot_score_threshold !== undefined
+					? {
+							threshold: p.bot_score_threshold,
+							exceptionsCount: p.except_detection_ids?.length ?? 0,
+						}
+					: null,
+		})),
+		botManagementFiltering: botFilteringEnabled,
 	});
 });
 
