@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "hello-world-do-template",
+  "workers_dev": true,
   "main": "src/index.ts",
   "compatibility_date": "2025-04-01",
   "upload_source_maps": true,

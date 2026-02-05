@@ -1,5 +1,6 @@
 {
   "name": "saas-admin-template",
+  "workers_dev": true,
   "main": "./dist/index.js",
   "assets": {
     "directory": "./dist"

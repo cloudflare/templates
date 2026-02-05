@@ -4,6 +4,7 @@
  */ {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "next-starter-template",
+  "workers_dev": true,
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
