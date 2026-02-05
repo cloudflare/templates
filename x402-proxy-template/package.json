@@ -32,7 +32,7 @@
 		"prettier": "3.7.4",
 		"tsx": "4.21.0",
 		"viem": "2.43.1",
-		"wrangler": "4.56.0",
+		"wrangler": "4.59.1",
 		"x402": "1.0.1"
 	},
 	"private": true,
