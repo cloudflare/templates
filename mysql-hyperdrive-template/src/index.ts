@@ -74,15 +74,14 @@ async function handleApiRequest(
         )
       `);
 
-			// Create users table with foreign key
+			// Create users table (no foreign key for Vitess compatibility)
 			await connection.query(`
         CREATE TABLE IF NOT EXISTS users (
           id INT AUTO_INCREMENT PRIMARY KEY,
           username VARCHAR(255) NOT NULL,
           organization_id INT,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-          FOREIGN KEY (organization_id) REFERENCES organizations(id) ON DELETE SET NULL
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )
       `);
 

@@ -72,12 +72,42 @@
 		//
 		// After payment, users get a JWT cookie valid for 1 hour.
 		//
+		// ─────────────────────────────────────────────────────────────────────
+		// BOT MANAGEMENT FILTERING (Optional)
+		// Requires Bot Management for Enterprise to enable bot filtering.
+		// ─────────────────────────────────────────────────────────────────────
+		// With Bot Management enabled, you can add:
+		//   - bot_score_threshold: Score at or below which payment is required
+		//   - except_detection_ids: Detection IDs of bots that access FREE
+		//
+		// This enables "default closed" - humans pass free, bots must pay.
+		//
 		"PROTECTED_PATTERNS": [
+			// ─────────────────────────────────────────────────────────────────
+			// Example: Basic - All traffic must pay
+			// ─────────────────────────────────────────────────────────────────
 			{
 				"pattern": "/premium/*",
 				"price": "$0.01",
 				"description": "Access to premium content for 1 hour",
 			},
+
+			// ─────────────────────────────────────────────────────────────────
+			// Example: Bot Management Filtering
+			// Requires Bot Management for Enterprise to enable bot filtering.
+			// ─────────────────────────────────────────────────────────────────
+			// {
+			// 	"pattern": "/content/*",
+			// 	"price": "$0.25",
+			// 	"description": "Content access for 1 hour",
+			// 	"bot_score_threshold": 30,
+			// 	"except_detection_ids": [
+			// 		120623194,  // Googlebot
+			// 		117479730,  // BingBot
+			// 		132995013,  // ChatGPT-User
+			// 		33564303    // Claude-User
+			// 	]
+			// }
 		],
 		// =====================================================================
 		// ORIGIN_URL - External origin URL (OPTIONAL)
