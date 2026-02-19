@@ -2,6 +2,7 @@
 	"compatibility_date": "2025-10-08",
 	"main": "src/index.ts",
 	"name": "r2-explorer-template",
+	"workers_dev": true,
 	"assets": {
 		"directory": "node_modules/r2-explorer/dashboard",
 		"binding": "ASSETS",

@@ -5,6 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "react-router-hono-fullstack-template",
+	"workers_dev": true,
 	"compatibility_date": "2025-10-08",
 	"main": "./workers/app.ts",
 	"vars": {

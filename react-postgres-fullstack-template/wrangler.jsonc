@@ -5,6 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "react-postgres-fullstack-template",
+	"workers_dev": true,
 	"main": "api/index.js",
 	"compatibility_flags": ["nodejs_compat"],
 	"compatibility_date": "2025-10-08",
