@@ -361,16 +361,16 @@ COOKIE_SIGNING_KEY=my-secret # example comment: should be a real random string i
 
 ```json
 {
-  "name": "my-worker",
-  "main": "./src/index.ts",
-  "compatibility_date": "$today",
-  "secrets_store_secrets": [
-    {
-      "binding": "API_KEY",
-      "store_id": "demo",
-      "secret_name": "api-key"
-    }
-  ]
+	"name": "my-worker",
+	"main": "./src/index.ts",
+	"compatibility_date": "$today",
+	"secrets_store_secrets": [
+		{
+			"binding": "API_KEY",
+			"store_id": "demo",
+			"secret_name": "api-key"
+		}
+	]
 }
 ```
 
@@ -380,12 +380,12 @@ Environment variables can also be configured in the Wrangler configuration file 
 
 ```json
 {
-  "name": "my-worker",
-  "main": "./src/index.ts",
-  "compatibility_date": "$today",
-  "vars": {
-    "API_HOST": "https://example.com"
-  }
+	"name": "my-worker",
+	"main": "./src/index.ts",
+	"compatibility_date": "$today",
+	"vars": {
+		"API_HOST": "https://example.com"
+	}
 }
 ```
 
@@ -405,8 +405,8 @@ Playwright is installed
    import { test, expect } from "@playwright/test";
 
    test("homepage loads correctly", async ({ page }) => {
-     await page.goto("/");
-     await expect(page.locator("h1")).toBeVisible();
+   	await page.goto("/");
+   	await expect(page.locator("h1")).toBeVisible();
    });
    ```
 

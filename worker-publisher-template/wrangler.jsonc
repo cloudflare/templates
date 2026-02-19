@@ -3,13 +3,13 @@
 	"name": "worker-publisher-template",
 	"workers_dev": true,
 	"main": "./src/index.ts",
-	"compatibility_date": "2025-04-01",
+	"compatibility_date": "2025-10-08",
 	"upload_source_maps": true,
 	"dispatch_namespaces": [
 		{
 			"binding": "DISPATCHER",
 			"namespace": "my-dispatch-namespace",
-			"experimental_remote": true
+			"remote": true
 		}
 	],
 	"observability": {

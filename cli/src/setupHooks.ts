@@ -5,8 +5,8 @@ const prePushHook = `
 pnpm run fix`.trim();
 
 export function setupHooks() {
-  fs.writeFileSync(".git/hooks/pre-push", prePushHook, {
-    encoding: "utf-8",
-    mode: 0o755,
-  });
+	fs.writeFileSync(".git/hooks/pre-push", prePushHook, {
+		encoding: "utf-8",
+		mode: 0o755,
+	});
 }

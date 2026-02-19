@@ -7,13 +7,13 @@
 */
 
 body {
-  font-family: sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #999;
-  background-color: black;
-  text-align: center;
-  padding-top: 40px;
+	font-family: sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #999;
+	background-color: black;
+	text-align: center;
+	padding-top: 40px;
 }
 
 h1,
@@ -22,29 +22,29 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: sans-serif;
-  font-weight: 600;
-  line-height: 1.25;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
+	font-family: sans-serif;
+	font-weight: 600;
+	line-height: 1.25;
+	margin-top: 0;
+	margin-bottom: 0.5rem;
 }
 
 #app {
-  padding: 1rem;
+	padding: 1rem;
 }
 
 h1 {
-  color: white;
+	color: white;
 }
 
 b {
-  color: white;
-  font-weight: bold;
+	color: white;
+	font-weight: bold;
 }
 
 a {
-  color: #ccc;
-  text-decoration-line: underline;
-  text-underline-offset: 3px;
-  text-decoration-color: #555;
+	color: #ccc;
+	text-decoration-line: underline;
+	text-underline-offset: 3px;
+	text-decoration-color: #555;
 }
