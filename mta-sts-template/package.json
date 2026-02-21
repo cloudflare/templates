@@ -1,0 +1,25 @@
+{
+	"name": "mta-sts",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev"
+	},
+	"devDependencies": {
+		"wrangler": "^4.67.0"
+	},
+	"cloudflare": {
+		"label": "MTA-STS",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"static"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers/",
+		"icon_urls": [],
+		"preview_image_url": "https://fast.image.delivery/nnoriwy.png",
+		"publish": true
+	}
+}
