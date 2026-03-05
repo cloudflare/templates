@@ -1,0 +1,144 @@
+/**
+ * x402 Payment-Gated Proxy - Wrangler Configuration
+ *
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "x402-proxy-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true,
+	},
+	"assets": {
+		"directory": "public",
+	},
+	// =========================================================================
+	// ROUTES - Where x402-proxy intercepts requests
+	// =========================================================================
+	// Uncomment and configure routes to deploy x402-proxy on your domain.
+	// The proxy will intercept all requests matching these patterns.
+	//
+	// "routes": [
+	// 	{
+	// 		"pattern": "api.example.com/*",
+	// 		"zone_name": "example.com",
+	// 	},
+	// ],
+	// =========================================================================
+	// SERVICE BINDING - If your origin is another Cloudflare Worker
+	// =========================================================================
+	// Use this instead of ORIGIN_URL when your backend is another Worker
+	// in your account. Service Bindings are faster (no network hop) and
+	// don't require the origin Worker to have a public route.
+	//
+	// "services": [
+	// 	{
+	// 		"binding": "ORIGIN_SERVICE",
+	// 		"service": "my-origin-worker",
+	// 	},
+	// ],
+	"vars": {
+		// =====================================================================
+		// PAY_TO - Your wallet address to receive payments (REQUIRED)
+		// =====================================================================
+		// This is where payments will be sent when users pay for access.
+		// Any Ethereum-compatible wallet works (MetaMask, Coinbase Wallet, etc.).
+		//
+		// The default "dead address" below is useful for testing - payments
+		// sent there are unrecoverable but allow testing the flow.
+		//
+		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
+		// =====================================================================
+		// NETWORK - Blockchain network for payments (REQUIRED)
+		// =====================================================================
+		// Use "base-sepolia" for testing (free testnet tokens).
+		// Use "base" for production.
+		//
+		// Get testnet tokens: https://docs.cdp.coinbase.com/faucets/
+		// Supported networks: https://x402.org
+		//
+		"NETWORK": "base-sepolia",
+		// =====================================================================
+		// PROTECTED_PATTERNS - Routes requiring payment (REQUIRED)
+		// =====================================================================
+		// Define which routes require payment and how much they cost.
+		// Each entry has:
+		//   - pattern: Route to protect (supports /* wildcards)
+		//   - price: Cost in USD (e.g., "$0.01")
+		//   - description: Shown to users explaining what they're paying for
+		//
+		// After payment, users get a JWT cookie valid for 1 hour.
+		//
+		// ─────────────────────────────────────────────────────────────────────
+		// BOT MANAGEMENT FILTERING (Optional)
+		// Requires Bot Management for Enterprise to enable bot filtering.
+		// ─────────────────────────────────────────────────────────────────────
+		// With Bot Management enabled, you can add:
+		//   - bot_score_threshold: Score at or below which payment is required
+		//   - except_detection_ids: Detection IDs of bots that access FREE
+		//
+		// This enables "default closed" - humans pass free, bots must pay.
+		//
+		"PROTECTED_PATTERNS": [
+			// ─────────────────────────────────────────────────────────────────
+			// Example: Basic - All traffic must pay
+			// ─────────────────────────────────────────────────────────────────
+			{
+				"pattern": "/premium/*",
+				"price": "$0.01",
+				"description": "Access to premium content for 1 hour",
+			},
+
+			// ─────────────────────────────────────────────────────────────────
+			// Example: Bot Management Filtering
+			// Requires Bot Management for Enterprise to enable bot filtering.
+			// ─────────────────────────────────────────────────────────────────
+			// {
+			// 	"pattern": "/content/*",
+			// 	"price": "$0.25",
+			// 	"description": "Content access for 1 hour",
+			// 	"bot_score_threshold": 30,
+			// 	"except_detection_ids": [
+			// 		120623194,  // Googlebot
+			// 		117479730,  // BingBot
+			// 		132995013,  // ChatGPT-User
+			// 		33564303    // Claude-User
+			// 	]
+			// }
+		],
+		// =====================================================================
+		// ORIGIN_URL - External origin URL (OPTIONAL)
+		// =====================================================================
+		// Controls how requests are proxied to your backend after authentication.
+		//
+		// NOT SET (default): DNS-based proxy mode. Requests are forwarded to the
+		// origin server defined in your Cloudflare DNS records. Use this when your
+		// backend is a traditional server (VM, container, etc.).
+		//
+		// SET TO A URL: External Origin mode. Requests are rewritten to this URL.
+		// Use this to proxy to another Cloudflare Worker (on a Custom Domain) or
+		// any external service.
+		//
+		// Note: If ORIGIN_SERVICE binding is configured above, it takes priority
+		// over both ORIGIN_URL and DNS-based routing.
+		//
+		// "ORIGIN_URL": "https://my-backend.example.com",
+		// =====================================================================
+		// FACILITATOR_URL - Payment verification service (OPTIONAL)
+		// =====================================================================
+		// The facilitator verifies and settles payments on behalf of your server.
+		// Defaults to CDP facilitator if not set.
+		//
+		// Example facilitators:
+		//   - CDP (default): https://x402.org/facilitator (Base, Base Sepolia)
+		//   - PayAI: https://facilitator.payai.network (multi-chain)
+		//
+		// See: https://x402.gitbook.io/x402/core-concepts/facilitator
+		//
+		"FACILITATOR_URL": "https://x402.org/facilitator",
+	},
+	"upload_source_maps": true,
+}

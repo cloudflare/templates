@@ -1,0 +1,51 @@
+{
+	"name": "workers-for-platforms-template",
+	"private": true,
+	"description": "Build your own website hosting platform with Workers for Platforms. Users can create and deploy sites through a simple web interface.",
+	"license": "Apache-2.0",
+	"engines": {
+		"node": ">=18"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.5.30",
+		"@cloudflare/workers-types": "^4.20241205.0",
+		"typescript": "^5.0.0",
+		"vitest": "^2.1.8",
+		"wrangler": "^3.99.0"
+	},
+	"scripts": {
+		"dev": "wrangler dev --remote",
+		"build": "node scripts/setup-quick.js",
+		"deploy": "wrangler deploy && node scripts/setup-quick.js --set-secrets",
+		"setup": "node scripts/setup.js",
+		"setup:quick": "node scripts/setup-quick.js",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	},
+	"dependencies": {
+		"hono": "^4.2.1",
+		"workers-qb": "^0.1.1"
+	},
+	"cloudflare": {
+		"label": "Website Builder",
+		"products": [
+			"Workers",
+			"Workers for Platforms",
+			"D1"
+		],
+		"categories": [
+			"starter"
+		],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/0c5e578d-ad97-4efa-fb3d-f8f4ac7e1700/preview",
+		"publish": true,
+		"bindings": {
+			"CUSTOM_DOMAIN": {
+				"description": "(Optional) Your platform's domain, e.g. `myplatform.com`. Leave empty to use workers.dev"
+			},
+			"CLOUDFLARE_API_TOKEN": {
+				"description": "(Optional) API token with **SSL and Certificates Edit** permission for custom domain support. [Create token](https://dash.cloudflare.com/profile/api-tokens)"
+			}
+		}
+	}
+}

@@ -1,7 +1,6 @@
 export default {
-  ssr: true,
-  prerender: [],
-  future: {
-    unstable_viteEnvironmentApi: true,
-  },
+	ssr: true,
+	future: {
+		unstable_viteEnvironmentApi: true,
+	},
 };

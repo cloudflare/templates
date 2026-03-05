@@ -16,6 +16,7 @@ Features:
 - ✅ Sitemap support
 - ✅ RSS Feed support
 - ✅ Markdown & MDX support
+- ✅ Built-in Observability logging
 
 <!-- dash-content-end -->
 
@@ -52,6 +53,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help`         | Get help using the Astro CLI                     |
 | `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
+| `npm wrangler tail`               | View real-time logs for all Workers              |
 
 ## 👀 Want to learn more?
 

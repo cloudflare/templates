@@ -1,0 +1,49 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "nlweb-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./public",
+		"binding": "ASSETS",
+		"run_worker_first": true
+	},
+	"vars": {
+		"RAG_ID": "my-autorag-id"
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"unsafe": {
+		"bindings": [
+			{
+				"name": "RATE_LIMITER",
+				"type": "ratelimit",
+				"namespace_id": "100",
+				"simple": {
+					"limit": 15,
+					"period": 60
+				}
+			}
+		]
+	},
+	"migrations": [
+		{
+			"new_sqlite_classes": ["NLWebMcp"],
+			"tag": "v1"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "NLWebMcp",
+				"name": "MCP_OBJECT"
+			}
+		]
+	},
+	"upload_source_maps": true
+}

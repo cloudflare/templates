@@ -3,55 +3,50 @@ import { groupByGenre } from "../lib/utils";
 import Sidebar from "../components/Sidebar";
 import MockDataBanner from "../components/MockDataBanner";
 
-export async function loader({ request }) {
-  try {
-    const url = new URL(request.url);
+export async function loader({ request, context }) {
+	try {
+		const booksService = context?.cloudflare?.env?.BOOKS_SERVICE;
 
-    // Try fetching from the API
-    let data = { books: [] };
-    try {
-      const response = await fetch(`${url.origin}/api/books`);
-      if (response.ok) {
-        data = await response.json();
-      } else {
-        console.warn(`API returned status: ${response.status}`);
-        // If the API returns an error, let the backend handle it
-      }
-    } catch (fetchError) {
-      console.warn("API fetch failed:", fetchError);
-    }
+		if (!booksService) {
+			console.warn(
+				"[Book Layout Loader] BOOKS_SERVICE binding not available, returning empty genres",
+			);
+			return { genres: [], dataSource: "fallback" };
+		}
 
-    // Ensure we have books data or empty array
-    const books = data.books || [];
-    let genreGroups = [];
+		// Call the service binding method to get all books
+		const data = await booksService.getBooks();
 
-    if (books.length > 0) {
-      genreGroups = groupByGenre(books);
-    } else {
-      console.warn("No books data available");
-    }
+		// Ensure we have books data or empty array
+		const books = data.books || [];
+		let genreGroups = [];
 
-    return {
-      genres: genreGroups,
-      dataSource: data.source, // Let the source come directly from the API
-    };
-  } catch (error) {
-    console.error("Unexpected error in book layout loader:", error);
-    // We still need a fallback, but we won't set a default source
-    return { genres: [] };
-  }
+		if (books.length > 0) {
+			genreGroups = groupByGenre(books);
+		} else {
+			console.warn("[Book Layout Loader] No books data available from service");
+		}
+
+		return {
+			genres: genreGroups,
+			dataSource: data.source,
+		};
+	} catch (error) {
+		// Return empty genres on error
+		return { genres: [], dataSource: "error" };
+	}
 }
 
 export default function BookLayout() {
-  const { genres, dataSource } = useLoaderData();
+	const { genres, dataSource } = useLoaderData();
 
-  return (
-    <div className="layout">
-      <Sidebar genres={genres} counts />
-      <main className="main-content">
-        {dataSource === "mock" && <MockDataBanner />}
-        <Outlet context={{ genres }} />
-      </main>
-    </div>
-  );
+	return (
+		<div className="layout">
+			<Sidebar genres={genres} counts />
+			<main className="main-content">
+				{dataSource === "mock" && <MockDataBanner />}
+				<Outlet context={{ genres }} />
+			</main>
+		</div>
+	);
 }

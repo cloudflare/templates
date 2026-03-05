@@ -1,37 +1,39 @@
 {
-  "name": "astro-blog-starter-template",
-  "description": "Build a personal website, blog, or portfolio with Astro.",
-  "cloudflare": {
-    "label": "Astro Framework Starter",
-    "products": [
-      "Workers"
-    ],
-    "categories": [],
-    "icon_urls": [
-      "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
-    ],
-    "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/33bbbf02-eda2-4d3f-b244-c27a280f3900/public",
-    "publish": true
-  },
-  "dependencies": {
-    "@astrojs/cloudflare": "12.5.0",
-    "@astrojs/mdx": "4.2.4",
-    "@astrojs/rss": "4.0.11",
-    "@astrojs/sitemap": "3.3.0",
-    "astro": "5.7.4",
-    "typescript": "5.8.3"
-  },
-  "devDependencies": {
-    "wrangler": "4.16.1"
-  },
-  "scripts": {
-    "astro": "astro",
-    "build": "astro build",
-    "cf-typegen": "wrangler types",
-    "check": "astro build && tsc && wrangler deploy --dry-run",
-    "deploy": "wrangler deploy",
-    "dev": "astro dev",
-    "preview": "astro build && wrangler dev"
-  },
-  "type": "module"
+	"name": "astro-blog-starter-template",
+	"description": "Build a personal website, blog, or portfolio with Astro.",
+	"cloudflare": {
+		"label": "Astro Framework Starter",
+		"products": [
+			"Workers"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/394ca3c9-d351-4036-035a-9f6dfa26dd00/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/f40a6577-eed5-4f3e-cef4-b5ef0a1be100/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"@astrojs/cloudflare": "12.6.12",
+		"@astrojs/mdx": "4.3.13",
+		"@astrojs/rss": "4.0.14",
+		"@astrojs/sitemap": "3.6.1",
+		"astro": "5.16.9",
+		"typescript": "5.9.3"
+	},
+	"devDependencies": {
+		"wrangler": "4.56.0"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"private": true,
+	"scripts": {
+		"astro": "astro",
+		"build": "astro build",
+		"cf-typegen": "wrangler types",
+		"check": "astro build && tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "astro dev",
+		"preview": "astro build && wrangler dev"
+	},
+	"type": "module"
 }

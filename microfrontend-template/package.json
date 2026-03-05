@@ -1,0 +1,27 @@
+{
+	"name": "microfrontend-template",
+	"description": "Route requests to different Workers based on path patterns with automatic URL rewriting for unified microfrontend applications.",
+	"private": true,
+	"cloudflare": {
+		"label": "Microfrontend Router",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"starter"
+		]
+	},
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy",
+		"types": "tsc --noEmit",
+		"test": "vitest run"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.8.0",
+		"@cloudflare/workers-types": "^4.20251128.0",
+		"typescript": "5.8.3",
+		"vitest": "~3.0.0",
+		"wrangler": "^4.47.0"
+	}
+}

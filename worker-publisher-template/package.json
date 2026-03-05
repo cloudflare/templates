@@ -1,0 +1,35 @@
+{
+	"name": "worker-publisher-template",
+	"description": "A Cloudflare Worker template that creates and deploys Workers to a Dispatch Namespace via the Cloudflare SDK.",
+	"cloudflare": {
+		"label": "Worker Publisher Template",
+		"products": [
+			"Workers",
+			"Workers for Platforms"
+		],
+		"categories": [],
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/b1123d34-c3a4-446c-6574-8b67c7ac4400/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5012f8d4-59bc-4f1d-fb7e-7e6269d3da00/preview",
+		"publish": true,
+		"bindings": {
+			"READONLY": {
+				"description": "If `true`, disables new uploads. If `false`, allows new uploads."
+			}
+		}
+	},
+	"dependencies": {
+		"cloudflare": "5.2.0"
+	},
+	"devDependencies": {
+		"tsx": "4.21.0",
+		"typescript": "5.9.3",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"deploy": "npm run deploy:wfp && wrangler deploy",
+		"deploy:wfp": "tsx scripts/deploy-wfp.ts",
+		"dev": "wrangler dev",
+		"start": "wrangler dev"
+	}
+}

@@ -1,0 +1,35 @@
+{
+	"name": "nlweb-template",
+	"description": "Build Nl Web components with Cloudflare Workers.",
+	"cloudflare": {
+		"label": "NL Web Starter",
+		"products": [
+			"Workers",
+			"AutoRag"
+		],
+		"categories": [],
+		"docs_url": "https://github.com/nlweb-ai/NLWeb",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/2a5c7efe-4251-4572-bb33-4061e5f3c800/public",
+		"icon_urls": [],
+		"publish": false
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "1.23.0",
+		"@types/markdown-it": "14.1.2",
+		"agents": "0.2.25",
+		"markdown-it": "14.1.0",
+		"markdown-to-text": "0.1.1",
+		"zod": "4.1.13"
+	},
+	"devDependencies": {
+		"typescript": "5.9.3",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev"
+	}
+}

@@ -30,3 +30,7 @@ A live public deployment of this template is available at [https://text-to-image
    ```bash
    npx wrangler deploy
    ```
+3. Monitor your worker
+   ```bash
+   npx wrangler tail
+   ```

@@ -1,0 +1,13 @@
+{
+	"extends": "./tsconfig.node.json",
+	"compilerOptions": {
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker.tsbuildinfo",
+		"lib": ["ESNext"],
+		"types": [
+			"./worker-configuration.d.ts",
+			"vite/client",
+			"@cloudflare/vitest-pool-workers"
+		]
+	},
+	"include": ["./worker-configuration.d.ts", "./worker", "./test"]
+}

@@ -20,20 +20,18 @@ A perfect starting point for building interactive, styled, and edge-deployed SPA
 - 🧱 File-based route separation
 - 🚀 Zero-config Vite build for Workers
 - 🛠️ Automatically deploys with Wrangler
-
+- 🔎 Built-in Observability to monitor your Worker
 <!-- dash-content-end -->
 
 ## Tech Stack
 
 - **Frontend**: React + React Router + ShadCN UI
-
   - SPA architecture powered by React Router
   - Includes accessible, themeable UI from ShadCN
   - Styled with utility-first Tailwind CSS
   - Built and optimized with Vite
 
 - **Backend**: Hono on Cloudflare Workers
-
   - API routes defined and handled via Hono in `/api/*`
   - Supports REST-like endpoints, CORS, and middleware
 

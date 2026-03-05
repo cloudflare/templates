@@ -40,9 +40,10 @@ You can start editing the project by modifying `src/index.ts`.
 
 ## Deploying To Production
 
-| Command          | Action                                |
-| :--------------- | :------------------------------------ |
-| `npm run deploy` | Deploy your application to Cloudflare |
+| Command             | Action                                |
+| :------------------ | :------------------------------------ |
+| `npm run deploy`    | Deploy your application to Cloudflare |
+| `npm wrangler tail` | View real-time logs for all Workers   |
 
 ## Learn More
 

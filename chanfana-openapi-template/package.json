@@ -1,0 +1,40 @@
+{
+	"name": "chanfana-openapi-template",
+	"description": "Complete backend API template using Hono + Chanfana + D1 + Vitest.",
+	"cloudflare": {
+		"label": "Backend OpenAPI Template",
+		"products": [
+			"Workers",
+			"D1"
+		],
+		"categories": [
+			"storage"
+		],
+		"docs_url": "https://chanfana.com",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1b2805d9-e7fb-4576-5176-6b409e251800/public",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cbde46cf-20fa-4548-7f70-1ae8c2f48900/preview",
+		"publish": true
+	},
+	"dependencies": {
+		"chanfana": "2.8.3",
+		"hono": "4.11.1",
+		"zod": "3.25.67"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.10.11",
+		"@types/node": "24.10.1",
+		"typescript": "5.9.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.56.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"deploy": "wrangler deploy",
+		"dev": "pnpm seedLocalDb && wrangler dev",
+		"predeploy": "wrangler d1 migrations apply DB --remote",
+		"schema": "npx chanfana",
+		"seedLocalDb": "wrangler d1 migrations apply DB --local",
+		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
+	}
+}

@@ -3,6 +3,9 @@ import { defineConfig } from "astro/config";
 
 import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
+// TODO: @astrojs/tailwind is deprecated for Tailwind v4.
+// When shadcn/ui supports Tailwind v4, migrate to @tailwindcss/vite plugin.
+// See: https://tailwindcss.com/docs/installation/framework-guides/astro
 import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config

@@ -54,3 +54,7 @@ A live public deployment of this template is available at [https://mysql-hyperdr
    ```bash
    npx wrangler dev --remote
    ```
+5. Monitor your worker
+   ```bash
+   npx wrangler tail
+   ```

@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Workers Builds Notifications</title>
+		<link
+			rel="icon"
+			href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔔</text></svg>"
+		/>
+		<style>
+			:root {
+				--orange-500: #f6821f;
+				--orange-600: #e0740d;
+				--gray-50: #f9fafb;
+				--gray-100: #f3f4f6;
+				--gray-200: #e5e7eb;
+				--gray-300: #d1d5db;
+				--gray-600: #4b5563;
+				--gray-700: #374151;
+				--gray-800: #1f2937;
+				--gray-900: #111827;
+				--green-500: #22c55e;
+				--red-500: #ef4444;
+				--yellow-500: #eab308;
+				--blue-500: #3b82f6;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family:
+					-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+					"Helvetica Neue", Arial, sans-serif;
+				background: var(--gray-50);
+				color: var(--gray-800);
+				line-height: 1.6;
+				min-height: 100vh;
+			}
+
+			.container {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 2rem;
+			}
+
+			header {
+				text-align: center;
+				padding: 3rem 0;
+			}
+
+			.icon {
+				font-size: 4rem;
+				margin-bottom: 1rem;
+			}
+
+			h1 {
+				font-size: 2.5rem;
+				font-weight: 700;
+				color: var(--gray-900);
+				margin-bottom: 0.5rem;
+			}
+
+			.subtitle {
+				font-size: 1.25rem;
+				color: var(--gray-600);
+				max-width: 600px;
+				margin: 0 auto;
+			}
+
+			.badges {
+				display: flex;
+				gap: 0.5rem;
+				justify-content: center;
+				margin-top: 1.5rem;
+				flex-wrap: wrap;
+			}
+
+			.badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.25rem;
+				padding: 0.375rem 0.75rem;
+				background: white;
+				border: 1px solid var(--gray-200);
+				border-radius: 9999px;
+				font-size: 0.875rem;
+				color: var(--gray-700);
+			}
+
+			.section {
+				background: white;
+				border-radius: 1rem;
+				padding: 2rem;
+				margin-bottom: 1.5rem;
+				box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+			}
+
+			.section h2 {
+				font-size: 1.25rem;
+				font-weight: 600;
+				color: var(--gray-900);
+				margin-bottom: 1rem;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.section h2 .num {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 1.75rem;
+				height: 1.75rem;
+				background: var(--orange-500);
+				color: white;
+				border-radius: 50%;
+				font-size: 0.875rem;
+			}
+
+			.features {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1rem;
+			}
+
+			@media (max-width: 900px) {
+				.features {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+
+			@media (max-width: 500px) {
+				.features {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			.feature {
+				display: flex;
+				align-items: flex-start;
+				gap: 0.75rem;
+				padding: 1rem;
+				background: var(--gray-50);
+				border-radius: 0.5rem;
+			}
+
+			.feature-icon {
+				font-size: 1.5rem;
+				flex-shrink: 0;
+			}
+
+			.feature h3 {
+				font-size: 0.9375rem;
+				font-weight: 600;
+				color: var(--gray-800);
+				margin-bottom: 0.25rem;
+			}
+
+			.feature p {
+				font-size: 0.875rem;
+				color: var(--gray-600);
+			}
+
+			.architecture {
+				background: var(--gray-900);
+				border-radius: 0.5rem;
+				padding: 1.5rem;
+				overflow-x: auto;
+			}
+
+			.architecture pre {
+				color: var(--gray-100);
+				font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+				font-size: 0.8125rem;
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			.events-table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			.events-table th,
+			.events-table td {
+				padding: 0.75rem 1rem;
+				text-align: left;
+				border-bottom: 1px solid var(--gray-200);
+			}
+
+			.events-table th {
+				font-weight: 600;
+				color: var(--gray-700);
+				font-size: 0.875rem;
+			}
+
+			.events-table td {
+				font-size: 0.9375rem;
+			}
+
+			.events-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.event-icon {
+				font-size: 1.25rem;
+			}
+
+			.links {
+				display: flex;
+				gap: 1rem;
+				flex-wrap: wrap;
+			}
+
+			.link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.75rem 1.25rem;
+				background: var(--gray-100);
+				color: var(--gray-700);
+				text-decoration: none;
+				border-radius: 0.5rem;
+				font-weight: 500;
+				font-size: 0.9375rem;
+				transition:
+					background 0.15s,
+					color 0.15s;
+			}
+
+			.link:hover {
+				background: var(--gray-200);
+				color: var(--gray-900);
+			}
+
+			.link.primary {
+				background: var(--orange-500);
+				color: white;
+			}
+
+			.link.primary:hover {
+				background: var(--orange-600);
+				color: white;
+			}
+
+			footer {
+				text-align: center;
+				padding: 2rem;
+				color: var(--gray-500);
+				font-size: 0.875rem;
+			}
+
+			footer a {
+				color: var(--orange-500);
+				text-decoration: none;
+			}
+
+			footer a:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<div class="icon">🔔</div>
+				<h1>Workers Builds Notifications</h1>
+				<p class="subtitle">
+					Get notified when your Workers Builds complete, fail, or are
+					cancelled. Send notifications to Slack, Discord, or any webhook.
+				</p>
+				<div class="badges">
+					<span class="badge">⚡ Workers</span>
+					<span class="badge">🔨 Workers Builds</span>
+					<span class="badge">📬 Queues</span>
+					<span class="badge">🔗 Event Subscriptions</span>
+				</div>
+			</header>
+
+			<section class="section">
+				<h2>Features</h2>
+				<div class="features">
+					<div class="feature">
+						<span class="feature-icon">🔔</span>
+						<div>
+							<h3>Real-time Notifications</h3>
+							<p>
+								Get instant alerts for build success, failure, and cancellation
+							</p>
+						</div>
+					</div>
+					<div class="feature">
+						<span class="feature-icon">🔗</span>
+						<div>
+							<h3>Any Webhook</h3>
+							<p>Works with Slack, Discord, or custom endpoints</p>
+						</div>
+					</div>
+					<div class="feature">
+						<span class="feature-icon">📋</span>
+						<div>
+							<h3>Rich Context</h3>
+							<p>Commit message, branch, author, and build duration</p>
+						</div>
+					</div>
+					<div class="feature">
+						<span class="feature-icon">📜</span>
+						<div>
+							<h3>Build Logs</h3>
+							<p>Optional inline logs fetched via Cloudflare API</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>How It Works</h2>
+				<div class="architecture">
+					<pre>
+┌─────────────────┐     ┌─────────────┐     ┌──────────────────┐     ┌─────────┐
+│ Workers Builds  │────▶│   Queue     │────▶│ This Consumer    │────▶│ Webhook │
+│ (any worker)    │     │             │     │ Worker           │     │         │
+└─────────────────┘     └─────────────┘     └──────────────────┘     └─────────┘
+
+1. Any worker in your account triggers a build
+2. Workers Builds publishes an event to your Queue
+3. This consumer worker processes the event and sends a notification
+          </pre>
+				</div>
+			</section>
+
+			<section class="section">
+				<h2>Event Types</h2>
+				<table class="events-table">
+					<thead>
+						<tr>
+							<th>Event</th>
+							<th>Notification</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<span class="event-icon">✅</span> Build succeeded (production)
+							</td>
+							<td>Live Worker URL</td>
+						</tr>
+						<tr>
+							<td>
+								<span class="event-icon">✅</span> Build succeeded (preview)
+							</td>
+							<td>Preview URL</td>
+						</tr>
+						<tr>
+							<td><span class="event-icon">❌</span> Build failed</td>
+							<td>Error message extracted from logs</td>
+						</tr>
+						<tr>
+							<td><span class="event-icon">⚠️</span> Build cancelled</td>
+							<td>Cancellation note</td>
+						</tr>
+					</tbody>
+				</table>
+				<p
+					style="margin-top: 1rem; font-size: 0.875rem; color: var(--gray-600)"
+				>
+					<strong>Note:</strong> Build started/queued events are acknowledged
+					but do not send notifications.
+				</p>
+			</section>
+
+			<section class="section">
+				<h2>Documentation</h2>
+				<div class="links">
+					<a
+						href="https://github.com/cloudflare/templates/tree/main/workers-builds-notifications-template"
+						class="link primary"
+					>
+						📖 View on GitHub
+					</a>
+					<a
+						href="https://developers.cloudflare.com/queues/event-subscriptions/"
+						class="link"
+					>
+						📬 Event Subscriptions
+					</a>
+					<a
+						href="https://developers.cloudflare.com/workers/ci-cd/builds/"
+						class="link"
+					>
+						🔨 Workers Builds
+					</a>
+					<a href="https://developers.cloudflare.com/queues/" class="link">
+						📦 Queues
+					</a>
+				</div>
+			</section>
+
+			<footer>
+				Built with
+				<a href="https://workers.cloudflare.com">Cloudflare Workers</a>
+			</footer>
+		</div>
+	</body>
+</html>

@@ -6,6 +6,8 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). It's deployed on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
 
+This template uses [OpenNext](https://opennext.js.org/) via the [OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare), which works by taking the Next.js build output and transforming it, so that it can run in Cloudflare Workers.
+
 <!-- dash-content-end -->
 
 Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
@@ -49,6 +51,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 | `npm run build`                   | Build your production site                   |
 | `npm run preview`                 | Preview your build locally, before deploying |
 | `npm run build && npm run deploy` | Deploy your production site to Cloudflare    |
+| `npm wrangler tail`               | View real-time logs for all Workers          |
 
 ## Learn More
 

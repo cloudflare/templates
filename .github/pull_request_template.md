@@ -11,14 +11,17 @@ The following selections do not need to be completed if this PR only contains ch
 
 - Template Metadata
   - [ ] template directory ends with `-template`
-  - [ ] "cloudflare" section of package.json is populated
+  - [ ] "cloudflare" section of `package.json` is populated
   - [ ] template preview image uploaded to Images
   - [ ] README is populated and uses `<!-- dash-content-start -->` and `<!-- dash-content-end -->` to designate the Dash readme preview
-  - [ ] package.json contains a `deploy` command
+  - [ ] `.gitignore` file exists
+  - [ ] `package.json` contains a `deploy` command
+  - [ ] `package.json` contains `private: true` and no `version` field
 
-## Example package.json
+## Example `package.json`
 
 ```json
+"private": true,
 "cloudflare": {
   "label": "Worker + D1 Database",
   "products": [
@@ -27,10 +30,6 @@ The following selections do not need to be completed if this PR only contains ch
   ],
   "categories": [
     "storage"
-  ],
-  "icon_urls": [
-    "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/c6fc5da3-1e0a-4608-b2f1-9628577ec800/public",
-    "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5ca0ca32-e897-4699-d4c1-6b680512f000/public"
   ],
   "docs_url": "https://developers.cloudflare.com/d1/",
   "preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/cb7cb0a9-6102-4822-633c-b76b7bb25900/public"
