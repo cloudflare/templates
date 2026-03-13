@@ -16,7 +16,7 @@
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "1.23.0",
 		"@types/markdown-it": "14.1.2",
-		"agents": "0.2.25",
+		"agents": "0.3.7",
 		"markdown-it": "14.1.0",
 		"markdown-to-text": "0.1.1",
 		"zod": "4.1.13"
