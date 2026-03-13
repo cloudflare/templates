@@ -7,11 +7,11 @@
 		"node": ">=18"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.5.30",
+		"@cloudflare/vitest-pool-workers": "^0.12.4",
 		"@cloudflare/workers-types": "^4.20241205.0",
 		"typescript": "^5.0.0",
-		"vitest": "^2.1.8",
-		"wrangler": "^3.99.0"
+		"vitest": "^4.0.17",
+		"wrangler": "^4.59.2"
 	},
 	"scripts": {
 		"dev": "wrangler dev --remote",
