@@ -107,6 +107,7 @@ function lintWranglerJsonC(
 		compatibility_date?: string;
 		observability?: { enabled?: boolean };
 		upload_source_maps?: boolean;
+		workers_dev?: boolean;
 		name?: string;
 	};
 
@@ -120,6 +121,7 @@ function lintWranglerJsonC(
 		wrangler.compatibility_date = TARGET_COMPATIBILITY_DATE;
 		wrangler.observability = { enabled: true };
 		wrangler.upload_source_maps = true;
+		wrangler.workers_dev = true;
 		wrangler.name = template.name;
 		writeJsonC(filePath, wrangler);
 		return [];
@@ -135,6 +137,9 @@ function lintWranglerJsonC(
 	}
 	if (wrangler.upload_source_maps !== true) {
 		problems.push(`"upload_source_maps" should be set to true`);
+	}
+	if (wrangler.workers_dev !== true) {
+		problems.push(`"workers_dev" should be set to true`);
 	}
 	if (wrangler.name !== template.name) {
 		problems.push(`"name" should be set to "${template.name}"`);
@@ -163,6 +168,7 @@ function lintWranglerJson(
 		compatibility_date?: string;
 		observability?: { enabled?: boolean };
 		upload_source_maps?: boolean;
+		workers_dev?: boolean;
 		name?: string;
 	};
 
@@ -176,6 +182,7 @@ function lintWranglerJson(
 		wrangler.compatibility_date = TARGET_COMPATIBILITY_DATE;
 		wrangler.observability = { enabled: true };
 		wrangler.upload_source_maps = true;
+		wrangler.workers_dev = true;
 		wrangler.name = template.name;
 		writeJson(filePath, wrangler);
 		return [];
@@ -191,6 +198,9 @@ function lintWranglerJson(
 	}
 	if (wrangler.upload_source_maps !== true) {
 		problems.push(`"upload_source_maps" should be set to true`);
+	}
+	if (wrangler.workers_dev !== true) {
+		problems.push(`"workers_dev" should be set to true`);
 	}
 	if (wrangler.name !== template.name) {
 		problems.push(`"name" should be set to "${template.name}"`);

@@ -5,6 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "d1-starter-sessions-api-template",
+	"workers_dev": true,
 	"main": "src/index.ts",
 	"compatibility_date": "2025-10-08",
 	"observability": {

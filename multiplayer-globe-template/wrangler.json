@@ -2,6 +2,7 @@
 	"compatibility_date": "2025-10-08",
 	"main": "src/server/index.ts",
 	"name": "multiplayer-globe-template",
+	"workers_dev": true,
 	"migrations": [
 		{
 			"new_sqlite_classes": ["Globe"],

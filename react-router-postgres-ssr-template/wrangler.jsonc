@@ -1,6 +1,7 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
 	"name": "react-router-postgres-ssr-template",
+	"workers_dev": true,
 	"compatibility_date": "2025-10-08",
 	"main": "./api/index.js",
 	"compatibility_flags": ["nodejs_compat"],
