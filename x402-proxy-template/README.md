@@ -521,6 +521,38 @@ Cookies are configured with security best practices:
 - Payment amount validation
 - Network/token validation
 
+## Bot Management Filtering (Optional)
+
+With **Bot Management for Enterprise** enabled on your domain, x402-proxy can distinguish between human and automated traffic:
+
+- Humans can access protected routes without payment
+- Bots are charged unless explicitly exempted
+- You can allow specific crawlers (e.g., Googlebot, search engines) free access
+
+### Configuration Example
+
+```jsonc
+"PROTECTED_PATTERNS": [
+  {
+    "pattern": "/api/premium/*",
+    "price": "$0.10",
+    "description": "Premium API access",
+    "bot_score_threshold": 30,           // Lower score = more likely automated
+    "except_detection_ids": [
+      120623194,  // Googlebot
+      132995013   // ChatGPT-User
+    ]
+  }
+]
+```
+
+The configuration uses two settings:
+
+- `bot_score_threshold` (1-99) - determines the cutoff for blocking bot traffic and allowing humans through. See [Bot Score](https://developers.cloudflare.com/bots/concepts/bot-score/) for how scores are calculated.
+- `except_detection_ids` - array of bot detection IDs to whitelist. A sample list is available in [`src/bots.ts`](./src/bots.ts).
+
+Without Bot Management, all traffic to protected routes requires payment.
+
 ## Deployment
 
 ### Production Deployment
