@@ -21,7 +21,7 @@
 	},
 	"dependencies": {
 		"@coinbase/x402": "2.0.0",
-		"hono": "4.11.1",
+		"hono": "4.12.5",
 		"x402-hono": "1.0.0"
 	},
 	"devDependencies": {
@@ -32,7 +32,7 @@
 		"prettier": "3.7.4",
 		"tsx": "4.21.0",
 		"viem": "2.43.1",
-		"wrangler": "4.56.0",
+		"wrangler": "4.71.0",
 		"x402": "1.0.1"
 	},
 	"private": true,
