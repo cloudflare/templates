@@ -1,0 +1,28 @@
+{
+	"name": "commerce-llms-txt-template",
+	"main": "src/llms-txt-worker/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "ENRICHMENT_CACHE",
+			"id": "PLACEHOLDER"
+		}
+	],
+	"vars": {
+		"MERCHANT_NAME": "My Store",
+		"MERCHANT_DESCRIPTION": "Product catalog powered by Commerce llms.txt",
+		"STORE_CURRENCY": "USD",
+		"SHIPPING_POLICY": "",
+		"RETURN_POLICY": "",
+		"SHOPIFY_STORE_DOMAIN": "",
+		"MERCHANT_VERTICAL": "general retail",
+		"ENRICHMENT_CACHE_TTL": "3600"
+	}
+}

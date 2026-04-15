@@ -1,0 +1,48 @@
+{
+	"name": "commerce-llms-txt-template",
+	"description": "Make your product catalog visible to AI agents with a dynamic /llms.txt endpoint powered by Workers AI.",
+	"cloudflare": {
+		"label": "Commerce llms.txt",
+		"products": [
+			"Workers",
+			"AI",
+			"KV"
+		],
+		"categories": [
+			"ai"
+		],
+		"bindings": {
+			"MERCHANT_NAME": {
+				"description": "Your store name (e.g., 'Acme Outdoors')"
+			},
+			"MERCHANT_DESCRIPTION": {
+				"description": "A short description of your store for AI agents"
+			},
+			"SHOPIFY_STORE_DOMAIN": {
+				"description": "Your Shopify *.myshopify.com domain (leave empty to use sample catalog)"
+			},
+			"MERCHANT_VERTICAL": {
+				"description": "Your product vertical — guides how AI describes products (e.g., 'outdoor gear', 'electronics', 'fashion')"
+			}
+		}
+	},
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"hono": "^4.7.0"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.8.36",
+		"@cloudflare/workers-types": "^4.20250327.0",
+		"typescript": "5.9.3",
+		"vitest": "~3.0.0",
+		"wrangler": "4.56.0"
+	}
+}
