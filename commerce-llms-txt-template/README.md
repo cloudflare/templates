@@ -18,6 +18,12 @@ Make your product catalog visible to AI shopping agents. This template serves a 
 
 <!-- dash-content-end -->
 
+## Who is this for
+
+- **Merchants who want AI agents to recommend their products.** If you sell on Shopify and want ChatGPT, Perplexity, or other AI shopping agents to understand your catalog, this gives them a structured endpoint to consume.
+- **Developers building AI shopping experiences.** If you're building an agent that recommends products, this is the merchant-side counterpart — a standardized, enriched product feed your agent can consume in one request.
+- **Platform teams exploring agentic commerce.** If you're evaluating how to make product data agent-readable across a portfolio of stores, this template is a working starting point.
+
 ## Getting Started
 
 Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
@@ -45,18 +51,38 @@ npm create cloudflare@latest -- --template=cloudflare/templates/commerce-llms-tx
    }
    ```
 
-3. Create a KV namespace for caching:
+3. Create a KV namespace for caching and update `wrangler.json`:
    ```bash
    npx wrangler kv namespace create ENRICHMENT_CACHE
    ```
-   Copy the `id` into your `wrangler.json` under `kv_namespaces`.
+   This outputs a namespace ID. Replace `"PLACEHOLDER"` in the `kv_namespaces` section of `wrangler.json` with it:
+   ```json
+   {
+     "kv_namespaces": [
+       {
+         "binding": "ENRICHMENT_CACHE",
+         "id": "your-namespace-id-here"
+       }
+     ]
+   }
+   ```
 
 4. Deploy:
    ```bash
    npx wrangler deploy
    ```
 
-Your `/llms.txt` endpoint is now live.
+Your `/llms.txt` endpoint is now live at `https://commerce-llms-txt-template.<your-subdomain>.workers.dev/llms.txt`.
+
+## After Deploy
+
+Once deployed, your Worker serves an agent-readable product catalog. Here's how to put it to use:
+
+**Point your domain at it.** Add a [Custom Domain](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/) or [Route](https://developers.cloudflare.com/workers/configuration/routing/routes/) so `/llms.txt` is served from your store's actual domain (e.g., `yourstore.com/llms.txt`). AI agents and crawlers will discover it the same way they find `robots.txt`.
+
+**Test it with an agent.** Try asking ChatGPT or another AI assistant: "What products does [your store URL] sell?" If the agent supports web browsing, it can fetch your `/llms.txt` and reason about your catalog directly.
+
+**Monitor usage.** Use `npx wrangler tail` or the [Workers dashboard](https://dash.cloudflare.com/) to see requests to your `/llms.txt` endpoint and which agents are consuming it.
 
 ## Endpoints
 
@@ -70,14 +96,20 @@ Your `/llms.txt` endpoint is now live.
 
 ## Configuration
 
+Set these in the `vars` section of `wrangler.json`:
+
 | Variable | Description | Default |
 |---|---|---|
 | `MERCHANT_NAME` | Your store name | `"My Store"` |
-| `MERCHANT_DESCRIPTION` | Short store description | `"Product catalog powered by Commerce llms.txt"` |
+| `MERCHANT_DESCRIPTION` | Short store description for the llms.txt header | `"Product catalog powered by Commerce llms.txt"` |
 | `STORE_CURRENCY` | Currency code | `"USD"` |
-| `MERCHANT_VERTICAL` | Product vertical for AI enrichment | `"general retail"` |
+| `SHIPPING_POLICY` | Shipping policy (shown in llms.txt header) | *(empty)* |
+| `RETURN_POLICY` | Return policy (shown in llms.txt header) | *(empty)* |
+| `MERCHANT_VERTICAL` | Your product vertical — guides how AI describes products (e.g., `"outdoor gear"`, `"electronics"`, `"fashion"`) | `"general retail"` |
 | `SHOPIFY_STORE_DOMAIN` | Your `*.myshopify.com` domain | *(empty — uses sample catalog)* |
-| `ENRICHMENT_CACHE_TTL` | Cache TTL in seconds | `"3600"` |
+| `ENRICHMENT_CACHE_TTL` | How long enriched products are cached, in seconds | `"3600"` |
+
+### Secrets
 
 For password-protected Shopify stores:
 ```bash
@@ -87,7 +119,9 @@ npx wrangler secret put SHOPIFY_STORE_PASSWORD
 ## Development
 
 ```bash
-npm run dev    # Start local dev server
-npm run test   # Run tests
+npm run dev    # Start local dev server on :8787
+npm run test   # Run vitest tests
 npm run check  # Type check + dry-run deploy
 ```
+
+When running locally without a Shopify store configured, the Worker serves a sample catalog of children's ski gear with hand-written enrichments. This lets you see the full `/llms.txt` output without needing a live store or Workers AI connection.

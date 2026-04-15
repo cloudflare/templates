@@ -13,9 +13,9 @@
  * Endpoints:
  *   GET /llms.txt           — The dynamic llms.txt file (agent-friendly)
  *   GET /llms-full.txt      — Expanded version with full enriched descriptions
- *   GET /api/products       — Raw product catalog as JSON
- *   GET /api/products/:slug — Single product (raw + enriched)
- *   GET /                   — Human-readable homepage
+ *   GET /api/products       — Full enriched catalog as JSON
+ *   GET /api/products/:slug — Single product detail
+ *   GET /                   — Service info and endpoint listing
  *
  * Runs on port 8787 (default wrangler dev port).
  */

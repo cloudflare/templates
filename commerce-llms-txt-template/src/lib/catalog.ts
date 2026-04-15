@@ -1,15 +1,14 @@
 /**
- * Mock product catalog for "Mountain Kids Outfitters"
+ * Sample product catalog
  *
- * A family-focused ski and snow shop specializing in children's gear.
+ * Included so the template works out of the box without a Shopify store.
+ * Replace this with your own product source by setting SHOPIFY_STORE_DOMAIN
+ * in wrangler.json, or swap in a different product API entirely.
  *
- * The key insight: these specs are written for humans reading packaging,
- * not for AI agents making recommendations. An agent needs to know
- * "lightweight plastic skis a toddler can carry, with bindings that
- * release easily for safety" — not "polycarbonate cap, DIN 0.75-3.0."
- *
- * The enrichment Worker transforms these raw specs into agent-friendly
- * descriptions using Workers AI.
+ * The key insight these products demonstrate: specs like "polycarbonate cap,
+ * DIN 0.75-3.0" are meaningless to an AI agent trying to answer "find beginner
+ * skis for my 3-year-old." The enrichment module transforms these raw specs
+ * into natural language an agent can reason with.
  */
 
 import type { RawProduct } from "./types";

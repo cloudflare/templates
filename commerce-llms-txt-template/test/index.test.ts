@@ -49,23 +49,16 @@ describe("Commerce llms.txt", () => {
 	});
 
 	it("returns single product by slug", async () => {
-		// First get the catalog to find a valid slug
-		const catalogResponse = await SELF.fetch(
-			"https://example.com/api/products",
-		);
-		const catalog = (await catalogResponse.json()) as {
-			products: Array<{ slug: string }>;
-		};
-		const slug = catalog.products[0].slug;
-
+		// Use a known slug from the sample catalog to avoid needing two requests
 		const response = await SELF.fetch(
-			`https://example.com/api/products/${slug}`,
+			"https://example.com/api/products/little-ripper-70-skis",
 		);
 		expect(response.status).toBe(200);
 		const json = (await response.json()) as {
-			product: { slug: string; agentSummary: string };
+			product: { slug: string; name: string; agentSummary: string };
 		};
-		expect(json.product.slug).toBe(slug);
+		expect(json.product.slug).toBe("little-ripper-70-skis");
+		expect(json.product.name).toBeTruthy();
 		expect(json.product.agentSummary).toBeTruthy();
 	});
 

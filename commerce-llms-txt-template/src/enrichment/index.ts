@@ -4,10 +4,10 @@
  * Uses Workers AI to transform raw product specs into agent-friendly
  * natural language descriptions.
  *
- * This is the core value-add: turning "2-burner propane stove, 20,000 BTU"
- * into "works for car camping, boils water in 3 minutes, serves 2-4 people."
+ * This is the core value-add: turning "polycarbonate cap, DIN 0.75-3.0"
+ * into "lightweight skis for toddlers, bindings release easily for safety."
  *
- * The enrichment runs at the edge, can be cached, and updates when
+ * The enrichment runs at the edge, is cached in KV, and updates when
  * inventory changes.
  */
 
