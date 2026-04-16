@@ -23,6 +23,15 @@
 			},
 			"MERCHANT_VERTICAL": {
 				"description": "Your product vertical — guides how AI describes products (e.g., 'outdoor gear', 'electronics', 'fashion')"
+			},
+			"STORE_CURRENCY": {
+				"description": "Currency code for prices in llms.txt output (default: USD)"
+			},
+			"ENRICHMENT_CACHE_TTL": {
+				"description": "How long enriched products are cached in seconds (default: 3600)"
+			},
+			"AI_MODEL": {
+				"description": "Workers AI model ID for enrichment (default: @cf/meta/llama-3.1-8b-instruct)"
 			}
 		}
 	},

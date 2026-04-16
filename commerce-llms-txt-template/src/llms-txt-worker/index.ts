@@ -38,6 +38,7 @@ interface Env {
   RETURN_POLICY?: string;
   MERCHANT_VERTICAL?: string;
   ENRICHMENT_CACHE_TTL?: string;
+  AI_MODEL?: string;
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -74,7 +75,7 @@ const KV_CACHE_KEY = "enriched-catalog";
 let memoryCache: EnrichedProduct[] | null = null;
 let memoryCacheTimestamp = 0;
 
-async function getEnrichedCatalog(env: Env): Promise<EnrichedProduct[]> {
+async function getEnrichedCatalog(env: Env, ctx?: ExecutionContext): Promise<EnrichedProduct[]> {
   const config = getMerchantConfig(env);
   const cacheTtlSeconds = config.cacheTtl;
 
@@ -112,7 +113,7 @@ async function getEnrichedCatalog(env: Env): Promise<EnrichedProduct[]> {
   let enriched: EnrichedProduct[];
   if (env.AI) {
     try {
-      enriched = await enrichCatalog(catalog, env.AI, config.vertical);
+      enriched = await enrichCatalog(catalog, env.AI, config.vertical, env.AI_MODEL);
       console.log(`[Enrichment] AI enrichment complete for ${enriched.length} products`);
     } catch (err) {
       console.log(`[Enrichment] AI call failed, using fallback: ${err}`);
@@ -123,12 +124,18 @@ async function getEnrichedCatalog(env: Env): Promise<EnrichedProduct[]> {
     enriched = catalog.map(fallbackEnrichment);
   }
 
-  // Write to KV cache (non-blocking)
+  // Write to KV cache. Uses waitUntil so the response isn't blocked by the KV write.
   if (env.ENRICHMENT_CACHE) {
-    await env.ENRICHMENT_CACHE.put(KV_CACHE_KEY, JSON.stringify(enriched), {
+    const kvWrite = env.ENRICHMENT_CACHE.put(KV_CACHE_KEY, JSON.stringify(enriched), {
       expirationTtl: cacheTtlSeconds,
+    }).then(() => {
+      console.log(`[Cache] Wrote ${enriched.length} products to KV cache (TTL: ${cacheTtlSeconds}s)`);
     });
-    console.log(`[Cache] Wrote ${enriched.length} products to KV cache (TTL: ${cacheTtlSeconds}s)`);
+    if (ctx) {
+      ctx.waitUntil(kvWrite);
+    } else {
+      await kvWrite;
+    }
   } else {
     memoryCache = enriched;
     memoryCacheTimestamp = Date.now();
@@ -183,7 +190,7 @@ function generateLlmsTxt(products: EnrichedProduct[], full: boolean, config: Mer
     txt += `### ${product.name}\n`;
     txt += `- **Price**: $${product.price}\n`;
     txt += `- **Category**: ${product.category}\n`;
-    txt += `- **Availability**: In stock (${product.stockCount} available)\n`;
+    txt += `- **Availability**: In stock${product.stockCount > 0 ? ` (${product.stockCount} available)` : ""}\n`;
     txt += `- **Summary**: ${product.agentSummary}\n`;
     txt += `- **Best for**: ${product.bestFor}\n`;
     txt += `- **Use cases**: ${product.useCaseTags.join(", ")}\n`;
@@ -228,14 +235,20 @@ function generateLlmsTxt(products: EnrichedProduct[], full: boolean, config: Mer
 // ---------------------------------------------------------------------------
 
 app.get("/llms.txt", async (c) => {
-  const products = await getEnrichedCatalog(c.env);
+  const products = await getEnrichedCatalog(c.env, c.executionCtx);
   const config = getMerchantConfig(c.env);
   const txt = generateLlmsTxt(products, false, config);
 
   return new Response(txt, {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
+      // Rough token estimate (chars / 4) so consuming agents can gauge size before parsing.
       "x-markdown-tokens": String(Math.ceil(txt.length / 4)),
+      // Content-Signal is a proposed header for signaling content preferences to AI agents.
+      // ai-input=yes: this content is intended for AI consumption.
+      // search=yes: this content may be indexed by search engines.
+      // ai-train=no: this content should not be used for model training.
+      // See: https://contentcredentials.org/
       "Content-Signal": "ai-input=yes, search=yes, ai-train=no",
       "Cache-Control": "public, max-age=300",
     },
@@ -243,7 +256,7 @@ app.get("/llms.txt", async (c) => {
 });
 
 app.get("/llms-full.txt", async (c) => {
-  const products = await getEnrichedCatalog(c.env);
+  const products = await getEnrichedCatalog(c.env, c.executionCtx);
   const config = getMerchantConfig(c.env);
   const txt = generateLlmsTxt(products, true, config);
 
@@ -251,14 +264,14 @@ app.get("/llms-full.txt", async (c) => {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
       "x-markdown-tokens": String(Math.ceil(txt.length / 4)),
-      "Content-Signal": "ai-input=yes, search=yes, ai-train=no",
+      "Content-Signal": "ai-input=yes, search=yes, ai-train=no", // see /llms.txt handler for docs
       "Cache-Control": "public, max-age=300",
     },
   });
 });
 
 app.get("/api/products", async (c) => {
-  const products = await getEnrichedCatalog(c.env);
+  const products = await getEnrichedCatalog(c.env, c.executionCtx);
   const config = getMerchantConfig(c.env);
   return c.json({
     merchant: config.name,
@@ -270,7 +283,7 @@ app.get("/api/products", async (c) => {
 
 app.get("/api/products/:slug", async (c) => {
   const slug = c.req.param("slug");
-  const products = await getEnrichedCatalog(c.env);
+  const products = await getEnrichedCatalog(c.env, c.executionCtx);
   const product = products.find((p) => p.slug === slug);
 
   if (!product) {

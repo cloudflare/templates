@@ -113,8 +113,10 @@ function extractSpecs(description: string, product: ShopifyProduct): Record<stri
  * We aggregate variants to determine:
  * - Price: lowest variant price (the "starting at" price)
  * - In stock: true if any variant is available
- * - Stock count: sum of available variants (Shopify /products.json doesn't
- *   expose exact inventory counts, so we estimate from variant availability)
+ * - Stock count: number of available variants. Note: Shopify's public
+ *   /products.json endpoint only exposes variant-level availability (boolean),
+ *   not exact inventory quantities. The stockCount here represents available
+ *   variants, not units. For exact inventory, use the Shopify Admin API.
  */
 function mapShopifyProduct(product: ShopifyProduct): RawProduct {
   const description = stripHtml(product.body_html || "");
@@ -133,7 +135,9 @@ function mapShopifyProduct(product: ShopifyProduct): RawProduct {
     currency: "USD", // Overridden by STORE_CURRENCY env var in llms.txt output
     category,
     inStock: anyAvailable,
-    stockCount: anyAvailable ? availableCount * 5 : 0, // Estimate: ~5 units per available variant
+    // This is the count of available *variants*, not inventory units.
+    // Shopify's public API doesn't expose exact inventory counts.
+    stockCount: availableCount,
     specs: extractSpecs(description, product),
     description,
     imageUrl: undefined,
@@ -183,14 +187,40 @@ export async function fetchShopifyCatalog(
     }
   }
 
-  const response = await fetch(`${baseUrl}/products.json?limit=250`, { headers });
+  // Shopify's public /products.json endpoint returns up to 250 products per page.
+  // We paginate to fetch the entire catalog.
+  const allProducts: ShopifyProduct[] = [];
+  let page = 1;
+  const MAX_PAGES = 20; // Safety limit: 20 pages × 250 = 5,000 products max
 
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch Shopify catalog: ${response.status} ${response.statusText}`
+  while (page <= MAX_PAGES) {
+    const response = await fetch(
+      `${baseUrl}/products.json?limit=250&page=${page}`,
+      { headers }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch Shopify catalog (page ${page}): ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = (await response.json()) as ShopifyProductsResponse;
+
+    if (data.products.length === 0) {
+      break; // No more products
+    }
+
+    allProducts.push(...data.products);
+    page++;
+  }
+
+  if (page > MAX_PAGES) {
+    console.warn(
+      `[Shopify] Reached page limit (${MAX_PAGES}). Catalog may be truncated at ${allProducts.length} products.`
     );
   }
 
-  const data = (await response.json()) as ShopifyProductsResponse;
-  return data.products.map(mapShopifyProduct);
+  console.log(`[Shopify] Fetched ${allProducts.length} products across ${page - 1} page(s)`);
+  return allProducts.map(mapShopifyProduct);
 }

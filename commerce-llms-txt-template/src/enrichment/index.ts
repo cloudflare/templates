@@ -38,13 +38,19 @@ interface AiTextGeneration {
   run(model: string, input: Record<string, unknown>): Promise<unknown>;
 }
 
+const DEFAULT_AI_MODEL = "@cf/meta/llama-3.1-8b-instruct";
+
 /**
  * Enrich a single product using Workers AI.
+ *
+ * @param model - Workers AI model ID. Defaults to Llama 3.1 8B Instruct.
+ *   Override via the AI_MODEL env var to use a different model.
  */
 export async function enrichProduct(
   product: RawProduct,
   ai: AiTextGeneration,
-  vertical: string
+  vertical: string,
+  model: string = DEFAULT_AI_MODEL
 ): Promise<EnrichedProduct> {
   const specsText = Object.entries(product.specs)
     .map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`)
@@ -60,7 +66,7 @@ Raw Specifications:
 ${specsText}`;
 
   try {
-    const result = await ai.run("@cf/meta/llama-3.1-8b-instruct", {
+    const result = await ai.run(model, {
       messages: [
         { role: "system", content: buildEnrichmentPrompt(vertical) },
         { role: "user", content: productContext },
@@ -94,19 +100,23 @@ ${specsText}`;
 
 /**
  * Enrich an entire catalog. Runs enrichments concurrently (batched to avoid rate limits).
+ *
+ * @param model - Workers AI model ID. Override via the AI_MODEL env var.
  */
 export async function enrichCatalog(
   products: RawProduct[],
   ai: AiTextGeneration,
-  vertical = "general retail"
+  vertical = "general retail",
+  model: string = DEFAULT_AI_MODEL
 ): Promise<EnrichedProduct[]> {
-  // Batch in groups of 5 to avoid Workers AI rate limits on large catalogs
+  // Batch in groups of 5 to stay within Workers AI concurrent request limits.
+  // Each batch runs in parallel; batches run sequentially.
   const BATCH_SIZE = 5;
   const results: EnrichedProduct[] = [];
 
   for (let i = 0; i < products.length; i += BATCH_SIZE) {
     const batch = products.slice(i, i + BATCH_SIZE);
-    const enriched = await Promise.all(batch.map((p) => enrichProduct(p, ai, vertical)));
+    const enriched = await Promise.all(batch.map((p) => enrichProduct(p, ai, vertical, model)));
     results.push(...enriched);
   }
 

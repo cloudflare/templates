@@ -34,7 +34,7 @@ export const CATALOG: RawProduct[] = [
     },
     description:
       "Youth ski package with polycarbonate construction and step-in bindings, DIN 0.75-3.0.",
-    imageUrl: "/images/little-ripper-70.jpg",
+    imageUrl: undefined,
     lastUpdated: new Date().toISOString(),
   },
   {
@@ -57,7 +57,7 @@ export const CATALOG: RawProduct[] = [
     },
     description:
       "ASTM/CE certified toddler ski helmet, 48-52cm, dial-fit adjustment, 350g.",
-    imageUrl: "/images/snow-sprout-helmet.jpg",
+    imageUrl: undefined,
     lastUpdated: new Date().toISOString(),
   },
   {
@@ -80,7 +80,7 @@ export const CATALOG: RawProduct[] = [
     },
     description:
       "Single-buckle toddler ski boot, Mondo 15.5-19.5, polyolefin shell, flex 20.",
-    imageUrl: "/images/tiny-tracks-boots.jpg",
+    imageUrl: undefined,
     lastUpdated: new Date().toISOString(),
   },
   {
@@ -103,7 +103,7 @@ export const CATALOG: RawProduct[] = [
     },
     description:
       "Toddler one-piece snow suit, 10,000mm waterproofing, 200g insulation, sizes 2T-5T.",
-    imageUrl: "/images/powder-pup.jpg",
+    imageUrl: undefined,
     lastUpdated: new Date().toISOString(),
   },
   {
@@ -125,7 +125,7 @@ export const CATALOG: RawProduct[] = [
     },
     description:
       "Toddler ski goggles, cylindrical S1 lens, UV400, TPU frame, helmet-compatible.",
-    imageUrl: "/images/mountain-cub-goggles.jpg",
+    imageUrl: undefined,
     lastUpdated: new Date().toISOString(),
   },
   {
@@ -146,7 +146,7 @@ export const CATALOG: RawProduct[] = [
     },
     description:
       "Padded ski training harness with rear handle and detachable leash, up to 25kg.",
-    imageUrl: "/images/first-turns-harness.jpg",
+    imageUrl: undefined,
     lastUpdated: new Date().toISOString(),
   },
 ];

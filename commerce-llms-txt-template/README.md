@@ -10,7 +10,7 @@ Make your product catalog visible to AI shopping agents. This template serves a 
 
 **Key features:**
 - Dynamic `/llms.txt` and `/llms-full.txt` endpoints following the [llms.txt spec](https://llmstxt.org)
-- AI enrichment powered by Workers AI (Llama 3.1 8B) — turns "DIN 0.75-3.0" into "bindings release easily for toddler safety"
+- AI enrichment powered by Workers AI — turns "DIN 0.75-3.0" into "bindings release easily for toddler safety"
 - KV-backed caching with configurable TTL — no re-enrichment on cold starts
 - Shopify integration via public `/products.json` API
 - Configurable merchant vertical to tailor AI descriptions per industry
@@ -26,7 +26,7 @@ Make your product catalog visible to AI shopping agents. This template serves a 
 
 ## Getting Started
 
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
+Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/learning-paths/workers/get-started/first-worker/) (the `create-cloudflare` CLI):
 
 ```bash
 npm create cloudflare@latest -- --template=cloudflare/templates/commerce-llms-txt-template
@@ -34,45 +34,59 @@ npm create cloudflare@latest -- --template=cloudflare/templates/commerce-llms-tx
 
 ## Setup
 
+The template works out of the box with zero configuration — it ships with a sample catalog and falls back gracefully when KV isn't configured. You can deploy immediately and customize later.
+
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Configure your store in `wrangler.json` — set `MERCHANT_NAME`, `MERCHANT_DESCRIPTION`, and optionally `SHOPIFY_STORE_DOMAIN`:
-   ```json
-   {
-     "vars": {
-       "MERCHANT_NAME": "Your Store Name",
-       "MERCHANT_DESCRIPTION": "A short description for AI agents",
-       "SHOPIFY_STORE_DOMAIN": "your-store.myshopify.com",
-       "MERCHANT_VERTICAL": "outdoor gear"
-     }
-   }
-   ```
-
-3. Create a KV namespace for caching and update `wrangler.json`:
-   ```bash
-   npx wrangler kv namespace create ENRICHMENT_CACHE
-   ```
-   This outputs a namespace ID. Replace `"PLACEHOLDER"` in the `kv_namespaces` section of `wrangler.json` with it:
-   ```json
-   {
-     "kv_namespaces": [
-       {
-         "binding": "ENRICHMENT_CACHE",
-         "id": "your-namespace-id-here"
-       }
-     ]
-   }
-   ```
-
-4. Deploy:
+2. Deploy:
    ```bash
    npx wrangler deploy
    ```
 
-Your `/llms.txt` endpoint is now live at `https://commerce-llms-txt-template.<your-subdomain>.workers.dev/llms.txt`.
+Your `/llms.txt` endpoint is now live at `https://commerce-llms-txt-template.<your-subdomain>.workers.dev/llms.txt`. It serves the sample catalog with AI-enriched descriptions.
+
+### Connect your Shopify store (optional)
+
+Configure your store in `wrangler.json` — set `MERCHANT_NAME`, `MERCHANT_DESCRIPTION`, and `SHOPIFY_STORE_DOMAIN`:
+
+```json
+{
+  "vars": {
+    "MERCHANT_NAME": "Your Store Name",
+    "MERCHANT_DESCRIPTION": "A short description for AI agents",
+    "SHOPIFY_STORE_DOMAIN": "your-store.myshopify.com",
+    "MERCHANT_VERTICAL": "outdoor gear"
+  }
+}
+```
+
+Then redeploy with `npx wrangler deploy`.
+
+### Enable KV caching (recommended for production)
+
+Without KV, enriched products are cached in Worker memory and lost on eviction. Adding a KV namespace gives you persistent caching across cold starts:
+
+```bash
+npx wrangler kv namespace create ENRICHMENT_CACHE
+```
+
+This outputs a namespace ID. Add a `kv_namespaces` section to `wrangler.json`:
+
+```json
+{
+  "kv_namespaces": [
+    {
+      "binding": "ENRICHMENT_CACHE",
+      "id": "your-namespace-id-here"
+    }
+  ]
+}
+```
+
+Then redeploy. The Worker automatically detects the KV binding and uses it — no code changes needed.
 
 ## After Deploy
 
@@ -108,6 +122,7 @@ Set these in the `vars` section of `wrangler.json`:
 | `MERCHANT_VERTICAL` | Your product vertical — guides how AI describes products (e.g., `"outdoor gear"`, `"electronics"`, `"fashion"`) | `"general retail"` |
 | `SHOPIFY_STORE_DOMAIN` | Your `*.myshopify.com` domain | *(empty — uses sample catalog)* |
 | `ENRICHMENT_CACHE_TTL` | How long enriched products are cached, in seconds | `"3600"` |
+| `AI_MODEL` | Workers AI model ID for enrichment — swap to a different model if needed | `"@cf/meta/llama-3.1-8b-instruct"` |
 
 ### Secrets
 
@@ -125,3 +140,29 @@ npm run check  # Type check + dry-run deploy
 ```
 
 When running locally without a Shopify store configured, the Worker serves a sample catalog of children's ski gear with hand-written enrichments. This lets you see the full `/llms.txt` output without needing a live store or Workers AI connection.
+
+## How caching works
+
+On the first request (or after the cache expires), the Worker:
+
+1. Fetches your product catalog from Shopify (or uses the sample catalog)
+2. Sends each product to Workers AI for enrichment (batched 5 at a time)
+3. Stores the enriched catalog in KV (if configured) or Worker memory
+4. Serves the cached result for subsequent requests
+
+**Cache layers:** CDN caches the response for 5 minutes (`Cache-Control: public, max-age=300`). KV caches the enriched catalog for 1 hour by default (`ENRICHMENT_CACHE_TTL`). This means inventory changes can take up to ~65 minutes to propagate. Lower the TTL values if you need faster updates.
+
+**First-request latency:** The first request after a cache miss will be slow — Workers AI needs to enrich every product. For a 50-product catalog, expect 5-15 seconds on the first request. Subsequent requests are fast (KV read + response).
+
+## Shopify integration notes
+
+- **Public API only.** This template uses Shopify's public `/products.json` endpoint, which doesn't require an API key. It works with any Shopify store that hasn't disabled this endpoint.
+- **Inventory is approximate.** The public API exposes variant-level availability (in stock / out of stock) but not exact inventory quantities. The `stockCount` shown in `/llms.txt` is the number of available variants, not units on hand. For exact inventory, you'd need to integrate the [Shopify Admin API](https://shopify.dev/docs/api/admin-rest).
+- **Password-protected stores** are supported via the `SHOPIFY_STORE_PASSWORD` secret.
+- **Large catalogs** are paginated automatically (up to 5,000 products). Be aware that very large catalogs will trigger more Workers AI calls on cache miss and may take longer on the first request.
+
+## Known limitations
+
+- **Workers AI cost on cache miss.** Each product requires one AI inference call for enrichment. A 250-product store triggers 250 calls (in batches of 5) on the first request. These are billed as standard [Workers AI inference requests](https://developers.cloudflare.com/workers-ai/platform/pricing/). Once cached, no AI calls are made until the cache expires.
+- **No webhook-based cache invalidation.** The cache expires on a timer (default: 1 hour). If you need instant updates when products change in Shopify, you'd need to add a webhook handler that clears the KV cache — not included in this template.
+- **Single-store only.** The template serves one Shopify store per Worker. For multi-store setups, deploy one Worker per store or extend the routing logic.
