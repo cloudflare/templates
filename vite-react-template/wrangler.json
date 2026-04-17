@@ -10,6 +10,7 @@
 	"upload_source_maps": true,
 	"assets": {
 		"directory": "./dist/client",
+		"run_worker_first": ["/api/*"],
 		"not_found_handling": "single-page-application"
 	}
 }
