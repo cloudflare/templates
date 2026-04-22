@@ -310,6 +310,11 @@ app.get("/api", (c) => {
 	const config = getMerchantConfig(c.env);
 	return c.json({
 		service: `${config.name} — Commerce API`,
+		merchant: config.name,
+		description: config.description,
+		dataSource: c.env.SHOPIFY_STORE_DOMAIN
+			? `shopify (${c.env.SHOPIFY_STORE_DOMAIN})`
+			: "sample catalog",
 		endpoints: {
 			"GET /llms.txt":
 				"Agent-optimized product catalog (llms.txt format, concise)",
@@ -317,27 +322,37 @@ app.get("/api", (c) => {
 				"Agent-optimized product catalog (llms.txt format, full details with specs)",
 			"GET /api/products": "Complete product catalog as JSON",
 			"GET /api/products/:slug": "Single product detail as JSON",
+			"GET /api/raw-catalog":
+				"Raw merchant catalog (pre-enrichment) — the input to Workers AI",
 		},
+		note: "AI agents: request /llms.txt for an optimized product catalog with real-time inventory and natural language descriptions.",
 	});
 });
 
-app.get("/", (c) => {
+// Raw (pre-enrichment) catalog — used by the built-in UI to visualize
+// what Workers AI adds on top of the merchant's source data.
+app.get("/api/raw-catalog", async (c) => {
+	let catalog: RawProduct[];
+	if (c.env.SHOPIFY_STORE_DOMAIN) {
+		try {
+			catalog = await fetchShopifyCatalog(
+				c.env.SHOPIFY_STORE_DOMAIN,
+				c.env.SHOPIFY_STORE_PASSWORD,
+			);
+		} catch {
+			catalog = getCatalogWithLiveInventory();
+		}
+	} else {
+		catalog = getCatalogWithLiveInventory();
+	}
 	const config = getMerchantConfig(c.env);
 	return c.json({
 		merchant: config.name,
-		description: config.description,
-		dataSource: c.env.SHOPIFY_STORE_DOMAIN
+		source: c.env.SHOPIFY_STORE_DOMAIN
 			? `shopify (${c.env.SHOPIFY_STORE_DOMAIN})`
 			: "sample catalog",
-		endpoints: {
-			"/llms.txt": "Agent-optimized product catalog (concise)",
-			"/llms-full.txt":
-				"Agent-optimized product catalog (full details with specs)",
-			"/api/products": "Complete product catalog as JSON",
-			"/api/products/:slug": "Single product detail as JSON",
-			"/api": "API documentation",
-		},
-		note: "AI agents: request /llms.txt for an optimized product catalog with real-time inventory and natural language descriptions.",
+		productCount: catalog.length,
+		products: catalog,
 	});
 });
 

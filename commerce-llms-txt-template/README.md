@@ -6,7 +6,7 @@
 
 Make your product catalog visible to AI shopping agents. This template serves a dynamic `/llms.txt` endpoint that uses [Workers AI](https://developers.cloudflare.com/workers-ai/) to transform raw product specs into natural language descriptions agents can reason with.
 
-**How it works:** Connect your Shopify store (or use the included sample catalog), and the Worker enriches each product's technical specifications into agent-friendly summaries, use-case tags, and buyer highlights. The enriched catalog is cached in [KV](https://developers.cloudflare.com/kv/) and served as a structured `/llms.txt` endpoint that any AI agent can consume in a single request.
+**How it works:** Connect your Shopify store (or use the included sample catalog), and the Worker enriches each product's technical specifications into agent-friendly summaries, use-case tags, and buyer highlights. The enriched catalog is cached in [KV](https://developers.cloudflare.com/kv/) and served as a structured `/llms.txt` endpoint that any AI agent can consume in a single request. A small React SPA is bundled alongside the API at `/`, so a human visiting the domain sees the raw merchant data and the enriched output side-by-side.
 
 **Key features:**
 
@@ -15,7 +15,8 @@ Make your product catalog visible to AI shopping agents. This template serves a 
 - KV-backed caching with configurable TTL — no re-enrichment on cold starts
 - Shopify integration via public `/products.json` API
 - Configurable merchant vertical to tailor AI descriptions per industry
-- JSON API for programmatic access (`/api/products`, `/api/products/:slug`)
+- JSON API for programmatic access (`/api/products`, `/api/products/:slug`, `/api/raw-catalog`)
+- Built-in React + Vite landing page that visualizes the raw → enriched transformation live against your own catalog
 
 <!-- dash-content-end -->
 
@@ -89,13 +90,15 @@ Once deployed, your Worker serves an agent-readable product catalog. Here's how 
 
 ## Endpoints
 
-| Endpoint                  | Description                                |
-| ------------------------- | ------------------------------------------ |
-| `GET /llms.txt`           | Agent-optimized product catalog (concise)  |
-| `GET /llms-full.txt`      | Detailed version with specs and highlights |
-| `GET /api/products`       | Full enriched catalog as JSON              |
-| `GET /api/products/:slug` | Single product detail                      |
-| `GET /api`                | API documentation                          |
+| Endpoint                  | Description                                                                      |
+| ------------------------- | -------------------------------------------------------------------------------- |
+| `GET /`                   | React SPA: side-by-side view of raw merchant data and Workers AI–enriched output |
+| `GET /llms.txt`           | Agent-optimized product catalog (concise)                                        |
+| `GET /llms-full.txt`      | Detailed version with specs and highlights                                       |
+| `GET /api/products`       | Full enriched catalog as JSON                                                    |
+| `GET /api/products/:slug` | Single product detail                                                            |
+| `GET /api/raw-catalog`    | Raw merchant catalog (pre-enrichment) — the input to Workers AI                  |
+| `GET /api`                | API documentation                                                                |
 
 ## Configuration
 
@@ -124,12 +127,16 @@ npx wrangler secret put SHOPIFY_STORE_PASSWORD
 ## Development
 
 ```bash
-npm run dev    # Start local dev server on :8787
-npm run test   # Run vitest tests
-npm run check  # Type check + dry-run deploy
+npm run dev      # Vite dev server + Miniflare for the Worker (HMR for the SPA)
+npm run build    # Build the SPA + bundle the Worker (via @cloudflare/vite-plugin)
+npm run preview  # Build, then run the production bundle locally
+npm run test     # Run vitest tests
+npm run check    # Type check + build + dry-run deploy
 ```
 
-When running locally without a Shopify store configured, the Worker serves a sample catalog of children's ski gear with hand-written enrichments. This lets you see the full `/llms.txt` output without needing a live store or Workers AI connection. Miniflare provisions a local KV namespace automatically, so no extra setup is needed for `npm run dev` or `npm run test`.
+Under the hood the template uses [`@cloudflare/vite-plugin`](https://www.npmjs.com/package/@cloudflare/vite-plugin): a single `vite build` produces both the static SPA (output to `dist/client/`, served as Workers Static Assets) and the Worker bundle (uploaded by Wrangler). The Worker only handles routes it explicitly defines (`/llms.txt`, `/llms-full.txt`, `/api/*`). Any other request falls through to the SPA — that's what `assets.not_found_handling: "single-page-application"` in `wrangler.json` does.
+
+When running locally without a Shopify store configured, the Worker serves a sample catalog of children's ski gear with hand-written enrichments. This lets you see the full `/llms.txt` output and the SPA without needing a live store or Workers AI connection. Miniflare provisions a local KV namespace automatically, so no extra setup is needed for `npm run dev` or `npm run test`.
 
 ## How caching works
 

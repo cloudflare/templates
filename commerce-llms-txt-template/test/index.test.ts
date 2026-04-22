@@ -2,12 +2,26 @@ import { SELF } from "cloudflare:test";
 import { describe, it, expect } from "vitest";
 
 describe("Commerce llms.txt", () => {
-	it("returns 200 and JSON on root endpoint", async () => {
-		const response = await SELF.fetch("https://example.com/");
+	it("returns 200 and JSON on /api (service info)", async () => {
+		const response = await SELF.fetch("https://example.com/api");
 		expect(response.status).toBe(200);
 		const json = (await response.json()) as Record<string, unknown>;
 		expect(json).toHaveProperty("merchant");
 		expect(json).toHaveProperty("endpoints");
+	});
+
+	it("returns raw catalog (pre-enrichment) on /api/raw-catalog", async () => {
+		const response = await SELF.fetch("https://example.com/api/raw-catalog");
+		expect(response.status).toBe(200);
+		const json = (await response.json()) as {
+			merchant: string;
+			productCount: number;
+			products: Array<{ slug: string; name: string; specs: unknown }>;
+		};
+		expect(json.productCount).toBeGreaterThan(0);
+		expect(json.products[0]).toHaveProperty("specs");
+		// Raw products should not yet have enriched fields
+		expect(json.products[0]).not.toHaveProperty("agentSummary");
 	});
 
 	it("returns llms.txt as markdown with correct headers", async () => {
@@ -71,7 +85,7 @@ describe("Commerce llms.txt", () => {
 		expect(json.error).toBe("Product not found");
 	});
 
-	it("returns API documentation on /api", async () => {
+	it("lists all documented endpoints on /api", async () => {
 		const response = await SELF.fetch("https://example.com/api");
 		expect(response.status).toBe(200);
 		const json = (await response.json()) as {
@@ -80,6 +94,7 @@ describe("Commerce llms.txt", () => {
 		};
 		expect(json.endpoints).toHaveProperty("GET /llms.txt");
 		expect(json.endpoints).toHaveProperty("GET /api/products");
+		expect(json.endpoints).toHaveProperty("GET /api/raw-catalog");
 	});
 
 	it("includes merchant config from env vars in llms.txt output", async () => {
