@@ -1,0 +1,568 @@
+/* ---------------------------------------------------------------- */
+/* Page shell                                                       */
+/* ---------------------------------------------------------------- */
+
+.page {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+/* ---------------------------------------------------------------- */
+/* Header bar                                                       */
+/* ---------------------------------------------------------------- */
+
+.topbar {
+	background: #1f2733;
+	color: #f8f7f4;
+	padding: 1.25rem 2rem;
+	border-bottom: 3px solid #f38020;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.topbar .brand {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.topbar .brand-title {
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	color: rgba(248, 247, 244, 0.7);
+	text-transform: uppercase;
+}
+
+.topbar .merchant-name {
+	font-size: 1.4rem;
+	font-weight: 700;
+}
+
+.topbar .badges {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.badge {
+	display: inline-block;
+	padding: 0.25rem 0.6rem;
+	border-radius: 999px;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	background: rgba(248, 247, 244, 0.1);
+	border: 1px solid rgba(248, 247, 244, 0.3);
+	color: rgba(248, 247, 244, 0.9);
+}
+.badge.workers {
+	border-color: #f38020;
+	color: #ffd49a;
+}
+.badge.kv {
+	border-color: #63b3ed;
+	color: #bee3f8;
+}
+
+/* ---------------------------------------------------------------- */
+/* Layout                                                           */
+/* ---------------------------------------------------------------- */
+
+.main {
+	flex: 1;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem 1.5rem 4rem;
+	width: 100%;
+}
+
+.state {
+	text-align: center;
+	padding: 4rem 1rem;
+	color: #6b7280;
+}
+.state h2 {
+	color: #374151;
+	margin-bottom: 0.5rem;
+}
+.state .error {
+	color: #991b1b;
+}
+
+/* ---------------------------------------------------------------- */
+/* Section                                                          */
+/* ---------------------------------------------------------------- */
+
+.section {
+	margin-bottom: 2.5rem;
+}
+
+.section-header {
+	display: flex;
+	align-items: baseline;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.section-header h2 {
+	font-size: 1.05rem;
+	margin: 0;
+	font-weight: 600;
+	color: #1f2733;
+}
+
+.section-header .sub {
+	font-size: 0.85rem;
+	color: #6b7280;
+}
+
+/* ---------------------------------------------------------------- */
+/* Headline cards                                                   */
+/* ---------------------------------------------------------------- */
+
+.headline-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 1rem;
+	margin-bottom: 2rem;
+}
+
+.headline-card {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	padding: 1rem 1.25rem;
+}
+
+.headline-card .label {
+	font-size: 0.78rem;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	margin-bottom: 0.35rem;
+}
+
+.headline-card .value {
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: #1f2733;
+}
+
+.headline-card.revenue .value {
+	color: #16a34a;
+}
+
+.headline-card .hint {
+	font-size: 0.8rem;
+	color: #6b7280;
+	margin-top: 0.35rem;
+}
+
+/* ---------------------------------------------------------------- */
+/* Insights                                                         */
+/* ---------------------------------------------------------------- */
+
+.insight-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.insight {
+	display: flex;
+	gap: 0.75rem;
+	align-items: center;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-left: 3px solid #f38020;
+	border-radius: 6px;
+	padding: 0.7rem 0.95rem;
+}
+
+.insight.star {
+	border-left-color: #f59e0b;
+}
+.insight.refresh {
+	border-left-color: #3b82f6;
+}
+.insight.block {
+	border-left-color: #dc2626;
+}
+.insight.gap {
+	border-left-color: #8b5cf6;
+}
+.insight.trophy {
+	border-left-color: #eab308;
+}
+.insight.ok {
+	border-left-color: #16a34a;
+}
+.insight.dots {
+	border-left-color: #6b7280;
+}
+.insight.dollar {
+	border-left-color: #16a34a;
+}
+
+.insight .label {
+	font-size: 0.78rem;
+	font-weight: 700;
+	color: #374151;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	flex-shrink: 0;
+	min-width: 110px;
+}
+
+.insight .text {
+	color: #1f2733;
+	font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------- */
+/* Funnel                                                           */
+/* ---------------------------------------------------------------- */
+
+.funnel-row {
+	display: grid;
+	grid-template-columns: 200px 1fr auto;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.5rem 0;
+}
+
+.funnel-label {
+	font-size: 0.88rem;
+	color: #374151;
+}
+
+.funnel-bar-container {
+	background: #f3f4f6;
+	border-radius: 6px;
+	height: 24px;
+	position: relative;
+	overflow: hidden;
+}
+
+.funnel-bar {
+	height: 100%;
+	background: linear-gradient(to right, #f38020, #ea580c);
+	border-radius: 6px;
+	transition: width 0.4s ease;
+}
+
+.funnel-bar.blocked {
+	background: linear-gradient(to right, #ef4444, #dc2626);
+}
+
+.funnel-bar.success {
+	background: linear-gradient(to right, #16a34a, #15803d);
+}
+
+.funnel-value {
+	font-variant-numeric: tabular-nums;
+	font-size: 0.88rem;
+	font-weight: 600;
+	color: #1f2733;
+	min-width: 110px;
+	text-align: right;
+}
+
+.funnel-value .rate {
+	color: #6b7280;
+	font-weight: 400;
+	margin-left: 0.4rem;
+}
+
+@media (max-width: 700px) {
+	.funnel-row {
+		grid-template-columns: 1fr;
+		gap: 0.25rem;
+	}
+	.funnel-value {
+		text-align: left;
+	}
+}
+
+/* ---------------------------------------------------------------- */
+/* Agent table                                                      */
+/* ---------------------------------------------------------------- */
+
+.table-scroll {
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+}
+
+.agent-table {
+	width: 100%;
+	min-width: 640px;
+	border-collapse: collapse;
+	background: #fff;
+}
+
+.agent-table th,
+.agent-table td {
+	padding: 0.75rem 1rem;
+	text-align: left;
+	border-bottom: 1px solid #f3f4f6;
+	font-size: 0.9rem;
+}
+
+.agent-table thead {
+	background: #f8f7f4;
+}
+
+.agent-table th {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #6b7280;
+	font-weight: 600;
+}
+
+.agent-table tr:last-child td {
+	border-bottom: none;
+}
+
+.agent-table td.numeric {
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+}
+
+.status-pill {
+	display: inline-block;
+	padding: 0.15rem 0.5rem;
+	border-radius: 999px;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+.status-pill.verified {
+	background: #dcfce7;
+	color: #15803d;
+}
+.status-pill.unverified {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+.revenue-value {
+	color: #16a34a;
+	font-weight: 600;
+}
+
+/* ---------------------------------------------------------------- */
+/* Journeys                                                         */
+/* ---------------------------------------------------------------- */
+
+.journey-card {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	margin-bottom: 1rem;
+	overflow: hidden;
+}
+
+.journey-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.9rem 1.2rem;
+	background: #f8f7f4;
+	border-bottom: 1px solid #e5e7eb;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.journey-name {
+	font-weight: 600;
+	color: #1f2733;
+}
+
+.journey-summary {
+	font-size: 0.85rem;
+	color: #6b7280;
+	font-family: ui-monospace, monospace;
+}
+
+.journey-meta {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	font-size: 0.82rem;
+	color: #6b7280;
+}
+
+.journey-meta .spend {
+	color: #16a34a;
+	font-weight: 600;
+}
+
+.journey-steps {
+	padding: 0.75rem 1.2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.journey-step {
+	display: grid;
+	grid-template-columns: 80px 24px 1fr;
+	gap: 0.5rem;
+	align-items: center;
+	font-size: 0.88rem;
+}
+
+.journey-step .time {
+	color: #6b7280;
+	font-variant-numeric: tabular-nums;
+	font-size: 0.82rem;
+}
+
+.journey-step .icon {
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.72rem;
+	font-weight: 700;
+	background: #e5e7eb;
+	color: #374151;
+}
+
+.journey-step .icon.discover {
+	background: #dbeafe;
+	color: #1e40af;
+}
+.journey-step .icon.view {
+	background: #fef3c7;
+	color: #854d0e;
+}
+.journey-step .icon.buy {
+	background: #dcfce7;
+	color: #15803d;
+}
+.journey-step .icon.blocked {
+	background: #fee2e2;
+	color: #991b1b;
+}
+
+.journey-step .desc {
+	color: #1f2733;
+}
+
+/* ---------------------------------------------------------------- */
+/* Products                                                         */
+/* ---------------------------------------------------------------- */
+
+.product-table {
+	width: 100%;
+	min-width: 720px;
+	border-collapse: collapse;
+	background: #fff;
+}
+
+.product-table th,
+.product-table td {
+	padding: 0.75rem 1rem;
+	text-align: left;
+	border-bottom: 1px solid #f3f4f6;
+	font-size: 0.9rem;
+}
+
+.product-table thead {
+	background: #f8f7f4;
+}
+
+.product-table th {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #6b7280;
+	font-weight: 600;
+}
+
+.product-table td.numeric {
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+.product-table tr:last-child td {
+	border-bottom: none;
+}
+
+/* ---------------------------------------------------------------- */
+/* Side-by-side comparison                                          */
+/* ---------------------------------------------------------------- */
+
+.compare-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.compare-col {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	padding: 1rem 1.2rem;
+}
+
+.compare-col h3 {
+	font-size: 0.85rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: #6b7280;
+	margin: 0 0 0.6rem 0;
+	font-weight: 600;
+}
+
+.compare-col .value {
+	font-size: 0.9rem;
+	color: #1f2733;
+	line-height: 1.5;
+}
+
+.compare-col.before .value {
+	color: #6b7280;
+	font-style: italic;
+}
+
+@media (max-width: 700px) {
+	.compare-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ---------------------------------------------------------------- */
+/* Footer                                                           */
+/* ---------------------------------------------------------------- */
+
+.footer {
+	border-top: 1px solid #e5e7eb;
+	padding: 1.5rem;
+	text-align: center;
+	color: #6b7280;
+	font-size: 0.85rem;
+	background: #fff;
+}
+
+.footer code {
+	background: #f3f4f6;
+	padding: 0.15rem 0.35rem;
+	border-radius: 4px;
+	color: #1f2733;
+}
