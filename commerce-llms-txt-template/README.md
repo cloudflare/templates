@@ -9,6 +9,7 @@ Make your product catalog visible to AI shopping agents. This template serves a 
 **How it works:** Connect your Shopify store (or use the included sample catalog), and the Worker enriches each product's technical specifications into agent-friendly summaries, use-case tags, and buyer highlights. The enriched catalog is cached in [KV](https://developers.cloudflare.com/kv/) and served as a structured `/llms.txt` endpoint that any AI agent can consume in a single request.
 
 **Key features:**
+
 - Dynamic `/llms.txt` and `/llms-full.txt` endpoints following the [llms.txt spec](https://llmstxt.org)
 - AI enrichment powered by Workers AI (Gemma 4) — turns "DIN 0.75-3.0" into "bindings release easily for toddler safety"
 - KV-backed caching with configurable TTL — no re-enrichment on cold starts
@@ -37,14 +38,17 @@ npm create cloudflare@latest -- --template=cloudflare/templates/commerce-llms-tx
 The template ships with a sample catalog so you can see it working immediately after deploy. Follow these steps to get live:
 
 1. Install dependencies:
+
    ```bash
    npm install
    ```
 
 2. Create the KV namespace used to cache enriched products:
+
    ```bash
    npx wrangler kv namespace create ENRICHMENT_CACHE
    ```
+
    Copy the namespace ID from the output and paste it into `wrangler.json` in place of `<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>`.
 
    > If you deploy via the "Deploy to Cloudflare" button at the top of this README, the KV namespace is provisioned for you automatically — you can skip this step.
@@ -62,12 +66,12 @@ Configure your store in `wrangler.json` — set `MERCHANT_NAME`, `MERCHANT_DESCR
 
 ```json
 {
-  "vars": {
-    "MERCHANT_NAME": "Your Store Name",
-    "MERCHANT_DESCRIPTION": "A short description for AI agents",
-    "SHOPIFY_STORE_DOMAIN": "your-store.myshopify.com",
-    "MERCHANT_VERTICAL": "outdoor gear"
-  }
+	"vars": {
+		"MERCHANT_NAME": "Your Store Name",
+		"MERCHANT_DESCRIPTION": "A short description for AI agents",
+		"SHOPIFY_STORE_DOMAIN": "your-store.myshopify.com",
+		"MERCHANT_VERTICAL": "outdoor gear"
+	}
 }
 ```
 
@@ -85,33 +89,34 @@ Once deployed, your Worker serves an agent-readable product catalog. Here's how 
 
 ## Endpoints
 
-| Endpoint | Description |
-|---|---|
-| `GET /llms.txt` | Agent-optimized product catalog (concise) |
-| `GET /llms-full.txt` | Detailed version with specs and highlights |
-| `GET /api/products` | Full enriched catalog as JSON |
-| `GET /api/products/:slug` | Single product detail |
-| `GET /api` | API documentation |
+| Endpoint                  | Description                                |
+| ------------------------- | ------------------------------------------ |
+| `GET /llms.txt`           | Agent-optimized product catalog (concise)  |
+| `GET /llms-full.txt`      | Detailed version with specs and highlights |
+| `GET /api/products`       | Full enriched catalog as JSON              |
+| `GET /api/products/:slug` | Single product detail                      |
+| `GET /api`                | API documentation                          |
 
 ## Configuration
 
 Set these in the `vars` section of `wrangler.json`:
 
-| Variable | Description | Default |
-|---|---|---|
-| `MERCHANT_NAME` | Your store name | `"My Store"` |
-| `MERCHANT_DESCRIPTION` | Short store description for the llms.txt header | `"Product catalog powered by Commerce llms.txt"` |
-| `STORE_CURRENCY` | Currency code | `"USD"` |
-| `SHIPPING_POLICY` | Shipping policy (shown in llms.txt header) | *(empty)* |
-| `RETURN_POLICY` | Return policy (shown in llms.txt header) | *(empty)* |
-| `MERCHANT_VERTICAL` | Your product vertical — guides how AI describes products (e.g., `"outdoor gear"`, `"electronics"`, `"fashion"`) | `"general retail"` |
-| `SHOPIFY_STORE_DOMAIN` | Your `*.myshopify.com` domain | *(empty — uses sample catalog)* |
-| `ENRICHMENT_CACHE_TTL` | How long enriched products are cached, in seconds | `"3600"` |
-| `AI_MODEL` | Workers AI model ID for enrichment — swap to a different model if needed | `"@cf/google/gemma-4-26b-a4b-it"` |
+| Variable               | Description                                                                                                     | Default                                          |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `MERCHANT_NAME`        | Your store name                                                                                                 | `"My Store"`                                     |
+| `MERCHANT_DESCRIPTION` | Short store description for the llms.txt header                                                                 | `"Product catalog powered by Commerce llms.txt"` |
+| `STORE_CURRENCY`       | Currency code                                                                                                   | `"USD"`                                          |
+| `SHIPPING_POLICY`      | Shipping policy (shown in llms.txt header)                                                                      | _(empty)_                                        |
+| `RETURN_POLICY`        | Return policy (shown in llms.txt header)                                                                        | _(empty)_                                        |
+| `MERCHANT_VERTICAL`    | Your product vertical — guides how AI describes products (e.g., `"outdoor gear"`, `"electronics"`, `"fashion"`) | `"general retail"`                               |
+| `SHOPIFY_STORE_DOMAIN` | Your `*.myshopify.com` domain                                                                                   | _(empty — uses sample catalog)_                  |
+| `ENRICHMENT_CACHE_TTL` | How long enriched products are cached, in seconds                                                               | `"3600"`                                         |
+| `AI_MODEL`             | Workers AI model ID for enrichment — swap to a different model if needed                                        | `"@cf/google/gemma-4-26b-a4b-it"`                |
 
 ### Secrets
 
 For password-protected Shopify stores:
+
 ```bash
 npx wrangler secret put SHOPIFY_STORE_PASSWORD
 ```

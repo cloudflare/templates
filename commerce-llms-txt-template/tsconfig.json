@@ -4,10 +4,7 @@
 		"lib": ["esnext"],
 		"module": "esnext",
 		"moduleResolution": "bundler",
-		"types": [
-			"@cloudflare/workers-types",
-			"@cloudflare/vitest-pool-workers"
-		],
+		"types": ["@cloudflare/workers-types", "@cloudflare/vitest-pool-workers"],
 		"noEmit": true,
 		"isolatedModules": true,
 		"forceConsistentCasingInFileNames": true,
