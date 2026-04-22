@@ -1,0 +1,54 @@
+{
+	"name": "outcome-shopping-template",
+	"description": "Multi-vendor, outcome-based shopping with Workers AI. Decomposes a shopper's intent into component needs, then composes a cross-merchant recommendation from each merchant's /llms.txt catalog.",
+	"cloudflare": {
+		"label": "Outcome Shopping",
+		"products": [
+			"Workers",
+			"AI",
+			"KV"
+		],
+		"categories": [
+			"ai"
+		],
+		"bindings": {
+			"MERCHANT_ENDPOINTS": {
+				"description": "JSON array of registered merchant endpoints — each item is `{\"name\":\"...\",\"url\":\"https://...\"}`. Each merchant is expected to serve `/api/products` in the shape emitted by the [commerce-llms-txt-template](https://github.com/cloudflare/templates/tree/main/commerce-llms-txt-template). Leave as the default to use the bundled sample catalog."
+			},
+			"AI_MODEL": {
+				"description": "Workers AI model ID used for intent decomposition and per-need matching (default: `@cf/google/gemma-4-26b-a4b-it`)."
+			},
+			"CACHE_TTL": {
+				"description": "How long aggregated merchant catalogs are cached in seconds (default: 300)."
+			}
+		}
+	},
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "npm run build && vite preview",
+		"deploy": "npm run build && wrangler deploy",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && vite build && wrangler deploy --dry-run",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"hono": "^4.7.0",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@cloudflare/vitest-pool-workers": "^0.8.36",
+		"@cloudflare/workers-types": "^4.20250327.0",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"typescript": "5.9.3",
+		"vite": "^6.0.0",
+		"vitest": "~3.0.0",
+		"wrangler": "4.56.0"
+	}
+}
