@@ -28,7 +28,7 @@ import type { RawProduct, EnrichedProduct } from "../lib/types";
 
 interface Env {
   AI?: Ai;
-  ENRICHMENT_CACHE?: KVNamespace;
+  ENRICHMENT_CACHE: KVNamespace;
   SHOPIFY_STORE_DOMAIN?: string;
   SHOPIFY_STORE_PASSWORD?: string;
   MERCHANT_NAME?: string;
@@ -68,30 +68,15 @@ function getMerchantConfig(env: Env) {
 
 const KV_CACHE_KEY = "enriched-catalog";
 
-/**
- * In-memory fallback for when KV is not bound (local dev).
- * KV is the primary cache for deployed Workers.
- */
-let memoryCache: EnrichedProduct[] | null = null;
-let memoryCacheTimestamp = 0;
-
 async function getEnrichedCatalog(env: Env, ctx?: ExecutionContext): Promise<EnrichedProduct[]> {
   const config = getMerchantConfig(env);
   const cacheTtlSeconds = config.cacheTtl;
 
   // Try KV cache first
-  if (env.ENRICHMENT_CACHE) {
-    const cached = await env.ENRICHMENT_CACHE.get(KV_CACHE_KEY, "json") as EnrichedProduct[] | null;
-    if (cached) {
-      console.log(`[Cache] Serving ${cached.length} products from KV cache`);
-      return cached;
-    }
-  } else {
-    // Fall back to in-memory cache for local dev
-    const now = Date.now();
-    if (memoryCache && now - memoryCacheTimestamp < cacheTtlSeconds * 1000) {
-      return memoryCache;
-    }
+  const cached = (await env.ENRICHMENT_CACHE.get(KV_CACHE_KEY, "json")) as EnrichedProduct[] | null;
+  if (cached) {
+    console.log(`[Cache] Serving ${cached.length} products from KV cache`);
+    return cached;
   }
 
   // Fetch from Shopify if configured, otherwise fall back to sample catalog
@@ -124,21 +109,16 @@ async function getEnrichedCatalog(env: Env, ctx?: ExecutionContext): Promise<Enr
     enriched = catalog.map(fallbackEnrichment);
   }
 
-  // Write to KV cache. Uses waitUntil so the response isn't blocked by the KV write.
-  if (env.ENRICHMENT_CACHE) {
-    const kvWrite = env.ENRICHMENT_CACHE.put(KV_CACHE_KEY, JSON.stringify(enriched), {
-      expirationTtl: cacheTtlSeconds,
-    }).then(() => {
-      console.log(`[Cache] Wrote ${enriched.length} products to KV cache (TTL: ${cacheTtlSeconds}s)`);
-    });
-    if (ctx) {
-      ctx.waitUntil(kvWrite);
-    } else {
-      await kvWrite;
-    }
+  // Write to KV. Uses waitUntil so the response isn't blocked by the KV write.
+  const kvWrite = env.ENRICHMENT_CACHE.put(KV_CACHE_KEY, JSON.stringify(enriched), {
+    expirationTtl: cacheTtlSeconds,
+  }).then(() => {
+    console.log(`[Cache] Wrote ${enriched.length} products to KV cache (TTL: ${cacheTtlSeconds}s)`);
+  });
+  if (ctx) {
+    ctx.waitUntil(kvWrite);
   } else {
-    memoryCache = enriched;
-    memoryCacheTimestamp = Date.now();
+    await kvWrite;
   }
 
   return enriched;

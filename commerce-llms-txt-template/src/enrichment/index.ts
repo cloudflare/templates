@@ -38,12 +38,12 @@ interface AiTextGeneration {
   run(model: string, input: Record<string, unknown>): Promise<unknown>;
 }
 
-const DEFAULT_AI_MODEL = "@cf/meta/llama-3.1-8b-instruct";
+const DEFAULT_AI_MODEL = "@cf/google/gemma-4-26b-a4b-it";
 
 /**
  * Enrich a single product using Workers AI.
  *
- * @param model - Workers AI model ID. Defaults to Llama 3.1 8B Instruct.
+ * @param model - Workers AI model ID. Defaults to Gemma 4 26B.
  *   Override via the AI_MODEL env var to use a different model.
  */
 export async function enrichProduct(

@@ -31,7 +31,7 @@
 				"description": "How long enriched products are cached in seconds (default: 3600)"
 			},
 			"AI_MODEL": {
-				"description": "Workers AI model ID for enrichment (default: @cf/meta/llama-3.1-8b-instruct)"
+				"description": "Workers AI model ID for enrichment (default: @cf/google/gemma-4-26b-a4b-it)"
 			}
 		}
 	},

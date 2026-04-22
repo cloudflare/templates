@@ -10,7 +10,7 @@ Make your product catalog visible to AI shopping agents. This template serves a 
 
 **Key features:**
 - Dynamic `/llms.txt` and `/llms-full.txt` endpoints following the [llms.txt spec](https://llmstxt.org)
-- AI enrichment powered by Workers AI — turns "DIN 0.75-3.0" into "bindings release easily for toddler safety"
+- AI enrichment powered by Workers AI (Gemma 4) — turns "DIN 0.75-3.0" into "bindings release easily for toddler safety"
 - KV-backed caching with configurable TTL — no re-enrichment on cold starts
 - Shopify integration via public `/products.json` API
 - Configurable merchant vertical to tailor AI descriptions per industry
@@ -34,14 +34,22 @@ npm create cloudflare@latest -- --template=cloudflare/templates/commerce-llms-tx
 
 ## Setup
 
-The template works out of the box with zero configuration — it ships with a sample catalog and falls back gracefully when KV isn't configured. You can deploy immediately and customize later.
+The template ships with a sample catalog so you can see it working immediately after deploy. Follow these steps to get live:
 
 1. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Deploy:
+2. Create the KV namespace used to cache enriched products:
+   ```bash
+   npx wrangler kv namespace create ENRICHMENT_CACHE
+   ```
+   Copy the namespace ID from the output and paste it into `wrangler.json` in place of `<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>`.
+
+   > If you deploy via the "Deploy to Cloudflare" button at the top of this README, the KV namespace is provisioned for you automatically — you can skip this step.
+
+3. Deploy:
    ```bash
    npx wrangler deploy
    ```
@@ -64,29 +72,6 @@ Configure your store in `wrangler.json` — set `MERCHANT_NAME`, `MERCHANT_DESCR
 ```
 
 Then redeploy with `npx wrangler deploy`.
-
-### Enable KV caching (recommended for production)
-
-Without KV, enriched products are cached in Worker memory and lost on eviction. Adding a KV namespace gives you persistent caching across cold starts:
-
-```bash
-npx wrangler kv namespace create ENRICHMENT_CACHE
-```
-
-This outputs a namespace ID. Add a `kv_namespaces` section to `wrangler.json`:
-
-```json
-{
-  "kv_namespaces": [
-    {
-      "binding": "ENRICHMENT_CACHE",
-      "id": "your-namespace-id-here"
-    }
-  ]
-}
-```
-
-Then redeploy. The Worker automatically detects the KV binding and uses it — no code changes needed.
 
 ## After Deploy
 
@@ -122,7 +107,7 @@ Set these in the `vars` section of `wrangler.json`:
 | `MERCHANT_VERTICAL` | Your product vertical — guides how AI describes products (e.g., `"outdoor gear"`, `"electronics"`, `"fashion"`) | `"general retail"` |
 | `SHOPIFY_STORE_DOMAIN` | Your `*.myshopify.com` domain | *(empty — uses sample catalog)* |
 | `ENRICHMENT_CACHE_TTL` | How long enriched products are cached, in seconds | `"3600"` |
-| `AI_MODEL` | Workers AI model ID for enrichment — swap to a different model if needed | `"@cf/meta/llama-3.1-8b-instruct"` |
+| `AI_MODEL` | Workers AI model ID for enrichment — swap to a different model if needed | `"@cf/google/gemma-4-26b-a4b-it"` |
 
 ### Secrets
 
@@ -139,7 +124,7 @@ npm run test   # Run vitest tests
 npm run check  # Type check + dry-run deploy
 ```
 
-When running locally without a Shopify store configured, the Worker serves a sample catalog of children's ski gear with hand-written enrichments. This lets you see the full `/llms.txt` output without needing a live store or Workers AI connection.
+When running locally without a Shopify store configured, the Worker serves a sample catalog of children's ski gear with hand-written enrichments. This lets you see the full `/llms.txt` output without needing a live store or Workers AI connection. Miniflare provisions a local KV namespace automatically, so no extra setup is needed for `npm run dev` or `npm run test`.
 
 ## How caching works
 
@@ -147,7 +132,7 @@ On the first request (or after the cache expires), the Worker:
 
 1. Fetches your product catalog from Shopify (or uses the sample catalog)
 2. Sends each product to Workers AI for enrichment (batched 5 at a time)
-3. Stores the enriched catalog in KV (if configured) or Worker memory
+3. Stores the enriched catalog in KV
 4. Serves the cached result for subsequent requests
 
 **Cache layers:** CDN caches the response for 5 minutes (`Cache-Control: public, max-age=300`). KV caches the enriched catalog for 1 hour by default (`ENRICHMENT_CACHE_TTL`). This means inventory changes can take up to ~65 minutes to propagate. Lower the TTL values if you need faster updates.

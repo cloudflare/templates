@@ -9,6 +9,12 @@
 	"ai": {
 		"binding": "AI"
 	},
+	"kv_namespaces": [
+		{
+			"binding": "ENRICHMENT_CACHE",
+			"id": "<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>"
+		}
+	],
 	"vars": {
 		"MERCHANT_NAME": "My Store",
 		"MERCHANT_DESCRIPTION": "Product catalog powered by Commerce llms.txt",
@@ -18,6 +24,6 @@
 		"SHOPIFY_STORE_DOMAIN": "",
 		"MERCHANT_VERTICAL": "general retail",
 		"ENRICHMENT_CACHE_TTL": "3600",
-		"AI_MODEL": "@cf/meta/llama-3.1-8b-instruct"
+		"AI_MODEL": "@cf/google/gemma-4-26b-a4b-it"
 	}
 }
