@@ -30,7 +30,7 @@ import { fetchAllCatalogs, flattenCatalogs } from "../lib/catalog";
 import { decomposeIntent } from "../lib/decompose";
 import { matchProductsToNeeds } from "../lib/match";
 
-const DEFAULT_AI_MODEL = "@cf/google/gemma-4-26b-a4b-it";
+const DEFAULT_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 const DEFAULT_CACHE_TTL_SECONDS = 300;
 // KV's minimum expirationTtl is 60 seconds. Anything below silently rejects.
 const MIN_CACHE_TTL_SECONDS = 60;

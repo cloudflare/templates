@@ -16,7 +16,7 @@
 				"description": "JSON array of registered merchant endpoints — each item is `{\"name\":\"...\",\"url\":\"https://...\"}`. Each merchant is expected to serve `/api/products` in the shape emitted by the [commerce-llms-txt-template](https://github.com/cloudflare/templates/tree/main/commerce-llms-txt-template). Leave as the default to use the bundled sample catalog."
 			},
 			"AI_MODEL": {
-				"description": "Workers AI model ID used for intent decomposition and per-need matching (default: `@cf/google/gemma-4-26b-a4b-it`)."
+				"description": "Workers AI model ID used for intent decomposition and per-need matching (default: `@cf/meta/llama-3.3-70b-instruct-fp8-fast`). Any text-generation model that returns either the legacy `{response: string}` shape or an OpenAI-compatible `{choices: [{message: {content: string}}]}` shape will work."
 			},
 			"CACHE_TTL": {
 				"description": "How long aggregated merchant catalogs are cached in seconds (default: 300)."

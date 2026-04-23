@@ -23,7 +23,7 @@
 	],
 	"vars": {
 		"MERCHANT_ENDPOINTS": "[]",
-		"AI_MODEL": "@cf/google/gemma-4-26b-a4b-it",
+		"AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
 		"CACHE_TTL": "300"
 	}
 }
