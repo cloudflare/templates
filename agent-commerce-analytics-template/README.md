@@ -1,12 +1,14 @@
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/agent-commerce-analytics-template)
+
 # Agent Commerce Analytics
 
 ![Status: Demo-ready](https://img.shields.io/badge/status-demo--ready-green) ![Type: Analytics dashboard](https://img.shields.io/badge/type-analytics--dashboard-blue)
 
-**Part of the [agent-commerce](https://gitlab.cfdata.org/mconroy/agent-commerce) portfolio** — the visibility layer that stands on its own and composes with the rest.
+<!-- dash-content-start -->
 
-**Live dashboard:** https://agent-commerce-analytics.mattrc07.workers.dev/dashboard/text _(public)_
+A Cloudflare Workers template that gives merchants visibility into how AI shopping agents interact with their store. It tracks the full journey from discovery (`/llms.txt` reads) through browsing (product views) to purchase (checkout attempts), broken down by agent identity, payment network, and verification status, and ships with a React dashboard that surfaces auto-generated insights (top agents, blocked checkouts, product gaps, content quality, revenue headlines). Seeded with bundled demo traffic so the dashboard is populated on first deploy.
 
-A Cloudflare Workers prototype that gives merchants visibility into how AI shopping agents interact with their store. Tracks the full journey from discovery (/llms.txt reads) through browsing (product views) to purchase (checkout attempts), broken down by agent identity, payment network, and verification status.
+<!-- dash-content-end -->
 
 ## The Problem
 
@@ -17,7 +19,7 @@ Nobody tells them: "An agent searched for toddler skis, found the Little Rippers
 
 ## What This Does
 
-The analytics Worker collects commerce-specific signals from Demo 1 (llms.txt reads, search queries) and Demo 2 (verified agent identity, checkout attempts), then generates a merchant dashboard with:
+The analytics Worker collects commerce-specific signals — `/llms.txt` reads, search queries, verified agent identity, checkout attempts — then generates a merchant dashboard with:
 
 - **Auto-generated insights** — top agents, blocked checkouts, product gaps, content quality, revenue headlines — all computed from data, not hardcoded
 - **Agent journey timelines** — per-agent session reconstruction showing discover -> browse -> purchase -> return, with timestamps and return visit detection
@@ -32,8 +34,8 @@ The analytics Worker collects commerce-specific signals from Demo 1 (llms.txt re
 ## Architecture
 
 ```
-Demo 1 signals              Demo 2 signals
-(llms.txt reads,            (agent identity,
+Discovery signals           Trust signals
+(/llms.txt reads,           (agent identity,
  search queries)             checkout intent)
         \                      /
          v                    v
@@ -61,22 +63,26 @@ Demo 1 signals              Demo 2 signals
 
 ## Quick Start
 
+Deploy straight from the button above, or run locally:
+
 ```bash
 npm install
-npm run walkthrough    # Full self-contained demo (recommended)
+npm run dev        # Start the Worker + React dashboard locally
 ```
 
-### Other Commands
+Other commands:
 
 ```bash
-npm run dev            # Start the Worker locally on :8787
-npm run simulate       # Simulate agent traffic (Worker must be running)
-npm run dashboard      # Code walkthrough + simulation
+npm run build      # Type-check and build the React app
+npm run deploy     # Build and deploy to Cloudflare Workers
+npm test           # Run the Vitest suite
 ```
+
+On first request the Worker seeds bundled demo traffic (5 agents, 19 interactions) so the dashboard is populated out of the box. Set the `SEED_DEMO_DATA` binding to `false` once you're ingesting real events.
 
 ## Simulated Agents
 
-The demo simulates 5 agents with 19 interactions:
+The bundled demo traffic includes 5 agents with 19 interactions:
 
 | Agent          | Network               | Behavior                                                                                  |
 | -------------- | --------------------- | ----------------------------------------------------------------------------------------- |
@@ -105,19 +111,6 @@ INSIGHTS
 
 ## How this fits
 
-This dashboard is the **visibility layer** of the [agent-commerce portfolio](https://gitlab.cfdata.org/mconroy/agent-commerce) — a set of six prototypes that together explore what commerce looks like when the shopper is an AI agent:
+This template is the **visibility layer** of a broader exploration of agent commerce on Cloudflare — the loop where agents discover a merchant's catalog (e.g. via `/llms.txt`), get verified at the edge, and convert intent into checkout. Those other layers are out of scope for this template; this one stands on its own and can ingest events from any source that POSTs to `/events` or forwards `cf-agent-*` headers.
 
-| Layer                      | Component                                                                                        | What it does                                                      |
-| -------------------------- | ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| Discovery (supply)         | [commerce-llms-txt](https://gitlab.cfdata.org/mconroy/commerce-llms-txt)                         | Serves agent-readable product catalogs as `/llms.txt`             |
-| Discovery (distribution)   | [commerce-llms-txt-shopify-app](https://gitlab.cfdata.org/mconroy/commerce-llms-txt-shopify-app) | One-click install that brings `/llms.txt` to any Shopify merchant |
-| Trust                      | [agent-commerce-ruleset](https://gitlab.cfdata.org/mconroy/agent-commerce-ruleset)               | Verifies signed agent requests at the Cloudflare edge             |
-| Demand                     | [outcome-shopping](https://gitlab.cfdata.org/mconroy/outcome-shopping)                           | Multi-merchant orchestrator for outcome-level intents             |
-| **Visibility (this repo)** | **agent-commerce-analytics**                                                                     | **Merchant dashboard for agent traffic**                          |
-| B2B bet                    | [agent-commerce-b2b](https://gitlab.cfdata.org/mconroy/agent-commerce-b2b)                       | The same loop for B2B procurement                                 |
-
-### What we built
-
-This started as "Demo 3 of 3" — a minimal merchant-facing view paired with the discovery and trust prototypes. It's been extended to include auto-generated insights, per-agent session reconstruction, revenue attribution, and demand signals (which queries had no matching product, whether the concise `/llms.txt` is sufficient or agents are falling back to `/llms-full.txt`).
-
-It stands on its own — a merchant running no other piece of this portfolio can still benefit from a commerce-specific analytics surface. It's stronger when composed with the rest: real discovery events from `commerce-llms-txt`, verified-agent signals from `agent-commerce-ruleset`, and demand patterns from `outcome-shopping` all flow through the same event pipeline.
+A merchant running no other piece of that loop can still benefit from a commerce-specific analytics surface. It's stronger when composed with the rest: discovery events (`/llms.txt` reads, search queries), verified-agent signals from an edge ruleset, and demand patterns from an agent orchestrator all flow through the same event pipeline.
