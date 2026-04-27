@@ -13,13 +13,25 @@ const CATALOG_FETCH_TIMEOUT_MS = 5000;
  * Cache key that incorporates the configured merchant set so a change to
  * `MERCHANT_ENDPOINTS` automatically invalidates the cache instead of
  * returning stale catalog data until TTL expiry.
+ *
+ * KV keys are limited to 512 bytes, which the raw fingerprint can
+ * exceed with more than a handful of merchants (each URL contributes
+ * ~70-100 chars). We hash the fingerprint with SHA-256 — collision
+ * risk is irrelevant since a collision just means serving another
+ * merchant set's cache, which triggers invalidation on the next
+ * request anyway.
  */
-function cacheKey(merchants: MerchantEndpoint[]): string {
+async function cacheKey(merchants: MerchantEndpoint[]): Promise<string> {
 	const fingerprint = merchants
 		.map((m) => `${m.name}|${m.url.replace(/\/$/, "")}`)
 		.sort()
 		.join(";");
-	return `${AGGREGATED_CATALOGS_PREFIX}${fingerprint}`;
+	const bytes = new TextEncoder().encode(fingerprint);
+	const digest = await crypto.subtle.digest("SHA-256", bytes);
+	const hex = [...new Uint8Array(digest)]
+		.map((b) => b.toString(16).padStart(2, "0"))
+		.join("");
+	return `${AGGREGATED_CATALOGS_PREFIX}${hex}`;
 }
 
 /**
@@ -104,7 +116,7 @@ export async function fetchAllCatalogs(
 		};
 	}
 
-	const key = cacheKey(merchants);
+	const key = await cacheKey(merchants);
 
 	// Try KV cache first
 	const cached = (await cache.get(key, "json")) as MerchantCatalog[] | null;
