@@ -1,0 +1,29 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "outcome-shopping-template",
+	"main": "./src/orchestrator-worker/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	"assets": {
+		"directory": "./dist/client",
+		"not_found_handling": "single-page-application"
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "CATALOG_CACHE",
+			"id": "<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>"
+		}
+	],
+	"vars": {
+		"MERCHANT_ENDPOINTS": "[]",
+		"AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+		"CACHE_TTL": "300"
+	}
+}
