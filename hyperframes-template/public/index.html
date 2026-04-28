@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>HyperFrames on Cloudflare</title>
+		<link rel="icon" href="data:," />
+		<style>
+			:root {
+				--bg: #07070f;
+				--fg: #f5f5f7;
+				--muted: #8b8b9a;
+				--accent: #f97e3c;
+				--accent-fg: #1a0e07;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				background: var(--bg);
+				color: var(--fg);
+				font-family:
+					ui-sans-serif,
+					system-ui,
+					-apple-system,
+					"Segoe UI",
+					Roboto,
+					"Helvetica Neue",
+					Arial,
+					sans-serif;
+			}
+			main {
+				max-width: 1100px;
+				margin: 0 auto;
+				padding: 48px 24px 64px;
+			}
+			header h1 {
+				margin: 0 0 8px;
+				font-size: 28px;
+				letter-spacing: -0.01em;
+			}
+			header p {
+				margin: 0 0 32px;
+				color: var(--muted);
+				max-width: 70ch;
+				line-height: 1.5;
+			}
+			.player-wrap {
+				position: relative;
+				width: 100%;
+				aspect-ratio: 16 / 9;
+				background: #000;
+				border: 1px solid #1c1c2a;
+				border-radius: 12px;
+				overflow: hidden;
+			}
+			hyperframes-player {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			.controls {
+				display: flex;
+				align-items: center;
+				gap: 16px;
+				margin-top: 24px;
+				flex-wrap: wrap;
+			}
+			button {
+				background: var(--accent);
+				color: var(--accent-fg);
+				border: 0;
+				padding: 12px 20px;
+				font-weight: 600;
+				font-size: 15px;
+				border-radius: 8px;
+				cursor: pointer;
+				font-family: inherit;
+			}
+			button:disabled {
+				opacity: 0.6;
+				cursor: progress;
+			}
+			.hint {
+				color: var(--muted);
+				font-size: 14px;
+				margin: 0;
+			}
+			.hint a {
+				color: var(--fg);
+			}
+			.hint.error {
+				color: #ff7878;
+			}
+			footer {
+				margin-top: 48px;
+				color: var(--muted);
+				font-size: 13px;
+				display: flex;
+				gap: 12px;
+			}
+			footer a {
+				color: var(--muted);
+				text-decoration: none;
+			}
+			footer a:hover {
+				color: var(--fg);
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<header>
+				<h1>HyperFrames on Cloudflare</h1>
+				<p>
+					HTML-based video compositions — previewed in the browser, rendered
+					server-side in a Cloudflare Container.
+				</p>
+			</header>
+
+			<section class="player-wrap">
+				<hyperframes-player
+					src="/api/preview"
+					width="1920"
+					height="1080"
+					controls
+				></hyperframes-player>
+			</section>
+
+			<section class="controls">
+				<button id="render-btn">Render MP4</button>
+				<p id="render-hint" class="hint"></p>
+			</section>
+
+			<footer>
+				<a
+					href="https://github.com/heygen-com/hyperframes"
+					target="_blank"
+					rel="noopener noreferrer"
+					>HyperFrames on GitHub</a
+				>
+				<span>·</span>
+				<a
+					href="https://hyperframes.heygen.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					>Docs</a
+				>
+			</footer>
+		</main>
+
+		<script src="/_hyperframes/player.js"></script>
+		<script>
+			const btn = document.getElementById("render-btn");
+			const hint = document.getElementById("render-hint");
+
+			btn.addEventListener("click", async () => {
+				btn.disabled = true;
+				hint.className = "hint";
+				hint.textContent =
+					"Spinning up the render container (Chrome + FFmpeg). Cold renders take 1–2 minutes; warm renders are ~25s.";
+				try {
+					const res = await fetch("/api/render", { method: "POST" });
+					if (!res.ok) {
+						const body = await res.text();
+						throw new Error(body || `Render failed (${res.status})`);
+					}
+					const data = await res.json();
+					hint.innerHTML = `Done — <a href="${data.url}" target="_blank" rel="noopener noreferrer">open MP4</a>`;
+				} catch (err) {
+					hint.className = "hint error";
+					hint.textContent =
+						err instanceof Error ? err.message : "Render failed";
+				} finally {
+					btn.disabled = false;
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,50 @@
+{
+	"name": "hyperframes-template",
+	"description": "Preview HTML video compositions in the browser and render MP4s server-side using Cloudflare Workers, Containers, and R2.",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"cloudflare": {
+		"label": "HyperFrames Video Rendering",
+		"products": [
+			"Workers",
+			"Containers",
+			"R2"
+		],
+		"categories": [],
+		"docs_url": "https://github.com/heygen-com/hyperframes",
+		"preview_image_url": "",
+		"icon_urls": [],
+		"bindings": {
+			"RENDER_CONTAINER": {
+				"description": "Container Durable Object hosting Chromium + ffmpeg + hyperframes; receives composition files and returns MP4 bytes."
+			},
+			"RENDERS": {
+				"description": "R2 bucket where rendered MP4s are stored. Created automatically on first deploy."
+			},
+			"ASSETS": {
+				"description": "Static asset binding for the preview UI and the bundled composition HTML."
+			}
+		}
+	},
+	"scripts": {
+		"dev": "wrangler dev",
+		"deploy": "wrangler deploy",
+		"typecheck": "tsc --noEmit",
+		"cf-typegen": "wrangler types"
+	},
+	"dependencies": {
+		"@cloudflare/containers": "0.0.30",
+		"@hyperframes/core": "0.4.31",
+		"@hyperframes/player": "0.4.31"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "4.20260426.1",
+		"tsx": "4.21.0",
+		"typescript": "5.9.3",
+		"wrangler": "4.56.0"
+	},
+	"engines": {
+		"node": ">=22"
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "hyperframes-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"build": {
+		"command": "node scripts/build.mjs"
+	},
+	"assets": {
+		"directory": "./public",
+		"binding": "ASSETS"
+	},
+	"containers": [
+		{
+			"class_name": "RenderContainer",
+			"image": "./Dockerfile",
+			"max_instances": 5,
+			"instance_type": "standard-4"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "RENDER_CONTAINER",
+				"class_name": "RenderContainer"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["RenderContainer"]
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "RENDERS",
+			"bucket_name": "hyperframes-renders"
+		}
+	],
+	"upload_source_maps": true
+}

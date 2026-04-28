@@ -1,0 +1,2 @@
+# Local-only secrets. Copy to .dev.vars and fill in.
+# Production secrets go in Cloudflare dashboard or `wrangler secret put`.

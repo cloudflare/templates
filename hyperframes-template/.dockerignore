@@ -1,0 +1,11 @@
+node_modules
+.wrangler
+.git
+src
+public
+docs
+README.md
+*.md
+.dev.vars*
+.env*
+worker-configuration.d.ts
