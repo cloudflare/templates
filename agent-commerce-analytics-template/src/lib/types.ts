@@ -33,8 +33,22 @@ export interface AgentEvent {
 	agentName: string | null;
 	/** Payment network from cf-agent-network header. */
 	agentNetwork: string | null;
-	/** Whether the agent was verified by the Managed Ruleset. */
+	/**
+	 * Whether the agent was verified by the Managed Ruleset.
+	 *
+	 * Kept for back-compat with existing dashboards/clients. New code
+	 * should prefer `trustSignals.trustTier` which captures the full
+	 * gradient (verified / claimed-only / unverified) rather than a
+	 * binary.
+	 */
 	verified: boolean;
+	/**
+	 * Trust gradient — the four signal classes a merchant cares about
+	 * when triaging agent traffic. Optional so historical events that
+	 * pre-date this field still deserialize cleanly. When absent, the
+	 * dashboard derives a coarse tier from `verified`.
+	 */
+	trustSignals?: TrustSignals;
 	/** What the agent did. */
 	action: AgentAction;
 	/** The endpoint hit. */
@@ -45,6 +59,31 @@ export interface AgentEvent {
 	searchQuery: string | null;
 	/** HTTP status returned. */
 	statusCode: number;
+}
+
+/**
+ * The four trust signals merchants care about when triaging agent
+ * traffic. Each is independent — an agent may carry any subset.
+ *
+ * `trustTier` is a derived rollup so dashboard code doesn't have to
+ * re-derive it on every render:
+ *   - `verified`: Web Bot Auth signature was valid OR a Managed Ruleset
+ *     KYA token was present (i.e. Cloudflare-verified at the edge).
+ *   - `claimed-only`: signed-agents list match OR an agent claim in the
+ *     UA string, with no cryptographic proof.
+ *   - `unverified`: nothing — long-tail UA-only traffic.
+ */
+export interface TrustSignals {
+	/** RFC 9421 HTTP Message Signature on the request. */
+	webBotAuth: "valid" | "invalid" | "present" | "absent";
+	/** Matched the Cloudflare signed-agents (managed bot) list. */
+	signedAgentsList: boolean;
+	/** `cf-agent-*` headers from the Managed Ruleset KYA token. */
+	kyaToken: "present" | "absent";
+	/** Raw `User-Agent` claim, if any. */
+	uaClaimed: string | null;
+	/** Derived rollup. */
+	trustTier: "verified" | "claimed-only" | "unverified";
 }
 
 export type AgentAction =
@@ -72,6 +111,34 @@ export interface AgentAnalyticsSummary {
 	security: SecurityMetrics;
 	demandSignals: DemandSignals;
 	insights: Insight[];
+	trustBreakdown: TrustBreakdown;
+}
+
+/**
+ * Traffic broken down by trust gradient. Mirrors the wedge product
+ * (`agent-traffic-logger`) so a merchant viewing this dashboard gets the
+ * same "what did the agent do?" cut Lululemon/Nekuda asked for.
+ */
+export interface TrustBreakdown {
+	verified: TrustTierStats;
+	claimedOnly: TrustTierStats;
+	unverified: TrustTierStats;
+	signalCounts: {
+		webBotAuthValid: number;
+		webBotAuthPresent: number;
+		signedAgentsList: number;
+		kyaToken: number;
+		uaOnly: number;
+	};
+}
+
+export interface TrustTierStats {
+	requests: number;
+	uniqueAgents: number;
+	checkoutAttempts: number;
+	successfulCheckouts: number;
+	estimatedRevenue: number;
+	share: number;
 }
 
 export interface AgentProfile {

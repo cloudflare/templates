@@ -50,16 +50,17 @@ Discovery signals           Trust signals
 
 ## Endpoints
 
-| Endpoint                    | Description                           |
-| --------------------------- | ------------------------------------- |
-| `POST /events`              | Record a single agent event           |
-| `POST /events/batch`        | Record multiple events                |
-| `POST /events/from-headers` | Record event from cf-agent-\* headers |
-| `GET /dashboard`            | Full analytics summary (JSON)         |
-| `GET /dashboard/text`       | Analytics summary (human-readable)    |
-| `GET /dashboard/funnel`     | Discovery-to-purchase funnel          |
-| `GET /dashboard/agents`     | Agent profiles                        |
-| `GET /dashboard/products`   | Product performance                   |
+| Endpoint                    | Description                                                 |
+| --------------------------- | ----------------------------------------------------------- |
+| `POST /events`              | Record a single agent event                                 |
+| `POST /events/batch`        | Record multiple events                                      |
+| `POST /events/from-headers` | Record event from cf-agent-\* headers                       |
+| `GET /dashboard`            | Full analytics summary (JSON)                               |
+| `GET /dashboard/text`       | Analytics summary (human-readable)                          |
+| `GET /dashboard/funnel`     | Discovery-to-purchase funnel                                |
+| `GET /dashboard/agents`     | Agent profiles                                              |
+| `GET /dashboard/products`   | Product performance                                         |
+| `GET /dashboard/trust`      | Trust-tier breakdown (verified / claimed-only / unverified) |
 
 ## Quick Start
 
@@ -91,6 +92,27 @@ The bundled demo traffic includes 5 agents with 19 interactions:
 | **PriceScout** | Unverified            | Searched "cheapest toddler skis", tried checkout — BLOCKED                                |
 | **GearFinder** | Visa (verified)       | Browsed hiking + running, bought trail runners ($129.99)                                  |
 | **DealHunter** | Mastercard (verified) | Searched "snowboard toddler", left — product gap signal                                   |
+
+## Trust signals
+
+Every event is classified along four independent signals so the
+dashboard can show a real trust _gradient_ rather than a verified /
+unverified binary:
+
+| Signal             | What it means                                                                |
+| ------------------ | ---------------------------------------------------------------------------- |
+| Web Bot Auth       | RFC 9421 HTTP Message Signature — `valid`, `invalid`, `present`, or `absent` |
+| signed-agents list | Matched the Cloudflare-managed signed-agents bot list                        |
+| KYA token          | `cf-agent-*` headers injected by a Managed Ruleset                           |
+| UA claim           | Raw `User-Agent` (long-tail "claims to be ChatGPT, no proof")                |
+
+Those roll up into one of three tiers:
+
+- **`verified`** — Web Bot Auth was valid OR a Managed Ruleset KYA token was present (Cloudflare-verified at the edge).
+- **`claimed-only`** — Matched the signed-agents list OR a `Signature-Input` header was present but unverified. The agent identifies itself but provides no cryptographic proof we accepted.
+- **`unverified`** — UA-only. Long-tail traffic claiming an agent identity with no proof.
+
+`GET /dashboard/trust` returns the rollup. The `POST /events/from-headers` endpoint derives signals automatically from the request, so deploying behind a Worker that already runs Web Bot Auth or a KYA-emitting ruleset just works.
 
 ## Sample Dashboard Output
 

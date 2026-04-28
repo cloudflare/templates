@@ -29,6 +29,9 @@ import type {
 	RevenueMetrics,
 	SecurityEvent,
 	SecurityMetrics,
+	TrustBreakdown,
+	TrustSignals,
+	TrustTierStats,
 } from "./types";
 
 // Product catalog used for display names and revenue estimation. Matches
@@ -759,6 +762,10 @@ export function computeSummary(
 		revenue,
 	);
 
+	const trustBreakdown = computeTrustBreakdown(events, (e) =>
+		getProductPrice(e.productSlug ?? ""),
+	);
+
 	return {
 		period: nowIso,
 		merchantName,
@@ -774,6 +781,7 @@ export function computeSummary(
 		security,
 		demandSignals,
 		insights,
+		trustBreakdown,
 	};
 }
 
@@ -1187,5 +1195,157 @@ function emptySummary(
 			unmatchedDemand: [],
 		},
 		insights: [],
+		trustBreakdown: emptyTrustBreakdown(),
 	};
+}
+
+function emptyTrustBreakdown(): TrustBreakdown {
+	const tier = (): TrustTierStats => ({
+		requests: 0,
+		uniqueAgents: 0,
+		checkoutAttempts: 0,
+		successfulCheckouts: 0,
+		estimatedRevenue: 0,
+		share: 0,
+	});
+	return {
+		verified: tier(),
+		claimedOnly: tier(),
+		unverified: tier(),
+		signalCounts: {
+			webBotAuthValid: 0,
+			webBotAuthPresent: 0,
+			signedAgentsList: 0,
+			kyaToken: 0,
+			uaOnly: 0,
+		},
+	};
+}
+
+/**
+ * Derive a `TrustSignals` block from the headers a Worker sees in front
+ * of an origin. Pure function so it's reused by `from-headers` ingestion
+ * here and (eventually) by the `agent-traffic-logger` Worker.
+ *
+ * The four signal classes:
+ *   - Web Bot Auth (RFC 9421 signature) — strongest cryptographic proof
+ *   - signed-agents managed list — Cloudflare-curated list match
+ *   - KYA token (`cf-agent-*`) — Managed Ruleset injected
+ *   - UA claim only — long-tail "claims to be Perplexity, no proof"
+ *
+ * `webBotAuth` is reported as `present` when a `Signature-Input` header
+ * is on the request but the caller hasn't (yet) verified it. Callers
+ * that run TAPKit's `verifyTap()` should pass `webBotAuthValid: true` to
+ * upgrade the result to `valid`.
+ */
+export function deriveTrustSignals(input: {
+	signatureInputHeader: string | null;
+	signatureHeader: string | null;
+	webBotAuthValid?: boolean;
+	cfAgentId: string | null;
+	cfAgentName: string | null;
+	signedAgentsListMatch?: boolean;
+	userAgent: string | null;
+}): TrustSignals {
+	const hasSig = !!input.signatureInputHeader && !!input.signatureHeader;
+	const webBotAuth: TrustSignals["webBotAuth"] = !hasSig
+		? "absent"
+		: input.webBotAuthValid === true
+			? "valid"
+			: input.webBotAuthValid === false
+				? "invalid"
+				: "present";
+	const kyaToken: TrustSignals["kyaToken"] =
+		input.cfAgentId || input.cfAgentName ? "present" : "absent";
+	const signedAgentsList = !!input.signedAgentsListMatch;
+	const trustTier: TrustSignals["trustTier"] =
+		webBotAuth === "valid" || kyaToken === "present"
+			? "verified"
+			: signedAgentsList || webBotAuth === "present"
+				? "claimed-only"
+				: "unverified";
+	return {
+		webBotAuth,
+		signedAgentsList,
+		kyaToken,
+		uaClaimed: input.userAgent,
+		trustTier,
+	};
+}
+
+/**
+ * Roll up trust-tier stats across all events. Per-event signals are
+ * read from `event.trustSignals` when present, otherwise derived from
+ * the legacy `verified` flag so historical data still produces sane
+ * numbers.
+ */
+function computeTrustBreakdown(
+	events: AgentEvent[],
+	estimateRevenueFor: (e: AgentEvent) => number,
+): TrustBreakdown {
+	const breakdown = emptyTrustBreakdown();
+	const agentsByTier: Record<TrustSignals["trustTier"], Set<string>> = {
+		verified: new Set(),
+		"claimed-only": new Set(),
+		unverified: new Set(),
+	};
+
+	for (const event of events) {
+		const signals: TrustSignals = event.trustSignals ?? {
+			webBotAuth: "absent",
+			signedAgentsList: false,
+			kyaToken: event.verified ? "present" : "absent",
+			uaClaimed: null,
+			trustTier: event.verified ? "verified" : "unverified",
+		};
+
+		const stats =
+			signals.trustTier === "verified"
+				? breakdown.verified
+				: signals.trustTier === "claimed-only"
+					? breakdown.claimedOnly
+					: breakdown.unverified;
+
+		stats.requests += 1;
+		const ak = event.agentId ?? event.agentName ?? "anonymous";
+		agentsByTier[signals.trustTier].add(ak);
+
+		if (event.action === "checkout_attempt") {
+			stats.checkoutAttempts += 1;
+			if (event.statusCode === 200) {
+				stats.successfulCheckouts += 1;
+				stats.estimatedRevenue += estimateRevenueFor(event);
+			}
+		}
+
+		if (signals.webBotAuth === "valid") {
+			breakdown.signalCounts.webBotAuthValid += 1;
+		} else if (signals.webBotAuth === "present") {
+			breakdown.signalCounts.webBotAuthPresent += 1;
+		}
+		if (signals.signedAgentsList) {
+			breakdown.signalCounts.signedAgentsList += 1;
+		}
+		if (signals.kyaToken === "present") {
+			breakdown.signalCounts.kyaToken += 1;
+		}
+		if (
+			signals.webBotAuth === "absent" &&
+			!signals.signedAgentsList &&
+			signals.kyaToken === "absent"
+		) {
+			breakdown.signalCounts.uaOnly += 1;
+		}
+	}
+
+	breakdown.verified.uniqueAgents = agentsByTier.verified.size;
+	breakdown.claimedOnly.uniqueAgents = agentsByTier["claimed-only"].size;
+	breakdown.unverified.uniqueAgents = agentsByTier.unverified.size;
+
+	const total = events.length || 1;
+	breakdown.verified.share = breakdown.verified.requests / total;
+	breakdown.claimedOnly.share = breakdown.claimedOnly.requests / total;
+	breakdown.unverified.share = breakdown.unverified.requests / total;
+
+	return breakdown;
 }

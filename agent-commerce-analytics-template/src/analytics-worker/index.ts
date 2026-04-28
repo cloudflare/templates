@@ -30,6 +30,7 @@ import {
 	clearEvents,
 	classifyAction,
 	computeSummary,
+	deriveTrustSignals,
 	extractProductSlug,
 	loadEvents,
 	MAX_BATCH_EVENTS,
@@ -80,6 +81,8 @@ app.get("/api", (c) => {
 			"GET /api/dashboard/funnel": "Discovery-to-purchase funnel",
 			"GET /api/dashboard/agents": "Agent profiles",
 			"GET /api/dashboard/products": "Product performance",
+			"GET /api/dashboard/trust":
+				"Trust-tier breakdown (verified / claimed-only / unverified)",
 			"POST /api/events": "Record a single agent event",
 			"POST /api/events/batch": "Record multiple events",
 			"POST /api/events/from-headers":
@@ -122,6 +125,18 @@ app.get("/api/dashboard/products", async (c) => {
 	await maybeSeed(c.env);
 	const events = await loadEvents(c.env.EVENT_STORE);
 	return c.json(computeSummary(events, merchantName(c.env)).topProducts);
+});
+
+/**
+ * Trust-tier breakdown — the wedge view a merchant gets from the
+ * standalone `agent-traffic-logger`, surfaced inline here so the
+ * portfolio dashboard answers the same "what trust signals does this
+ * traffic carry?" question Lululemon/Nekuda flagged.
+ */
+app.get("/api/dashboard/trust", async (c) => {
+	await maybeSeed(c.env);
+	const events = await loadEvents(c.env.EVENT_STORE);
+	return c.json(computeSummary(events, merchantName(c.env)).trustBreakdown);
 });
 
 // ---------------------------------------------------------------------------
@@ -178,12 +193,28 @@ app.post("/api/events/from-headers", async (c) => {
 		if (!body.path) {
 			return c.json({ error: "Body must include a path" }, 400);
 		}
+		const cfAgentId = c.req.header("cf-agent-id") ?? null;
+		const cfAgentName = c.req.header("cf-agent-name") ?? null;
+		const trustSignals = deriveTrustSignals({
+			signatureInputHeader: c.req.header("signature-input") ?? null,
+			signatureHeader: c.req.header("signature") ?? null,
+			webBotAuthValid:
+				c.req.header("cf-agent-verified") === "true" || undefined,
+			cfAgentId,
+			cfAgentName,
+			signedAgentsListMatch:
+				c.req.header("cf-signed-agent") === "true" || undefined,
+			userAgent: c.req.header("user-agent") ?? null,
+		});
 		const event: AgentEvent = {
 			timestamp: new Date().toISOString(),
-			agentId: c.req.header("cf-agent-id") ?? null,
-			agentName: c.req.header("cf-agent-name") ?? null,
+			agentId: cfAgentId,
+			agentName: cfAgentName,
 			agentNetwork: c.req.header("cf-agent-network") ?? null,
-			verified: c.req.header("cf-agent-verified") === "true",
+			verified:
+				trustSignals.trustTier === "verified" ||
+				c.req.header("cf-agent-verified") === "true",
+			trustSignals,
 			action: classifyAction(body.path, c.req.header("cf-agent-intent")),
 			path: body.path,
 			productSlug: extractProductSlug(body.path),
