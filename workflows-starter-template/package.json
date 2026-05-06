@@ -34,10 +34,12 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "^1.15.3",
-		"@cloudflare/vitest-pool-workers": "^0.10.14",
+		"@cloudflare/vitest-pool-workers": "0.11.1",
 		"@eslint/js": "^9.33.0",
 		"@types/react": "^19.1.10",
 		"@types/react-dom": "^19.1.7",
+		"@vitest/runner": "3.2.4",
+		"@vitest/snapshot": "3.2.4",
 		"@vitejs/plugin-react-swc": "^4.0.0",
 		"autoprefixer": "^10.4.22",
 		"eslint": "^9.33.0",
@@ -46,10 +48,10 @@
 		"globals": "^16.3.0",
 		"postcss": "^8.5.6",
 		"tailwindcss": "^3.4.18",
-		"typescript": "~5.8.3",
+		"typescript": "5.9.3",
 		"typescript-eslint": "^8.39.1",
 		"vite": "^7.1.2",
-		"vitest": "3.2.x",
+		"vitest": "3.2.4",
 		"wrangler": "^4.51.0"
 	}
 }
