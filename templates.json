@@ -28,13 +28,13 @@
       "package_json_hash": "a9c89dd06c0baa1e907e8fdd4e3e4481c2dca4bf"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "96cd9c56fd934109a356a5de1a630965b3260363"
+      "package_json_hash": "2bd305f95a77079b46fd9f509e69424d33c563d0"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "7d4b67afe295fa4381e500c4698bdb0785040522"
+      "package_json_hash": "ad6fa8796984e11b20beb8c0ac7398bdfeabb38b"
     },
     "react-router-starter-template": {
-      "package_json_hash": "8b9de8e9be5fd5c4751d7603088922bfd59af529"
+      "package_json_hash": "346a187d8d8dd11807caf3cfa525fcce94a3f4a7"
     },
     "remix-starter-template": {
       "package_json_hash": "de4d57328a3e32702427ccc3c961e3b4eeaa5a5c"
@@ -49,7 +49,7 @@
       "package_json_hash": "41d115a1abf4715a52d7e226d7adb4862a379ff4"
     },
     "vite-react-template": {
-      "package_json_hash": "abf8094f108bba9b6d6ec1ca18ad509b4f8a2e92"
+      "package_json_hash": "7606956b6fb281c991682297d0828fce832f801e"
     },
     "worker-publisher-template": {
       "package_json_hash": "db1148380cf994c9e42190b71340e7c1779553e8"
@@ -76,13 +76,13 @@
       "package_json_hash": "3c9309ece47c60f320f231c902eaeff639ca4974"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "9dc78284a3d5aaa5fdf89bcddda7ec0b753cf54d"
+      "package_json_hash": "60a15d17ab93fc7637cf1f7e13b34bbff8203bfe"
     },
     "x402-proxy-template": {
       "package_json_hash": "436f521fc7854bc068dc1bc151317042a3e152fb"
     },
     "workflows-starter-template": {
-      "package_json_hash": "b382d305cec5642a2a4e57a3715bcb91ba797fea"
+      "package_json_hash": "20fc0be14d7f38ed2cd781eeea67c75a15e008b6"
     },
     "workers-for-platforms-template": {
       "package_json_hash": "1806625dc4dc03774fbf59b752e8b79eb28a8127"
