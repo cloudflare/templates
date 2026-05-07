@@ -35,8 +35,8 @@
 	},
 	"dependencies": {
 		"@cloudflare/containers": "0.0.30",
-		"@hyperframes/core": "0.4.31",
-		"@hyperframes/player": "0.4.31"
+		"@hyperframes/core": "0.5.3",
+		"@hyperframes/player": "0.5.3"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "4.20260426.1",
