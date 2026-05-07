@@ -81,7 +81,7 @@
       left: 50%;
       top: 50%;
       width: 720px;
-      height: 480px;
+      height: 420px;
       overflow: visible;
       transform: translate(-50%, -50%);
       transform-origin: 50% 50%;
@@ -89,7 +89,6 @@
     }
 
     #cloud-fill { fill: #F38020; }
-    #cloud-tail { fill: #FAAE40; }
 
     #copy-layer {
       position: absolute;
@@ -143,7 +142,7 @@
     }
 
     #beat-prefix {
-      left: 140px;
+      left: 250px;
       opacity: 0;
       transform: translateX(-760px);
     }
@@ -185,7 +184,7 @@
     }
 
     #hf-word {
-      width: 760px;
+      width: 700px;
       height: 144px;
       margin-top: -14px;
       padding-top: 14px;
@@ -207,7 +206,7 @@
     }
 
     #beat-suffix-wrap {
-      left: 1280px;
+      left: 1410px;
       top: 454px;
       height: 144px;
       padding: 14px 0 0;
@@ -269,12 +268,9 @@
     </div>
     <div id="shadow"></div>
     <div id="mark-layer">
-      <!-- Cloudflare-style cloud mark. Two-tone orange to evoke the brand silhouette + tail. -->
-      <svg id="cloud-svg" viewBox="0 0 240 140" aria-hidden="true">
-        <g transform="translate(8, 14)">
-          <path id="cloud-tail" d="M 168 70 C 158 70 150 78 150 88 C 150 98 158 106 170 106 L 218 106 C 220 106 222 104 222 102 C 222 84 198 70 168 70 Z"></path>
-          <path id="cloud-fill" d="M 35 110 C 16 110 0 95 0 76 C 0 58 16 43 35 43 C 38 22 58 8 84 8 C 108 8 130 22 134 44 C 158 44 178 64 178 88 C 178 102 168 110 152 110 Z"></path>
-        </g>
+      <!-- Official Cloudflare cloud + tail mark in brand orange. -->
+      <svg id="cloud-svg" viewBox="0 4 24 14" aria-hidden="true">
+        <path id="cloud-fill" d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"></path>
       </svg>
     </div>
     <div id="copy-layer">
@@ -285,7 +281,7 @@
     </div>
     <div id="next-beat" aria-hidden="true">
       <div id="beat-prefix"><span id="hf-word"><span id="hf-word-face">HyperFrames</span></span><span id="beat-now"> <span id="beat-symbol"><span id="beat-n">n</span><span id="beat-plus">+</span></span><span id="beat-rest">ow on</span></span></div>
-      <div id="beat-suffix-wrap"><span id="beat-cloudflare">loudflare</span></div>
+      <div id="beat-suffix-wrap"><span id="beat-cloudflare">Cloudflare</span></div>
       <img id="hf-icon" class="app-icon" src="data:image/png;base64,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" alt="">
       <img id="cf-icon" class="app-icon" src="assets/cloudflare.svg" alt="">
     </div>
@@ -537,10 +533,12 @@
             duration: 1500,
             easing: "linear"
           }, 220)
-          // "Cloudflare" word reveals (clip-path drop)
+          // "Cloudflare" word reveals (clip-path drop) and the cloud mark fades
+          // out — the cloud is an opening element, not a letter substitute.
           .add({
             targets: beatState,
             suffixMask: 0,
+            markOpacity: 0,
             duration: 520,
             easing: "easeOutCubic"
           }, 1820)
@@ -570,7 +568,6 @@
             suffixOpacity: 0,
             hfWordRoll: 1,
             suffixRoll: 1,
-            markOpacity: 0,
             hfIconOpacity: 1,
             cfIconOpacity: 1,
             hfIconScale: 1.18,
@@ -606,7 +603,11 @@
             duration: 200,
             easing: "easeOutCubic"
           }, 2940)
-          // Icons slide outward into final lockup positions
+          // Icons slide outward into final lockup positions. With prefix-left
+          // 250 and the n→+ flourish, the plus sits at pre-camera x=933 — the
+          // same as the midpoint between HF (761) and CF (1105) at lockup, so
+          // the plus reads as centered between the two icons after the camera
+          // scale (visible plus 960, visible icon midpoint 960.5).
           .add({
             targets: beatState,
             hfIconX: 293,
@@ -658,7 +659,7 @@
         beatState.suffixOpacity = 1 - iconProgress;
         beatState.suffixRoll = iconProgress;
         beatState.suffixMask = 100 * (1 - suffixProgress);
-        beatState.markOpacity = 1 - iconProgress;
+        beatState.markOpacity = 1 - Math.max(suffixProgress, iconProgress);
         beatState.hfIconOpacity = iconProgress;
         beatState.cfIconOpacity = iconProgress;
         beatState.hfIconScale = 0.82 + 0.36 * iconProgress;
