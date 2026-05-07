@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Cloudflare Intro HyperFrames</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html,
+    body {
+      margin: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    #cloudflare-intro {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background: #ffffff;
+      color: #1f1f1f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    #grid {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0.55;
+      background:
+        linear-gradient(90deg, transparent calc(100% - 1px), #ead7c2 0) 0 0 / 120px 100%,
+        linear-gradient(0deg, transparent calc(100% - 1px), #ead7c2 0) 0 0 / 100% 120px;
+    }
+
+    #telemetry {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+      color: #b1672e;
+      font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 18px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    #telemetry span {
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+
+    #shadow {
+      position: absolute;
+      left: 50%;
+      top: 720px;
+      width: 560px;
+      height: 1px;
+      z-index: 1;
+      opacity: 0;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, transparent, rgba(243, 128, 32, 0.55), transparent);
+    }
+
+    #mark-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      opacity: 1;
+      transform-origin: 50% 50%;
+      will-change: opacity;
+    }
+
+    #cloud-svg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 720px;
+      height: 480px;
+      overflow: visible;
+      transform: translate(-50%, -50%);
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    #cloud-fill { fill: #F38020; }
+    #cloud-tail { fill: #FAAE40; }
+
+    #copy-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      place-items: end center;
+      padding: 0 150px 108px;
+      opacity: 0;
+      color: #1f1f1f;
+      pointer-events: none;
+    }
+
+    #copy-layer h1 {
+      margin: 0;
+      width: 1180px;
+      max-width: 100%;
+      font-size: 78px;
+      line-height: 0.98;
+      font-weight: 650;
+      letter-spacing: 0;
+      text-align: center;
+    }
+
+    #copy-layer span {
+      display: block;
+    }
+
+    #next-beat {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      opacity: 0;
+      color: #1f1f1f;
+      perspective: 900px;
+      transform-origin: 50% 50%;
+      will-change: opacity, transform;
+      pointer-events: none;
+    }
+
+    #beat-prefix,
+    #beat-suffix-wrap {
+      position: absolute;
+      top: 468px;
+      font-size: 96px;
+      line-height: 1;
+      font-weight: 650;
+      letter-spacing: 0;
+      white-space: nowrap;
+      will-change: transform, opacity, clip-path;
+    }
+
+    #beat-prefix {
+      left: 140px;
+      opacity: 0;
+      transform: translateX(-760px);
+    }
+
+    #hf-word,
+    #beat-now {
+      display: inline-block;
+      will-change: opacity, transform;
+    }
+
+    #beat-symbol {
+      position: relative;
+      display: inline-block;
+      width: 54px;
+      height: 110px;
+      vertical-align: top;
+    }
+
+    #beat-n,
+    #beat-plus {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      transform-origin: 50% 50%;
+      will-change: opacity, transform;
+    }
+
+    #beat-plus {
+      left: -26px;
+      opacity: 0;
+      color: #F38020;
+    }
+
+    #beat-rest {
+      display: inline-block;
+      transform-origin: 0 50%;
+      will-change: opacity, transform;
+    }
+
+    #hf-word {
+      width: 760px;
+      height: 144px;
+      margin-top: -14px;
+      padding-top: 14px;
+      padding-left: 48px;
+      margin-left: -48px;
+      margin-right: 8px;
+      overflow: hidden;
+      perspective: 900px;
+      transform-style: preserve-3d;
+      vertical-align: top;
+    }
+
+    #hf-word-face,
+    #beat-cloudflare {
+      display: block;
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+      will-change: opacity, transform;
+    }
+
+    #beat-suffix-wrap {
+      left: 1280px;
+      top: 454px;
+      height: 144px;
+      padding: 14px 0 0;
+      overflow: hidden;
+      perspective: 900px;
+      transform-style: preserve-3d;
+      clip-path: inset(100% 0 0 0);
+    }
+
+    #beat-cloudflare {
+      transform: translateY(0);
+    }
+
+    .app-icon {
+      position: absolute;
+      top: 409px;
+      width: 172px;
+      height: 172px;
+      opacity: 0;
+      border-radius: 36px;
+      object-fit: cover;
+      box-shadow: 0 22px 54px rgba(180, 92, 24, 0.22);
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+      will-change: opacity, transform;
+    }
+
+    #hf-icon {
+      left: 382px;
+    }
+
+    #cf-icon {
+      left: 1184px;
+      background: #ffffff;
+    }
+
+    #label {
+      position: absolute;
+      left: 34px;
+      bottom: 30px;
+      z-index: 8;
+      display: none;
+      color: rgba(31, 31, 31, 0.58);
+      font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+      font-size: 16px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div id="cloudflare-intro" data-composition-id="cloudflare-intro" data-width="1920" data-height="1080" data-start="0" data-duration="9" data-root="true">
+    <div id="grid"></div>
+    <div id="telemetry" aria-hidden="true">
+      <span style="left:22%;top:26%;">edge</span>
+      <span style="left:76%;top:30%;">[ok] cf</span>
+      <span style="left:70%;top:70%;">render</span>
+      <span style="left:28%;top:72%;">r2</span>
+    </div>
+    <div id="shadow"></div>
+    <div id="mark-layer">
+      <!-- Cloudflare-style cloud mark. Two-tone orange to evoke the brand silhouette + tail. -->
+      <svg id="cloud-svg" viewBox="0 0 240 140" aria-hidden="true">
+        <g transform="translate(8, 14)">
+          <path id="cloud-tail" d="M 168 70 C 158 70 150 78 150 88 C 150 98 158 106 170 106 L 218 106 C 220 106 222 104 222 102 C 222 84 198 70 168 70 Z"></path>
+          <path id="cloud-fill" d="M 35 110 C 16 110 0 95 0 76 C 0 58 16 43 35 43 C 38 22 58 8 84 8 C 108 8 130 22 134 44 C 158 44 178 64 178 88 C 178 102 168 110 152 110 Z"></path>
+        </g>
+      </svg>
+    </div>
+    <div id="copy-layer">
+      <h1>
+        <span>Build apps that generate video.</span>
+        <span>Cloudflare runs the render pipeline.</span>
+      </h1>
+    </div>
+    <div id="next-beat" aria-hidden="true">
+      <div id="beat-prefix"><span id="hf-word"><span id="hf-word-face">HyperFrames</span></span><span id="beat-now"> <span id="beat-symbol"><span id="beat-n">n</span><span id="beat-plus">+</span></span><span id="beat-rest">ow on</span></span></div>
+      <div id="beat-suffix-wrap"><span id="beat-cloudflare">loudflare</span></div>
+      <img id="hf-icon" class="app-icon" src="assets/hfsquare.png" alt="">
+      <img id="cf-icon" class="app-icon" src="assets/cloudflare.svg" alt="">
+    </div>
+    <div id="label">white open</div>
+  </div>
+
+  <script>
+    window.__timelines = window.__timelines || {};
+
+    (function () {
+      const WIDTH = 1920;
+      const HEIGHT = 1080;
+      const root = document.querySelector("#cloudflare-intro");
+      const grid = document.querySelector("#grid");
+      const telemetry = document.querySelector("#telemetry");
+      const shadow = document.querySelector("#shadow");
+      const markLayer = document.querySelector("#mark-layer");
+      const cloudSvg = document.querySelector("#cloud-svg");
+      const copyLayer = document.querySelector("#copy-layer");
+      const nextBeat = document.querySelector("#next-beat");
+      const beatPrefix = document.querySelector("#beat-prefix");
+      const hfWord = document.querySelector("#hf-word");
+      const hfWordFace = document.querySelector("#hf-word-face");
+      const beatNow = document.querySelector("#beat-now");
+      const beatN = document.querySelector("#beat-n");
+      const beatPlus = document.querySelector("#beat-plus");
+      const beatRest = document.querySelector("#beat-rest");
+      const beatSuffixWrap = document.querySelector("#beat-suffix-wrap");
+      const beatCloudflare = document.querySelector("#beat-cloudflare");
+      const hfIcon = document.querySelector("#hf-icon");
+      const cfIcon = document.querySelector("#cf-icon");
+      const label = document.querySelector("#label");
+
+      const state = {
+        x: -34,
+        y: 8,
+        scale: 0.62,
+        rotation: -118,
+        markOpacity: 1,
+        gridOpacity: 0.82,
+        telemetryOpacity: 0,
+        shadowOpacity: 0,
+        copyOpacity: 0,
+        beatOpacity: 0,
+        beatBlur: 0,
+        beatCameraX: 0,
+        beatCameraY: 0,
+        beatCameraScale: 1,
+        prefixX: -760,
+        prefixOpacity: 0,
+        hfWordOpacity: 1,
+        hfWordRoll: 0,
+        nowX: 0,
+        nowRestOpacity: 1,
+        nowRestScale: 1,
+        nOpacity: 1,
+        nY: 0,
+        nScale: 1,
+        nRotation: 0,
+        plusY: -25,
+        plusOpacity: 0,
+        plusScale: 0.4,
+        plusRotation: -90,
+        suffixOpacity: 1,
+        suffixMask: 100,
+        suffixRoll: 0,
+        suffixY: 0,
+        hfIconOpacity: 0,
+        hfIconX: 0,
+        hfIconScale: 0.82,
+        hfIconRoll: -88,
+        hfIconZ: -120,
+        cfIconOpacity: 0,
+        cfIconX: 0,
+        cfIconScale: 0.82,
+        cfIconRoll: 88,
+        cfIconZ: -120,
+        label: "white open"
+      };
+
+      function renderDom() {
+        cloudSvg.style.transform = `translate(-50%, -50%) translate(${state.x}%, ${state.y}%) scale(${state.scale}) rotate(${state.rotation}deg)`;
+        grid.style.opacity = state.gridOpacity;
+        telemetry.style.opacity = state.telemetryOpacity;
+        shadow.style.opacity = state.shadowOpacity;
+        markLayer.style.opacity = state.markOpacity;
+        copyLayer.style.opacity = state.copyOpacity;
+        nextBeat.style.opacity = state.beatOpacity;
+        nextBeat.style.filter = `blur(${state.beatBlur}px)`;
+        nextBeat.style.transform = `translate(${state.beatCameraX}px, ${state.beatCameraY}px) scale(${state.beatCameraScale})`;
+        beatPrefix.style.opacity = state.prefixOpacity;
+        beatPrefix.style.transform = `translateX(${state.prefixX}px)`;
+        hfWord.style.opacity = state.hfWordOpacity;
+        hfWordFace.style.transform = `translateX(-40px) translateZ(${state.hfWordRoll * -70}px) rotateX(${state.hfWordRoll * -90}deg)`;
+        beatNow.style.transform = `translateX(${state.nowX + 20}px)`;
+        beatRest.style.opacity = state.nowRestOpacity;
+        beatRest.style.transform = `scale(${state.nowRestScale})`;
+        beatN.style.opacity = state.nOpacity;
+        beatN.style.transform = `translateY(${state.nY}px) rotate(${state.nRotation}deg) scale(${state.nScale})`;
+        beatPlus.style.opacity = state.plusOpacity;
+        beatPlus.style.transform = `translateY(${state.plusY}px) rotate(${state.plusRotation}deg) scale(${state.plusScale})`;
+        beatSuffixWrap.style.opacity = state.suffixOpacity;
+        beatSuffixWrap.style.clipPath = `inset(${state.suffixMask}% 0 0 0)`;
+        beatCloudflare.style.opacity = state.suffixOpacity;
+        beatCloudflare.style.transform = `translateY(${state.suffixY}px) translateZ(${state.suffixRoll * -70}px) rotateX(${state.suffixRoll * -90}deg)`;
+        hfIcon.style.opacity = state.hfIconOpacity;
+        hfIcon.style.transform = `translateX(${state.hfIconX}px) translateZ(${state.hfIconZ}px) rotateX(${state.hfIconRoll}deg) scale(${state.hfIconScale})`;
+        cfIcon.style.opacity = state.cfIconOpacity;
+        cfIcon.style.transform = `translateX(${state.cfIconX}px) translateZ(${state.cfIconZ}px) rotateX(${state.cfIconRoll}deg) scale(${state.cfIconScale})`;
+        label.textContent = state.label;
+      }
+
+      const ROLL_DURATION = 1;
+      const HOLD_DURATION = 0.6;
+      const SNAP_DURATION = 0.35;
+      const PRE_BEAT_HOLD = 0.05;
+      const NEXT_BEAT_START = ROLL_DURATION + HOLD_DURATION + SNAP_DURATION + PRE_BEAT_HOLD;
+      const NEXT_BEAT_LOGO_SLIDE_END = (2940 + 580) / 1000;
+      const NEXT_BEAT_DURATION = NEXT_BEAT_LOGO_SLIDE_END;
+      const FINAL_HOLD = 1.2;
+      const TOTAL_DURATION = NEXT_BEAT_START + NEXT_BEAT_DURATION + FINAL_HOLD;
+
+      const animeTimeline = window.anime && anime.timeline;
+      const beatDriver = { ms: 0 };
+      const beatState = {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        beatOpacity: 0,
+        beatCameraX: 0,
+        beatCameraY: 0,
+        beatCameraScale: 1,
+        prefixX: -760,
+        prefixOpacity: 0,
+        hfWordOpacity: 1,
+        hfWordRoll: 0,
+        nowX: 0,
+        nowRestOpacity: 1,
+        nowRestScale: 1,
+        nOpacity: 1,
+        nY: 0,
+        nScale: 1,
+        nRotation: 0,
+        plusY: -25,
+        plusOpacity: 0,
+        plusScale: 0.4,
+        plusRotation: -90,
+        suffixY: 0,
+        suffixOpacity: 1,
+        suffixRoll: 0,
+        suffixMask: 100,
+        hfIconOpacity: 0,
+        hfIconX: 0,
+        hfIconScale: 0.82,
+        hfIconRoll: -88,
+        hfIconZ: -120,
+        cfIconOpacity: 0,
+        cfIconX: 0,
+        cfIconScale: 0.82,
+        cfIconRoll: 88,
+        cfIconZ: -120,
+        markOpacity: 1
+      };
+
+      function renderBeatState() {
+        state.x = beatState.x;
+        state.y = beatState.y;
+        state.scale = beatState.scale;
+        state.rotation = beatState.rotation;
+        state.markOpacity = beatState.markOpacity;
+        state.beatOpacity = beatState.beatOpacity;
+        state.beatCameraX = beatState.beatCameraX;
+        state.beatCameraY = beatState.beatCameraY;
+        state.beatCameraScale = beatState.beatCameraScale;
+        state.prefixX = beatState.prefixX;
+        state.prefixOpacity = beatState.prefixOpacity;
+        state.hfWordOpacity = beatState.hfWordOpacity;
+        state.hfWordRoll = beatState.hfWordRoll;
+        state.nowX = beatState.nowX;
+        state.nowRestOpacity = beatState.nowRestOpacity;
+        state.nowRestScale = beatState.nowRestScale;
+        state.nOpacity = beatState.nOpacity;
+        state.nY = beatState.nY;
+        state.nScale = beatState.nScale;
+        state.nRotation = beatState.nRotation;
+        state.plusY = beatState.plusY;
+        state.plusOpacity = beatState.plusOpacity;
+        state.plusScale = beatState.plusScale;
+        state.plusRotation = beatState.plusRotation;
+        state.suffixY = beatState.suffixY;
+        state.suffixOpacity = beatState.suffixOpacity;
+        state.suffixRoll = beatState.suffixRoll;
+        state.suffixMask = beatState.suffixMask;
+        state.hfIconOpacity = beatState.hfIconOpacity;
+        state.hfIconX = beatState.hfIconX;
+        state.hfIconScale = beatState.hfIconScale;
+        state.hfIconRoll = beatState.hfIconRoll;
+        state.hfIconZ = beatState.hfIconZ;
+        state.cfIconOpacity = beatState.cfIconOpacity;
+        state.cfIconX = beatState.cfIconX;
+        state.cfIconScale = beatState.cfIconScale;
+        state.cfIconRoll = beatState.cfIconRoll;
+        state.cfIconZ = beatState.cfIconZ;
+        state.copyOpacity = 0;
+        state.gridOpacity = 0;
+        state.shadowOpacity = 0;
+        state.telemetryOpacity = 0;
+        renderDom();
+      }
+
+      const beatAnime = animeTimeline ? anime.timeline({
+        autoplay: false,
+        easing: "linear",
+        update: renderBeatState
+      }) : null;
+
+      if (beatAnime) {
+        beatAnime
+          // Prefix slides in from the left
+          .add({
+            targets: beatState,
+            beatOpacity: 1,
+            prefixOpacity: 1,
+            prefixX: 0,
+            nowX: -20,
+            duration: 680,
+            easing: "easeOutCubic"
+          }, 1620)
+          // Cloud snaps to small lockup position (would-be "C" of Cloudflare)
+          .add({
+            targets: beatState,
+            x: [
+              { value: -28, duration: 360, easing: "easeOutQuad" },
+              { value: 18, duration: 520, easing: "easeInOutSine" },
+              { value: 38, duration: 620, easing: "easeOutCubic" }
+            ],
+            y: [
+              { value: -30, duration: 360, easing: "easeOutQuad" },
+              { value: 16, duration: 520, easing: "easeInOutSine" },
+              { value: -3.6, duration: 620, easing: "easeOutCubic" }
+            ],
+            scale: [
+              { value: 0.46, duration: 360, easing: "easeOutQuad" },
+              { value: 0.22, duration: 520, easing: "easeInOutSine" },
+              { value: 0.13, duration: 620, easing: "easeOutCubic" }
+            ],
+            rotation: 720,
+            duration: 1500,
+            easing: "linear"
+          }, 220)
+          // "Cloudflare" word reveals (clip-path drop)
+          .add({
+            targets: beatState,
+            suffixMask: 0,
+            duration: 520,
+            easing: "easeOutCubic"
+          }, 1820)
+          // Linear pad
+          .add({
+            targets: beatState,
+            duration: 440,
+            easing: "linear"
+          }, 2060)
+          .add({
+            targets: beatState,
+            duration: 660,
+            easing: "linear"
+          }, 2440)
+          // "ow on" rest fades to make room for the icon swap
+          .add({
+            targets: beatState,
+            nowRestOpacity: 0,
+            nowRestScale: 0.82,
+            duration: 100,
+            easing: "easeOutQuad"
+          }, 2540)
+          // Words flip away, app icons flip in (HF + Cloudflare)
+          .add({
+            targets: beatState,
+            hfWordOpacity: 0,
+            suffixOpacity: 0,
+            hfWordRoll: 1,
+            suffixRoll: 1,
+            markOpacity: 0,
+            hfIconOpacity: 1,
+            cfIconOpacity: 1,
+            hfIconScale: 1.18,
+            cfIconScale: 1.18,
+            hfIconRoll: 0,
+            cfIconRoll: 0,
+            hfIconZ: 0,
+            cfIconZ: 0,
+            duration: 360,
+            easing: "easeOutCubic"
+          }, 2540)
+          // Symbol n → +
+          .add({
+            targets: beatState,
+            nOpacity: 0,
+            nY: -25,
+            nScale: 0.58,
+            nRotation: 92,
+            nowX: 0,
+            plusY: -25,
+            plusOpacity: 1,
+            plusScale: 1,
+            plusRotation: 0,
+            duration: 240,
+            easing: "easeOutCubic"
+          }, 2790)
+          // Camera nudges to feature the icon row
+          .add({
+            targets: beatState,
+            beatCameraX: 55,
+            beatCameraY: 91,
+            beatCameraScale: 2.025,
+            duration: 200,
+            easing: "easeOutCubic"
+          }, 2940)
+          // Icons slide outward into final lockup positions
+          .add({
+            targets: beatState,
+            hfIconX: 293,
+            cfIconX: -165,
+            duration: 580,
+            easing: "easeInOutCubic"
+          }, 2940);
+      }
+
+      function seekBeat(ms) {
+        if (beatAnime) {
+          beatAnime.seek(ms);
+          return;
+        }
+        // Fallback: linear approximations of the key channels for environments
+        // that lack anime.js. Keeps the lockup roughly correct.
+        const prefixProgress = Math.min(1, Math.max(0, (ms - 1620) / 680));
+        const suffixProgress = Math.min(1, Math.max(0, (ms - 1820) / 520));
+        const iconProgress = Math.min(1, Math.max(0, (ms - 2540) / 360));
+        const restProgress = Math.min(1, Math.max(0, (ms - 2540) / 100));
+        const plusProgress = Math.min(1, Math.max(0, (ms - 2790) / 240));
+        const cameraProgress = Math.min(1, Math.max(0, (ms - 2940) / 200));
+        const slideProgress = Math.min(1, Math.max(0, (ms - 2940) / 580));
+        const cloudProgress = Math.min(1, Math.max(0, ms / 1720));
+        beatState.x = 38 * cloudProgress;
+        beatState.y = -3.6 * cloudProgress;
+        beatState.scale = 1 + (0.13 - 1) * cloudProgress;
+        beatState.rotation = 720 * cloudProgress;
+        beatState.beatOpacity = Math.max(prefixProgress, suffixProgress, iconProgress);
+        beatState.beatCameraX = 55 * cameraProgress;
+        beatState.beatCameraY = 91 * cameraProgress;
+        beatState.beatCameraScale = 1 + 1.025 * cameraProgress;
+        beatState.prefixOpacity = prefixProgress;
+        beatState.prefixX = -760 * (1 - prefixProgress);
+        beatState.hfWordOpacity = 1 - iconProgress;
+        beatState.hfWordRoll = iconProgress;
+        beatState.nowRestOpacity = 1 - restProgress;
+        beatState.nowRestScale = 1 + (0.82 - 1) * restProgress;
+        beatState.nowX = prefixProgress > 0 ? -20 * (1 - plusProgress) : 0;
+        beatState.nOpacity = 1 - plusProgress;
+        beatState.nY = -25 * plusProgress;
+        beatState.nScale = 1 + (0.58 - 1) * plusProgress;
+        beatState.nRotation = 92 * plusProgress;
+        beatState.plusY = -25;
+        beatState.plusOpacity = plusProgress;
+        beatState.plusScale = 0.4 + 0.6 * plusProgress;
+        beatState.plusRotation = -90 * (1 - plusProgress);
+        beatState.suffixY = 0;
+        beatState.suffixOpacity = 1 - iconProgress;
+        beatState.suffixRoll = iconProgress;
+        beatState.suffixMask = 100 * (1 - suffixProgress);
+        beatState.markOpacity = 1 - iconProgress;
+        beatState.hfIconOpacity = iconProgress;
+        beatState.cfIconOpacity = iconProgress;
+        beatState.hfIconScale = 0.82 + 0.36 * iconProgress;
+        beatState.cfIconScale = 0.82 + 0.36 * iconProgress;
+        beatState.hfIconRoll = -88 + 88 * iconProgress;
+        beatState.cfIconRoll = 88 - 88 * iconProgress;
+        beatState.hfIconZ = -120 + 120 * iconProgress;
+        beatState.cfIconZ = -120 + 120 * iconProgress;
+        beatState.hfIconX = 293 * slideProgress;
+        beatState.cfIconX = -165 * slideProgress;
+        renderBeatState();
+      }
+
+      const tl = gsap.timeline({ paused: true, onUpdate: renderDom });
+
+      tl.set(state, {
+        x: -180,
+        y: 0,
+        scale: 1,
+        rotation: -360,
+        markOpacity: 1,
+        gridOpacity: 0.82,
+        telemetryOpacity: 0,
+        shadowOpacity: 0,
+        copyOpacity: 0,
+        beatOpacity: 0,
+        beatBlur: 0,
+        beatCameraX: 0,
+        beatCameraY: 0,
+        beatCameraScale: 1,
+        prefixX: -760,
+        prefixOpacity: 0,
+        hfWordOpacity: 1,
+        hfWordRoll: 0,
+        nowX: 0,
+        nowRestOpacity: 1,
+        nowRestScale: 1,
+        nOpacity: 1,
+        nY: 0,
+        nScale: 1,
+        nRotation: 0,
+        plusY: -25,
+        plusOpacity: 0,
+        plusScale: 0.4,
+        plusRotation: -90,
+        suffixOpacity: 1,
+        suffixMask: 100,
+        suffixRoll: 0,
+        suffixY: 0,
+        hfIconOpacity: 0,
+        hfIconX: 0,
+        hfIconScale: 0.82,
+        hfIconRoll: -88,
+        hfIconZ: -120,
+        cfIconOpacity: 0,
+        cfIconX: 0,
+        cfIconScale: 0.82,
+        cfIconRoll: 88,
+        cfIconZ: -120,
+        label: "white open"
+      }, 0);
+
+      // Phase 1: cloud rolls in from the left
+      tl.to(state, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        shadowOpacity: 0.46,
+        telemetryOpacity: 0.18,
+        duration: ROLL_DURATION,
+        ease: "power2.out",
+        onUpdate: () => { state.label = "roll in"; }
+      }, 0);
+
+      // Phase 2: hold on the cloud, gentle breath
+      tl.to(state, {
+        scale: 1.04,
+        duration: HOLD_DURATION * 0.5,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: 1,
+        onUpdate: () => { state.label = "centered cloud hold"; }
+      }, ROLL_DURATION);
+
+      // Phase 3: snap small to lockup mark position
+      tl.to(state, {
+        scale: 0.6,
+        x: 0,
+        y: 0,
+        rotation: 0,
+        shadowOpacity: 0,
+        telemetryOpacity: 0,
+        duration: SNAP_DURATION,
+        ease: "power2.in",
+        onUpdate: () => { state.label = "cloud snap"; }
+      }, ROLL_DURATION + HOLD_DURATION);
+
+      // Phase 4: hand off to the next-beat lockup driven by anime.js
+      tl.set(state, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        markOpacity: 1,
+        beatOpacity: 0,
+        beatBlur: 0,
+        beatCameraX: 0,
+        beatCameraY: 0,
+        beatCameraScale: 1,
+        prefixX: -760,
+        prefixOpacity: 0,
+        hfWordOpacity: 1,
+        hfWordRoll: 0,
+        nowX: 0,
+        nowRestOpacity: 1,
+        nowRestScale: 1,
+        nOpacity: 1,
+        nY: 0,
+        nScale: 1,
+        nRotation: 0,
+        plusY: -25,
+        plusOpacity: 0,
+        plusScale: 0.4,
+        plusRotation: -90,
+        suffixOpacity: 1,
+        suffixMask: 100,
+        suffixRoll: 0,
+        suffixY: 0,
+        hfIconOpacity: 0,
+        hfIconX: 0,
+        hfIconScale: 0.82,
+        hfIconRoll: -88,
+        hfIconZ: -120,
+        cfIconOpacity: 0,
+        cfIconX: 0,
+        cfIconScale: 0.82,
+        cfIconRoll: 88,
+        cfIconZ: -120,
+        label: "next beat setup"
+      }, NEXT_BEAT_START);
+
+      tl.call(() => {
+        beatDriver.ms = 0;
+        seekBeat(0);
+      }, [], NEXT_BEAT_START);
+
+      tl.to(beatDriver, {
+        ms: NEXT_BEAT_DURATION * 1000,
+        duration: NEXT_BEAT_DURATION,
+        ease: "none",
+        onUpdate: () => {
+          seekBeat(beatDriver.ms);
+        },
+        onComplete: () => {
+          seekBeat(NEXT_BEAT_DURATION * 1000);
+        }
+      }, NEXT_BEAT_START);
+
+      // Final hold so the lockup lingers before the loop ends
+      tl.to(state, {
+        duration: FINAL_HOLD,
+        ease: "none",
+        onUpdate: () => { state.label = "final lockup hold"; }
+      }, NEXT_BEAT_START + NEXT_BEAT_DURATION);
+
+      renderDom();
+      window.__timelines["cloudflare-intro"] = tl;
+    })();
+  </script>
+</body>
+</html>

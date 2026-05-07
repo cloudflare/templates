@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="36" fill="#ffffff"/>
+  <g transform="translate(28, 64)">
+    <!-- Lighter-orange tail (drawn behind the main cloud body). -->
+    <path d="M 168 70 C 158 70 150 78 150 88 C 150 98 158 106 170 106 L 218 106 C 220 106 222 104 222 102 C 222 84 198 70 168 70 Z"
+          fill="#FAAE40"/>
+    <!-- Main orange cloud body. -->
+    <path d="M 35 110 C 16 110 0 95 0 76 C 0 58 16 43 35 43 C 38 22 58 8 84 8 C 108 8 130 22 134 44 C 158 44 178 64 178 88 C 178 102 168 110 152 110 Z"
+          fill="#F38020"/>
+  </g>
+</svg>

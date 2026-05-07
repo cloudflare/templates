@@ -7,7 +7,7 @@ import { copyFile, mkdir, readdir, writeFile } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 
 const COMP_DIR =
-	process.env.PREVIEW_COMPOSITION_DIR ?? "compositions/ui-3d-reveal";
+	process.env.PREVIEW_COMPOSITION_DIR ?? "compositions/cloudflare-intro";
 const ROOT = "public";
 const compRoot = join(ROOT, COMP_DIR);
 

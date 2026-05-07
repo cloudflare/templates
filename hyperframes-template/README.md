@@ -37,7 +37,7 @@ Deploying provisions a Worker, the `RenderContainer` Durable Object, and an R2 b
 
 ## What this template does
 
-- **Preview** a bundled composition (`ui-3d-reveal`) in the browser using `<hyperframes-player>`, the zero-dependency web component from `@hyperframes/player`.
+- **Preview** a bundled composition (`cloudflare-intro`) in the browser using `<hyperframes-player>`, the zero-dependency web component from `@hyperframes/player`.
 - **Render** the composition to an MP4 by POSTing to `/api/render`. The Worker streams the composition to a Cloudflare Container running a pre-built image with Chromium + FFmpeg + HyperFrames, streams the rendered MP4 directly into R2, and returns a URL.
 
 ## Architecture
