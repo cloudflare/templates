@@ -40,7 +40,7 @@
       "package_json_hash": "9a9b096ddd035c7833036133d39336e17dedb4e7"
     },
     "saas-admin-template": {
-      "package_json_hash": "ede85517b1cb72828f7e36d32f4b281ce4b7e3a2"
+      "package_json_hash": "674e225c7d582b6a7dc18c0fa22f4861891276d1"
     },
     "text-to-image-template": {
       "package_json_hash": "8fb9be4dfec79971923c4cf07d8a934e25a24efa"
@@ -58,7 +58,7 @@
       "package_json_hash": "b2afbb3e0f234bacf6c7bb059d2ca51ce14e5a9c"
     },
     "d1-starter-sessions-api-template": {
-      "package_json_hash": "d7868e3d720010880613efbca4ddd587028e9d22"
+      "package_json_hash": "5668f7824b265f63796c84f954f1346fc9c6217e"
     },
     "hello-world-do-template": {
       "package_json_hash": "672fc6bbf82fda50a4a6569d4dd98bd908b1dc37"
@@ -82,16 +82,16 @@
       "package_json_hash": "85cf0e355a64d995bf663b8831ee9b9562f41c16"
     },
     "workflows-starter-template": {
-      "package_json_hash": "893ff8f965c52a6191ebe7e1d940f40315a2df6e"
+      "package_json_hash": "571c2cea75712ec33e53da4c0df832f9bef98a7f"
     },
     "workers-for-platforms-template": {
-      "package_json_hash": "716e151ee119ed79ac3a3fe66a76deeccb0482ae"
+      "package_json_hash": "6125cb4740e7fd28be288cc373e4789f181e292c"
     },
     "microfrontend-template": {
-      "package_json_hash": "9897ed168b4140205eaa25dc9afa89beb1f888a7"
+      "package_json_hash": "8a11ef9122321d047d483e1fcf495eddcd456896"
     },
     "workers-builds-notifications-template": {
-      "package_json_hash": "446bdce0516257350b0a4e21cd69a76bdd91fc27"
+      "package_json_hash": "6cfe18a9555106217af4337e203dac703328a66d"
     }
   }
 }
