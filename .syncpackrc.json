@@ -1,5 +1,6 @@
 {
 	"dependencyTypes": ["dev", "prod"],
+	"indent": "\t",
 	"semverGroups": [
 		{
 			"label": "don't pin @cloudflare/workers-types",

@@ -1,6 +1,5 @@
 {
 	"name": "workflows-starter-template",
-	"private": true,
 	"description": "Interactive starter template demonstrating Cloudflare Workflows with real-time status updates",
 	"cloudflare": {
 		"label": "Workflows Starter",
@@ -17,17 +16,6 @@
 		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/6d6e9a49-5c10-4ef6-bfa8-b6577a656300/public",
 		"docs_url": "https://developers.cloudflare.com/workflows/"
 	},
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc -b && vite build",
-		"check": "tsc && wrangler deploy --dry-run",
-		"lint": "eslint .",
-		"preview": "npm run build && vite preview",
-		"deploy": "npm run build && wrangler deploy",
-		"cf-typegen": "wrangler types",
-		"test": "vitest run"
-	},
 	"dependencies": {
 		"react": "^19.1.2",
 		"react-dom": "^19.1.2"
@@ -38,9 +26,9 @@
 		"@eslint/js": "^9.33.0",
 		"@types/react": "^19.1.10",
 		"@types/react-dom": "^19.1.7",
+		"@vitejs/plugin-react-swc": "^4.0.0",
 		"@vitest/runner": "3.2.4",
 		"@vitest/snapshot": "3.2.4",
-		"@vitejs/plugin-react-swc": "^4.0.0",
 		"autoprefixer": "^10.4.22",
 		"eslint": "^9.33.0",
 		"eslint-plugin-react-hooks": "^5.2.0",
@@ -53,5 +41,17 @@
 		"vite": "^7.0.0",
 		"vitest": "3.2.4",
 		"wrangler": "4.88.0"
-	}
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc -b && vite build",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "npm run build && wrangler deploy",
+		"dev": "vite",
+		"lint": "eslint .",
+		"preview": "npm run build && vite preview",
+		"test": "vitest run"
+	},
+	"type": "module"
 }

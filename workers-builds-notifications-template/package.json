@@ -1,15 +1,6 @@
 {
 	"name": "workers-builds-notifications-template",
 	"description": "Send Workers Builds status notifications to Slack, Discord, or any webhook via Event Subscriptions.",
-	"private": true,
-	"scripts": {
-		"dev": "wrangler dev",
-		"deploy": "wrangler deploy",
-		"tail": "wrangler tail",
-		"test": "vitest run",
-		"test:watch": "vitest",
-		"cf-typegen": "wrangler types"
-	},
 	"cloudflare": {
 		"label": "Workers Builds Notifications",
 		"products": [
@@ -32,5 +23,14 @@
 		"typescript": "5.9.3",
 		"vitest": "3.2.4",
 		"wrangler": "4.88.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"tail": "wrangler tail",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	}
 }
