@@ -17,15 +17,15 @@
 		"docs_url": "https://developers.cloudflare.com/workflows/"
 	},
 	"dependencies": {
-		"react": "^19.1.2",
-		"react-dom": "^19.1.2"
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.15.3",
 		"@cloudflare/vitest-pool-workers": "0.11.1",
 		"@eslint/js": "^9.33.0",
-		"@types/react": "^19.1.10",
-		"@types/react-dom": "^19.1.7",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
 		"@vitejs/plugin-react-swc": "4.0.0",
 		"@vitest/runner": "3.2.4",
 		"@vitest/snapshot": "3.2.4",
