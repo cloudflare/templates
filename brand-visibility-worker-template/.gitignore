@@ -1,0 +1,7 @@
+node_modules/
+.wrangler/
+.react-router/
+dist/
+build/
+.backup-vanilla/
+public/_old-*
