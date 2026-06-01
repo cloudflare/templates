@@ -13,11 +13,13 @@ export type ModelConfig = {
 	/** Display name */
 	name: string;
 	/** Provider label for badges */
-	provider: "openai" | "anthropic" | "google" | "meta" | "mistral";
+	provider: "openai" | "anthropic" | "google" | "meta" | "mistral" | "workers-ai";
 	/** Max tokens to request */
 	maxTokens?: number;
 	/** Whether this is a Gemini model (different request/response format) */
 	isGemini?: boolean;
+	/** Whether this is an Anthropic model (no system role in messages) */
+	isAnthropic?: boolean;
 };
 
 /**
@@ -37,6 +39,7 @@ export const MODELS: ModelConfig[] = [
 		name: "Claude Sonnet 4",
 		provider: "anthropic",
 		maxTokens: 512,
+		isAnthropic: true,
 	},
 	{
 		id: "google/gemini-3-flash",

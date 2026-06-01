@@ -64,6 +64,7 @@ export type QueueJob = {
 	prompt: string;
 	maxTokens: number;
 	isGemini?: boolean;
+	isAnthropic?: boolean;
 };
 
 export const apiRoutes = new Hono<{ Bindings: Env }>();
@@ -178,6 +179,7 @@ apiRoutes.post("/sites/:domain/test", async (c) => {
 				prompt,
 				maxTokens: model.maxTokens ?? 512,
 				isGemini: model.isGemini,
+				isAnthropic: model.isAnthropic,
 			});
 		}
 	}
@@ -501,10 +503,7 @@ async function handleSetup(
 			description: `Test prompts for ${domain}`,
 			prompts: [
 				{ text: `What is ${brand}?`, tag: "Branded" },
-				{
-					text: `How does ${brand} compare to alternatives?`,
-					tag: "Competitive",
-				},
+				{ text: `How does ${brand} compare to alternatives?`, tag: "Competitive" },
 				{ text: `What are the key features of ${domain}?`, tag: "Category" },
 				{
 					text: `Is ${brand} a good choice for my needs?`,

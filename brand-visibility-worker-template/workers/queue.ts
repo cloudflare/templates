@@ -95,6 +95,7 @@ async function callModel(env: Env, job: QueueJob): Promise<string> {
 	let input: any;
 
 	if (job.isGemini) {
+		// Gemini format
 		input = {
 			contents: [
 				{
@@ -104,7 +105,16 @@ async function callModel(env: Env, job: QueueJob): Promise<string> {
 			],
 			generationConfig: { maxOutputTokens: job.maxTokens },
 		};
+	} else if (job.isAnthropic) {
+		// Anthropic format - no system role in messages, prepend to user message
+		input = {
+			messages: [
+				{ role: "user", content: `${SYSTEM_PROMPT}\n\n${job.prompt}` },
+			],
+			max_tokens: job.maxTokens,
+		};
 	} else {
+		// OpenAI/Workers AI format - supports system role
 		input = {
 			messages: [
 				{ role: "system", content: SYSTEM_PROMPT },
