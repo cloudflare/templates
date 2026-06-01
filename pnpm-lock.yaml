@@ -1022,11 +1022,11 @@ importers:
         specifier: 2.17.2
         version: 2.17.2(@remix-run/react@2.17.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(typescript@5.9.3))(@types/node@25.0.3)(bufferutil@4.0.9)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(vite@5.4.14(@types/node@25.0.3)(lightningcss@1.30.2)(terser@5.16.9))(wrangler@3.114.15(@cloudflare/workers-types@4.20260507.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10))(yaml@2.8.1)
       '@types/react':
-        specifier: ^18.0.0
-        version: 18.3.12
+        specifier: 18.3.23
+        version: 18.3.23
       '@types/react-dom':
-        specifier: ^18.0.0
-        version: 18.3.1
+        specifier: 18.3.7
+        version: 18.3.7(@types/react@18.3.23)
       '@typescript-eslint/eslint-plugin':
         specifier: 8.50.0
         version: 8.50.0(@typescript-eslint/parser@8.50.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
