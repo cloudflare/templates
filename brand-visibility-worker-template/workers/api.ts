@@ -503,7 +503,10 @@ async function handleSetup(
 			description: `Test prompts for ${domain}`,
 			prompts: [
 				{ text: `What is ${brand}?`, tag: "Branded" },
-				{ text: `How does ${brand} compare to alternatives?`, tag: "Competitive" },
+				{
+					text: `How does ${brand} compare to alternatives?`,
+					tag: "Competitive",
+				},
 				{ text: `What are the key features of ${domain}?`, tag: "Category" },
 				{
 					text: `Is ${brand} a good choice for my needs?`,

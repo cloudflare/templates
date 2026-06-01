@@ -13,7 +13,13 @@ export type ModelConfig = {
 	/** Display name */
 	name: string;
 	/** Provider label for badges */
-	provider: "openai" | "anthropic" | "google" | "meta" | "mistral" | "workers-ai";
+	provider:
+		| "openai"
+		| "anthropic"
+		| "google"
+		| "meta"
+		| "mistral"
+		| "workers-ai";
 	/** Max tokens to request */
 	maxTokens?: number;
 	/** Whether this is a Gemini model (different request/response format) */
