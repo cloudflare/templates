@@ -1,7 +1,15 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "~/components/button";
-import { Sparkle, X as XIcon, Plus } from "@phosphor-icons/react";
+import { PlusIcon, SparkleIcon, XIcon } from "@phosphor-icons/react";
+
+type ModelOption = { name: string; id: string; provider: string };
+type ModelsResponse = { models?: ModelOption[] };
+type SetupResponse = {
+	brandName?: string;
+	prompts?: ({ text?: string; tag?: string } | string)[];
+};
+type TestStart = { id: string };
 
 export function meta() {
 	return [{ title: "Add Site | AI Brand Visibility" }];
@@ -20,9 +28,7 @@ export default function Setup() {
 	const [selectedPrompts, setSelectedPrompts] = useState<Set<string>>(
 		new Set(),
 	);
-	const [models, setModels] = useState<
-		{ name: string; id: string; provider: string }[]
-	>([]);
+	const [models, setModels] = useState<ModelOption[]>([]);
 	const [enabledModels, setEnabledModels] = useState<Set<string>>(new Set());
 	const [loading, setLoading] = useState(false);
 	const [generating, setGenerating] = useState(false);
@@ -68,10 +74,10 @@ export default function Setup() {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ domain: d, brandName: guessedBrand }),
 			}),
-			fetch("/api/models").then((r) => r.json()),
+			fetch("/api/models").then((r) => r.json() as Promise<ModelsResponse>),
 		]);
 		setModels(modelsData.models ?? []);
-		setEnabledModels(new Set((modelsData.models ?? []).map((m: any) => m.id)));
+		setEnabledModels(new Set((modelsData.models ?? []).map((m) => m.id)));
 		setLoading(false);
 		setStep(1);
 	}, [domain]);
@@ -86,7 +92,7 @@ export default function Setup() {
 			if (brandName) params.set("brand", brandName);
 			if (competitors.length) params.set("competitors", competitors.join(","));
 			const resp = await fetch(`/api/setup?${params}`);
-			const data = await resp.json();
+			const data = (await resp.json()) as SetupResponse;
 			const sugs: { text: string; tag: string }[] = (data.prompts ?? [])
 				.map((p: any) =>
 					typeof p === "string"
@@ -153,9 +159,9 @@ export default function Setup() {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ models: [...enabledModels] }),
 		});
-		const run = await fetch(`/api/sites/${encodeURIComponent(d)}/test`, {
+		const run = (await fetch(`/api/sites/${encodeURIComponent(d)}/test`, {
 			method: "POST",
-		}).then((r) => r.json());
+		}).then((r) => r.json())) as TestStart;
 		navigate(`/?site=${encodeURIComponent(d)}&testId=${run.id}`);
 	};
 
@@ -242,7 +248,7 @@ export default function Setup() {
 					</div>
 
 					<div
-						className="w-full max-w-[38rem] absolute px-6"
+						className="w-full max-w-152 absolute px-6"
 						style={{ top: COL_TOP }}
 					>
 						<h1
@@ -526,7 +532,7 @@ function StepCompetitors({
 					variant="secondary"
 					size="md"
 					onClick={addCompetitor}
-					icon={<Plus size={14} />}
+					icon={<PlusIcon size={14} />}
 					className="h-9"
 				>
 					Add
@@ -564,7 +570,7 @@ function StepPrompts({
 					{generating ? (
 						<span className="inline-block w-4 h-4 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />
 					) : (
-						<Sparkle size={16} />
+						<SparkleIcon size={16} />
 					)}
 					{generating ? "Generating prompts..." : "Generate suggested prompts"}
 				</button>
@@ -572,7 +578,7 @@ function StepPrompts({
 			{suggestions.length > 0 && (
 				<div className="flex flex-col gap-1.5">
 					<div className="flex items-center gap-1.5 text-[11px] font-medium text-neutral-400 mb-0.5">
-						<Sparkle size={12} /> {selectedPrompts.size} selected
+						<SparkleIcon size={12} /> {selectedPrompts.size} selected
 					</div>
 					{suggestions.map((s: any, i: number) => (
 						<label
@@ -601,7 +607,7 @@ function StepPrompts({
 						{generating ? (
 							<span className="inline-block w-3 h-3 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />
 						) : (
-							<Sparkle size={12} />
+							<SparkleIcon size={12} />
 						)}
 						{generating ? "Regenerating..." : "Regenerate"}
 					</button>

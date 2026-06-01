@@ -43,8 +43,6 @@ export default function Models({ loaderData }: Route.ComponentProps) {
 	const { site, models, enabled } = loaderData;
 	const revalidator = useRevalidator();
 
-	if (!site) return <NoSiteSelected />;
-
 	const toggleModel = useCallback(
 		async (modelId: string, checked: boolean) => {
 			let newEnabled = [...enabled];
@@ -59,6 +57,8 @@ export default function Models({ loaderData }: Route.ComponentProps) {
 		},
 		[site, enabled, revalidator],
 	);
+
+	if (!site) return <NoSiteSelected />;
 
 	return (
 		<>

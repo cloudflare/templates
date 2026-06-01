@@ -13,7 +13,13 @@ export type ModelConfig = {
 	/** Display name */
 	name: string;
 	/** Provider label for badges */
-	provider: "openai" | "anthropic" | "google" | "meta" | "mistral";
+	provider:
+		| "openai"
+		| "anthropic"
+		| "google"
+		| "workers-ai"
+		| "meta"
+		| "mistral";
 	/** Max tokens to request */
 	maxTokens?: number;
 	/** Whether this is a Gemini model (different request/response format) */
@@ -51,12 +57,12 @@ export const MODELS: ModelConfig[] = [
 		provider: "workers-ai",
 		maxTokens: 512,
 	},
-  {
-    id: "@cf/moonshotai/kimi-k2.6",
-    name: "Kimi K2.6",
-    provider: "workers-ai",
-    maxTokens: 512,
-  },
+	{
+		id: "@cf/mistralai/mistral-small-3.1-24b-instruct",
+		name: "Mistral Small 3.1",
+		provider: "workers-ai",
+		maxTokens: 512,
+	},
 ];
 
 /** Model used for AI prompt generation in /api/setup */

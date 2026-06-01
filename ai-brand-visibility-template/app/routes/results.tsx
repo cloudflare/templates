@@ -1,15 +1,31 @@
-import { useLoaderData, useRevalidator, useSearchParams } from "react-router";
+import { useRevalidator, useSearchParams } from "react-router";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import type { Route } from "./+types/results";
 import { PageHeader, PageBody } from "~/components/page";
-import { Card, CardBody, CardTitle } from "~/components/card";
+import { Card, CardBody } from "~/components/card";
 import { Table, Thead, Th, Td, Tr } from "~/components/table";
 import { Button } from "~/components/button";
 import { DownloadButton } from "~/components/download-button";
 import { NoSiteSelected } from "~/components/empty-state";
-import { CaretDown, CaretLeft, CaretRight, Trash } from "@phosphor-icons/react";
+import {
+	CaretDownIcon,
+	CaretLeftIcon,
+	CaretRightIcon,
+	TrashIcon,
+} from "@phosphor-icons/react";
 
 const PAGE_SIZE = 20;
+
+type TestStatus = {
+	completed: number;
+	total: number;
+	status: "running" | "complete";
+};
+
+type TestStart = {
+	id: string;
+	total: number;
+};
 
 export function meta() {
 	return [{ title: "Results | AI Brand Visibility" }];
@@ -92,8 +108,6 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 		}
 	}, []);
 
-	if (!site) return <NoSiteSelected />;
-
 	// Poll active test every 3s
 	useEffect(() => {
 		if (!activeTestId || !testing) return;
@@ -102,9 +116,9 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 			while (!cancelled) {
 				await new Promise((r) => setTimeout(r, 3000));
 				try {
-					const s = await fetch(`/api/tests/${activeTestId}/status`).then((r) =>
-						r.json(),
-					);
+					const s = (await fetch(`/api/tests/${activeTestId}/status`).then(
+						(r) => r.json(),
+					)) as TestStatus;
 					if (cancelled) break;
 					setProgress({ completed: s.completed, total: s.total });
 					if (s.status === "complete") {
@@ -129,10 +143,10 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 		setTesting(true);
 		setProgress({ completed: 0, total: 0 });
 		try {
-			const run = await fetch(
+			const run = (await fetch(
 				`/api/sites/${encodeURIComponent(site.domain)}/test`,
 				{ method: "POST" },
-			).then((r) => r.json());
+			).then((r) => r.json())) as TestStart;
 			setActiveTestId(run.id);
 			setProgress({ completed: 0, total: run.total });
 		} catch (e) {
@@ -154,6 +168,8 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 		});
 		window.location.href = "/";
 	}, [site]);
+
+	if (!site) return <NoSiteSelected />;
 
 	const downloadFilteredCsv = () => {
 		if (!filtered.length) return;
@@ -195,7 +211,7 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 						<Button
 							variant="ghost"
 							onClick={deleteSite}
-							icon={<Trash size={14} />}
+							icon={<TrashIcon size={14} />}
 							className="text-neutral-400 hover:text-red-600"
 						>
 							Delete site
@@ -328,7 +344,7 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 												disabled={page === 0}
 												className="w-8 h-8 flex items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
 											>
-												<CaretLeft size={14} weight="bold" />
+												<CaretLeftIcon size={14} weight="bold" />
 											</button>
 											{Array.from({ length: totalPages }, (_, i) => (
 												<button
@@ -346,7 +362,7 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 												disabled={page >= totalPages - 1}
 												className="w-8 h-8 flex items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
 											>
-												<CaretRight size={14} weight="bold" />
+												<CaretRightIcon size={14} weight="bold" />
 											</button>
 										</div>
 									</div>
@@ -382,7 +398,7 @@ function FilterSelect({
 }) {
 	const isActive = value !== "all";
 	return (
-		<div className="relative min-w-[140px] max-w-[240px]">
+		<div className="relative min-w-[140px] max-w-60">
 			<select
 				value={value}
 				onChange={(e) => onChange(e.target.value)}
@@ -395,7 +411,7 @@ function FilterSelect({
 					</option>
 				))}
 			</select>
-			<CaretDown
+			<CaretDownIcon
 				size={12}
 				weight="bold"
 				className={`absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none ${isActive ? "text-white/70" : "text-neutral-400"}`}

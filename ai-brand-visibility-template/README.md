@@ -1,8 +1,10 @@
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/ai-brand-visibility-template)
+
 # AI Brand Visibility Template
 
-Test whether AI models mention your brand when answering relevant queries. Runs prompts through GPT-5.4, Claude Sonnet 4, Gemini 3 Flash, Llama 4, and Mistral — all through Cloudflare AI Gateway. No API keys needed.
+<!-- dash-content-start -->
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/ai-brand-visibility-template)
+Test whether AI models mention your brand when answering relevant queries. Runs prompts through GPT-5.4, Claude Sonnet 4, Gemini 3 Flash, Llama 4, and Mistral — all through Cloudflare AI Gateway. No API keys needed.
 
 ## What it does
 
@@ -13,6 +15,8 @@ Test whether AI models mention your brand when answering relevant queries. Runs 
 - **Real-time progress** — Poll-based UI shows results as they complete
 - **CSV export** — Download results filtered by model or prompt
 - **SSR** — React Router 7 + Hono on Cloudflare Workers, server-rendered
+
+<!-- dash-content-end -->
 
 ## Prerequisites
 

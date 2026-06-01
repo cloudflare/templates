@@ -1,11 +1,15 @@
-import { useLoaderData, useRevalidator } from "react-router";
+import { useRevalidator } from "react-router";
 import { useState, useCallback } from "react";
 import type { Route } from "./+types/prompts";
 import { PageHeader, PageBody } from "~/components/page";
 import { Card, CardHeader, CardBody } from "~/components/card";
 import { Button } from "~/components/button";
 import { NoSiteSelected } from "~/components/empty-state";
-import { Sparkle, X } from "@phosphor-icons/react";
+import { SparkleIcon, X } from "@phosphor-icons/react";
+
+type SetupResponse = {
+	prompts?: { text: string; tag: string }[];
+};
 
 export function meta() {
 	return [{ title: "Prompts | Brand Visibility Tester" }];
@@ -67,9 +71,9 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 	const generate = useCallback(async () => {
 		setGenerating(true);
 		try {
-			const d = await fetch(
+			const d = (await fetch(
 				`/api/setup?domain=${encodeURIComponent(domain)}`,
-			).then((r) => r.json());
+			).then((r) => r.json())) as SetupResponse;
 			setSuggestions(d.prompts ?? []);
 			setAddedSet(new Set());
 		} catch (e) {
@@ -97,7 +101,7 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 						variant="secondary"
 						onClick={generate}
 						loading={generating}
-						icon={<Sparkle size={14} />}
+						icon={<SparkleIcon size={14} />}
 					>
 						Generate suggestions
 					</Button>
