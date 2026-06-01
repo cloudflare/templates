@@ -5,6 +5,7 @@ export default defineWorkersConfig({
 		poolOptions: {
 			workers: {
 				wrangler: { configPath: "./wrangler.jsonc" },
+				remoteBindings: false,
 				miniflare: {
 					// Mock bindings for testing
 					d1Databases: ["DB"],

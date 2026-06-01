@@ -1,31 +1,6 @@
 {
 	"name": "workers-for-platforms-template",
-	"private": true,
 	"description": "Build your own website hosting platform with Workers for Platforms. Users can create and deploy sites through a simple web interface.",
-	"license": "Apache-2.0",
-	"engines": {
-		"node": ">=18"
-	},
-	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "^0.5.30",
-		"@cloudflare/workers-types": "^4.20241205.0",
-		"typescript": "^5.0.0",
-		"vitest": "^2.1.8",
-		"wrangler": "^3.99.0"
-	},
-	"scripts": {
-		"dev": "wrangler dev --remote",
-		"build": "node scripts/setup-quick.js",
-		"deploy": "wrangler deploy && node scripts/setup-quick.js --set-secrets",
-		"setup": "node scripts/setup.js",
-		"setup:quick": "node scripts/setup-quick.js",
-		"test": "vitest run",
-		"test:watch": "vitest"
-	},
-	"dependencies": {
-		"hono": "^4.2.1",
-		"workers-qb": "^0.1.1"
-	},
 	"cloudflare": {
 		"label": "Website Builder",
 		"products": [
@@ -47,5 +22,32 @@
 				"description": "(Optional) API token with **SSL and Certificates Edit** permission for custom domain support. [Create token](https://dash.cloudflare.com/profile/api-tokens)"
 			}
 		}
+	},
+	"dependencies": {
+		"hono": "4.11.1",
+		"workers-qb": "0.1.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/workers-types": "^4.20260507.1",
+		"@vitest/runner": "3.2.4",
+		"@vitest/snapshot": "3.2.4",
+		"typescript": "5.9.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"license": "Apache-2.0",
+	"private": true,
+	"scripts": {
+		"build": "node scripts/setup-quick.js",
+		"deploy": "wrangler deploy && node scripts/setup-quick.js --set-secrets",
+		"dev": "wrangler dev --remote",
+		"setup": "node scripts/setup.js",
+		"setup:quick": "node scripts/setup-quick.js",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	}
 }

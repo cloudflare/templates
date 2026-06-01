@@ -1,5 +1,6 @@
 {
 	"dependencyTypes": ["dev", "prod"],
+	"indent": "\t",
 	"semverGroups": [
 		{
 			"label": "don't pin @cloudflare/workers-types",
@@ -22,34 +23,10 @@
 			"pinVersion": "3.25.67"
 		},
 		{
-			"label": "Pin TypeScript 5.8.3 for templates using typescript-eslint due to peer dep",
-			"packages": [
-				"remix-starter-template",
-				"to-do-list-kv-template",
-				"vite-react-template"
-			],
-			"dependencies": ["typescript"],
-			"pinVersion": "5.8.3"
-		},
-		{
 			"label": "Allow vite 5 for Remix templates",
 			"packages": ["remix-starter-template", "to-do-list-kv-template"],
 			"dependencies": ["vite"],
 			"pinVersion": "5.4.14"
-		},
-		{
-			"label": "Allow React 19 for specific templates",
-			"packages": [
-				"react-router-starter-template",
-				"saas-admin-starter-template"
-			],
-			"dependencies": [
-				"react",
-				"react-dom",
-				"@types/react",
-				"@types/react-dom"
-			],
-			"pinVersion": "^19.0.0"
 		},
 		{
 			"label": "Keep React 18 for other templates",
@@ -89,18 +66,22 @@
 				"chanfana-openapi-template",
 				"d1-starter-sessions-api-template",
 				"llm-chat-app-template",
+				"microfrontend-template",
 				"mysql-hyperdrive-template",
 				"postgres-hyperdrive-template",
-				"to-do-list-kv-template"
+				"to-do-list-kv-template",
+				"workers-builds-notifications-template",
+				"workers-for-platforms-template",
+				"workflows-starter-template"
 			],
-			"dependencies": ["vitest"],
+			"dependencies": ["@vitest/runner", "@vitest/snapshot", "vitest"],
 			"pinVersion": "3.2.4"
 		},
 		{
-			"label": "Set vite to v6",
+			"label": "Set vite to v7",
 			"packages": ["*"],
 			"dependencies": ["vite"],
-			"pinVersion": "^6.0.0"
+			"pinVersion": "^7.0.0"
 		}
 	]
 }
