@@ -68,18 +68,12 @@ test.describe("Brand Visibility Worker Template", () => {
 		await expect(page.locator("body")).toContainText(/domain|site|website/i);
 	});
 
-	test("UI - Models selection page loads", async ({
-		page,
-		templateUrl,
-	}) => {
+	test("UI - Models selection page loads", async ({ page, templateUrl }) => {
 		// Create a test site first
 		const testDomain = "test.example.com";
-		const createResponse = await page.request.post(
-			`${templateUrl}/api/sites`,
-			{
-				data: { domain: testDomain },
-			},
-		);
+		const createResponse = await page.request.post(`${templateUrl}/api/sites`, {
+			data: { domain: testDomain },
+		});
 		expect(createResponse.ok()).toBeTruthy();
 
 		// Navigate to models page
@@ -103,18 +97,12 @@ test.describe("Brand Visibility Worker Template", () => {
 		expect(hasModelUI).toBeTruthy();
 	});
 
-	test("UI - Prompts management page loads", async ({
-		page,
-		templateUrl,
-	}) => {
+	test("UI - Prompts management page loads", async ({ page, templateUrl }) => {
 		// Create a test site first
 		const testDomain = "test2.example.com";
-		const createResponse = await page.request.post(
-			`${templateUrl}/api/sites`,
-			{
-				data: { domain: testDomain },
-			},
-		);
+		const createResponse = await page.request.post(`${templateUrl}/api/sites`, {
+			data: { domain: testDomain },
+		});
 		expect(createResponse.ok()).toBeTruthy();
 
 		// Navigate to prompts page

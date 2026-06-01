@@ -1,7 +1,7 @@
 {
 	"name": "brand-visibility-worker-template",
 	"description": "Test whether AI models mention your brand when answering relevant queries. Runs prompts through GPT-5.4, Claude Sonnet 4, Gemini 3 Flash, Llama 4, and Mistral via Cloudflare AI Gateway.",
-  "private": true,
+	"private": true,
 	"cloudflare": {
 		"label": "Brand Visibility Worker Template",
 		"products": [

@@ -1,34 +1,34 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "brand-visibility-worker-template",
-  "compatibility_date": "2025-10-08",
-  "main": "./workers/app.ts",
-  "upload_source_maps": true,
-  "observability": {
-    "enabled": true
-  },
-  "ai": {
-    "binding": "AI"
-  },
-  "kv_namespaces": [
-    {
-      "binding": "AEO_KV",
-      "id": "AEO_KV"
-    }
-  ],
-  "queues": {
-    "producers": [
-      {
-        "queue": "brand-visibility-jobs",
-        "binding": "TEST_QUEUE"
-      }
-    ],
-    "consumers": [
-      {
-        "queue": "brand-visibility-jobs",
-        "max_batch_size": 5,
-        "max_concurrency": 10
-      }
-    ]
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "brand-visibility-worker-template",
+	"compatibility_date": "2025-10-08",
+	"main": "./workers/app.ts",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "AEO_KV",
+			"id": "AEO_KV"
+		}
+	],
+	"queues": {
+		"producers": [
+			{
+				"queue": "brand-visibility-jobs",
+				"binding": "TEST_QUEUE"
+			}
+		],
+		"consumers": [
+			{
+				"queue": "brand-visibility-jobs",
+				"max_batch_size": 5,
+				"max_concurrency": 10
+			}
+		]
+	}
 }
