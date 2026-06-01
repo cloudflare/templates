@@ -106,11 +106,10 @@ async function callModel(env: Env, job: QueueJob): Promise<string> {
 			generationConfig: { maxOutputTokens: job.maxTokens },
 		};
 	} else if (job.isAnthropic) {
-		// Anthropic format - no system role in messages, prepend to user message
+		// Anthropic format
 		input = {
-			messages: [
-				{ role: "user", content: `${SYSTEM_PROMPT}\n\n${job.prompt}` },
-			],
+			system: SYSTEM_PROMPT,
+			messages: [{ role: "user", content: job.prompt }],
 			max_tokens: job.maxTokens,
 		};
 	} else {
