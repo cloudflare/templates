@@ -20,7 +20,7 @@
 		"producers": [
 			{
 				"queue": "brand-visibility-jobs",
-				"binding": "TEST_QUEUE"
+				"binding": "BRAND_VISIBILITY_QUEUE"
 			}
 		],
 		"consumers": [

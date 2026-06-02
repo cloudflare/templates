@@ -11,6 +11,7 @@ import {
 	CaretDownIcon,
 	CaretLeftIcon,
 	CaretRightIcon,
+	InfoIcon,
 	TrashIcon,
 } from "@phosphor-icons/react";
 
@@ -27,8 +28,12 @@ type TestStart = {
 	total: number;
 };
 
+type ApiError = {
+	error?: string;
+};
+
 export function meta() {
-	return [{ title: "Results | AI Brand Visibility" }];
+	return [{ title: "Results | AI Brand Visibility Template" }];
 }
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -39,18 +44,27 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 	const site = siteParam
 		? sites.find((s: any) => s.domain === siteParam)
 		: sites[0];
-	if (!site) return { site: null, latest: null };
+	if (!site) return { site: null, latest: null, prompts: [], models: [] };
 	const history =
 		((await env.AEO_KV.get(`site:${site.domain}:results`, "json")) as any[]) ??
 		[];
 	let latest = null;
 	if (history.length)
 		latest = await env.AEO_KV.get(`test:${history[0].id}`, "json");
-	return { site, latest };
+
+	// Fetch prompts and models for validation
+	const prompts =
+		((await env.AEO_KV.get(`site:${site.domain}:prompts`, "json")) as any[]) ??
+		[];
+	const models =
+		((await env.AEO_KV.get(`site:${site.domain}:models`, "json")) as any[]) ??
+		[];
+
+	return { site, latest, prompts, models };
 }
 
 export default function Results({ loaderData }: Route.ComponentProps) {
-	const { site, latest } = loaderData;
+	const { site, latest, prompts = [], models = [] } = loaderData;
 	const revalidator = useRevalidator();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const [testing, setTesting] = useState(false);
@@ -138,22 +152,57 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 		};
 	}, [activeTestId, testing, revalidator]);
 
+	const activePrompts = useMemo(
+		() => (Array.isArray(prompts) ? prompts.filter((p: any) => p.active) : []),
+		[prompts],
+	);
+	const hasActivePrompts = activePrompts.length > 0;
+	const hasEnabledModels = Array.isArray(models) && models.length > 0;
+	const canRunTest = hasActivePrompts && hasEnabledModels;
+
 	const runTest = useCallback(async () => {
 		if (!site) return;
+
+		// Re-check conditions at runtime
+		const activePromptsCheck = Array.isArray(prompts)
+			? prompts.filter((p: any) => p.active)
+			: [];
+		const hasPromptsCheck = activePromptsCheck.length > 0;
+		const hasModelsCheck = Array.isArray(models) && models.length > 0;
+
+		if (!hasPromptsCheck || !hasModelsCheck) {
+			alert(
+				!hasPromptsCheck
+					? "Please add and activate at least one prompt before running a test."
+					: "Please enable at least one model before running a test.",
+			);
+			return;
+		}
+
 		setTesting(true);
 		setProgress({ completed: 0, total: 0 });
 		try {
-			const run = (await fetch(
+			const response = await fetch(
 				`/api/sites/${encodeURIComponent(site.domain)}/test`,
 				{ method: "POST" },
-			).then((r) => r.json())) as TestStart;
+			);
+			const data = (await response.json()) as TestStart | ApiError;
+
+			if (!response.ok) {
+				const errorMsg = (data as ApiError).error || "Failed to start test";
+				alert(errorMsg);
+				setTesting(false);
+				return;
+			}
+
+			const run = data as TestStart;
 			setActiveTestId(run.id);
 			setProgress({ completed: 0, total: run.total });
 		} catch (e) {
 			alert(e instanceof Error ? e.message : "Test failed");
 			setTesting(false);
 		}
-	}, [site]);
+	}, [site, prompts, models]);
 
 	const deleteSite = useCallback(async () => {
 		if (!site) return;
@@ -205,7 +254,19 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 				subtitle={`${site.domain}${testTimestamp ? ` · ${new Date(testTimestamp).toLocaleString()}` : ""}`}
 				actions={
 					<>
-						<Button onClick={runTest} loading={testing}>
+						<Button
+							onClick={runTest}
+							loading={testing}
+							disabled={!canRunTest || testing}
+							title={
+								!canRunTest
+									? !hasActivePrompts
+										? "No active prompts configured"
+										: "No models enabled"
+									: ""
+							}
+							className={!canRunTest || testing ? "pointer-events-none" : ""}
+						>
 							{testing ? `${progress.completed}/${progress.total}` : "Run test"}
 						</Button>
 						<Button
@@ -220,6 +281,50 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 				}
 			/>
 			<PageBody>
+				{/* Setup required banner */}
+				{!canRunTest && !testing && (
+					<Card>
+						<CardBody className="flex items-center gap-3 bg-amber-50 border border-amber-200">
+							<InfoIcon
+								size={18}
+								weight="fill"
+								className="text-amber-600 shrink-0"
+							/>
+							<div className="flex-1 text-[13px] text-neutral-700">
+								{!hasActivePrompts && !hasEnabledModels ? (
+									<>
+										<strong>Setup required:</strong> Add prompts and enable
+										models before running a test.{" "}
+										<a href="/prompts" className="text-brand hover:underline">
+											Configure prompts
+										</a>
+										{" · "}
+										<a href="/models" className="text-brand hover:underline">
+											Select models
+										</a>
+									</>
+								) : !hasActivePrompts ? (
+									<>
+										<strong>No active prompts:</strong> Add and activate at
+										least one prompt to run a test.{" "}
+										<a href="/prompts" className="text-brand hover:underline">
+											Configure prompts
+										</a>
+									</>
+								) : (
+									<>
+										<strong>No models enabled:</strong> Enable at least one AI
+										model to run a test.{" "}
+										<a href="/models" className="text-brand hover:underline">
+											Select models
+										</a>
+									</>
+								)}
+							</div>
+						</CardBody>
+					</Card>
+				)}
+
 				{/* Progress banner */}
 				{testing && (
 					<Card>

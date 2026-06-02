@@ -1,19 +1,24 @@
-import { useRevalidator } from "react-router";
+import { useLoaderData, useRevalidator } from "react-router";
 import { useState, useCallback } from "react";
 import type { Route } from "./+types/prompts";
 import { PageHeader, PageBody } from "~/components/page";
 import { Card, CardHeader, CardBody } from "~/components/card";
 import { Button } from "~/components/button";
 import { NoSiteSelected } from "~/components/empty-state";
-import { SparkleIcon, X } from "@phosphor-icons/react";
+import { SparkleIcon, XIcon } from "@phosphor-icons/react";
+
+export function meta() {
+	return [{ title: "Prompts | AI Brand Visibility Template" }];
+}
+
+type Prompt = {
+	text: string;
+	active: boolean;
+};
 
 type SetupResponse = {
 	prompts?: { text: string; tag: string }[];
 };
-
-export function meta() {
-	return [{ title: "Prompts | Brand Visibility Tester" }];
-}
 
 export async function loader({ context, request }: Route.LoaderArgs) {
 	const env = context.cloudflare.env;
@@ -28,7 +33,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 		((await env.AEO_KV.get(
 			`site:${site.domain}:prompts`,
 			"json",
-		)) as string[]) ?? [];
+		)) as Prompt[]) ?? [];
 	return { site, prompts };
 }
 
@@ -50,6 +55,18 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ prompt: text }),
+			});
+			revalidator.revalidate();
+		},
+		[domain, revalidator],
+	);
+
+	const togglePrompt = useCallback(
+		async (text: string, active: boolean) => {
+			await fetch(`/api/sites/${encodeURIComponent(domain)}/prompts`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ prompt: text, active }),
 			});
 			revalidator.revalidate();
 		},
@@ -152,21 +169,33 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 
 				{/* Active prompts */}
 				<Card>
-					<CardHeader>Active prompts ({prompts.length})</CardHeader>
+					<CardHeader>Active prompts</CardHeader>
 					<CardBody flush>
 						{prompts.length ? (
 							prompts.map((p, i) => (
 								<div
 									key={i}
-									className="flex items-center gap-2 px-4 py-3 border-b border-neutral-100 last:border-b-0 text-[13px] group"
+									className="flex items-center gap-3 px-4 py-3 border-b border-neutral-100 last:border-b-0 text-[13px] group"
 								>
-									<span className="flex-1 text-neutral-900">{p}</span>
+									<input
+										type="checkbox"
+										checked={p.active}
+										onChange={(e) => togglePrompt(p.text, e.target.checked)}
+										className="w-4 h-4 accent-brand cursor-pointer shrink-0"
+									/>
+									<span
+										className={`flex-1 ${
+											p.active ? "text-neutral-900" : "text-neutral-400"
+										}`}
+									>
+										{p.text}
+									</span>
 									<button
-										onClick={() => deletePrompt(p)}
+										onClick={() => deletePrompt(p.text)}
 										className="w-7 h-7 flex items-center justify-center rounded-md text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-colors opacity-0 group-hover:opacity-100"
 										title="Remove"
 									>
-										<X size={14} weight="bold" />
+										<XIcon size={14} weight="bold" />
 									</button>
 								</div>
 							))

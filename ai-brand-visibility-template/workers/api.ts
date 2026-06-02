@@ -16,7 +16,7 @@ import type { ModelConfig } from "../src/config";
 type Env = {
 	AI: Ai;
 	AEO_KV: KVNamespace;
-	TEST_QUEUE: Queue;
+	BRAND_VISIBILITY_QUEUE: Queue;
 	TARGET_DOMAIN: string;
 };
 
@@ -55,6 +55,11 @@ type Citation = {
 	response: string;
 };
 
+type Prompt = {
+	text: string;
+	active: boolean;
+};
+
 export type QueueJob = {
 	testId: string;
 	domain: string;
@@ -64,6 +69,7 @@ export type QueueJob = {
 	prompt: string;
 	maxTokens: number;
 	isGemini?: boolean;
+	isAnthropic?: boolean;
 };
 
 export const apiRoutes = new Hono<{ Bindings: Env }>();
@@ -125,17 +131,29 @@ apiRoutes.post("/sites/:domain/prompts", async (c) => {
 	const b = await c.req.json<{ prompts?: string[]; prompt?: string }>();
 	const toAdd = b.prompts ?? (b.prompt ? [b.prompt] : []);
 	const cur = await getPrompts(c.env, d);
+	const newPrompts: Prompt[] = toAdd.map((text) => ({ text, active: true }));
 	await c.env.AEO_KV.put(
 		`site:${d}:prompts`,
-		JSON.stringify([...new Set([...cur, ...toAdd])]),
+		JSON.stringify([...cur, ...newPrompts]),
 	);
 	return c.json(await getPrompts(c.env, d));
+});
+
+apiRoutes.patch("/sites/:domain/prompts", async (c) => {
+	const d = c.req.param("domain");
+	const b = await c.req.json<{ prompt: string; active: boolean }>();
+	const prompts = await getPrompts(c.env, d);
+	const updated = prompts.map((p) =>
+		p.text === b.prompt ? { ...p, active: b.active } : p,
+	);
+	await c.env.AEO_KV.put(`site:${d}:prompts`, JSON.stringify(updated));
+	return c.json(updated);
 });
 
 apiRoutes.delete("/sites/:domain/prompts", async (c) => {
 	const d = c.req.param("domain");
 	const b = await c.req.json<{ prompt: string }>();
-	const cur = (await getPrompts(c.env, d)).filter((x) => x !== b.prompt);
+	const cur = (await getPrompts(c.env, d)).filter((p) => p.text !== b.prompt);
 	await c.env.AEO_KV.put(`site:${d}:prompts`, JSON.stringify(cur));
 	return c.json(await getPrompts(c.env, d));
 });
@@ -157,8 +175,10 @@ apiRoutes.put("/sites/:domain/models", async (c) => {
 
 apiRoutes.post("/sites/:domain/test", async (c) => {
 	const d = c.req.param("domain");
-	const prompts = await getPrompts(c.env, d);
-	if (!prompts.length) return c.json({ error: "No prompts configured" }, 400);
+	const allPrompts = await getPrompts(c.env, d);
+	const prompts = allPrompts.filter((p) => p.active).map((p) => p.text);
+	if (!prompts.length)
+		return c.json({ error: "No active prompts configured" }, 400);
 
 	const enabled = await getEnabledModels(c.env, d);
 	const models = MODELS.filter((m) => enabled.includes(m.id));
@@ -178,6 +198,7 @@ apiRoutes.post("/sites/:domain/test", async (c) => {
 				prompt,
 				maxTokens: model.maxTokens ?? 512,
 				isGemini: model.isGemini,
+				isAnthropic: model.isAnthropic,
 			});
 		}
 	}
@@ -198,7 +219,7 @@ apiRoutes.post("/sites/:domain/test", async (c) => {
 
 	// Enqueue in batches of 25
 	for (let i = 0; i < jobs.length; i += 25) {
-		await c.env.TEST_QUEUE.sendBatch(
+		await c.env.BRAND_VISIBILITY_QUEUE.sendBatch(
 			jobs.slice(i, i + 25).map((j) => ({ body: j })),
 		);
 	}
@@ -382,10 +403,15 @@ async function getSites(env: Env): Promise<Site[]> {
 	return ((await env.AEO_KV.get("sites", "json")) as Site[]) ?? [];
 }
 
-async function getPrompts(env: Env, domain: string): Promise<string[]> {
-	return (
-		((await env.AEO_KV.get(`site:${domain}:prompts`, "json")) as string[]) ?? []
-	);
+async function getPrompts(env: Env, domain: string): Promise<Prompt[]> {
+	const raw = await env.AEO_KV.get(`site:${domain}:prompts`, "json");
+	if (!raw) return [];
+
+	if (Array.isArray(raw) && raw.length > 0 && typeof raw[0] === "string") {
+		return (raw as string[]).map((text) => ({ text, active: true }));
+	}
+
+	return (raw as Prompt[]) ?? [];
 }
 
 async function getIndex(env: Env, domain: string): Promise<IndexEntry[]> {
@@ -492,6 +518,33 @@ async function handleSetup(
 				.map((s) => s.trim())
 				.filter(Boolean)
 		: [];
+
+	// If AI binding is not available, return mock prompts
+	if (!env.AI) {
+		console.log("AI binding not available, using mock prompts");
+		return c.json({
+			brandName: brand,
+			description: `Test prompts for ${domain}`,
+			prompts: [
+				{ text: `What is ${brand}?`, tag: "Branded" },
+				{
+					text: `How does ${brand} compare to alternatives?`,
+					tag: "Competitive",
+				},
+				{ text: `What are the key features of ${domain}?`, tag: "Category" },
+				{
+					text: `Is ${brand} a good choice for my needs?`,
+					tag: "Branded",
+				},
+				{
+					text: competitorList.length
+						? `Compare ${brand} vs ${competitorList[0]}`
+						: `What are alternatives to ${brand}?`,
+					tag: "Competitive",
+				},
+			],
+		});
+	}
 
 	const prompt = `You are an AI visibility consultant. Generate prompts to test whether AI assistants mention a brand.
 

@@ -6,7 +6,7 @@ import { queueConsumer } from "./queue";
 type Env = {
 	AI: Ai;
 	AEO_KV: KVNamespace;
-	TEST_QUEUE: Queue;
+	BRAND_VISIBILITY_QUEUE: Queue;
 	TARGET_DOMAIN: string;
 };
 

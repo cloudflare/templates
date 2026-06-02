@@ -6,10 +6,10 @@ import { Card, CardHeader, CardBody } from "~/components/card";
 import { Table, Thead, Th, Td, Tr } from "~/components/table";
 import { Badge, providerBadgeVariant, providerLabel } from "~/components/badge";
 import { NoSiteSelected } from "~/components/empty-state";
-import { Info } from "@phosphor-icons/react";
+import { InfoIcon } from "@phosphor-icons/react";
 
 export function meta() {
-	return [{ title: "Models | Brand Visibility Tester" }];
+	return [{ title: "Models | AI Brand Visibility Template" }];
 }
 
 export async function loader({ context, request }: Route.LoaderArgs) {
@@ -43,6 +43,8 @@ export default function Models({ loaderData }: Route.ComponentProps) {
 	const { site, models, enabled } = loaderData;
 	const revalidator = useRevalidator();
 
+	if (!site) return <NoSiteSelected />;
+
 	const toggleModel = useCallback(
 		async (modelId: string, checked: boolean) => {
 			let newEnabled = [...enabled];
@@ -58,8 +60,6 @@ export default function Models({ loaderData }: Route.ComponentProps) {
 		[site, enabled, revalidator],
 	);
 
-	if (!site) return <NoSiteSelected />;
-
 	return (
 		<>
 			<PageHeader
@@ -69,7 +69,7 @@ export default function Models({ loaderData }: Route.ComponentProps) {
 			<PageBody>
 				{/* Billing note */}
 				<div className="flex items-start gap-3 p-4 rounded-lg bg-blue-50 ring-1 ring-blue-100 text-[13px] text-blue-800">
-					<Info size={16} weight="fill" className="shrink-0 mt-0.5" />
+					<InfoIcon size={16} weight="fill" className="shrink-0 mt-0.5" />
 					<div>
 						<strong>Unified Billing.</strong> Third-party models (OpenAI,
 						Anthropic, Google) are charged via{" "}

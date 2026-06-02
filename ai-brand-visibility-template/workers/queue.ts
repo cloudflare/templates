@@ -83,11 +83,19 @@ async function executeJob(env: Env, job: QueueJob): Promise<Citation> {
 /**
  * Universal model caller — all models go through env.AI.run() with AI Gateway.
  * Handles OpenAI/Anthropic (messages format) and Gemini (contents format).
+ * Falls back to mock responses when AI binding is unavailable.
  */
 async function callModel(env: Env, job: QueueJob): Promise<string> {
+	// If AI binding is not available, return mock response
+	if (!env.AI) {
+		console.log("AI binding not available, using mock response");
+		return `Mock AI response from ${job.modelName}`;
+	}
+
 	let input: any;
 
 	if (job.isGemini) {
+		// Gemini format
 		input = {
 			contents: [
 				{
@@ -97,7 +105,15 @@ async function callModel(env: Env, job: QueueJob): Promise<string> {
 			],
 			generationConfig: { maxOutputTokens: job.maxTokens },
 		};
+	} else if (job.isAnthropic) {
+		// Anthropic format
+		input = {
+			system: SYSTEM_PROMPT,
+			messages: [{ role: "user", content: job.prompt }],
+			max_tokens: job.maxTokens,
+		};
 	} else {
+		// OpenAI/Workers AI format - supports system role
 		input = {
 			messages: [
 				{ role: "system", content: SYSTEM_PROMPT },

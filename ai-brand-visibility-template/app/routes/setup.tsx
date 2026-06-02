@@ -1,18 +1,23 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "~/components/button";
-import { PlusIcon, SparkleIcon, XIcon } from "@phosphor-icons/react";
+import { SparkleIcon, XIcon, PlusIcon } from "@phosphor-icons/react";
 
-type ModelOption = { name: string; id: string; provider: string };
-type ModelsResponse = { models?: ModelOption[] };
-type SetupResponse = {
-	brandName?: string;
-	prompts?: ({ text?: string; tag?: string } | string)[];
+type ModelsResponse = {
+	models: { name: string; id: string; provider: string }[];
 };
-type TestStart = { id: string };
+
+type SetupResponse = {
+	prompts?: (string | { text: string; tag?: string })[];
+	brandName?: string;
+};
+
+type TestStart = {
+	id: string;
+};
 
 export function meta() {
-	return [{ title: "Add Site | AI Brand Visibility" }];
+	return [{ title: "Add Site | AI Brand Visibility Template" }];
 }
 
 export default function Setup() {
@@ -28,7 +33,9 @@ export default function Setup() {
 	const [selectedPrompts, setSelectedPrompts] = useState<Set<string>>(
 		new Set(),
 	);
-	const [models, setModels] = useState<ModelOption[]>([]);
+	const [models, setModels] = useState<
+		{ name: string; id: string; provider: string }[]
+	>([]);
 	const [enabledModels, setEnabledModels] = useState<Set<string>>(new Set());
 	const [loading, setLoading] = useState(false);
 	const [generating, setGenerating] = useState(false);
@@ -68,16 +75,16 @@ export default function Setup() {
 		const guessedBrand = slug.charAt(0).toUpperCase() + slug.slice(1);
 		setBrandName(guessedBrand);
 		// Save site + load models in parallel (both fast)
-		const [, modelsData] = await Promise.all([
+		const [, modelsData] = (await Promise.all([
 			fetch("/api/sites", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ domain: d, brandName: guessedBrand }),
 			}),
-			fetch("/api/models").then((r) => r.json() as Promise<ModelsResponse>),
-		]);
+			fetch("/api/models").then((r) => r.json()),
+		])) as [Response, ModelsResponse];
 		setModels(modelsData.models ?? []);
-		setEnabledModels(new Set((modelsData.models ?? []).map((m) => m.id)));
+		setEnabledModels(new Set((modelsData.models ?? []).map((m: any) => m.id)));
 		setLoading(false);
 		setStep(1);
 	}, [domain]);
@@ -248,7 +255,7 @@ export default function Setup() {
 					</div>
 
 					<div
-						className="w-full max-w-152 absolute px-6"
+						className="w-full max-w-[38rem] absolute px-6"
 						style={{ top: COL_TOP }}
 					>
 						<h1
