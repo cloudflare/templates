@@ -165,13 +165,7 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 
 				{/* Active prompts */}
 				<Card>
-					<CardHeader className="flex items-center justify-between">
-						<span>Active prompts</span>
-						<span className="text-xs text-neutral-400 whitespace-nowrap">
-							{prompts.filter((p) => p.active).length} of {prompts.length}{" "}
-							enabled
-						</span>
-					</CardHeader>
+					<CardHeader>Active prompts</CardHeader>
 					<CardBody flush>
 						{prompts.length ? (
 							prompts.map((p, i) => (
