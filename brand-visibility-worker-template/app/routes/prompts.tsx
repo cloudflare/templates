@@ -11,6 +11,11 @@ export function meta() {
 	return [{ title: "Prompts | Brand Visibility Tester" }];
 }
 
+type Prompt = {
+	text: string;
+	active: boolean;
+};
+
 export async function loader({ context, request }: Route.LoaderArgs) {
 	const env = context.cloudflare.env;
 	const sites = ((await env.AEO_KV.get("sites", "json")) as any[]) ?? [];
@@ -24,7 +29,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
 		((await env.AEO_KV.get(
 			`site:${site.domain}:prompts`,
 			"json",
-		)) as string[]) ?? [];
+		)) as Prompt[]) ?? [];
 	return { site, prompts };
 }
 
@@ -46,6 +51,18 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ prompt: text }),
+			});
+			revalidator.revalidate();
+		},
+		[domain, revalidator],
+	);
+
+	const togglePrompt = useCallback(
+		async (text: string, active: boolean) => {
+			await fetch(`/api/sites/${encodeURIComponent(domain)}/prompts`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ prompt: text, active }),
 			});
 			revalidator.revalidate();
 		},
@@ -148,17 +165,35 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 
 				{/* Active prompts */}
 				<Card>
-					<CardHeader>Active prompts ({prompts.length})</CardHeader>
+					<CardHeader className="flex items-center justify-between">
+						<span>Active prompts</span>
+						<span className="text-xs text-neutral-400 whitespace-nowrap">
+							{prompts.filter((p) => p.active).length} of {prompts.length}{" "}
+							enabled
+						</span>
+					</CardHeader>
 					<CardBody flush>
 						{prompts.length ? (
 							prompts.map((p, i) => (
 								<div
 									key={i}
-									className="flex items-center gap-2 px-4 py-3 border-b border-neutral-100 last:border-b-0 text-[13px] group"
+									className="flex items-center gap-3 px-4 py-3 border-b border-neutral-100 last:border-b-0 text-[13px] group"
 								>
-									<span className="flex-1 text-neutral-900">{p}</span>
+									<input
+										type="checkbox"
+										checked={p.active}
+										onChange={(e) => togglePrompt(p.text, e.target.checked)}
+										className="w-4 h-4 accent-brand cursor-pointer shrink-0"
+									/>
+									<span
+										className={`flex-1 ${
+											p.active ? "text-neutral-900" : "text-neutral-400"
+										}`}
+									>
+										{p.text}
+									</span>
 									<button
-										onClick={() => deletePrompt(p)}
+										onClick={() => deletePrompt(p.text)}
 										className="w-7 h-7 flex items-center justify-center rounded-md text-neutral-400 hover:text-neutral-900 hover:bg-neutral-100 transition-colors opacity-0 group-hover:opacity-100"
 										title="Remove"
 									>
