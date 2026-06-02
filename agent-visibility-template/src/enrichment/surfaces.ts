@@ -92,7 +92,9 @@ export function renderIndexJson(ctx: RenderCtx) {
 	return {
 		protocol: INDEX_PROTOCOL,
 		site: { name: site.name, description: site.description },
-		generatedAt: new Date().toISOString(),
+		// Derived from the latest content update (not wall-clock) so identical
+		// content yields identical output — ETag/cache friendly.
+		generatedAt: latestUpdatedAt(resources),
 		surfaces: {
 			llmsTxt: `${site.origin}/llms.txt`,
 			llmsFullTxt: `${site.origin}/llms-full.txt`,
@@ -232,4 +234,14 @@ export function renderResourceJsonLd(args: {
 
 function firstSentence(text: string): string {
 	return text.split(/(?<=[.!?])\s+/)[0]?.trim() ?? text;
+}
+
+/** Most recent `updatedAt` across resources (epoch start if empty). */
+function latestUpdatedAt(resources: Resource[]): string {
+	let latest = 0;
+	for (const r of resources) {
+		const t = Date.parse(r.updatedAt);
+		if (Number.isFinite(t) && t > latest) latest = t;
+	}
+	return new Date(latest).toISOString();
 }
