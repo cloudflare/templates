@@ -11,6 +11,9 @@
 		"categories": [
 			"ai"
 		],
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/e3da9264-f2a0-4e95-390e-99446f822000/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
 		"bindings": {
 			"MERCHANT_NAME": {
 				"description": "Your store name (e.g., 'Acme Outdoors')"
@@ -47,20 +50,20 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"hono": "^4.7.0",
+		"hono": "4.11.1",
 		"react": "19.2.1",
 		"react-dom": "19.2.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.15.3",
-		"@cloudflare/vitest-pool-workers": "^0.8.36",
-		"@cloudflare/workers-types": "^4.20250327.0",
+		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/workers-types": "^4.20260507.1",
 		"@types/react": "19.2.7",
 		"@types/react-dom": "19.2.3",
 		"@vitejs/plugin-react": "5.1.1",
 		"typescript": "5.9.3",
-		"vite": "^6.0.0",
-		"vitest": "~3.0.0",
-		"wrangler": "4.56.0"
+		"vite": "^7.0.0",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
 	}
 }
