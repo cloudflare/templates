@@ -14,7 +14,10 @@
 		"categories": [
 			"ai"
 		],
-		"docs_url": "https://developers.cloudflare.com/ai-gateway/"
+		"docs_url": "https://developers.cloudflare.com/ai-gateway/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/9207b0e2-48fa-484b-bec3-670a2b4a5500/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true
 	},
 	"type": "module",
 	"scripts": {
