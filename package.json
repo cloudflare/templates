@@ -10,7 +10,7 @@
 		"prettier": "3.7.4",
 		"syncpack": "13.0.4",
 		"turbo": "2.6.1",
-		"vitest": "4.0.14"
+		"vitest": "4.1.0"
 	},
 	"engines": {
 		"node": ">=20.16.0 || >=22.3.0"

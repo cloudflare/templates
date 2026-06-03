@@ -23,7 +23,7 @@
 		"@vitest/snapshot": "3.2.4",
 		"durable-utils": "0.3.5",
 		"typescript": "5.9.3",
-		"vitest": "3.2.4",
+		"vitest": "4.1.0",
 		"wrangler": "4.88.0"
 	},
 	"private": true,
