@@ -95,9 +95,6 @@
     },
     "ai-brand-visibility-template": {
       "package_json_hash": "86df9d8fed71a83b8cf2f680b3e6e85ef15c3718"
-    },
-    "brand-visibility-worker-template": {
-      "package_json_hash": "86cbe50db0922474f327eca5e0b124685da77800"
     }
   }
 }

@@ -262,9 +262,9 @@ export default function Setup() {
 							className="hidden xl:block absolute text-[15px] font-medium text-neutral-900 whitespace-nowrap text-right leading-snug"
 							style={{ right: "calc(100% + 4rem)", top: -8 }}
 						>
-							Brand Visibility
+							AI Brand Visibility
 							<br />
-							Worker Template
+							Template
 						</h1>
 						<div
 							className="hidden xl:flex flex-col absolute"
