@@ -12,6 +12,9 @@
 			"ai"
 		],
 		"docs_url": "https://developers.cloudflare.com/workers-ai/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/9207b0e2-48fa-484b-bec3-670a2b4a5500/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
 		"bindings": {
 			"SITE_NAME": {
 				"description": "The name of your site (shown across every agent surface)"
@@ -33,32 +36,32 @@
 			}
 		}
 	},
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"dev": "vite",
-		"build": "tsc -b && vite build",
-		"preview": "npm run build && vite preview",
-		"deploy": "npm run build && wrangler deploy",
-		"cf-typegen": "wrangler types",
-		"check": "tsc && vite build && wrangler deploy --dry-run",
-		"test": "vitest run"
-	},
 	"dependencies": {
-		"hono": "^4.7.0",
+		"hono": "4.11.1",
 		"react": "19.2.1",
 		"react-dom": "19.2.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.15.3",
-		"@cloudflare/vitest-pool-workers": "^0.8.36",
-		"@cloudflare/workers-types": "^4.20250327.0",
+		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/workers-types": "^4.20260507.1",
 		"@types/react": "19.2.7",
 		"@types/react-dom": "19.2.3",
 		"@vitejs/plugin-react": "5.1.1",
 		"typescript": "5.9.3",
-		"vite": "^6.0.0",
-		"vitest": "~3.0.0",
-		"wrangler": "^4.57.0"
-	}
+		"vite": "^7.0.0",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc -b && vite build",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && vite build && wrangler deploy --dry-run",
+		"deploy": "npm run build && wrangler deploy",
+		"dev": "vite",
+		"preview": "npm run build && vite preview",
+		"test": "vitest run"
+	},
+	"type": "module"
 }

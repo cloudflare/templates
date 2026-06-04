@@ -186,8 +186,8 @@ before relying on it in production.
 npm test
 ```
 
-> Tests exercise the live Workers AI binding, so they require Cloudflare
-> credentials and may incur usage charges.
+The test suite seeds the KV cache before hitting the public surfaces, so it can
+run locally without making Workers AI requests.
 
 ## License
 
