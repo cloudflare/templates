@@ -24,33 +24,72 @@ interface Resource {
 
 function useSiteInfo() {
 	const [info, setInfo] = useState<SiteInfo | null>(null);
+	const [error, setError] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		fetch("/api/site")
-			.then((r) => r.json())
-			.then(setInfo)
-			.catch(() => setInfo(null));
+		async function loadSiteInfo() {
+			try {
+				const response = await fetch("/api/site");
+				if (!response.ok) {
+					throw new Error(
+						`/api/site returned ${response.status} ${response.statusText}`.trim(),
+					);
+				}
+				setInfo(await response.json());
+				setError(null);
+			} catch (error) {
+				setInfo(null);
+				setError(
+					error instanceof Error ? error.message : "Could not load /api/site.",
+				);
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		void loadSiteInfo();
 	}, []);
-	return info;
+	return { info, loading, error };
 }
 
 function SurfacePreview({ surface }: { surface: Surface }) {
 	const [open, setOpen] = useState(false);
 	const [body, setBody] = useState<string>("");
+	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [copied, setCopied] = useState(false);
 
 	async function load() {
 		setLoading(true);
+		setError(null);
 		try {
 			const res = await fetch(surface.path);
+			if (!res.ok) {
+				throw new Error(
+					`${surface.path} returned ${res.status} ${res.statusText}`.trim(),
+				);
+			}
 			const text = await res.text();
-			setBody(
-				surface.kind === "json"
-					? JSON.stringify(JSON.parse(text), null, 2)
-					: text,
+			if (surface.kind === "json") {
+				try {
+					setBody(JSON.stringify(JSON.parse(text), null, 2));
+				} catch (error) {
+					throw new Error(
+						`${surface.path} returned invalid JSON${
+							error instanceof Error ? `: ${error.message}` : "."
+						}`,
+					);
+				}
+			} else {
+				setBody(text);
+			}
+		} catch (error) {
+			setBody("");
+			setError(
+				error instanceof Error
+					? error.message
+					: `Could not load ${surface.path}.`,
 			);
-		} catch {
-			setBody("Failed to load surface.");
 		} finally {
 			setLoading(false);
 		}
@@ -63,6 +102,7 @@ function SurfacePreview({ surface }: { surface: Surface }) {
 	}
 
 	async function copy() {
+		if (!body) return;
 		await navigator.clipboard.writeText(body);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 1500);
@@ -86,6 +126,12 @@ function SurfacePreview({ surface }: { surface: Surface }) {
 				<div className="surface-body">
 					{loading ? (
 						<p className="muted">Loading…</p>
+					) : error ? (
+						<div className="error" role="alert">
+							<strong>Preview unavailable.</strong>
+							<p>{error}</p>
+							<p>Open the surface directly or check the Worker logs.</p>
+						</div>
 					) : (
 						<>
 							<button className="copy" onClick={copy}>
@@ -101,20 +147,54 @@ function SurfacePreview({ surface }: { surface: Surface }) {
 }
 
 export default function App() {
-	const info = useSiteInfo();
+	const { info, loading: siteLoading, error: siteError } = useSiteInfo();
 	const [resources, setResources] = useState<Resource[]>([]);
+	const [resourcesLoading, setResourcesLoading] = useState(true);
+	const [resourcesError, setResourcesError] = useState<string | null>(null);
 
 	useEffect(() => {
-		fetch("/api/resources")
-			.then((r) => r.json())
-			.then((d) => setResources(d.resources ?? []))
-			.catch(() => setResources([]));
+		async function loadResources() {
+			try {
+				const response = await fetch("/api/resources");
+				if (!response.ok) {
+					throw new Error(
+						`/api/resources returned ${response.status} ${response.statusText}`.trim(),
+					);
+				}
+				const data = await response.json();
+				setResources(data.resources ?? []);
+				setResourcesError(null);
+			} catch (error) {
+				setResources([]);
+				setResourcesError(
+					error instanceof Error
+						? error.message
+						: "Could not load /api/resources.",
+				);
+			} finally {
+				setResourcesLoading(false);
+			}
+		}
+
+		void loadResources();
 	}, []);
+
+	if (siteLoading) {
+		return (
+			<main className="container">
+				<p className="muted">Loading…</p>
+			</main>
+		);
+	}
 
 	if (!info) {
 		return (
 			<main className="container">
-				<p className="muted">Loading…</p>
+				<div className="error" role="alert">
+					<strong>Could not load site metadata.</strong>
+					<p>{siteError ?? "The /api/site response was empty."}</p>
+					<p>Refresh the page or check the Worker logs for /api/site.</p>
+				</div>
 			</main>
 		);
 	}
@@ -151,22 +231,36 @@ export default function App() {
 
 			<section>
 				<h2>Indexed pages ({resources.length})</h2>
-				<div className="cards">
-					{resources.map((r) => (
-						<article className="card" key={r.slug}>
-							<h3>
-								<a href={`/${r.slug}.md`} target="_blank" rel="noreferrer">
-									{r.title}
-								</a>
-							</h3>
-							{r.category && <span className="tag">{r.category}</span>}
-							<p>{r.summary}</p>
-							{r.topics.length > 0 && (
-								<p className="topics">{r.topics.join(" · ")}</p>
-							)}
-						</article>
-					))}
-				</div>
+				{resourcesLoading ? (
+					<p className="muted">Loading indexed pages…</p>
+				) : resourcesError ? (
+					<div className="error" role="alert">
+						<strong>Could not load indexed pages.</strong>
+						<p>{resourcesError}</p>
+						<p>Check /api/resources or the Worker logs, then refresh.</p>
+					</div>
+				) : resources.length === 0 ? (
+					<p className="muted">
+						No indexed pages returned from /api/resources.
+					</p>
+				) : (
+					<div className="cards">
+						{resources.map((r) => (
+							<article className="card" key={r.slug}>
+								<h3>
+									<a href={`/${r.slug}.md`} target="_blank" rel="noreferrer">
+										{r.title}
+									</a>
+								</h3>
+								{r.category && <span className="tag">{r.category}</span>}
+								<p>{r.summary}</p>
+								{r.topics.length > 0 && (
+									<p className="topics">{r.topics.join(" · ")}</p>
+								)}
+							</article>
+						))}
+					</div>
+				)}
 			</section>
 
 			<footer>

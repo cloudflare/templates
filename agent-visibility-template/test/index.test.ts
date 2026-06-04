@@ -91,6 +91,7 @@ describe("Agent Visibility template", () => {
 	it("serves robots.txt that welcomes known AI agents with a Content-Signal", async () => {
 		const res = await SELF.fetch(`${BASE}/robots.txt`);
 		expect(res.status).toBe(200);
+		expect(res.headers.get("content-signal")).toContain("ai-input=yes");
 		const text = await res.text();
 		expect(text).toContain("User-agent: GPTBot");
 		expect(text).toContain("llms.txt");
@@ -107,6 +108,7 @@ describe("Agent Visibility template", () => {
 	it("serves site-level JSON-LD at /jsonld", async () => {
 		const res = await SELF.fetch(`${BASE}/jsonld`);
 		expect(res.status).toBe(200);
+		expect(res.headers.get("content-type")).toContain("application/ld+json");
 		const json = (await res.json()) as Record<string, unknown>;
 		expect(json["@context"]).toBe("https://schema.org");
 		expect(json["@type"]).toBe("WebSite");
@@ -115,6 +117,7 @@ describe("Agent Visibility template", () => {
 	it("serves per-page JSON-LD at /:slug.jsonld", async () => {
 		const res = await SELF.fetch(`${BASE}/pricing.jsonld`);
 		expect(res.status).toBe(200);
+		expect(res.headers.get("content-type")).toContain("application/ld+json");
 		const json = (await res.json()) as Record<string, unknown>;
 		expect(json["@type"]).toBe("Article");
 	});
@@ -137,6 +140,13 @@ describe("Agent Visibility template", () => {
 			body: JSON.stringify({ slug: "x", body: "hi" }),
 		});
 		expect(res.status).toBe(401);
+	});
+
+	it("rejects unauthenticated refresh requests", async () => {
+		const res = await SELF.fetch(`${BASE}/api/refresh`, { method: "POST" });
+		expect(res.status).toBe(401);
+		const json = (await res.json()) as { error: string };
+		expect(json.error).toContain("Unauthorized");
 	});
 
 	it("rejects an invalid slug even when authenticated", async () => {
@@ -171,6 +181,20 @@ describe("Agent Visibility template", () => {
 
 		const md = await SELF.fetch(`${BASE}/changelog.md`);
 		expect(md.status).toBe(200);
+	});
+
+	it("accepts authenticated refresh requests and clears the enriched cache", async () => {
+		await env.VISIBILITY_CACHE.put(ENRICHED_KEY, JSON.stringify(SEEDED));
+
+		const res = await SELF.fetch(`${BASE}/api/refresh`, {
+			method: "POST",
+			headers: { authorization: "Bearer test-token" },
+		});
+		expect(res.status).toBe(200);
+		const json = (await res.json()) as { ok: boolean; message: string };
+		expect(json.ok).toBe(true);
+		expect(json.message).toContain("Cache cleared");
+		expect(await env.VISIBILITY_CACHE.get(ENRICHED_KEY)).toBeNull();
 	});
 
 	it("keeps the Web Bot Auth identity surface disabled by default", async () => {

@@ -166,6 +166,10 @@ falls back to deterministic enrichment and caches that degraded result for only
   per resource (or D1) and add pagination.
 - **KV is eventually consistent.** After a `POST`, a surface read in another
   region may briefly serve the previous version.
+- **Runtime writes use KV read-modify-write.** The mutating API is intended for
+  lightweight admin updates. Avoid concurrent writes; for high-volume or
+  multi-writer workflows, serialize writes through a Durable Object or move the
+  store to D1.
 - **Web Bot Auth is a minimal reference** (see below), not a hardened
   implementation — review the current drafts before relying on it.
 

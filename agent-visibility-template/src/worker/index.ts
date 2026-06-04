@@ -132,15 +132,20 @@ app.get("/robots.txt", async (c) => {
 			contentSignal: contentSignal(c)["Content-Signal"],
 		}),
 		200,
-		{ "Content-Type": "text/plain; charset=utf-8" },
+		{
+			"Content-Type": "text/plain; charset=utf-8",
+			...contentSignal(c),
+		},
 	);
 });
 
 app.get("/jsonld", async (c) => {
 	const site = siteConfig(c.env, originOf(c.req.url));
 	const resources = await getResources(c.env);
-	c.header("Content-Signal", contentSignal(c)["Content-Signal"]);
-	return c.json(renderWebsiteJsonLd({ site, resources }));
+	return c.json(renderWebsiteJsonLd({ site, resources }), 200, {
+		"Content-Type": "application/ld+json; charset=utf-8",
+		...contentSignal(c),
+	});
 });
 
 // Per-page Markdown: /:slug.md
@@ -163,8 +168,10 @@ app.get("/:file{.+\\.jsonld}", async (c) => {
 	const resources = await getResources(c.env);
 	const resource = resources.find((r) => r.slug === slug);
 	if (!resource) return c.notFound();
-	c.header("Content-Signal", contentSignal(c)["Content-Signal"]);
-	return c.json(renderResourceJsonLd({ resource, site }));
+	return c.json(renderResourceJsonLd({ resource, site }), 200, {
+		"Content-Type": "application/ld+json; charset=utf-8",
+		...contentSignal(c),
+	});
 });
 
 // ---------------------------------------------------------------------------
@@ -268,14 +275,6 @@ app.post("/api/refresh", async (c) => {
 	if (!isAuthorized(c)) {
 		return c.json({ error: "Unauthorized. Set the ADMIN_TOKEN secret." }, 401);
 	}
-	await clearCache(c.env);
-	return c.json({
-		ok: true,
-		message: "Cache cleared; surfaces will re-enrich.",
-	});
-});
-
-app.post("/api/refresh", async (c) => {
 	await clearCache(c.env);
 	return c.json({
 		ok: true,

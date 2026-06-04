@@ -37,6 +37,25 @@ h2 {
 	font-size: 0.95rem;
 }
 
+.error {
+	border: 1px solid rgba(190, 18, 60, 0.35);
+	border-radius: 10px;
+	background: rgba(190, 18, 60, 0.08);
+	color: #9f1239;
+	padding: 0.9rem 1rem;
+}
+
+.error p {
+	margin: 0.35rem 0 0;
+}
+
+@media (prefers-color-scheme: dark) {
+	.error {
+		background: rgba(251, 113, 133, 0.12);
+		color: #fda4af;
+	}
+}
+
 .surfaces {
 	display: flex;
 	flex-direction: column;
