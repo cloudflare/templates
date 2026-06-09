@@ -1,0 +1,14 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "browser-rendering-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"browser": {
+		"binding": "BROWSER"
+	},
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	}
+}

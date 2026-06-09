@@ -1,0 +1,24 @@
+{
+	"name": "browser-rendering-template",
+	"description": "Take a screenshot of any web page using Browser Rendering and Puppeteer.",
+	"cloudflare": {
+		"label": "Browser Rendering Screenshots",
+		"products": [
+			"Workers",
+			"Browser Rendering"
+		],
+		"docs_url": "https://developers.cloudflare.com/browser-rendering/"
+	},
+	"devDependencies": {
+		"@cloudflare/puppeteer": "1.1.0",
+		"typescript": "5.9.3",
+		"wrangler": "4.88.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev"
+	}
+}
