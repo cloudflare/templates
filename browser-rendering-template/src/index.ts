@@ -69,21 +69,33 @@ export default {
 			});
 		}
 
-		// Validate and normalize the requested URL before handing it to the browser.
-		let normalized: string;
+		// Validate the requested URL before handing it to the browser. `new URL()`
+		// also accepts schemes like `javascript:`, `data:`, and `file:`, so we
+		// must explicitly restrict to http(s). Note: this Worker screenshots
+		// arbitrary user-supplied URLs — if you adapt it for production, consider
+		// an allowlist or other SSRF mitigations.
+		let parsed: URL;
 		try {
-			normalized = new URL(target).toString();
+			parsed = new URL(target);
 		} catch {
 			return new Response(
 				"Invalid `url` parameter. Example: /?url=https://example.com",
 				{ status: 400 },
 			);
 		}
+		if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+			return new Response("Only http and https URLs are supported.", {
+				status: 400,
+			});
+		}
 
 		const browser = await puppeteer.launch(env.BROWSER);
 		try {
 			const page = await browser.newPage();
-			await page.goto(normalized, { waitUntil: "networkidle0" });
+			await page.goto(parsed.toString(), {
+				waitUntil: "networkidle0",
+				timeout: 15_000,
+			});
 			const screenshot = (await page.screenshot({
 				type: "jpeg",
 				quality: 80,
@@ -95,6 +107,12 @@ export default {
 					"cache-control": "public, max-age=3600",
 				},
 			});
+		} catch {
+			// Navigation timed out or the page failed to load.
+			return new Response(
+				"Failed to load the page. It may be too slow or unavailable.",
+				{ status: 504 },
+			);
 		} finally {
 			// Always release the browser session, even if navigation fails.
 			await browser.close();

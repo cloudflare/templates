@@ -7,6 +7,9 @@
 			"Workers",
 			"Browser Rendering"
 		],
+		"categories": [
+			"starter"
+		],
 		"docs_url": "https://developers.cloudflare.com/browser-rendering/"
 	},
 	"devDependencies": {

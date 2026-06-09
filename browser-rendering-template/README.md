@@ -1,5 +1,7 @@
 # Browser Rendering Screenshots
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/browser-rendering-template)
+
 A Cloudflare Worker that takes a screenshot of any web page using [Browser Rendering](https://developers.cloudflare.com/browser-rendering/) and [Cloudflare's fork of Puppeteer](https://developers.cloudflare.com/browser-run/puppeteer/).
 
 <!-- dash-content-start -->
@@ -48,3 +50,7 @@ npm run deploy
 ```
 
 Once deployed, take your first screenshot at `https://<your-worker>.<your-subdomain>.workers.dev/?url=https://example.com`.
+
+## A note on security
+
+This template screenshots arbitrary, user-supplied URLs and only restricts the scheme to `http`/`https`. If you build on it for production, consider adding an allowlist of permitted hosts or other [SSRF](https://owasp.org/www-community/attacks/Server_Side_Request_Forgery) mitigations.
