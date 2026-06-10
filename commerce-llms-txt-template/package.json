@@ -1,0 +1,69 @@
+{
+	"name": "commerce-llms-txt-template",
+	"description": "Make your product catalog visible to AI agents with a dynamic /llms.txt endpoint powered by Workers AI.",
+	"cloudflare": {
+		"label": "Commerce llms.txt",
+		"products": [
+			"Workers",
+			"AI",
+			"KV"
+		],
+		"categories": [
+			"ai"
+		],
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/e3da9264-f2a0-4e95-390e-99446f822000/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
+		"bindings": {
+			"MERCHANT_NAME": {
+				"description": "Your store name (e.g., 'Acme Outdoors')"
+			},
+			"MERCHANT_DESCRIPTION": {
+				"description": "A short description of your store for AI agents"
+			},
+			"SHOPIFY_STORE_DOMAIN": {
+				"description": "Your Shopify *.myshopify.com domain (leave empty to use sample catalog)"
+			},
+			"MERCHANT_VERTICAL": {
+				"description": "Your product vertical — guides how AI describes products (e.g., 'outdoor gear', 'electronics', 'fashion')"
+			},
+			"STORE_CURRENCY": {
+				"description": "Currency code for prices in llms.txt output (default: USD)"
+			},
+			"ENRICHMENT_CACHE_TTL": {
+				"description": "How long enriched products are cached in seconds (default: 3600)"
+			},
+			"AI_MODEL": {
+				"description": "Workers AI model ID for enrichment (default: @cf/google/gemma-4-26b-a4b-it)"
+			}
+		}
+	},
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "npm run build && vite preview",
+		"deploy": "npm run build && wrangler deploy",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && vite build && wrangler deploy --dry-run",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"hono": "4.11.1",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/workers-types": "^4.20260507.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"typescript": "5.9.3",
+		"vite": "^7.0.0",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	}
+}

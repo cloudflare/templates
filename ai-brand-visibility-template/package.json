@@ -1,0 +1,52 @@
+{
+	"name": "ai-brand-visibility-template",
+	"description": "Test whether AI models mention your brand when answering relevant queries. Runs prompts through GPT-5.4, Claude Sonnet 4, Gemini 3 Flash, Llama 4, and Mistral via Cloudflare AI Gateway.",
+	"private": true,
+	"cloudflare": {
+		"label": "AI Brand Visibility Template",
+		"products": [
+			"Workers",
+			"Workers AI",
+			"AI Gateway",
+			"KV",
+			"Queues"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/ai-gateway/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/9207b0e2-48fa-484b-bec3-670a2b4a5500/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true
+	},
+	"type": "module",
+	"scripts": {
+		"dev": "react-router dev",
+		"build": "react-router build",
+		"deploy": "npm run build && wrangler deploy",
+		"preview": "npm run build && vite preview",
+		"cf-typegen": "wrangler types",
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+	},
+	"dependencies": {
+		"@phosphor-icons/react": "^2.1.10",
+		"hono": "4.11.1",
+		"isbot": "5.1.32",
+		"react": "19.2.1",
+		"react-dom": "19.2.1",
+		"react-router": "7.9.6"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@cloudflare/workers-types": "^4.20250521.0",
+		"@react-router/dev": "7.9.6",
+		"@tailwindcss/vite": "4.1.17",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"tailwindcss": "4.1.17",
+		"typescript": "5.9.3",
+		"vite": "^6.0.0",
+		"vite-tsconfig-paths": "5.1.4",
+		"wrangler": "^4.17.0"
+	}
+}

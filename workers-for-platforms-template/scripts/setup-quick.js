@@ -41,6 +41,18 @@ function getVarFromWranglerToml(varName) {
 			return match[1];
 		}
 	}
+
+	const jsoncConfigPath = path.join(PROJECT_ROOT, "wrangler.jsonc");
+	if (fs.existsSync(jsoncConfigPath)) {
+		const content = fs.readFileSync(jsoncConfigPath, "utf-8");
+		const match = content.match(
+			new RegExp(`"${varName}"\\s*:\\s*["']([^"']*)["']`),
+		);
+		if (match && match[1] && match[1] !== "") {
+			return match[1];
+		}
+	}
+
 	return null;
 }
 
@@ -93,7 +105,17 @@ function getDispatchNamespaceFromConfig() {
 		if (varMatch) return varMatch[1];
 	}
 
-	return "workers-platform-template";
+	const jsoncConfigPath = path.join(PROJECT_ROOT, "wrangler.jsonc");
+	if (fs.existsSync(jsoncConfigPath)) {
+		const content = fs.readFileSync(jsoncConfigPath, "utf-8");
+		const match = content.match(/"namespace"\s*:\s*"([^"]+)"/);
+		if (match) return match[1];
+
+		const varMatch = content.match(/"DISPATCH_NAMESPACE_NAME"\s*:\s*"([^"]+)"/);
+		if (varMatch) return varMatch[1];
+	}
+
+	return "workers-for-platforms-template";
 }
 
 function ensureDispatchNamespace(namespaceName) {
@@ -306,6 +328,15 @@ async function detectZoneId(config) {
 }
 
 function updateWranglerConfig(config) {
+	if (
+		!config.accountId &&
+		!config.customDomain &&
+		!config.zoneId &&
+		!config.fallbackOrigin
+	) {
+		return false;
+	}
+
 	const wranglerPath = path.join(PROJECT_ROOT, "wrangler.toml");
 
 	if (!fs.existsSync(wranglerPath)) {

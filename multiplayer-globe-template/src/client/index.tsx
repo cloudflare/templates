@@ -7,11 +7,10 @@ import usePartySocket from "partysocket/react";
 
 // The type of messages we'll be receiving from the server
 import type { OutgoingMessage } from "../shared";
-import type { LegacyRef } from "react";
 
 function App() {
 	// A reference to the canvas element where we'll render the globe
-	const canvasRef = useRef<HTMLCanvasElement>();
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	// The number of markers we're currently displaying
 	const [counter, setCounter] = useState(0);
 	// A map of marker IDs to their positions
@@ -51,11 +50,13 @@ function App() {
 	});
 
 	useEffect(() => {
+		if (!canvasRef.current) return;
+
 		// The angle of rotation of the globe
 		// We'll update this on every frame to make the globe spin
 		let phi = 0;
 
-		const globe = createGlobe(canvasRef.current as HTMLCanvasElement, {
+		const globe = createGlobe(canvasRef.current, {
 			devicePixelRatio: 2,
 			width: 400 * 2,
 			height: 400 * 2,
@@ -101,7 +102,7 @@ function App() {
 
 			{/* The canvas where we'll render the globe */}
 			<canvas
-				ref={canvasRef as LegacyRef<HTMLCanvasElement>}
+				ref={canvasRef}
 				style={{ width: 400, height: 400, maxWidth: "100%", aspectRatio: 1 }}
 			/>
 

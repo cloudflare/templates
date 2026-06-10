@@ -1,0 +1,67 @@
+{
+	"name": "agent-visibility-template",
+	"description": "Make your content visible to AI agents across every discovery surface — llms.txt, a typed JSON index, per-page Markdown, robots.txt, Content-Signal headers, and JSON-LD — all generated from one store by Workers AI.",
+	"cloudflare": {
+		"label": "AI Agent Visibility",
+		"products": [
+			"Workers",
+			"Workers AI",
+			"KV"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers-ai/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/60892561-2c5e-4e84-8c9c-d82963602200/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
+		"bindings": {
+			"SITE_NAME": {
+				"description": "The name of your site (shown across every agent surface)"
+			},
+			"SITE_DESCRIPTION": {
+				"description": "A one-line description of your site for AI agents"
+			},
+			"AI_MODEL": {
+				"description": "Workers AI model ID used for enrichment (default: @cf/meta/llama-3.3-70b-instruct-fp8-fast)"
+			},
+			"ENRICHMENT_CACHE_TTL": {
+				"description": "How long enriched records are cached in seconds (default: 3600)"
+			},
+			"CONTENT_SIGNAL": {
+				"description": "Content-Signal header value declaring agent usage intent (default: ai-input=yes, search=yes, ai-train=no)"
+			},
+			"ENABLE_WEB_BOT_AUTH": {
+				"description": "Set to 'true' to expose the optional Web Bot Auth identity surface (default: false)"
+			}
+		}
+	},
+	"dependencies": {
+		"hono": "4.11.1",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/workers-types": "^4.20260507.1",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"typescript": "5.9.3",
+		"vite": "^7.0.0",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc -b && vite build",
+		"cf-typegen": "wrangler types",
+		"check": "tsc -b && vite build && wrangler deploy --dry-run",
+		"deploy": "npm run build && wrangler deploy",
+		"dev": "vite",
+		"preview": "npm run build && vite preview",
+		"test": "vitest run"
+	},
+	"type": "module"
+}

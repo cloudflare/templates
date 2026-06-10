@@ -3,3 +3,7 @@ overrides:
       - "*.jsonc"
     options:
       trailingComma: none
+  - files:
+      - "saas-admin-template/package.json"
+    options:
+      useTabs: true
