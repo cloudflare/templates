@@ -11,7 +11,9 @@
 			"ai"
 		],
 		"docs_url": "https://developers.cloudflare.com/kv/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5a24f3f7-d7f8-4ebc-2632-f59324097200/public",
 		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
 		"bindings": {
 			"MERCHANT_NAME": {
 				"description": "Your store name, shown in the dashboard header (e.g., 'Mountain Kids Outfitters')."
