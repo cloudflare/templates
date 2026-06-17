@@ -1,0 +1,63 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "edge-fullstack-starter",
+	"main": "./server/index.ts",
+	"compatibility_date": "2025-05-01",
+	// AsyncLocalStorage — required by better-auth's request context.
+	"compatibility_flags": ["nodejs_compat"],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./dist/client",
+		"not_found_handling": "single-page-application",
+		// The asset binding is greedy: for /api/* it would otherwise fall through
+		// to index.html (the SPA shell) and let the edge cache that response under
+		// a path-only key — catastrophic for auth (a different user's session
+		// response served to everyone). Force the Worker first for the API surface.
+		"run_worker_first": ["/api/*"]
+	},
+	"observability": {
+		"enabled": true
+	},
+	// ---------------------------------------------------------------------------
+	// Bindings below are declared with placeholder ids. When someone clicks the
+	// "Deploy to Cloudflare" button, Cloudflare creates a fresh D1 / KV / R2 in
+	// THEIR account and rewrites these ids automatically. Locally, `npm run dev`
+	// uses emulated resources (the ids are ignored), so the app just works with
+	// no setup. The only thing you must supply is BETTER_AUTH_SECRET — see
+	// .dev.vars.example (prompted at deploy time, or put it in .dev.vars locally).
+	// ---------------------------------------------------------------------------
+
+	// D1 — relational app data (notes) AND the auth tables (user / account /
+	// verification) live in ONE database. One binding, one billing line, real
+	// foreign keys (notes.user_id -> user.id). The Worker creates the tables on
+	// first request if they're missing, so a brand-new D1 needs no migration step.
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "edge-fullstack-db",
+			"database_id": "00000000-0000-0000-0000-000000000000",
+			"migrations_dir": "./migrations"
+		}
+	],
+
+	// KV — session storage. Auth checks happen on every authenticated request;
+	// a session lookup is a ~ms edge-cached KV read instead of a billed D1 row
+	// read. This is the single biggest cost lever in an auth app (see README).
+	"kv_namespaces": [
+		{
+			"binding": "SESSIONS",
+			"id": "00000000000000000000000000000000"
+		}
+	],
+
+	// R2 — file/object storage with zero egress fees. This template uploads
+	// through the Worker via the binding (env.BUCKET.put) for true zero-config.
+	// For production scale, switch to presigned direct-to-R2 uploads — see the
+	// "Going further" note in the README.
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "edge-fullstack-uploads"
+		}
+	]
+}

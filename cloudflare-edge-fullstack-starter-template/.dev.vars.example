@@ -1,0 +1,8 @@
+# Copy to .dev.vars for local dev. At deploy time (the "Deploy to Cloudflare"
+# button), Cloudflare prompts you for these values and stores them as Worker
+# secrets — they are never committed.
+
+# Signs session tokens. MUST be a random, secret string. Generate one with:
+#   openssl rand -base64 32
+# Anyone who knows this value can forge any user's session — keep it secret.
+BETTER_AUTH_SECRET=replace-me-with-a-long-random-string

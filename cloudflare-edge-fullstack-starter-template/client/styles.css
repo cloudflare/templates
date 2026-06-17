@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+html,
+body {
+	background: #fafaf9; /* stone-50 */
+	color: #1c1917; /* stone-900 */
+}
+
+/* Component classes referenced from the pages. Defined as plain CSS (not
+   @apply) so they never depend on Tailwind scanning the TSX for these
+   exact utility strings. */
+@layer components {
+	.input {
+		width: 100%;
+		border-radius: 0.5rem;
+		border: 1px solid #d6d3d1; /* stone-300 */
+		background: #fff;
+		padding: 0.5rem 0.75rem;
+		font-size: 0.875rem;
+		color: #1c1917;
+		outline: none;
+	}
+	.input:focus {
+		border-color: #fb923c; /* orange-400 */
+		box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.2);
+	}
+
+	.btn-primary {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0.5rem;
+		background: #ea580c; /* orange-600 */
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #fff;
+		cursor: pointer;
+	}
+	.btn-primary:hover {
+		background: #c2410c; /* orange-700 */
+	}
+	.btn-primary:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	.btn-ghost {
+		border-radius: 0.5rem;
+		padding: 0.375rem 0.75rem;
+		font-size: 0.875rem;
+		color: #57534e; /* stone-600 */
+		cursor: pointer;
+	}
+	.btn-ghost:hover {
+		background: #f5f5f4; /* stone-100 */
+	}
+}
