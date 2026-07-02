@@ -101,6 +101,9 @@
     },
     "commerce-llms-txt-template": {
       "package_json_hash": "73d700ad98c614ad2ab8b3da1ebb182cdacb94f4"
+    },
+    "security-txt-template": {
+      "package_json_hash": ""
     }
   }
 }
