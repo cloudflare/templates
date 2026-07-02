@@ -1,0 +1,6 @@
+#### 5. Paste into `.gitignore` (Standard Git Exclusions):
+```text
+node_modules/
+.wrangler/
+package-lock.json
+dist/

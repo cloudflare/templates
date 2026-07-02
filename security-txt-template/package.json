@@ -1,0 +1,22 @@
+{
+  "name": "cloudflare-security-txt",
+  "version": "1.0.0",
+  "description": "Deploy an RFC 9116 compliant security.txt on Cloudflare Workers",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "start": "wrangler dev"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "security.txt",
+    "rfc-9116",
+    "vulnerability-disclosure"
+  ],
+  "author": "SEOSiri <info@seosiri.com> (https://www.seosiri.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
