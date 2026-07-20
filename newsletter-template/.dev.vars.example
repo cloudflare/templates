@@ -1,0 +1,14 @@
+# These are filled in on the "Deploy to Cloudflare" screen — no CLI needed.
+# For local development, copy this file to `.dev.vars` and fill in real values.
+
+# Password that protects your send page (/admin). Use a long, random string.
+ADMIN_TOKEN=change-me-to-a-long-random-string
+
+# When you connect your own email provider (see src/email.ts), add its
+# secret(s) here too, e.g.:
+# EMAIL_API_KEY=
+
+# Optional bot protection with Cloudflare Turnstile (https://developers.cloudflare.com/turnstile).
+# Set BOTH the secret here and the public TURNSTILE_SITE_KEY var (wrangler.json)
+# to enable it. Leave unset to disable.
+# TURNSTILE_SECRET_KEY=
