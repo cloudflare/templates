@@ -72,8 +72,9 @@ export async function sendEmail(
 // thousands with a handful of subrequests, even on the Workers free plan
 // (raise the SEND_BATCH variable accordingly).
 //
-// Contract: deliver all given emails or throw. On a throw the whole run is
-// put back in the queue and retried (up to 3 attempts per recipient).
+// Contract: deliver all given emails or throw. If the batch call throws, the
+// same run falls back to per-email sendEmail() delivery; anything that still
+// fails is retried on later runs (up to 3 attempts per recipient).
 //
 // Example — the shape matches typical batch APIs (an `emails` array, one
 // entry per message, per-message custom headers; most cap a call at ~1,000):
@@ -100,6 +101,10 @@ export async function sendEmail(
 //         })),
 //       }),
 //     });
-//     if (!res.ok) throw new Error(`batch send failed: ${res.status}`);
+//     // Include the response body: batch APIs put the reason a call was
+//     // rejected there, and the queue logs this message on failure.
+//     if (!res.ok) {
+//       throw new Error(`batch send failed: ${res.status} ${await res.text().catch(() => "")}`);
+//     }
 //   }
 // }

@@ -226,26 +226,39 @@ async function drainOutbox(env: Bindings): Promise<void> {
 		else failed.push(row);
 	}
 
+	const sendIndividually = async (
+		list: { row: OutboxRow; msg: OutgoingEmail }[],
+	) => {
+		for (const d of list) {
+			try {
+				await sendEmail(env, d.msg);
+				sent.push(d.row);
+			} catch (err) {
+				console.error(`sendEmail to ${d.msg.to} failed:`, err);
+				failed.push(d.row);
+			}
+		}
+	};
+
 	if (sendEmailBatch && deliverable.length) {
-		// One API call (or a few, chunked in the adapter) for the whole run.
+		// One API call (or a few, chunked in the adapter) for the whole run. If
+		// the batch call fails, fall back to per-email delivery so a broken batch
+		// adapter degrades to slower sends instead of burning retry attempts.
 		try {
 			await sendEmailBatch(
 				env,
 				deliverable.map((d) => d.msg),
 			);
 			sent.push(...deliverable.map((d) => d.row));
-		} catch {
-			failed.push(...deliverable.map((d) => d.row));
+		} catch (err) {
+			console.error(
+				"sendEmailBatch failed, falling back to per-email delivery:",
+				err,
+			);
+			await sendIndividually(deliverable);
 		}
 	} else {
-		for (const d of deliverable) {
-			try {
-				await sendEmail(env, d.msg);
-				sent.push(d.row);
-			} catch {
-				failed.push(d.row);
-			}
-		}
+		await sendIndividually(deliverable);
 	}
 
 	// Book results: successes leave the queue and count on the campaign;
