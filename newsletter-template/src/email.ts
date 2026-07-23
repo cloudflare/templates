@@ -62,3 +62,44 @@ export async function sendEmail(
 	// });
 	// if (!res.ok) throw new Error(`email send failed: ${res.status}`);
 }
+
+// --- Optional: batch delivery ----------------------------------------------
+//
+// Most providers also offer a batch endpoint: one API call carrying many
+// emails, each with its own body and headers. If yours does, export a
+// `sendEmailBatch` function here — the background queue then uses it instead
+// of one call per recipient, and a single run can deliver hundreds or
+// thousands with a handful of subrequests, even on the Workers free plan
+// (raise the SEND_BATCH variable accordingly).
+//
+// Contract: deliver all given emails or throw. On a throw the whole run is
+// put back in the queue and retried (up to 3 attempts per recipient).
+//
+// Example — the shape matches typical batch APIs (an `emails` array, one
+// entry per message, per-message custom headers; most cap a call at ~1,000):
+//
+// export async function sendEmailBatch(
+//   env: MailEnv,
+//   emails: { to: string; subject: string; html: string; headers: Record<string, string> }[],
+// ): Promise<void> {
+//   const sender = `${env.FROM_NAME || "Newsletter"} <${env.FROM_EMAIL || "newsletter@example.com"}>`;
+//   for (let i = 0; i < emails.length; i += 1000) {
+//     const res = await fetch("https://YOUR_EMAIL_API/email/batch", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": `Bearer ${env.EMAIL_API_KEY}`,
+//       },
+//       body: JSON.stringify({
+//         emails: emails.slice(i, i + 1000).map((m) => ({
+//           sender,
+//           to: [m.to],
+//           subject: m.subject,
+//           html_body: m.html,
+//           custom_headers: Object.entries(m.headers).map(([header, value]) => ({ header, value })),
+//         })),
+//       }),
+//     });
+//     if (!res.ok) throw new Error(`batch send failed: ${res.status}`);
+//   }
+// }

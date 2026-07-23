@@ -22,6 +22,9 @@
 			},
 			"DOUBLE_OPT_IN": {
 				"description": "Set to \"true\" to require subscribers to confirm via a link before they're added (needs email configured). Default \"false\" (single opt-in)."
+			},
+			"SEND_BATCH": {
+				"description": "Queued emails delivered per minutely background run. The default 40 fits the free plan; raise it on the paid plan or when sendEmailBatch is implemented in src/email.ts."
 			}
 		}
 	},

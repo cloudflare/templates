@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { sendEmail, isEmailConfigured } from "./email";
+import * as mail from "./email";
 import {
 	signupPage,
 	embedPage,
@@ -24,7 +25,26 @@ type Bindings = {
 	PUBLIC_URL?: string;
 	SENDER_ADDRESS?: string;
 	PRIVACY_URL?: string;
+	SEND_BATCH?: string;
 };
+
+// One outgoing email, ready for delivery.
+type OutgoingEmail = {
+	to: string;
+	subject: string;
+	html: string;
+	headers: Record<string, string>;
+};
+
+// Optional batch hook: when src/email.ts exports sendEmailBatch (one API call,
+// many emails — see the commented example there), the queue drain uses it
+// instead of one call per recipient. Looked up loosely so a customized
+// email.ts from an older version keeps compiling.
+const sendEmailBatch = (
+	mail as {
+		sendEmailBatch?: (env: Bindings, emails: OutgoingEmail[]) => Promise<void>;
+	}
+).sendEmailBatch;
 
 const app = new Hono<{ Bindings: Bindings }>();
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,42 +91,186 @@ const applyMergeTags = (
 		.replaceAll("{{email}}", email)
 		.replaceAll("{{name}}", name || "");
 
-// Send one campaign to every subscribed address; log it. Shared by the admin
-// send endpoint and the RSS auto-send job.
-async function broadcast(
+// Store a campaign and queue one outbox row per subscribed address. Delivery
+// happens in the background: the minutely cron drains the queue in
+// SEND_BATCH-sized runs, which keeps every Worker invocation inside the free
+// plan's subrequest limits no matter how large the list is. Shared by the
+// admin send endpoint and the RSS auto-send job.
+async function enqueueCampaign(
 	env: Bindings,
 	baseUrl: string,
 	subject: string,
 	html: string,
-): Promise<{ sent: number; failed: number }> {
-	const { results } = await env.DB.prepare(
-		`SELECT email, name, unsub_token FROM subscribers WHERE status = 'subscribed'`,
-	).all<{ email: string; name: string | null; unsub_token: string }>();
+): Promise<number> {
+	const campaign = await env.DB.prepare(
+		`INSERT INTO campaigns (subject, body_html, base_url) VALUES (?1, ?2, ?3) RETURNING id`,
+	)
+		.bind(subject, html, baseUrl)
+		.first<{ id: number }>();
+	if (!campaign) return 0;
+	const res = await env.DB.prepare(
+		`INSERT INTO outbox (campaign_id, email, name, unsub_token)
+     SELECT ?1, email, name, unsub_token FROM subscribers WHERE status = 'subscribed'`,
+	)
+		.bind(campaign.id)
+		.run();
+	return res.meta.changes ?? 0;
+}
 
-	let sent = 0,
-		failed = 0;
-	for (const r of results) {
-		const unsub = unsubUrl(baseUrl, r.unsub_token);
+// Emails delivered per drain run. The default of 40 fits the free plan's
+// ~50 outbound calls per invocation; raise it on the paid plan, or implement
+// sendEmailBatch (one call per ~1,000 emails) and raise it a lot.
+const sendBatchSize = (env: Bindings) =>
+	Math.min(5000, Math.max(1, parseInt(env.SEND_BATCH ?? "", 10) || 40));
+
+type OutboxRow = {
+	id: number;
+	campaign_id: number;
+	email: string;
+	name: string | null;
+	unsub_token: string;
+	attempts: number;
+};
+
+const countByCampaign = (rows: OutboxRow[]) => {
+	const m = new Map<number, number>();
+	for (const r of rows) m.set(r.campaign_id, (m.get(r.campaign_id) ?? 0) + 1);
+	return m;
+};
+
+// Deliver the next chunk of the queue. Runs every minute on the cron. Rows
+// are claimed atomically (pending -> sending), so overlapping runs can never
+// double-send; rows stuck in 'sending' (a crashed run) are reclaimed after
+// 10 minutes and give up as 'failed' after 3 attempts.
+async function drainOutbox(env: Bindings): Promise<void> {
+	if (!isEmailConfigured(env)) return;
+
+	// Honor opt-outs that happened after queueing: their pending rows are
+	// cancelled, not delivered.
+	await env.DB.prepare(
+		`DELETE FROM outbox WHERE status = 'pending'
+     AND email NOT IN (SELECT email FROM subscribers WHERE status = 'subscribed')`,
+	).run();
+
+	const { results: rows } = await env.DB.prepare(
+		`UPDATE outbox SET status = 'sending', attempts = attempts + 1, claimed_at = datetime('now')
+     WHERE id IN (
+       SELECT id FROM outbox
+       WHERE (status = 'pending' OR (status = 'sending' AND claimed_at < datetime('now', '-10 minutes')))
+         AND attempts < 3
+       ORDER BY id LIMIT ?1
+     )
+     RETURNING id, campaign_id, email, name, unsub_token, attempts`,
+	)
+		.bind(sendBatchSize(env))
+		.all<OutboxRow>();
+	if (!rows.length) return;
+
+	// Campaign bodies for this chunk.
+	const ids = [...new Set(rows.map((r) => r.campaign_id))];
+	const { results: campaigns } = await env.DB.prepare(
+		`SELECT id, subject, body_html, base_url FROM campaigns WHERE id IN (${ids.map(() => "?").join(",")})`,
+	)
+		.bind(...ids)
+		.all<{
+			id: number;
+			subject: string;
+			body_html: string | null;
+			base_url: string | null;
+		}>();
+	const campaignById = new Map(campaigns.map((c) => [c.id, c]));
+
+	const build = (r: OutboxRow): OutgoingEmail | null => {
+		const c = campaignById.get(r.campaign_id);
+		if (!c?.body_html || !c.base_url) return null;
+		const unsub = unsubUrl(c.base_url, r.unsub_token);
+		return {
+			to: r.email,
+			subject: c.subject,
+			html:
+				applyMergeTags(
+					c.base_url,
+					c.body_html,
+					r.unsub_token,
+					r.email,
+					r.name,
+				) + complianceFooter(env, unsub),
+			headers: listHeaders(unsub),
+		};
+	};
+
+	const sent: OutboxRow[] = [];
+	const failed: OutboxRow[] = [];
+	const deliverable: { row: OutboxRow; msg: OutgoingEmail }[] = [];
+	for (const row of rows) {
+		const msg = build(row);
+		if (msg) deliverable.push({ row, msg });
+		else failed.push(row);
+	}
+
+	if (sendEmailBatch && deliverable.length) {
+		// One API call (or a few, chunked in the adapter) for the whole run.
 		try {
-			await sendEmail(env, {
-				to: r.email,
-				subject,
-				html:
-					applyMergeTags(baseUrl, html, r.unsub_token, r.email, r.name) +
-					complianceFooter(env, unsub),
-				headers: listHeaders(unsub),
-			});
-			sent++;
+			await sendEmailBatch(
+				env,
+				deliverable.map((d) => d.msg),
+			);
+			sent.push(...deliverable.map((d) => d.row));
 		} catch {
-			failed++;
+			failed.push(...deliverable.map((d) => d.row));
+		}
+	} else {
+		for (const d of deliverable) {
+			try {
+				await sendEmail(env, d.msg);
+				sent.push(d.row);
+			} catch {
+				failed.push(d.row);
+			}
 		}
 	}
-	await env.DB.prepare(
-		`INSERT INTO campaigns (subject, sent_count, fail_count) VALUES (?1, ?2, ?3)`,
-	)
-		.bind(subject, sent, failed)
-		.run();
-	return { sent, failed };
+
+	// Book results: successes leave the queue and count on the campaign;
+	// failures retry next run, or stick as 'failed' on the third attempt.
+	const stmts: D1PreparedStatement[] = [];
+	if (sent.length) {
+		stmts.push(
+			env.DB.prepare(
+				`DELETE FROM outbox WHERE id IN (${sent.map(() => "?").join(",")})`,
+			).bind(...sent.map((r) => r.id)),
+		);
+		for (const [cid, n] of countByCampaign(sent)) {
+			stmts.push(
+				env.DB.prepare(
+					`UPDATE campaigns SET sent_count = sent_count + ?2 WHERE id = ?1`,
+				).bind(cid, n),
+			);
+		}
+	}
+	const retry = failed.filter((r) => r.attempts < 3);
+	const gaveUp = failed.filter((r) => r.attempts >= 3);
+	if (retry.length) {
+		stmts.push(
+			env.DB.prepare(
+				`UPDATE outbox SET status = 'pending' WHERE id IN (${retry.map(() => "?").join(",")})`,
+			).bind(...retry.map((r) => r.id)),
+		);
+	}
+	if (gaveUp.length) {
+		stmts.push(
+			env.DB.prepare(
+				`UPDATE outbox SET status = 'failed' WHERE id IN (${gaveUp.map(() => "?").join(",")})`,
+			).bind(...gaveUp.map((r) => r.id)),
+		);
+		for (const [cid, n] of countByCampaign(gaveUp)) {
+			stmts.push(
+				env.DB.prepare(
+					`UPDATE campaigns SET fail_count = fail_count + ?2 WHERE id = ?1`,
+				).bind(cid, n),
+			);
+		}
+	}
+	if (stmts.length) await env.DB.batch(stmts);
 }
 
 // Verify a Cloudflare Turnstile token server-side. Only enforced when a secret
@@ -364,8 +528,10 @@ app.post("/api/send", async (c) => {
 		return c.json({ ok: true, test: true });
 	}
 
-	const { sent, failed } = await broadcast(c.env, origin, subject, html);
-	return c.json({ ok: true, sent, failed });
+	// Queue and return immediately; the minutely cron delivers in the
+	// background (SEND_BATCH emails per run).
+	const queued = await enqueueCampaign(c.env, origin, subject, html);
+	return c.json({ ok: true, queued });
 });
 
 // Build the email body for one feed item. broadcast() appends the compliance
@@ -383,8 +549,9 @@ function postEmailHtml(item: FeedItem): string {
     <p><a href="${item.link}">Read the full post →</a></p>`;
 }
 
-// Check the RSS feed and email any new posts. Runs on the cron schedule.
-// Opt-in: does nothing unless RSS_AUTOSEND is "true" and a feed URL is set.
+// Check the RSS feed and queue any new posts for delivery. Runs on the cron
+// schedule. Opt-in: does nothing unless RSS_AUTOSEND is "true" and a feed URL
+// is set.
 async function runAutoSend(env: Bindings): Promise<void> {
 	if (String(env.RSS_AUTOSEND ?? "").toLowerCase() !== "true") return;
 	const feedUrl = (env.RSS_FEED_URL ?? "").trim();
@@ -418,9 +585,9 @@ async function runAutoSend(env: Bindings): Promise<void> {
 		return;
 	}
 
-	// Feeds are newest-first; send oldest-first for chronological delivery.
+	// Feeds are newest-first; queue oldest-first for chronological delivery.
 	for (const item of fresh.reverse()) {
-		await broadcast(
+		await enqueueCampaign(
 			env,
 			baseUrl,
 			item.title || "New post",
@@ -433,10 +600,15 @@ async function runAutoSend(env: Bindings): Promise<void> {
 export default {
 	fetch: app.fetch,
 	async scheduled(
-		_controller: ScheduledController,
+		controller: ScheduledController,
 		env: Bindings,
 		_ctx: ExecutionContext,
 	) {
-		await runAutoSend(env);
+		// One minutely cron: the queue drains every run; the RSS feed check keeps
+		// a 15-minute cadence within it.
+		if (new Date(controller.scheduledTime).getUTCMinutes() % 15 === 0) {
+			await runAutoSend(env);
+		}
+		await drainOutbox(env);
 	},
 };

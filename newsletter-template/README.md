@@ -12,16 +12,16 @@ your subscribers. **You own the data** (Cloudflare D1) and **bring your own
 email sender** — connect any provider you like.
 
 No servers, no monthly SaaS bill, no command line: it runs on Cloudflare
-Workers + D1. Signups are free at any scale; sending fits the free plan up to
-~50 recipients per campaign, and the $5/month plan takes you into the
-thousands (see Notes & limits below).
+Workers + D1. Signups are free at any scale, and sending is queued in the
+background — even the free plan works through lists of thousands (see Notes &
+limits below).
 
 ## What you get
 
 - **Signup** — a hosted form at `/`, an embeddable version for your own site, and a `POST /api/subscribe` endpoint
 - **One-click unsubscribe** — RFC 8058 headers on every send, with a per-subscriber token
 - **Compliance built in** — every email gets a footer with an unsubscribe link and your postal address; consent and opt-out timestamps are stored (CAN-SPAM / GDPR)
-- **Send** — a `/admin` page: paste a subject + HTML, send a test to yourself, then send to everyone
+- **Send** — a `/admin` page: paste a subject + HTML, send a test to yourself, then queue it for everyone; a background job delivers at a steady pace with retries
 - **Your data** — subscribers live in a D1 database on _your_ account, exportable any time
 - **Double opt-in** _(optional)_ — a confirmation-email step before a subscriber is added
 - **Bot protection** _(optional)_ — Cloudflare Turnstile on the signup form
@@ -64,6 +64,9 @@ Settings → Variables and Secrets_ (double opt-in can also be set on the deploy
   physical address in commercial email. Set it before your first campaign.
 - **Privacy policy (`PRIVACY_URL`)** — absolute URL of your privacy policy;
   when set, a link appears under the signup form (expected by EU privacy rules).
+- **Throughput (`SEND_BATCH`)** — queued emails delivered per minutely
+  background run. The default `40` fits the free plan; raise it on the paid
+  plan or when `sendEmailBatch` is implemented (see Sending email below).
 
 ## How it works
 
@@ -92,15 +95,17 @@ sequenceDiagram
 
     Note over A,EM: Send a campaign
     A->>W: Compose and send (/admin)
-    W->>DB: Read subscribed list
-    W->>EM: Deliver campaign
-    W->>DB: Log campaign
+    W->>DB: Store campaign, queue recipients
+    W-->>A: Queued!
 
-    Note over W,EM: Auto-send from RSS (cron)
-    W->>W: Scheduled trigger (every 15 min)
+    Note over W,EM: Auto-send from RSS (every 15 min)
     W->>DB: Check already-sent posts
-    W->>EM: Email new posts only
-    W->>DB: Mark posts sent
+    W->>DB: Queue new posts only
+
+    Note over W,EM: Background delivery (cron, every minute)
+    W->>DB: Claim next batch from queue
+    W->>EM: Deliver batch
+    W->>DB: Mark sent, retry failures
 
     Note over V,EM: Unsubscribe
     EM->>V: Email with unsubscribe link
@@ -179,6 +184,15 @@ footer — unsubscribe link plus your `SENDER_ADDRESS` — is appended to every
 email automatically; use `{{unsubscribe_url}}` in your HTML only if you want an
 extra inline link.
 
+Campaign sends are **queued**: `/api/send` stores the campaign and returns
+immediately, then a background job (every minute) delivers `SEND_BATCH` emails
+per run — 40 by default, sized for the free plan — with up to 3 attempts per
+recipient. Anyone who unsubscribes while queued is skipped. If your provider
+has a **batch endpoint** (one API call, many emails), implement the optional
+`sendEmailBatch()` in [`src/email.ts`](src/email.ts) (commented example in the
+file) and raise `SEND_BATCH` — then even the free plan delivers thousands in a
+few minutes.
+
 ## Automatic sending from your blog (RSS)
 
 Instead of composing each issue by hand, the Worker can watch your blog's feed
@@ -191,11 +205,11 @@ To turn it on, add these in the dashboard under _Settings → Variables and Secr
   so unsubscribe links in the sent emails are absolute
 - and your email provider configured (see above)
 
-A scheduled job (every 15 minutes by default — adjust the cron in
-`wrangler.json`) checks the feed and sends any new post to your subscribed list,
-newest posts in order. Two safeguards are built in: each post is emailed only
-once, and the **first run just records your current feed as a baseline** — it
-never blasts your back catalogue. Only posts published after you enable it go out.
+The feed is checked every 15 minutes; new posts are queued and delivered by
+the same background job as regular campaigns, oldest first. Two safeguards are
+built in: each post is emailed only once, and the **first run just records
+your current feed as a baseline** — it never blasts your back catalogue. Only
+posts published after you enable it go out.
 
 ## Staying compliant
 
@@ -211,10 +225,11 @@ newsletter. The template takes care of the mechanical part:
   CAN-SPAM requires a valid physical address in commercial email. The `/admin`
   page warns you while it's missing.
 - **Opt-outs take effect immediately** — no delay (CAN-SPAM allows up to
-  10 business days), no login, and the link never expires. The link shows a
-  one-button confirmation page so corporate mail scanners that prefetch links
-  can't unsubscribe your readers by accident; mail clients use the one-click
-  POST directly.
+  10 business days), no login, and the link never expires. Queued-but-undelivered
+  emails to that address are cancelled too. The link shows a one-button
+  confirmation page so corporate mail scanners that prefetch links can't
+  unsubscribe your readers by accident; mail clients use the one-click POST
+  directly.
 - **Data minimization** — on unsubscribe, the subscriber's name and extra
   fields are deleted on the spot; only the address itself is kept as the
   opt-out record so it can be honored.
@@ -262,13 +277,13 @@ schema upgrades happen by themselves.
 - **Single opt-in by default** — simplest to start. Flip `DOUBLE_OPT_IN` to
   `"true"` for a confirmation-email step; it needs your
   email provider wired up so the confirmation link can be sent.
-- **Sending is a simple sequential loop** — one API call per recipient, and
-  Workers cap outbound calls per invocation: **~50 recipients per campaign on
-  the free plan, 10,000 on the [$5/month paid plan](https://developers.cloudflare.com/workers/platform/pricing/)**.
-  In practice a single send is comfortable into the low thousands (each
-  recipient adds ~100–300 ms of wall time). For bigger lists, batch via
-  [Cloudflare Queues](https://developers.cloudflare.com/queues/) or implement
-  `sendEmail()` against your provider's batch endpoint.
+- **Sending is queued** — a background run delivers `SEND_BATCH` emails per
+  minute (default 40, sized for the free plan's ~50 outbound calls per
+  invocation): a 1,000-recipient campaign takes ~25 minutes on the free plan.
+  On the [$5/month paid plan](https://developers.cloudflare.com/workers/platform/pricing/)
+  (10,000 calls per invocation) raise `SEND_BATCH` into the hundreds — or
+  implement `sendEmailBatch()` in `src/email.ts` (one API call, many emails)
+  and even the free plan delivers thousands in a few minutes.
 - **Deliverability is your domain's** — verify your sending domain with your
   email provider (SPF/DKIM/DMARC). The one-click deploy provisions the backend;
   it can't verify your domain for you.

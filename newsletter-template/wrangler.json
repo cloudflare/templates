@@ -4,7 +4,6 @@
 	"compatibility_date": "2025-10-08",
 	"upload_source_maps": true,
 	"observability": { "enabled": true },
-	"placement": { "mode": "smart" },
 	"d1_databases": [
 		{
 			"binding": "DB",
@@ -13,11 +12,12 @@
 		}
 	],
 	"triggers": {
-		"crons": ["*/15 * * * *"]
+		"crons": ["* * * * *"]
 	},
 	"vars": {
 		"FROM_NAME": "My Newsletter",
 		"FROM_EMAIL": "newsletter@example.com",
-		"DOUBLE_OPT_IN": "false"
+		"DOUBLE_OPT_IN": "false",
+		"SEND_BATCH": "40"
 	}
 }

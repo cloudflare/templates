@@ -158,8 +158,9 @@ export function adminPage(hasSenderAddress: boolean): string {
 	return shell(
 		"Send campaign",
 		`<h1>Send a campaign</h1>
-     <p>Paste your email HTML, send a test to yourself, then send to everyone.
-        A footer with the unsubscribe link and your postal address is appended
+     <p>Paste your email HTML, send a test to yourself, then queue it for
+        everyone — a background job delivers in batches every minute. A footer
+        with the unsubscribe link and your postal address is appended
         automatically. Merge tags: <code>{{unsubscribe_url}}</code>,
         <code>{{email}}</code>, <code>{{name}}</code>.</p>
      ${
@@ -192,7 +193,7 @@ export function adminPage(hasSenderAddress: boolean): string {
          headers:{'Content-Type':'application/json','x-admin-token': token.value}, body: JSON.stringify(body) });
        const j = await r.json().catch(()=>({}));
        m.textContent = !r.ok ? ('Error: ' + (j.error || r.status))
-         : test ? 'Test sent.' : ('Done — sent ' + j.sent + ', failed ' + j.failed + '.');
+         : test ? 'Test sent.' : ('Queued ' + j.queued + ' emails — delivery runs in the background.');
      }`,
 	);
 }
