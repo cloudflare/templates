@@ -234,6 +234,27 @@ cp .dev.vars.example .dev.vars   # fill in your values
 npm run dev                      # applies the schema to a local D1, then starts Wrangler
 ```
 
+## Updating
+
+Deploying created a snapshot of this template in your own GitHub account —
+later improvements here don't reach it automatically (nothing ever pushes
+into your account). To pull in a newer version:
+
+```bash
+git remote add upstream https://github.com/cloudflare/templates
+git fetch upstream
+git merge -X subtree=newsletter-template -X theirs --allow-unrelated-histories --no-commit upstream/main
+git checkout HEAD -- src/email.ts src/fields.ts wrangler.json
+git commit -m "Update template" && git push
+```
+
+`-X theirs` takes the upstream side of every change; the `git checkout` line
+then keeps your own email adapter, your extra fields, and your `wrangler.json`
+(your D1 `database_id` lives there). If you've customized other files too,
+drop `-X theirs` and resolve the conflicts by hand. Your CI redeploys on push,
+and database migrations are append-only + applied by the `predeploy` script —
+schema upgrades happen by themselves.
+
 ## Notes & limits
 
 - **Single opt-in by default** — simplest to start. Flip `DOUBLE_OPT_IN` to
