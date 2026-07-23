@@ -67,6 +67,10 @@ Settings → Variables and Secrets_ (double opt-in can also be set on the deploy
 - **Throughput (`SEND_BATCH`)** — queued emails delivered per minutely
   background run. The default `40` fits the free plan; raise it on the paid
   plan or when `sendEmailBatch` is implemented (see Sending email below).
+- **Localized email texts** — the automatic footer and the double-opt-in email
+  default to English. Set `FOOTER_TEXT` and `UNSUBSCRIBE_LABEL` for the footer,
+  and `CONFIRM_SUBJECT` / `CONFIRM_HTML` (supports a `{{confirm_url}}` merge
+  tag) for the confirmation email, to use your own language.
 
 ## How it works
 

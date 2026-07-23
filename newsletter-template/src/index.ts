@@ -26,6 +26,10 @@ type Bindings = {
 	SENDER_ADDRESS?: string;
 	PRIVACY_URL?: string;
 	SEND_BATCH?: string;
+	FOOTER_TEXT?: string;
+	UNSUBSCRIBE_LABEL?: string;
+	CONFIRM_SUBJECT?: string;
+	CONFIRM_HTML?: string;
 };
 
 // One outgoing email, ready for delivery.
@@ -68,14 +72,27 @@ const escapeHtml = (s: string) =>
 // Footer appended to every campaign email: why the reader is getting it, a
 // working unsubscribe link, and the sender's postal address. The US CAN-SPAM
 // Act requires a valid physical address in commercial email, and anti-spam
-// laws generally require a clear opt-out in every message.
+// laws generally require a clear opt-out in every message. FOOTER_TEXT and
+// UNSUBSCRIBE_LABEL localize the wording (defaults are English).
 function complianceFooter(env: Bindings, unsub: string): string {
 	const address = String(env.SENDER_ADDRESS ?? "").trim();
+	const text =
+		String(env.FOOTER_TEXT ?? "").trim() ||
+		`You're receiving this email because you subscribed to ${env.FROM_NAME || "this newsletter"}.`;
+	const label = String(env.UNSUBSCRIBE_LABEL ?? "").trim() || "Unsubscribe";
 	return `<hr style="border:none;border-top:1px solid #ddd;margin:28px 0 12px">
     <p style="font-size:12px;line-height:1.6;color:#888">
-      You're receiving this email because you subscribed to ${escapeHtml(env.FROM_NAME || "this newsletter")}.
-      <a href="${unsub}" style="color:#888">Unsubscribe</a>${address ? `<br>${escapeHtml(address)}` : ""}
+      ${escapeHtml(text)}
+      <a href="${unsub}" style="color:#888">${escapeHtml(label)}</a>${address ? `<br>${escapeHtml(address)}` : ""}
     </p>`;
+}
+
+// Wrap outgoing HTML in a minimal document with an explicit charset, unless
+// the author already pasted a complete document. Without this, mail clients
+// may guess the encoding and garble non-ASCII text (umlauts, accents, …).
+function emailDocument(html: string): string {
+	if (/<html[\s>]/i.test(html)) return html;
+	return `<!doctype html><html><head><meta charset="utf-8"></head><body>${html}</body></html>`;
 }
 
 // Fill merge tags in campaign HTML for one recipient.
@@ -187,7 +204,7 @@ async function drainOutbox(env: Bindings): Promise<void> {
 		return {
 			to: r.email,
 			subject: c.subject,
-			html:
+			html: emailDocument(
 				applyMergeTags(
 					c.base_url,
 					c.body_html,
@@ -195,6 +212,7 @@ async function drainOutbox(env: Bindings): Promise<void> {
 					r.email,
 					r.name,
 				) + complianceFooter(env, unsub),
+			),
 			headers: listHeaders(unsub),
 		};
 	};
@@ -296,11 +314,19 @@ async function turnstileOk(
 	return data.success === true;
 }
 
-// Plain confirmation email for double opt-in.
-const confirmEmailHtml = (link: string) =>
-	`<p>Please confirm your subscription by clicking the link below:</p>
+// Confirmation email for double opt-in. CONFIRM_SUBJECT and CONFIRM_HTML
+// (with a {{confirm_url}} merge tag) localize it; defaults are English.
+const confirmSubject = (env: Bindings) =>
+	String(env.CONFIRM_SUBJECT ?? "").trim() ||
+	"Please confirm your subscription";
+
+function confirmEmailHtml(env: Bindings, link: string): string {
+	const custom = String(env.CONFIRM_HTML ?? "").trim();
+	if (custom) return custom.replaceAll("{{confirm_url}}", link);
+	return `<p>Please confirm your subscription by clicking the link below:</p>
    <p><a href="${link}">Confirm my subscription</a></p>
    <p>If you didn't request this, you can ignore this email.</p>`;
+}
 
 // Read JSON or form-encoded bodies transparently.
 async function readParams(c: any): Promise<Record<string, string>> {
@@ -400,8 +426,10 @@ app.post("/api/subscribe", async (c) => {
 		try {
 			await sendEmail(c.env, {
 				to: email,
-				subject: "Please confirm your subscription",
-				html: confirmEmailHtml(confirmUrl(origin, row.confirm_token)),
+				subject: confirmSubject(c.env),
+				html: emailDocument(
+					confirmEmailHtml(c.env, confirmUrl(origin, row.confirm_token)),
+				),
 				headers: listHeaders(unsubUrl(origin, row.unsub_token)),
 			});
 		} catch {
@@ -520,9 +548,10 @@ app.post("/api/send", async (c) => {
 		await sendEmail(c.env, {
 			to: testEmail,
 			subject,
-			html:
+			html: emailDocument(
 				applyMergeTags(origin, html, t, testEmail) +
-				complianceFooter(c.env, unsub),
+					complianceFooter(c.env, unsub),
+			),
 			headers: listHeaders(unsub),
 		});
 		return c.json({ ok: true, test: true });
