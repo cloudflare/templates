@@ -104,6 +104,9 @@
     },
     "agent-commerce-analytics-template": {
       "package_json_hash": "800d5e6088a3a816e8572b307f8a1b76dfc1fe04"
+    },
+    "shopify-on-cloudflare-template": {
+      "package_json_hash": "0655539ec53a5f2236b701bf435c30784c7fa0fe"
     }
   }
 }

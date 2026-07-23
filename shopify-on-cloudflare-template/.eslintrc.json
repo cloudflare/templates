@@ -1,0 +1,70 @@
+{
+	"root": false,
+	"env": {
+		"browser": true,
+		"es2021": true
+	},
+	"extends": ["airbnb"],
+	"parserOptions": {
+		"ecmaVersion": 2021,
+		"sourceType": "module"
+	},
+	"rules": {},
+	"overrides": [
+		{
+			"files": ["web/**/*.ts", "web/**/*.tsx"],
+			"parser": "@typescript-eslint/parser",
+			"parserOptions": {
+				"ecmaFeatures": { "jsx": true }
+			},
+			"plugins": ["react-hooks", "@typescript-eslint"],
+			"extends": ["plugin:@typescript-eslint/recommended"],
+			"rules": {
+				"quotes": [2, "single"],
+				"react/jsx-filename-extension": [
+					"error",
+					{ "extensions": [".jsx", ".tsx"] }
+				],
+				"react/jsx-props-no-spreading": "off",
+				"react/jsx-no-useless-fragment": "off",
+				"react/require-default-props": "off",
+				"consistent-return": "off",
+				"react/forbid-prop-types": "off",
+				"react/no-array-index-key": "off",
+				"react/jsx-no-bind": "off",
+				"no-shadow": "off",
+				"react/react-in-jsx-scope": "off",
+				"import/no-unresolved": "off",
+				"import/prefer-default-export": "off",
+				"import/extensions": "off",
+				"no-unused-vars": "off",
+				"@typescript-eslint/no-unused-vars": [
+					"error",
+					{ "argsIgnorePattern": "^_" }
+				],
+				"max-len": ["error", { "code": 200 }],
+				"jsx-a11y/anchor-is-valid": [
+					"error",
+					{
+						"components": ["Link"],
+						"specialLink": ["to", "url"],
+						"aspects": ["noHref", "invalidHref", "preferButton"]
+					}
+				],
+				"import/no-extraneous-dependencies": [
+					"error",
+					{
+						"devDependencies": [
+							"**/*.test.ts",
+							"**/*.test.tsx",
+							"**/*.spec.ts",
+							"**/*.spec.tsx"
+						]
+					}
+				]
+			},
+			"globals": {}
+		}
+	],
+	"ignorePatterns": ["./functions"]
+}
