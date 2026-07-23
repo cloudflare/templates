@@ -31,4 +31,14 @@ test.describe("Newsletter Template", () => {
 			page.getByRole("heading", { name: "Send a campaign" }),
 		).toBeVisible();
 	});
+
+	test("unsubscribe link shows a confirmation step", async ({
+		page,
+		templateUrl,
+	}) => {
+		await page.goto(new URL("/unsubscribe?t=some-token", templateUrl).href);
+		await expect(
+			page.getByRole("button", { name: "Unsubscribe" }),
+		).toBeVisible();
+	});
 });

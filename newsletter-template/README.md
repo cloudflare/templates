@@ -6,7 +6,7 @@
 
 <!-- dash-content-start -->
 
-A complete, self-hosted newsletter on your own Cloudflare account: a signup
+A complete serverless newsletter on your own Cloudflare account: a signup
 form, one-click unsubscribe, and a simple page to send an email campaign to
 your subscribers. **You own the data** (Cloudflare D1) and **bring your own
 email sender** — connect any provider you like.
@@ -17,7 +17,8 @@ Workers + D1 and stays comfortably inside the free tier for small and medium lis
 ## What you get
 
 - **Signup** — a hosted form at `/`, an embeddable version for your own site, and a `POST /api/subscribe` endpoint
-- **One-click unsubscribe** — RFC 8058 compliant, with a per-subscriber token
+- **One-click unsubscribe** — RFC 8058 headers on every send, with a per-subscriber token
+- **Compliance built in** — every email gets a footer with an unsubscribe link and your postal address; consent and opt-out timestamps are stored (CAN-SPAM / GDPR)
 - **Send** — a `/admin` page: paste a subject + HTML, send a test to yourself, then send to everyone
 - **Your data** — subscribers live in a D1 database on _your_ account, exportable any time
 - **Double opt-in** _(optional)_ — a confirmation-email step before a subscriber is added
@@ -45,7 +46,7 @@ A live public deployment of this template is available at
 
 ### Options
 
-Both are off by default. Add them any time in the dashboard under _your Worker →
+All optional. Add them any time in the dashboard under _your Worker →
 Settings → Variables and Secrets_ (double opt-in can also be set on the deploy screen):
 
 - **Double opt-in** — set `DOUBLE_OPT_IN` to `"true"` to require new subscribers
@@ -56,6 +57,11 @@ Settings → Variables and Secrets_ (double opt-in can also be set on the deploy
   `TURNSTILE_SITE_KEY` (variable) **and** `TURNSTILE_SECRET_KEY` (secret). The
   signup form then shows the widget and rejects unverified submissions. Leave
   both blank to disable.
+- **Postal address (`SENDER_ADDRESS`)** — e.g. `Acme Inc., 123 Main St, Springfield, USA`.
+  Appears in the footer of every email; the US CAN-SPAM Act requires a valid
+  physical address in commercial email. Set it before your first campaign.
+- **Privacy policy (`PRIVACY_URL`)** — absolute URL of your privacy policy;
+  when set, a link appears under the signup form (expected by EU privacy rules).
 
 ## How it works
 
@@ -166,8 +172,10 @@ adapt. Then:
    this is what makes your email land in inboxes.
 
 Then open `https://<your-worker>.workers.dev/admin`, paste your `ADMIN_TOKEN`,
-write your email, send a test to yourself, and send to your list. Use
-`{{unsubscribe_url}}` anywhere in your HTML for the one-click unsubscribe link.
+write your email, send a test to yourself, and send to your list. A compliance
+footer — unsubscribe link plus your `SENDER_ADDRESS` — is appended to every
+email automatically; use `{{unsubscribe_url}}` in your HTML only if you want an
+extra inline link.
 
 ## Automatic sending from your blog (RSS)
 
@@ -187,6 +195,37 @@ newest posts in order. Two safeguards are built in: each post is emailed only
 once, and the **first run just records your current feed as a baseline** — it
 never blasts your back catalogue. Only posts published after you enable it go out.
 
+## Staying compliant
+
+Anti-spam and privacy laws — the US CAN-SPAM Act, the EU's GDPR and ePrivacy
+rules, and similar laws elsewhere — put duties on anyone who sends a
+newsletter. The template takes care of the mechanical part:
+
+- **Unsubscribe in every email** — a footer with a working unsubscribe link is
+  appended to every campaign automatically, and every send carries the
+  RFC 8058 `List-Unsubscribe` headers (the native "Unsubscribe" button in
+  Gmail/Outlook, required by Gmail and Yahoo for bulk senders).
+- **Postal address** — set `SENDER_ADDRESS` and it appears in every footer;
+  CAN-SPAM requires a valid physical address in commercial email. The `/admin`
+  page warns you while it's missing.
+- **Opt-outs take effect immediately** — no delay (CAN-SPAM allows up to
+  10 business days), no login, and the link never expires. The link shows a
+  one-button confirmation page so corporate mail scanners that prefetch links
+  can't unsubscribe your readers by accident; mail clients use the one-click
+  POST directly.
+- **Data minimization** — on unsubscribe, the subscriber's name and extra
+  fields are deleted on the spot; only the address itself is kept as the
+  opt-out record so it can be honored.
+- **Consent on record** — signup, confirmation (double opt-in) and opt-out
+  timestamps are stored per subscriber, so you can prove consent later.
+- **EU-grade consent** — flip `DOUBLE_OPT_IN` to `"true"` and set
+  `PRIVACY_URL` so the signup form links your privacy policy.
+
+Still yours to do: truthful `From`/subject lines, sending only to people who
+actually signed up, domain authentication at your provider (SPF/DKIM/DMARC),
+and honoring requests that arrive outside the unsubscribe link — a full GDPR
+erasure is one `DELETE` on your D1 database. None of this is legal advice.
+
 ## Local development
 
 ```
@@ -204,8 +243,8 @@ npm run dev                      # applies the schema to a local D1, then starts
   (Cloudflare Workers subrequest limits). For larger lists, batch the send via
   [Cloudflare Queues](https://developers.cloudflare.com/queues/).
 - **Deliverability is your domain's** — verify your sending domain with your
-  email provider (SPF/DKIM). The one-click deploy provisions the backend; it
-  can't verify your domain for you.
+  email provider (SPF/DKIM/DMARC). The one-click deploy provisions the backend;
+  it can't verify your domain for you.
 
 ## License
 

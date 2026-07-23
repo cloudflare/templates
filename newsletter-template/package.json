@@ -1,6 +1,6 @@
 {
 	"name": "newsletter-template",
-	"description": "Self-hosted serverless newsletter on Cloudflare — signup, one-click unsubscribe, and send campaigns to your own list. Bring your own email sender.",
+	"description": "Serverless newsletter on your own Cloudflare account — signup, compliant one-click unsubscribe, and campaigns to your own list. Bring your own email sender.",
 	"cloudflare": {
 		"label": "Newsletter",
 		"products": [

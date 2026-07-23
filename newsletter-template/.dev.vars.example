@@ -12,3 +12,13 @@ ADMIN_TOKEN=change-me-to-a-long-random-string
 # Set BOTH the secret here and the public TURNSTILE_SITE_KEY var (wrangler.json)
 # to enable it. Leave unset to disable.
 # TURNSTILE_SECRET_KEY=
+
+# Your postal address, appended to the footer of every email. The US CAN-SPAM
+# Act requires a valid physical address in commercial email, and most other
+# anti-spam laws expect one too. In production, add it as a plain variable in
+# the dashboard (Settings -> Variables and Secrets).
+# SENDER_ADDRESS=Acme Inc., 123 Main St, Springfield, ST 12345, USA
+
+# Absolute URL of your privacy policy. When set, a link appears under the
+# signup form (the transparency EU privacy rules expect).
+# PRIVACY_URL=https://example.com/privacy

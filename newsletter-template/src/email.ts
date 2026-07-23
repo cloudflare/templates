@@ -28,7 +28,15 @@ export function isEmailConfigured(_env: MailEnv): boolean {
 
 export async function sendEmail(
 	env: MailEnv,
-	opts: { to: string; subject: string; html: string; unsubUrl: string },
+	opts: {
+		to: string;
+		subject: string;
+		html: string;
+		// Ready-made compliance headers (RFC 8058 one-click unsubscribe). Pass
+		// them through to your provider — Gmail and Yahoo require them for bulk
+		// senders, and mail clients use them for their native Unsubscribe button.
+		headers: Record<string, string>;
+	},
 ): Promise<void> {
 	throw new Error(
 		"Email sending is not configured. Implement sendEmail() in src/email.ts to connect your own provider.",
@@ -49,11 +57,7 @@ export async function sendEmail(
 	//     to: opts.to,
 	//     subject: opts.subject,
 	//     html: opts.html,
-	//     // Native "Unsubscribe" button in Gmail/Outlook (RFC 8058):
-	//     headers: {
-	//       "List-Unsubscribe": `<${opts.unsubUrl}>`,
-	//       "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-	//     },
+	//     headers: opts.headers, // List-Unsubscribe & co. — keep these!
 	//   }),
 	// });
 	// if (!res.ok) throw new Error(`email send failed: ${res.status}`);
