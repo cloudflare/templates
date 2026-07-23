@@ -12,7 +12,9 @@ your subscribers. **You own the data** (Cloudflare D1) and **bring your own
 email sender** — connect any provider you like.
 
 No servers, no monthly SaaS bill, no command line: it runs on Cloudflare
-Workers + D1 and stays comfortably inside the free tier for small and medium lists.
+Workers + D1. Signups are free at any scale; sending fits the free plan up to
+~50 recipients per campaign, and the $5/month plan takes you into the
+thousands (see Notes & limits below).
 
 ## What you get
 
@@ -260,9 +262,13 @@ schema upgrades happen by themselves.
 - **Single opt-in by default** — simplest to start. Flip `DOUBLE_OPT_IN` to
   `"true"` for a confirmation-email step; it needs your
   email provider wired up so the confirmation link can be sent.
-- **Sending is a simple loop** — great for up to a few hundred recipients per send
-  (Cloudflare Workers subrequest limits). For larger lists, batch the send via
-  [Cloudflare Queues](https://developers.cloudflare.com/queues/).
+- **Sending is a simple sequential loop** — one API call per recipient, and
+  Workers cap outbound calls per invocation: **~50 recipients per campaign on
+  the free plan, 10,000 on the [$5/month paid plan](https://developers.cloudflare.com/workers/platform/pricing/)**.
+  In practice a single send is comfortable into the low thousands (each
+  recipient adds ~100–300 ms of wall time). For bigger lists, batch via
+  [Cloudflare Queues](https://developers.cloudflare.com/queues/) or implement
+  `sendEmail()` against your provider's batch endpoint.
 - **Deliverability is your domain's** — verify your sending domain with your
   email provider (SPF/DKIM/DMARC). The one-click deploy provisions the backend;
   it can't verify your domain for you.
