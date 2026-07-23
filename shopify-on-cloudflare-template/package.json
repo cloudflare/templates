@@ -1,0 +1,111 @@
+{
+	"name": "shopify-on-cloudflare-template",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Shopify embedded app starter on Cloudflare Workers: Hono, D1, KV, R2, React, Polaris, Drizzle ORM, and session-token auth",
+	"keywords": [
+		"shopify",
+		"cloudflare",
+		"cloudflare-workers",
+		"shopify-app",
+		"hono",
+		"d1",
+		"react",
+		"polaris",
+		"drizzle",
+		"typescript",
+		"kv",
+		"r2",
+		"embedded-app"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/devkindhq/shopify-on-cloudflare"
+	},
+	"homepage": "https://github.com/devkindhq/shopify-on-cloudflare#readme",
+	"bugs": {
+		"url": "https://github.com/devkindhq/shopify-on-cloudflare/issues"
+	},
+	"author": {
+		"name": "Devkind",
+		"url": "https://devkind.com.au"
+	},
+	"license": "MIT",
+	"cloudflare": {
+		"label": "Shopify on Cloudflare",
+		"products": [
+			"Workers",
+			"D1",
+			"KV"
+		],
+		"categories": [
+			"starter",
+			"storage"
+		],
+		"bindings": {
+			"DB": {
+				"description": "D1 database. Create it with `wrangler d1 create shopify-on-cloudflare-db`, then paste the returned `database_id` into `wrangler.jsonc`."
+			},
+			"SESSION_KV": {
+				"description": "KV namespace for Shopify session storage. Create it with `wrangler kv:namespace create SESSION_KV`, then paste the returned `id` into `wrangler.jsonc`."
+			},
+			"R2": {
+				"description": "R2 bucket for file storage. Create it with `wrangler r2 bucket create shopify-on-cloudflare-files`."
+			}
+		}
+	},
+	"scripts": {
+		"dev": "vite",
+		"dev:tunnel": "cloudflared tunnel --url http://localhost:5173",
+		"build": "vite build",
+		"preview": "npm run build && vite preview",
+		"deploy": "npm run build && wrangler d1 migrations apply DB --remote && wrangler deploy",
+		"d1:migrate": "wrangler d1 migrations apply shopify-on-cloudflare-db --remote",
+		"d1:migrate:local": "wrangler d1 migrations apply shopify-on-cloudflare-db --local",
+		"d1:generate": "drizzle-kit generate",
+		"lint": "eslint web --ext .ts,.tsx --fix",
+		"type-check": "tsc --noEmit",
+		"test": "vitest",
+		"test:e2e": "playwright test",
+		"cf-typegen": "wrangler types",
+		"check": "vite build && wrangler deploy --dry-run",
+		"setup": "wrangler d1 migrations apply shopify-on-cloudflare-db --local"
+	},
+	"dependencies": {
+		"@bugsnag/js": "^8.9.0",
+		"@bugsnag/plugin-react": "^8.9.0",
+		"@shopify/app-bridge-react": "^4.1.5",
+		"@shopify/polaris": "10.45.0",
+		"@shopify/polaris-icons": "^9.3.1",
+		"@shopify/shopify-api": "^13.0.0",
+		"@shopify/shopify-app-session-storage-kv": "^6.0.0",
+		"@tanstack/react-query": "^5.100.1",
+		"drizzle-orm": "^0.45.2",
+		"hono": "^4.6.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-router-dom": "^6.6.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.46.0",
+		"@playwright/test": "^1.49.0",
+		"@types/node": "^20.12.8",
+		"@types/react": "^18.0.28",
+		"@types/react-dom": "^18.0.11",
+		"@typescript-eslint/eslint-plugin": "^8.59.4",
+		"@typescript-eslint/parser": "^8.59.4",
+		"@vitejs/plugin-react-swc": "^4.3.1",
+		"dotenv": "^16.4.5",
+		"drizzle-kit": "^0.31.10",
+		"eslint": "^8.56.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-plugin-import": "^2.29.1",
+		"eslint-plugin-jsx-a11y": "^6.8.0",
+		"eslint-plugin-react": "^7.33.2",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"typescript": "^5.9.3",
+		"vite": "^7.0.0",
+		"vitest": "^4.1.9",
+		"wrangler": "4.113.0"
+	}
+}

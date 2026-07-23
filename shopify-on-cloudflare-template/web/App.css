@@ -1,0 +1,73 @@
+body {
+	background: #f3f3f3;
+	color: #252525;
+	padding: 55px;
+	line-height: 1.5;
+	font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+main {
+	flex: 1 0 auto;
+	padding: 2rem;
+}
+
+h1 {
+	font-size: 32px;
+	margin: 24px 0;
+	max-width: none;
+}
+h2 {
+	font-size: 24px;
+	max-width: none;
+}
+h3 {
+	font-size: 16px;
+	max-width: none;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 7px 0px;
+}
+
+td {
+	padding: 7px 6px;
+}
+
+.logo {
+	display: inline-block;
+}
+
+.development {
+	color: #87550b;
+	text-transform: capitalize;
+}
+
+.production {
+	color: #5d39bb;
+	text-transform: capitalize;
+}
+
+code {
+	font-family:
+		"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 0.95em;
+	font-weight: bold;
+}
+
+.logo {
+	display: inline-block;
+}
+
+a {
+	color: currentColor;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+:focus {
+	outline: 1px dashed currentColor;
+	outline-offset: 0.15rem;
+}

@@ -101,6 +101,9 @@
     },
     "commerce-llms-txt-template": {
       "package_json_hash": "73d700ad98c614ad2ab8b3da1ebb182cdacb94f4"
+    },
+    "shopify-on-cloudflare-template": {
+      "package_json_hash": "f359fc51ebfaf32195bcfc28c04202a335df8f9e"
     }
   }
 }
