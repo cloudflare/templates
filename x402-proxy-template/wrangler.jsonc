@@ -9,6 +9,7 @@
 	"name": "x402-proxy-template",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
 		"enabled": true,
 	},
@@ -42,25 +43,38 @@
 	// ],
 	"vars": {
 		// =====================================================================
-		// PAY_TO - Your wallet address to receive payments (REQUIRED)
+		// PAY_TO - EVM wallet address to receive payments
 		// =====================================================================
 		// This is where payments will be sent when users pay for access.
+		// Required whenever NETWORK includes an eip155:* entry.
 		// Any Ethereum-compatible wallet works (MetaMask, Coinbase Wallet, etc.).
 		//
 		// The default "dead address" below is useful for testing - payments
 		// sent there are unrecoverable but allow testing the flow.
 		//
 		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
+		// The default Solana address is the well-known incinerator. Payments sent
+		// there are unrecoverable but allow testing the flow. Replace it with your
+		// wallet address.
+		// The recipient must already hold a token account for the payment asset;
+		// the incinerator already has one for devnet USDC.
+		// PAY_TO_SOLANA is required whenever NETWORK includes a solana:* entry.
+		"PAY_TO_SOLANA": "1nc1nerator11111111111111111111111111111111",
 		// =====================================================================
 		// NETWORK - Blockchain network for payments (REQUIRED)
 		// =====================================================================
-		// Use "base-sepolia" for testing (free testnet tokens).
-		// Use "base" for production.
+		// Set one CAIP-2 network or a comma-separated list for multi-network
+		// payment options. Supported families are eip155:* and solana:*.
 		//
-		// Get testnet tokens: https://docs.cdp.coinbase.com/faucets/
-		// Supported networks: https://x402.org
+		// Legacy aliases remain accepted:
+		//   base-sepolia, base, solana, solana-devnet
 		//
-		"NETWORK": "base-sepolia",
+		// Base Sepolia and Solana devnet USDC: https://faucet.circle.com
+		// Payers need no testnet ETH or SOL: EVM payments are signed offline
+		// (EIP-3009), Solana uses extra.feePayer, and the facilitator submits.
+		// Supported networks: https://docs.x402.org/dev-tools/facilitators
+		//
+		"NETWORK": "eip155:84532,solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
 		// =====================================================================
 		// PROTECTED_PATTERNS - Routes requiring payment (REQUIRED)
 		// =====================================================================
@@ -129,13 +143,13 @@
 		// FACILITATOR_URL - Payment verification service (OPTIONAL)
 		// =====================================================================
 		// The facilitator verifies and settles payments on behalf of your server.
-		// Defaults to CDP facilitator if not set.
+		// Defaults to x402.org if not set. x402.org is intended for testnets.
 		//
 		// Example facilitators:
-		//   - CDP (default): https://x402.org/facilitator (Base, Base Sepolia)
+		//   - CDP: https://x402.org/facilitator (testnets: Base Sepolia, Solana Devnet)
 		//   - PayAI: https://facilitator.payai.network (multi-chain)
 		//
-		// See: https://x402.gitbook.io/x402/core-concepts/facilitator
+		// More production facilitators: https://docs.x402.org/dev-tools/facilitators
 		//
 		"FACILITATOR_URL": "https://x402.org/facilitator",
 	},
