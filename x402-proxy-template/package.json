@@ -20,20 +20,24 @@
 		}
 	},
 	"dependencies": {
-		"@coinbase/x402": "2.0.0",
-		"hono": "4.11.1",
-		"x402-hono": "1.0.0"
+		"@x402/core": "2.19.0",
+		"@x402/evm": "2.19.0",
+		"@x402/hono": "2.19.0",
+		"@x402/svm": "2.19.0",
+		"hono": "4.11.1"
 	},
 	"devDependencies": {
+		"@scure/base": "1.2.6",
+		"@solana/kit": "5.1.0",
 		"@typescript-eslint/eslint-plugin": "8.50.0",
 		"@typescript-eslint/parser": "8.50.0",
+		"@x402/fetch": "2.19.0",
 		"eslint": "9.39.2",
 		"eslint-config-prettier": "10.1.8",
 		"prettier": "3.7.4",
 		"tsx": "4.21.0",
 		"viem": "2.43.1",
-		"wrangler": "4.88.0",
-		"x402": "1.0.1"
+		"wrangler": "4.88.0"
 	},
 	"private": true,
 	"scripts": {
