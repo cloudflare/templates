@@ -2,11 +2,116 @@
  * Authentication middleware for cookie-based JWT verification
  */
 
+import { HTTPFacilitatorClient } from "@x402/core/server";
+import type { Network } from "@x402/core/types";
+import { ExactEvmScheme } from "@x402/evm/exact/server";
+import { paymentMiddleware, x402ResourceServer } from "@x402/hono";
+import { ExactSvmScheme } from "@x402/svm/exact/server";
 import { Context, Next, MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 import { verifyJWT } from "./jwt";
-import { paymentMiddleware } from "x402-hono";
-import type { AppContext } from "./env";
+import type { AppContext, Env } from "./env";
+
+export const DEFAULT_FACILITATOR_URL = "https://x402.org/facilitator";
+
+const NETWORK_ALIASES: Record<string, Network> = {
+	"base-sepolia": "eip155:84532",
+	base: "eip155:8453",
+	solana: "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+	"solana-devnet": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+};
+
+type NetworkResolution =
+	| { ok: true; networks: Network[] }
+	| { ok: false; error: string };
+
+type PaymentConfigResolution =
+	| {
+			ok: true;
+			config: {
+				facilitatorUrl: string;
+				networks: Network[];
+				payToEvm?: string;
+				payToSolana?: string;
+			};
+	  }
+	| { ok: false; error: string };
+
+const middlewareCache = new Map<string, MiddlewareHandler>();
+
+function configError(message: string): string {
+	return `Server misconfigured: ${message}. See README for setup instructions.`;
+}
+
+/**
+ * Resolve a comma-separated NETWORK value to v2 CAIP-2 network identifiers.
+ */
+export function resolveNetworks(value: string | undefined): NetworkResolution {
+	const entries = (value || "")
+		.split(",")
+		.map((entry) => entry.trim())
+		.filter(Boolean);
+
+	if (entries.length === 0) {
+		return { ok: false, error: configError("NETWORK not set") };
+	}
+
+	const networks: Network[] = [];
+	for (const entry of entries) {
+		const network = NETWORK_ALIASES[entry] || entry;
+		if (!/^(eip155|solana):[^:]+$/.test(network)) {
+			return {
+				ok: false,
+				error: configError(`unknown NETWORK entry "${entry}"`),
+			};
+		}
+		if (!networks.includes(network as Network)) {
+			networks.push(network as Network);
+		}
+	}
+
+	return { ok: true, networks };
+}
+
+/**
+ * Resolve and validate all payment-related Worker configuration.
+ */
+export function resolvePaymentConfig(env: Env): PaymentConfigResolution {
+	const networkResolution = resolveNetworks(env.NETWORK);
+	if (!networkResolution.ok) {
+		return { ok: false, error: networkResolution.error };
+	}
+
+	const needsEvm = networkResolution.networks.some((network) =>
+		network.startsWith("eip155:")
+	);
+	const needsSolana = networkResolution.networks.some((network) =>
+		network.startsWith("solana:")
+	);
+
+	if (needsEvm && !env.PAY_TO) {
+		return {
+			ok: false,
+			error: configError("PAY_TO not set for an eip155 network"),
+		};
+	}
+	if (needsSolana && !env.PAY_TO_SOLANA) {
+		return {
+			ok: false,
+			error: configError("PAY_TO_SOLANA not set for a solana network"),
+		};
+	}
+
+	return {
+		ok: true,
+		config: {
+			facilitatorUrl: env.FACILITATOR_URL || DEFAULT_FACILITATOR_URL,
+			networks: networkResolution.networks,
+			payToEvm: env.PAY_TO,
+			payToSolana: env.PAY_TO_SOLANA,
+		},
+	};
+}
 
 /**
  * Creates a combined middleware that checks for valid cookie authentication
@@ -68,41 +173,76 @@ export interface ProtectedRouteConfig {
 }
 
 /**
- * Creates middleware for a protected route that requires payment OR valid cookie
- * This dynamically creates payment middleware at request time to access environment variables
- * The route path is automatically determined from the request context
+ * Convert the template's trailing `/*` prefix convention to the x402 v2
+ * wildcard that preserves the same matching behavior.
+ */
+function toX402RoutePattern(pattern: string): string {
+	return pattern.endsWith("/*") ? `${pattern.slice(0, -2)}*` : pattern;
+}
+
+/**
+ * Get or create one payment middleware covering all configured protected routes.
+ * The deterministic cache key prevents facilitator synchronization per request.
  *
- * @param config - Payment configuration
+ * @param configs - All built-in and user-configured protected routes
  * @returns Middleware that enforces payment or cookie authentication
  */
-export function createProtectedRoute(config: ProtectedRouteConfig) {
+export function createProtectedRoute(configs: ProtectedRouteConfig[]) {
 	return async (c: Context<AppContext>, next: Next) => {
-		// Get the route path from the request context
-		// Normalize the path by removing trailing slashes (except for root "/")
-		// This matches how x402's findMatchingRoute normalizes incoming request paths
-		const rawPath = c.req.path;
-		const routePath =
-			rawPath.length > 1 ? rawPath.replace(/\/+$/, "") : rawPath;
+		const resolution = resolvePaymentConfig(c.env);
+		if (!resolution.ok) {
+			return c.json({ error: resolution.error }, 500);
+		}
 
-		// Create payment middleware dynamically with config from env
-		// Facilitator is optional - x402 uses its own default when not provided
-		const facilitator = c.env.FACILITATOR_URL
-			? { url: c.env.FACILITATOR_URL }
-			: undefined;
+		const { facilitatorUrl, networks, payToEvm, payToSolana } =
+			resolution.config;
+		const fingerprint = JSON.stringify({
+			facilitatorUrl,
+			networks,
+			payToEvm,
+			payToSolana,
+			routes: configs.map(({ pattern, price, description }) => ({
+				pattern,
+				price,
+				description,
+			})),
+		});
 
-		const paymentMw = paymentMiddleware(
-			c.env.PAY_TO as `0x${string}`,
-			{
-				[routePath]: {
-					price: config.price,
-					network: c.env.NETWORK,
-					config: {
-						description: config.description,
-					},
-				},
-			},
-			facilitator
-		);
+		let paymentMw = middlewareCache.get(fingerprint);
+		if (!paymentMw) {
+			const routes: Parameters<typeof paymentMiddleware>[0] = {};
+			for (const config of configs) {
+				const routePattern = toX402RoutePattern(config.pattern);
+				if (routePattern in routes) {
+					continue;
+				}
+				routes[routePattern] = {
+					accepts: networks.map((network) => ({
+						scheme: "exact",
+						price: config.price,
+						network,
+						payTo: network.startsWith("eip155:")
+							? (payToEvm as string)
+							: (payToSolana as string),
+					})),
+					description: config.description,
+				};
+			}
+
+			const facilitator = new HTTPFacilitatorClient({ url: facilitatorUrl });
+			const server = new x402ResourceServer(facilitator);
+			for (const network of networks) {
+				server.register(
+					network,
+					network.startsWith("eip155:")
+						? new ExactEvmScheme()
+						: new ExactSvmScheme()
+				);
+			}
+
+			paymentMw = paymentMiddleware(routes, server);
+			middlewareCache.set(fingerprint, paymentMw);
+		}
 
 		// Apply the combined auth/payment middleware
 		return await requirePaymentOrCookie(paymentMw)(c, next);
