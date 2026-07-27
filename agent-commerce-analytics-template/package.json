@@ -1,0 +1,57 @@
+{
+	"name": "agent-commerce-analytics-template",
+	"description": "Merchant-facing analytics for AI shopping agents. Tracks the discover → browse → purchase journey per agent, payment network, and verification status, with auto-generated insights and a React dashboard.",
+	"cloudflare": {
+		"label": "Agent Commerce Analytics",
+		"products": [
+			"Workers",
+			"KV"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/kv/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/5a24f3f7-d7f8-4ebc-2632-f59324097200/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
+		"bindings": {
+			"MERCHANT_NAME": {
+				"description": "Your store name, shown in the dashboard header (e.g., 'Mountain Kids Outfitters')."
+			},
+			"SEED_DEMO_DATA": {
+				"description": "Seed bundled demo traffic on first request so the dashboard is populated out of the box. Set to `false` once you're ingesting real events."
+			},
+			"EVENT_RETENTION_DAYS": {
+				"description": "How many days of agent events to retain in KV (default: 30)."
+			}
+		}
+	},
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "npm run build && vite preview",
+		"deploy": "npm run build && wrangler deploy",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && vite build && wrangler deploy --dry-run",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"hono": "^4.7.0",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.15.3",
+		"@cloudflare/vitest-pool-workers": "^0.8.36",
+		"@cloudflare/workers-types": "^4.20250327.0",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "5.1.1",
+		"typescript": "5.9.3",
+		"vite": "^6.0.0",
+		"vitest": "~3.0.0",
+		"wrangler": "4.56.0"
+	}
+}
