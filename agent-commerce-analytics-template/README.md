@@ -4,6 +4,8 @@
 
 ![Status: Demo-ready](https://img.shields.io/badge/status-demo--ready-green) ![Type: Analytics dashboard](https://img.shields.io/badge/type-analytics--dashboard-blue)
 
+**Live demo:** https://agent-commerce-analytics-template.templates.workers.dev/
+
 <!-- dash-content-start -->
 
 A Cloudflare Workers template that gives merchants visibility into how AI shopping agents interact with their store. It tracks the full journey from discovery (`/llms.txt` reads) through browsing (product views) to purchase (checkout attempts), broken down by agent identity, payment network, and verification status, and ships with a React dashboard that surfaces auto-generated insights (top agents, blocked checkouts, product gaps, content quality, revenue headlines). Seeded with bundled demo traffic so the dashboard is populated on first deploy.
