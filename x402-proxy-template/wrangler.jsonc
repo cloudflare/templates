@@ -146,7 +146,7 @@
 		// Defaults to x402.org if not set. x402.org is intended for testnets.
 		//
 		// Example facilitators:
-		//   - CDP: https://x402.org/facilitator (testnets: Base Sepolia, Solana Devnet)
+		//   - x402 Foundation: https://x402.org/facilitator (testnets: Base Sepolia, Solana Devnet)
 		//   - PayAI: https://facilitator.payai.network (multi-chain)
 		//
 		// More production facilitators: https://docs.x402.org/dev-tools/facilitators
