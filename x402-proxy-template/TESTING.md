@@ -157,7 +157,7 @@ You should receive the authenticated response without being asked for payment!
 
 ### Route configuration error
 
-- Use CAIP-2 identifiers or one of the four documented aliases
+- Use CAIP-2 identifiers (e.g. `eip155:84532`, `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`)
 - Set `PAY_TO` for every `eip155:*` network
 - Set `PAY_TO_SOLANA` for every `solana:*` network
 - Confirm the selected facilitator supports every configured network
