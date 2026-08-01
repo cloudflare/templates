@@ -154,14 +154,14 @@ The proxy is configured via environment variables in `wrangler.jsonc`:
 
 `NETWORK` accepts a CAIP-2 identifier or a comma-separated list. Every protected route advertises one payment option per configured network.
 
-| Network        | CAIP-2 identifier                         | Legacy alias    |
-| -------------- | ----------------------------------------- | --------------- |
-| Base Sepolia   | `eip155:84532`                            | `base-sepolia`  |
-| Base           | `eip155:8453`                             | `base`          |
-| Solana mainnet | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` | `solana`        |
-| Solana devnet  | `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1` | `solana-devnet` |
+| Network        | CAIP-2 identifier                         |
+| -------------- | ----------------------------------------- |
+| Base Sepolia   | `eip155:84532`                            |
+| Base           | `eip155:8453`                             |
+| Solana mainnet | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` |
+| Solana devnet  | `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1` |
 
-Network identifiers are [CAIP-2](https://chainagnostic.org/CAIPs/caip-2). Live facilitator and network support is listed under [Facilitators](https://docs.x402.org/dev-tools/facilitators). Existing deployments may keep the four aliases; new configurations should prefer CAIP-2 identifiers:
+Network identifiers are [CAIP-2](https://chainagnostic.org/CAIPs/caip-2). Live facilitator and network support is listed under [Facilitators](https://docs.x402.org/dev-tools/facilitators):
 
 ```jsonc
 "NETWORK": "eip155:84532,solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"

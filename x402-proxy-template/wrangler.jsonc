@@ -66,9 +66,6 @@
 		// Set one CAIP-2 network or a comma-separated list for multi-network
 		// payment options. Supported families are eip155:* and solana:*.
 		//
-		// Legacy aliases remain accepted:
-		//   base-sepolia, base, solana, solana-devnet
-		//
 		// Base Sepolia and Solana devnet USDC: https://faucet.circle.com
 		// Payers need no testnet ETH or SOL: EVM payments are signed offline
 		// (EIP-3009), Solana uses extra.feePayer, and the facilitator submits.

@@ -14,13 +14,6 @@ import type { AppContext, Env } from "./env";
 
 export const DEFAULT_FACILITATOR_URL = "https://x402.org/facilitator";
 
-const NETWORK_ALIASES: Record<string, Network> = {
-	"base-sepolia": "eip155:84532",
-	base: "eip155:8453",
-	solana: "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
-	"solana-devnet": "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
-};
-
 type NetworkResolution =
 	| { ok: true; networks: Network[] }
 	| { ok: false; error: string };
@@ -44,7 +37,7 @@ function configError(message: string): string {
 }
 
 /**
- * Resolve a comma-separated NETWORK value to v2 CAIP-2 network identifiers.
+ * Parse and validate the comma-separated NETWORK value (CAIP-2 identifiers).
  */
 export function resolveNetworks(value: string | undefined): NetworkResolution {
 	const entries = (value || "")
@@ -58,15 +51,16 @@ export function resolveNetworks(value: string | undefined): NetworkResolution {
 
 	const networks: Network[] = [];
 	for (const entry of entries) {
-		const network = NETWORK_ALIASES[entry] || entry;
-		if (!/^(eip155|solana):[^:]+$/.test(network)) {
+		if (!/^(eip155|solana):[^:]+$/.test(entry)) {
 			return {
 				ok: false,
-				error: configError(`unknown NETWORK entry "${entry}"`),
+				error: configError(
+					`unknown NETWORK entry "${entry}"; use CAIP-2 identifiers such as eip155:84532`
+				),
 			};
 		}
-		if (!networks.includes(network as Network)) {
-			networks.push(network as Network);
+		if (!networks.includes(entry as Network)) {
+			networks.push(entry as Network);
 		}
 	}
 
