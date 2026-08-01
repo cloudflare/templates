@@ -143,7 +143,7 @@ Ask these together:
 2. **"What EVM address should receive payments (`PAY_TO`), if using `eip155:*`?"**
 3. **"What Solana address should receive payments (`PAY_TO_SOLANA`), if using `solana:*`?"**
 
-Accepted aliases are `base-sepolia`, `base`, `solana`, and `solana-devnet`. Prefer CAIP-2 identifiers in new configurations; live facilitator and network support is listed under [Facilitators](https://docs.x402.org/dev-tools/facilitators).
+Network identifiers use CAIP-2 format (e.g. `eip155:84532`, `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`); live facilitator and network support is listed under [Facilitators](https://docs.x402.org/dev-tools/facilitators).
 
 #### If User Doesn't Have a Wallet Address
 
@@ -435,13 +435,13 @@ If a bot isn't in the registry, the user can find its detection ID in the dashbo
 
 ### Required Variables
 
-| Variable             | Description                                                  |
-| -------------------- | ------------------------------------------------------------ |
-| `PAY_TO`             | Recipient for configured `eip155:*` networks                 |
-| `PAY_TO_SOLANA`      | Recipient for configured `solana:*` networks                 |
-| `NETWORK`            | CAIP-2 network or comma-separated networks (aliases allowed) |
-| `JWT_SECRET`         | Secret for signing tokens (64 hex chars)                     |
-| `PROTECTED_PATTERNS` | Array of protected route configurations                      |
+| Variable             | Description                                  |
+| -------------------- | -------------------------------------------- |
+| `PAY_TO`             | Recipient for configured `eip155:*` networks |
+| `PAY_TO_SOLANA`      | Recipient for configured `solana:*` networks |
+| `NETWORK`            | CAIP-2 network or comma-separated networks   |
+| `JWT_SECRET`         | Secret for signing tokens (64 hex chars)     |
+| `PROTECTED_PATTERNS` | Array of protected route configurations      |
 
 ### Protected Pattern Schema
 
