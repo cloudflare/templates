@@ -7,6 +7,8 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/shopify-on-cloudflare-template)
 
+![Shopify on Cloudflare: a production-ready Shopify embedded app starter on Cloudflare Workers](preview-image.png)
+
 **🔗 Live preview:** [cloudflare-shopify-starter-template.ali-d43.workers.dev/preview](https://cloudflare-shopify-starter-template.ali-d43.workers.dev/preview) (opens without a Shopify login).
 
 **📦 Source:** [devkindhq/shopify-on-cloudflare](https://github.com/devkindhq/shopify-on-cloudflare) · built by [Devkind](https://devkind.com.au).
