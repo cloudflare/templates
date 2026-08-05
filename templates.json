@@ -107,6 +107,9 @@
     },
     "agent-commerce-analytics-template": {
       "package_json_hash": "800d5e6088a3a816e8572b307f8a1b76dfc1fe04"
+    },
+    "react-starter-template": {
+      "package_json_hash": "d767d871776b0393536149ee47805f1350fe97cd"
     }
   }
 }
