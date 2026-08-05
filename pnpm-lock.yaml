@@ -120,6 +120,25 @@ importers:
         specifier: 4.88.0
         version: 4.88.0(@cloudflare/workers-types@4.20260507.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
+  agentskit-agent-template:
+    dependencies:
+      '@agentskit/adapters':
+        specifier: 0.14.0
+        version: 0.14.0
+      '@agentskit/core':
+        specifier: 1.12.5
+        version: 1.12.5
+    devDependencies:
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: 3.2.4
+        version: 3.2.4(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)
+      wrangler:
+        specifier: 4.88.0
+        version: 4.88.0(@cloudflare/workers-types@4.20260507.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
   ai-brand-visibility-template:
     dependencies:
       '@phosphor-icons/react':
@@ -1415,6 +1434,20 @@ packages:
 
   '@adraffy/ens-normalize@1.11.1':
     resolution: {integrity: sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ==}
+
+  '@agentskit/adapters@0.14.0':
+    resolution: {integrity: sha512-HzJKLCIhdF9vW0KMq0dnxk3z+0gDvSxDJEJ71UvbLeULlC1U8ARhjk3XfvfX4U8NoydMlqla3vamxKPrkI5lRQ==}
+    peerDependencies:
+      '@aws-sdk/client-bedrock-runtime': ^3.0.0
+      '@mlc-ai/web-llm': ^0.2.0
+    peerDependenciesMeta:
+      '@aws-sdk/client-bedrock-runtime':
+        optional: true
+      '@mlc-ai/web-llm':
+        optional: true
+
+  '@agentskit/core@1.12.5':
+    resolution: {integrity: sha512-pj+KKY5H9k85p0aJNSa/Rq5RwKWyp3epug3xbns+ZhDg7mtCTksR7m3SL031fNgmsPVp+59GpucUz1uAfn36bg==}
 
   '@ai-sdk/gateway@2.0.15':
     resolution: {integrity: sha512-i1YVKzC1dg9LGvt+GthhD7NlRhz9J4+ZRj3KELU14IZ/MHPsOBiFeEoCCIDLR+3tqT8/+5nIsK3eZ7DFRfMfdw==}
@@ -12554,6 +12587,12 @@ packages:
 snapshots:
 
   '@adraffy/ens-normalize@1.11.1': {}
+
+  '@agentskit/adapters@0.14.0':
+    dependencies:
+      '@agentskit/core': 1.12.5
+
+  '@agentskit/core@1.12.5': {}
 
   '@ai-sdk/gateway@2.0.15(zod@3.25.76)':
     dependencies:
