@@ -1,0 +1,45 @@
+{
+	"name": "internal-sites-template",
+	"private": true,
+	"description": "Deploy an internal static site platform for your company. Employees drag-and-drop files to publish sites behind Cloudflare Access.",
+	"license": "Apache-2.0",
+	"engines": {
+		"node": ">=18"
+	},
+	"cloudflare": {
+		"label": "Internal Sites Platform",
+		"products": ["Workers for Platforms", "D1", "Access"],
+		"categories": ["starter"],
+		"bindings": {
+			"ACCOUNT_ID": {
+				"description": "The Account ID for the Cloudflare account you are deploying to. [Open Account Home](https://dash.cloudflare.com/) and select **Copy Account ID** from the menu beside your account name."
+			},
+			"DISPATCH_NAMESPACE_API_TOKEN": {
+				"description": "API token with **Workers Scripts Edit** permission. [Create a Custom Token](https://dash.cloudflare.com/profile/api-tokens) with `Account > Workers Scripts > Edit` scoped to your account."
+			},
+			"SITE_DOMAIN": {
+				"description": "Your company's internal domain, e.g. `internal-company.com`. Sites deploy to `site-name.internal-company.com`."
+			}
+		}
+	},
+	"scripts": {
+		"build": "node scripts/setup.js",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy && node scripts/setup.js --set-secrets",
+		"dev": "wrangler dev --remote",
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"fflate": "^0.8.2",
+		"hono": "^4.7.0"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.8.71",
+		"@cloudflare/workers-types": "4.20260702.1",
+		"@vitest/runner": "3.2.4",
+		"@vitest/snapshot": "3.2.4",
+		"typescript": "5.9.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	}
+}
