@@ -1,0 +1,22 @@
+name = "mta-sts"
+main = "src/index.js"
+compatibility_date = "2026-02-21"
+
+[env.test_none.vars]
+MAX_AGE  = 60
+MODE     = "none"
+
+[env.test_testing.vars]
+MODE     = "testing"
+MAX_AGE  = "60"
+MX_HOSTS = "mx1.example.com mx2.example.com"
+
+[env.enforce_proton.vars]
+MAX_AGE  = 60
+MODE     = "enforce"
+MX_HOSTS = "mail.protonmail.ch mailsec.protonmail.ch"
+
+[env.enforce_protonalias.vars]
+MAX_AGE  = 60
+MODE     = "enforce"
+MX_HOSTS = "mx1.alias.proton.me mx2.alias.proton.me"
