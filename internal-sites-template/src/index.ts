@@ -92,7 +92,10 @@ app.get("/admin", async (c) => {
 	let dispatchHtml = "";
 
 	try {
-		const sites = await FetchTable(c.var.db, "sites") as unknown as Parameters<typeof BuildSitesTable>[0];
+		const sites = (await FetchTable(
+			c.var.db,
+			"sites",
+		)) as unknown as Parameters<typeof BuildSitesTable>[0];
 		sitesHtml = BuildSitesTable(sites, urlFn);
 	} catch (error) {
 		sitesHtml = `<p class="admin-error">Could not load sites: ${escapeHtml(errorMessage(error))}</p>`;
@@ -107,11 +110,11 @@ app.get("/admin", async (c) => {
 
 	try {
 		const scripts = await GetScriptsInDispatchNamespace(c.env);
-		dispatchHtml = BuildTable(
-			c.env.DISPATCH_NAMESPACE_NAME,
-			scripts,
-			["id", "created_on", "modified_on"],
-		);
+		dispatchHtml = BuildTable(c.env.DISPATCH_NAMESPACE_NAME, scripts, [
+			"id",
+			"created_on",
+			"modified_on",
+		]);
 	} catch (error) {
 		dispatchHtml = `<p class="admin-error">Could not load dispatch namespace: ${escapeHtml(errorMessage(error))}</p>`;
 	}
@@ -157,13 +160,15 @@ app.post("/api/sites/deploy", async (c) => {
 		const existingSite = await GetSiteBySlug(c.var.db, upload.slug);
 		const now = new Date().toISOString();
 		const site =
-			existingSite ||
-			buildSite(upload.name, upload.slug, identity.email, now);
+			existingSite || buildSite(upload.name, upload.slug, identity.email, now);
 
 		// Prevent slug takeover
 		if (existingSite && existingSite.owner_email !== identity.email) {
 			return c.json(
-				{ error: "This site name is already taken. Please choose a different one." },
+				{
+					error:
+						"This site name is already taken. Please choose a different one.",
+				},
 				409,
 			);
 		}
@@ -268,10 +273,7 @@ app.get("*", async (c) => {
 	const site = await GetSiteBySlug(c.var.db, slug);
 
 	if (!site) {
-		return c.html(
-			renderNotFound(siteDomain(c.env), deployPath(c.env)),
-			404,
-		);
+		return c.html(renderNotFound(siteDomain(c.env), deployPath(c.env)), 404);
 	}
 
 	// Redirect /sites/slug to /sites/slug/ in path-based mode
@@ -292,10 +294,7 @@ app.get("*", async (c) => {
 			error instanceof Error &&
 			error.message.startsWith("Worker not found")
 		) {
-			return c.html(
-				renderNotFound(siteDomain(c.env), deployPath(c.env)),
-				404,
-			);
+			return c.html(renderNotFound(siteDomain(c.env), deployPath(c.env)), 404);
 		}
 
 		console.error("Dispatch failed", error);
@@ -338,9 +337,7 @@ function slugFromRequest(request: Request, env: Env): string | null {
 
 	// Production: subdomain routing
 	if (url.hostname.endsWith(`.${domain}`)) {
-		return normalizeSlug(
-			url.hostname.slice(0, -(domain.length + 1)),
-		);
+		return normalizeSlug(url.hostname.slice(0, -(domain.length + 1)));
 	}
 
 	// Testing: path-based routing

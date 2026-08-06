@@ -91,10 +91,7 @@ function ensureDispatchNamespace(namespaceName) {
 		}
 
 		if (output.includes("You do not have access")) {
-			log(
-				yellow,
-				"  Workers for Platforms is not available on this account.",
-			);
+			log(yellow, "  Workers for Platforms is not available on this account.");
 			log(
 				yellow,
 				"  Enable it at: https://dash.cloudflare.com/?to=/:account/workers-for-platforms",
@@ -174,8 +171,7 @@ function writeDevVars(accountId, dispatchToken) {
 	const vars = {};
 	if (dispatchToken) vars.DISPATCH_NAMESPACE_API_TOKEN = dispatchToken;
 	else if (existing.DISPATCH_NAMESPACE_API_TOKEN)
-		vars.DISPATCH_NAMESPACE_API_TOKEN =
-			existing.DISPATCH_NAMESPACE_API_TOKEN;
+		vars.DISPATCH_NAMESPACE_API_TOKEN = existing.DISPATCH_NAMESPACE_API_TOKEN;
 
 	if (accountId) vars.ACCOUNT_ID = accountId;
 	else if (existing.ACCOUNT_ID) vars.ACCOUNT_ID = existing.ACCOUNT_ID;
@@ -277,14 +273,8 @@ function main() {
 			"  set as a Worker secret automatically after deployment finishes.",
 		);
 		log(cyan, "");
-		log(
-			cyan,
-			"  If deploying manually, set it with:",
-		);
-		log(
-			cyan,
-			"    npx wrangler secret put DISPATCH_NAMESPACE_API_TOKEN",
-		);
+		log(cyan, "  If deploying manually, set it with:");
+		log(cyan, "    npx wrangler secret put DISPATCH_NAMESPACE_API_TOKEN");
 		console.log("");
 	}
 

@@ -133,10 +133,7 @@ export function renderDeployPage(options: {
 	);
 }
 
-export function renderNotFound(
-	siteDomain: string,
-	deployPath: string,
-): string {
+export function renderNotFound(siteDomain: string, deployPath: string): string {
 	return renderShell(
 		`
     <p class="lede">No site is configured for this URL.</p>

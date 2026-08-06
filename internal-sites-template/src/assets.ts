@@ -78,8 +78,7 @@ export async function parseStaticSiteUpload(
 
 	// Detect ZIP upload: single file ending in .zip
 	const zipFile =
-		fileParts.length === 1 &&
-		fileParts[0].name.toLowerCase().endsWith(".zip")
+		fileParts.length === 1 && fileParts[0].name.toLowerCase().endsWith(".zip")
 			? fileParts[0]
 			: null;
 
@@ -156,10 +155,7 @@ async function assetsFromZip(file: File): Promise<UploadedAsset[]> {
 }
 
 function normalizeRelativePath(path: string): string {
-	return path
-		.replace(/\\/g, "/")
-		.replace(/^\/+/, "")
-		.replace(/^\.\//, "");
+	return path.replace(/\\/g, "/").replace(/^\/+/, "").replace(/^\.\//, "");
 }
 
 /**
@@ -167,9 +163,7 @@ function normalizeRelativePath(path: string): string {
  * This handles the common case where a folder upload wraps everything
  * in a single directory (e.g. "my-site/index.html" -> "index.html").
  */
-function stripCommonTopLevelFolder(
-	assets: UploadedAsset[],
-): UploadedAsset[] {
+function stripCommonTopLevelFolder(assets: UploadedAsset[]): UploadedAsset[] {
 	const firstSegments = assets
 		.map((asset) => asset.path.split("/")[0])
 		.filter(Boolean);
@@ -199,9 +193,7 @@ function validateAssets(assets: UploadedAsset[]): void {
 	}
 
 	if (assets.length > MAX_FILES) {
-		throw new Error(
-			`Upload contains too many files. Maximum is ${MAX_FILES}.`,
-		);
+		throw new Error(`Upload contains too many files. Maximum is ${MAX_FILES}.`);
 	}
 
 	let totalBytes = 0;
@@ -230,9 +222,7 @@ function validateAssets(assets: UploadedAsset[]): void {
 
 function contentTypeForPath(path: string): string {
 	const lower = path.toLowerCase();
-	const extension = Object.keys(MIME_TYPES).find((ext) =>
-		lower.endsWith(ext),
-	);
+	const extension = Object.keys(MIME_TYPES).find((ext) => lower.endsWith(ext));
 
 	return extension ? MIME_TYPES[extension] : "application/octet-stream";
 }

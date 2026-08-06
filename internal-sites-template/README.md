@@ -87,21 +87,21 @@ Update `SITE_DOMAIN` in `wrangler.jsonc` to your domain. The platform switches t
 
 ```jsonc
 {
-  "workers_dev": false,
-  "vars": {
-    "SITE_DOMAIN": "yourcompany.com"
-  },
-  "routes": [
-    { "pattern": "yourcompany.com/*", "zone_name": "yourcompany.com" },
-    { "pattern": "*.yourcompany.com/*", "zone_name": "yourcompany.com" }
-  ]
+	"workers_dev": false,
+	"vars": {
+		"SITE_DOMAIN": "yourcompany.com",
+	},
+	"routes": [
+		{ "pattern": "yourcompany.com/*", "zone_name": "yourcompany.com" },
+		{ "pattern": "*.yourcompany.com/*", "zone_name": "yourcompany.com" },
+	],
 }
 ```
 
 **b. Add DNS records** in your Cloudflare DNS settings:
 
 | Type | Name | Content     | Proxy   |
-|------|------|-------------|---------|
+| ---- | ---- | ----------- | ------- |
 | A    | `@`  | `192.0.2.1` | Proxied |
 | A    | `*`  | `192.0.2.1` | Proxied |
 
@@ -157,13 +157,13 @@ http://localhost:8787/sites/site-name/
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| "Company sign-in is required" | Access is not configured. See **Require company login** in the Setup section above |
-| "Could not create asset upload session" | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission |
-| "Dispatch namespace not found" | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npx wrangler dispatch-namespace create internal-sites` |
-| 404 on deployed sites | Ensure uploaded files include `index.html` at the root |
-| Database errors | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard |
+| Problem                                 | Solution                                                                                                                                                        |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Company sign-in is required"           | Access is not configured. See **Require company login** in the Setup section above                                                                              |
+| "Could not create asset upload session" | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                           |
+| "Dispatch namespace not found"          | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npx wrangler dispatch-namespace create internal-sites` |
+| 404 on deployed sites                   | Ensure uploaded files include `index.html` at the root                                                                                                          |
+| Database errors                         | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                          |
 
 **View logs:**
 

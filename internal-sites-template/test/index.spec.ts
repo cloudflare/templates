@@ -138,9 +138,7 @@ describe("Internal Sites Platform", () => {
 	});
 
 	it("returns 404 for non-existent site via API", async () => {
-		const request = new Request(
-			"http://localhost/api/sites/nonexistent-slug",
-		);
+		const request = new Request("http://localhost/api/sites/nonexistent-slug");
 		const ctx = createExecutionContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);

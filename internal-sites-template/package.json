@@ -8,8 +8,14 @@
 	},
 	"cloudflare": {
 		"label": "Internal Sites Platform",
-		"products": ["Workers for Platforms", "D1", "Access"],
-		"categories": ["starter"],
+		"products": [
+			"Workers for Platforms",
+			"D1",
+			"Access"
+		],
+		"categories": [
+			"starter"
+		],
 		"bindings": {
 			"ACCOUNT_ID": {
 				"description": "The Account ID for the Cloudflare account you are deploying to. [Open Account Home](https://dash.cloudflare.com/) and select **Copy Account ID** from the menu beside your account name."

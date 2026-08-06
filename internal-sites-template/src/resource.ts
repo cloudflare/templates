@@ -164,9 +164,7 @@ function normalizeAssets(assets: UploadedAsset[]): UploadedAsset[] {
 	}
 
 	if (!seen.has("/index.html")) {
-		throw new Error(
-			"Static site must include an index.html file at the root",
-		);
+		throw new Error("Static site must include an index.html file at the root");
 	}
 
 	return normalized;
@@ -174,9 +172,7 @@ function normalizeAssets(assets: UploadedAsset[]): UploadedAsset[] {
 
 function normalizeAssetPath(path: string): string {
 	const withoutBackslashes = path.replace(/\\/g, "/");
-	const stripped = withoutBackslashes
-		.replace(/^\/+/, "")
-		.replace(/^\.\//, "");
+	const stripped = withoutBackslashes.replace(/^\/+/, "").replace(/^\.\//, "");
 	const parts = stripped.split("/").filter((part) => part && part !== ".");
 
 	return `/${parts.join("/")}`;
@@ -209,12 +205,8 @@ async function hashAsset(
 	scriptName: string,
 	asset: UploadedAsset,
 ): Promise<string> {
-	const prefix = new TextEncoder().encode(
-		`${scriptName}\0${asset.path}\0`,
-	);
-	const bytes = new Uint8Array(
-		prefix.byteLength + asset.content.byteLength,
-	);
+	const prefix = new TextEncoder().encode(`${scriptName}\0${asset.path}\0`);
+	const bytes = new Uint8Array(prefix.byteLength + asset.content.byteLength);
 	bytes.set(prefix, 0);
 	bytes.set(asset.content, prefix.byteLength);
 
@@ -252,10 +244,7 @@ async function createAssetsUploadSession(
 
 	if (!data.success) {
 		throw new Error(
-			formatCloudflareError(
-				"Could not create asset upload session",
-				data,
-			),
+			formatCloudflareError("Could not create asset upload session", data),
 		);
 	}
 
@@ -282,16 +271,13 @@ async function uploadAssetBucket(
 		formData.append(hash, bytesToBase64(asset.content));
 	}
 
-	const response = await fetch(
-		`${BaseURI(env)}/assets/upload?base64=true`,
-		{
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${uploadJwt}`,
-			},
-			body: formData,
+	const response = await fetch(`${BaseURI(env)}/assets/upload?base64=true`, {
+		method: "POST",
+		headers: {
+			Authorization: `Bearer ${uploadJwt}`,
 		},
-	);
+		body: formData,
+	});
 
 	const data = await readCloudflareResponse<{ jwt: string }>(
 		response,
@@ -356,10 +342,7 @@ async function putStaticAssetWorker(
 		).catch(() => null);
 		throw new Error(
 			data
-				? formatCloudflareError(
-						"Could not deploy static site Worker",
-						data,
-					)
+				? formatCloudflareError("Could not deploy static site Worker", data)
 				: "Could not deploy static site Worker",
 		);
 	}
@@ -378,9 +361,7 @@ async function readCloudflareResponse<T>(
 	try {
 		data = JSON.parse(text) as CloudflareApiResponse<T>;
 	} catch {
-		throw new Error(
-			`${context}: ${response.status} ${text.slice(0, 300)}`,
-		);
+		throw new Error(`${context}: ${response.status} ${text.slice(0, 300)}`);
 	}
 
 	if (!response.ok) {
