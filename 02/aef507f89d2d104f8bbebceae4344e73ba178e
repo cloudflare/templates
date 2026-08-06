@@ -1,0 +1,33 @@
+internal-sites-template/README.md
+  s_ea3fae4c04c4c1::t_d2467576484972 90-97,104,160-166
+internal-sites-template/package.json
+  s_ea3fae4c04c4c1::t_5ee999d7a00097 11-18
+internal-sites-template/scripts/setup.js
+  s_ea3fae4c04c4c1::t_d5fdea64440fcb 94,174,276-277
+internal-sites-template/src/assets.ts
+  s_ea3fae4c04c4c1::t_6ad222605acc82 81,158,166,196,225
+internal-sites-template/src/index.ts
+  s_ea3fae4c04c4c1::t_7a738c270d175d 95-98,113-117,163,168-171,276,297,340
+internal-sites-template/src/resource.ts
+  s_ea3fae4c04c4c1::t_0b68f5cab61b81 167,175,208-209,247,274-277,279-280,345,364
+internal-sites-template/src/ui.ts
+  s_ea3fae4c04c4c1::t_f921318b93497f 136
+internal-sites-template/test/index.spec.ts
+  s_ea3fae4c04c4c1::t_776a1a732211a5 141
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "02aef507f89d2d104f8bbebceae4344e73ba178e",
+  "prompts": {},
+  "sessions": {
+    "s_ea3fae4c04c4c1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_028931909ffeWLzh9I4KqVzJH6",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "chythra-w1 <chythra-w1@users.noreply.github.com>"
+    }
+  }
+}
