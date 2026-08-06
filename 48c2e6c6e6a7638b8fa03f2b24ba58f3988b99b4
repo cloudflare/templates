@@ -1,0 +1,61 @@
+internal-sites-template/.dev.vars.example
+  s_ea3fae4c04c4c1::t_77b35607b3a188 1-19
+internal-sites-template/.gitignore
+  s_ea3fae4c04c4c1::t_a4ef66c3442890 1-103
+internal-sites-template/.npmrc
+  s_ea3fae4c04c4c1::t_859a4afe761223 1
+internal-sites-template/LICENSE
+  s_ea3fae4c04c4c1::t_430f329df30375 1-177
+internal-sites-template/README.md
+  s_ea3fae4c04c4c1::t_8d1da18007852c 1-202
+internal-sites-template/package-lock.json
+  s_ea3fae4c04c4c1::t_fff239c62ae2ac 1-4424
+internal-sites-template/package.json
+  s_ea3fae4c04c4c1::t_88e8798fe029e1 1-45
+internal-sites-template/scripts/setup.js
+  s_ea3fae4c04c4c1::t_386515df15410b 1-305
+internal-sites-template/src/access.ts
+  s_ea3fae4c04c4c1::t_16093fce14422c 1-96
+internal-sites-template/src/assets.ts
+  s_ea3fae4c04c4c1::t_4a3f07da32eed7 1-238
+internal-sites-template/src/db.ts
+  s_ea3fae4c04c4c1::t_16dec4c68cfc08 1-184
+internal-sites-template/src/env.ts
+  s_ea3fae4c04c4c1::t_9d63d1214486c6 1-50
+internal-sites-template/src/index.ts
+  s_ea3fae4c04c4c1::t_106d2bc9bc73b6 1-476
+internal-sites-template/src/render.ts
+  s_ea3fae4c04c4c1::t_89276c6851a514 1-134
+internal-sites-template/src/resource.ts
+  s_ea3fae4c04c4c1::t_1cd62605c53f14 1-415
+internal-sites-template/src/types.ts
+  s_ea3fae4c04c4c1::t_36fb451b3cfff0 1-45
+internal-sites-template/src/ui.ts
+  s_ea3fae4c04c4c1::t_18b8d740265ef1 1-1165
+internal-sites-template/test/index.spec.ts
+  s_ea3fae4c04c4c1::t_ace44473945465 1-163
+internal-sites-template/tsconfig.json
+  s_ea3fae4c04c4c1::t_2caf70f3da721d 1-17
+internal-sites-template/vitest.config.ts
+  s_ea3fae4c04c4c1::t_c8830b77992557 1-14
+internal-sites-template/wrangler.jsonc
+  s_ea3fae4c04c4c1::t_c35f21f238f3ba 1-35
+playwright-tests/internal-sites-template.spec.ts
+  s_ea3fae4c04c4c1::t_f4d845c381fc7b 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "48c2e6c6e6a7638b8fa03f2b24ba58f3988b99b4",
+  "prompts": {},
+  "sessions": {
+    "s_ea3fae4c04c4c1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_028931909ffeWLzh9I4KqVzJH6",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "chythra-w1 <chythra-w1@users.noreply.github.com>"
+    }
+  }
+}
