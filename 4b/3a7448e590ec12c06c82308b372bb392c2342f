@@ -1,0 +1,21 @@
+internal-sites-template/package-lock.json
+  s_ea3fae4c04c4c1::t_c3c0ef949ae649 707-709,1677-1693,1724-1726,1738-1740,1752-1754,1766-1768,1780-1782,1794-1796,1808-1810,1822-1824,1836-1838,1850-1852,1864-1866,1878-1880,1892-1894,1906-1908,1920-1922,1934-1936,1948-1950,1962-1964,1976-1978,1990-1992,2004-2006,2018-2020,2032-2034,2046-2048,2060-2062,2087-2089,2432-2434,2531-2533,2584-2586,2691-2693,2761-2763,2781,2790-2792,2806-2831,3057-3059
+templates.json
+  s_ea3fae4c04c4c1::t_30ef0304e667f9 110-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "4b3a7448e590ec12c06c82308b372bb392c2342f",
+  "prompts": {},
+  "sessions": {
+    "s_ea3fae4c04c4c1": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_028931909ffeWLzh9I4KqVzJH6",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "chythra-w1 <chythra-w1@users.noreply.github.com>"
+    }
+  }
+}
