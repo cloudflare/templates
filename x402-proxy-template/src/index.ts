@@ -1,6 +1,11 @@
 import { Hono } from "hono";
 import { setCookie } from "hono/cookie";
-import { createProtectedRoute, type ProtectedRouteConfig } from "./auth";
+import {
+	createProtectedRoute,
+	DEFAULT_FACILITATOR_URL,
+	resolveNetworks,
+	type ProtectedRouteConfig,
+} from "./auth";
 import { generateJWT } from "./jwt";
 import { hasBotManagementException } from "./bot-management";
 import type { AppContext, Env } from "./env";
@@ -159,8 +164,11 @@ app.use("*", async (c, next) => {
 			);
 		}
 
-		// Use the protected route middleware
-		const protectedMiddleware = createProtectedRoute(protectedConfig);
+		// Use one memoized payment middleware for all protected route definitions
+		const protectedMiddleware = createProtectedRoute([
+			...BUILTIN_PROTECTED_PATHS,
+			...protectedPatterns,
+		]);
 		let jwtToken = "";
 
 		const result = await protectedMiddleware(c, async () => {
@@ -183,7 +191,7 @@ app.use("*", async (c, next) => {
 		}
 
 		// Check if the payment middleware set an error response (e.g., settlement failed)
-		// The x402-hono middleware sets c.res to a 402 if settlement fails, even though
+		// The @x402/hono middleware sets c.res on settlement failure, even though
 		// it doesn't return a Response object. We must check c.res status and discard
 		// the JWT token if payment didn't fully complete.
 		if (c.res && c.res.status >= 400) {
@@ -269,10 +277,18 @@ app.get("/__x402/config", (c) => {
 	const botFilteringEnabled = patterns.some(
 		(p) => p.bot_score_threshold !== undefined
 	);
+	const networkResolution = resolveNetworks(c.env.NETWORK);
 
 	return c.json({
 		network: c.env.NETWORK,
-		payTo: c.env.PAY_TO ? `***${c.env.PAY_TO.slice(-6)}` : null,
+		networks: networkResolution.ok ? networkResolution.networks : [],
+		payTo: {
+			eip155: c.env.PAY_TO ? `***${c.env.PAY_TO.slice(-6)}` : null,
+			solana: c.env.PAY_TO_SOLANA
+				? `***${c.env.PAY_TO_SOLANA.slice(-6)}`
+				: null,
+		},
+		facilitatorUrl: c.env.FACILITATOR_URL || DEFAULT_FACILITATOR_URL,
 		hasOriginUrl: !!c.env.ORIGIN_URL,
 		hasOriginService: !!c.env.ORIGIN_SERVICE,
 		protectedPatterns: patterns.map((p) => ({
