@@ -7,7 +7,7 @@
 		"node": ">=18"
 	},
 	"cloudflare": {
-		"label": "Internal Sites Platform",
+		"label": "Internal Static Sites Platform",
 		"products": [
 			"Workers for Platforms",
 			"D1",
