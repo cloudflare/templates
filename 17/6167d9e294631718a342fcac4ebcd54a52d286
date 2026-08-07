@@ -1,0 +1,21 @@
+internal-sites-template/package.json
+  s_e699fc3fbb6acc::t_386160489d7c52 10
+templates.json
+  s_e699fc3fbb6acc::t_0f508c4f92d8d6 112,115
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "176167d9e294631718a342fcac4ebcd54a52d286",
+  "prompts": {},
+  "sessions": {
+    "s_e699fc3fbb6acc": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_02872bd82ffe6IUieF8iZFdtS0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "chythra-w1 <chythra-w1@users.noreply.github.com>"
+    }
+  }
+}
