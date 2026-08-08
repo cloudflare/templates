@@ -1,0 +1,47 @@
+{
+	"name": "newsletter-template",
+	"description": "Serverless newsletter on your own Cloudflare account — signup, compliant one-click unsubscribe, and campaigns to your own list. Bring your own email sender.",
+	"cloudflare": {
+		"label": "Newsletter",
+		"products": [
+			"Workers",
+			"D1"
+		],
+		"categories": [
+			"starter"
+		],
+		"bindings": {
+			"ADMIN_TOKEN": {
+				"description": "Password that protects your send page (/admin). Use a long, random string."
+			},
+			"FROM_NAME": {
+				"description": "The name your emails are sent from, e.g. \"Jane's Newsletter\"."
+			},
+			"FROM_EMAIL": {
+				"description": "The address your emails are sent from, once you connect an email provider in src/email.ts."
+			},
+			"DOUBLE_OPT_IN": {
+				"description": "Set to \"true\" to require subscribers to confirm via a link before they're added (needs email configured). Default \"false\" (single opt-in)."
+			},
+			"SEND_BATCH": {
+				"description": "Queued emails delivered per minutely background run. The default 40 fits the free plan; raise it on the paid plan or when sendEmailBatch is implemented in src/email.ts."
+			}
+		}
+	},
+	"dependencies": {
+		"hono": "4.11.1"
+	},
+	"devDependencies": {
+		"typescript": "5.9.3",
+		"wrangler": "4.88.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "pnpm seedLocalD1 && wrangler dev",
+		"predeploy": "wrangler d1 migrations apply DB --remote",
+		"seedLocalD1": "wrangler d1 migrations apply DB --local"
+	}
+}
