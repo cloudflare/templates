@@ -30,6 +30,7 @@
 		"deploy": "npm run deploy:wfp && wrangler deploy",
 		"deploy:wfp": "tsx scripts/deploy-wfp.ts",
 		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
 		"start": "wrangler dev"
 	}
 }

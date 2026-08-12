@@ -1,23 +1,51 @@
-import { spawn, ChildProcess } from "child_process";
-import { join } from "path";
-import { existsSync, copyFileSync } from "fs";
+import { spawn, type ChildProcess } from "node:child_process";
+import {
+	copyFileSync,
+	existsSync,
+	readdirSync,
+	readFileSync,
+	unlinkSync,
+} from "node:fs";
+import { createServer } from "node:net";
+import { join } from "node:path";
 import fetch from "node-fetch";
 
-// Helper function to kill process tree
+// Helper function to kill the complete process tree without leaving dev servers
+// behind between Playwright runs.
 async function killProcessTree(pid: number): Promise<void> {
 	if (process.platform === "win32") {
-		// Windows
-		spawn("taskkill", ["/pid", pid.toString(), "/T", "/F"], {
-			stdio: "ignore",
+		await new Promise<void>((resolve) => {
+			const taskkill = spawn("taskkill", ["/pid", pid.toString(), "/T", "/F"], {
+				stdio: "ignore",
+			});
+			taskkill.once("close", () => resolve());
+			taskkill.once("error", () => resolve());
 		});
-	} else {
-		// Unix-like (macOS, Linux)
+		return;
+	}
+
+	const processGroupExists = () => {
 		try {
-			process.kill(-pid, "SIGTERM");
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+			process.kill(-pid, 0);
+			return true;
+		} catch {
+			return false;
+		}
+	};
+
+	try {
+		process.kill(-pid, "SIGTERM");
+	} catch {
+		return;
+	}
+	for (let attempt = 0; attempt < 20 && processGroupExists(); attempt++) {
+		await new Promise((resolve) => setTimeout(resolve, 50));
+	}
+	if (processGroupExists()) {
+		try {
 			process.kill(-pid, "SIGKILL");
-		} catch (error) {
-			// Process might already be dead
+		} catch {
+			// Process group exited between the liveness check and signal.
 		}
 	}
 }
@@ -25,14 +53,28 @@ async function killProcessTree(pid: number): Promise<void> {
 export interface Template {
 	name: string;
 	path: string;
-	port: number;
 	devCommand: string;
-	framework: "vite" | "next" | "astro" | "remix" | "wrangler" | "react-router";
-	healthCheckPath?: string; // Optional custom path for server readiness check
+	devScript: "dev" | "e2e:dev";
+	healthCheckPath?: string;
 }
 
+type TemplatePackageJson = {
+	scripts?: Record<string, string>;
+	cloudflare?: {
+		publish?: boolean;
+		healthCheckPath?: string;
+	};
+};
+
+type RunningServer = {
+	process: ChildProcess;
+	url: string;
+	logs: string[];
+	createdEnvFiles: string[];
+};
+
 export class TemplateServerManager {
-	private servers: Map<string, ChildProcess> = new Map();
+	private servers: Map<string, RunningServer> = new Map();
 	private templates: Template[] = [];
 	private useLiveUrls: boolean = false;
 
@@ -43,26 +85,23 @@ export class TemplateServerManager {
 	}
 
 	private discoverTemplates(): void {
-		const fs = require("fs");
-		const templatesRoot = join(process.cwd());
+		const templatesRoot = process.cwd();
 
-		// Get all directories ending with -template
-		const entries = fs.readdirSync(templatesRoot, { withFileTypes: true });
-		const templateDirs = entries
+		const templateDirs = readdirSync(templatesRoot, { withFileTypes: true })
 			.filter(
-				(entry: any) => entry.isDirectory() && entry.name.endsWith("-template"),
+				(entry) => entry.isDirectory() && entry.name.endsWith("-template"),
 			)
-			.map((entry: any) => entry.name);
+			.map((entry) => entry.name);
 
 		for (const templateDir of templateDirs) {
 			const templatePath = join(templatesRoot, templateDir);
 			const packageJsonPath = join(templatePath, "package.json");
 
-			if (fs.existsSync(packageJsonPath)) {
+			if (existsSync(packageJsonPath)) {
 				try {
 					const packageJson = JSON.parse(
-						fs.readFileSync(packageJsonPath, "utf8"),
-					);
+						readFileSync(packageJsonPath, "utf8"),
+					) as TemplatePackageJson;
 
 					// For live tests, only include templates with cloudflare.publish === true
 					if (this.useLiveUrls) {
@@ -93,56 +132,22 @@ export class TemplateServerManager {
 	private analyzeTemplate(
 		name: string,
 		path: string,
-		packageJson: any,
+		packageJson: TemplatePackageJson,
 	): Template | null {
-		const scripts = packageJson.scripts || {};
-		const dependencies = {
-			...packageJson.dependencies,
-			...packageJson.devDependencies,
-		};
+		const scripts = packageJson.scripts ?? {};
 
 		if (!scripts.dev) {
 			console.warn(`Template ${name} has no dev script, skipping`);
 			return null;
 		}
 
-		// Determine framework and default port
-		let framework: Template["framework"] = "wrangler";
-		let port = 8787; // Default wrangler port
-
-		if (dependencies["vite"] || scripts.dev.includes("vite")) {
-			framework = "vite";
-			port = 5173;
-		} else if (dependencies["next"] || scripts.dev.includes("next")) {
-			framework = "next";
-			port = 3000;
-		} else if (dependencies["astro"] || scripts.dev.includes("astro")) {
-			framework = "astro";
-			port = 4321;
-		} else if (
-			dependencies["@remix-run/dev"] ||
-			scripts.dev.includes("remix")
-		) {
-			framework = "remix";
-			port = 5173;
-		} else if (
-			dependencies["@react-router/dev"] ||
-			scripts.dev.includes("react-router")
-		) {
-			framework = "react-router";
-			port = 5173;
-		}
-
-		// Check for custom health check path in cloudflare config
-		const healthCheckPath = packageJson.cloudflare?.healthCheckPath;
-
+		const e2eDevCommand = scripts["e2e:dev"];
 		return {
 			name,
 			path,
-			port,
-			devCommand: scripts.dev,
-			framework,
-			healthCheckPath,
+			devCommand: e2eDevCommand ?? scripts.dev,
+			devScript: e2eDevCommand ? "e2e:dev" : "dev",
+			healthCheckPath: packageJson.cloudflare?.healthCheckPath,
 		};
 	}
 
@@ -159,45 +164,65 @@ export class TemplateServerManager {
 			return liveUrl;
 		}
 
-		if (this.servers.has(templateName)) {
+		const runningServer = this.servers.get(templateName);
+		if (runningServer) {
 			console.log(`Server for ${templateName} already running`);
-			return `http://localhost:${template.port}`;
+			return runningServer.url;
 		}
 
-		console.log(
-			`Starting server for ${template.name} on port ${template.port}...`,
+		const port = await this.getAvailablePort();
+		console.log(`Starting server for ${template.name} on port ${port}...`);
+
+		// Copy example env files if they exist. Files created by the test harness
+		// are removed when the server stops.
+		const createdEnvFiles = this.copyEnvFiles(template.path);
+
+		const devArgs = ["run", template.devScript, "--port", port.toString()];
+		if (template.devCommand.includes("wrangler")) {
+			devArgs.push(
+				"--inspector-port",
+				(await this.getAvailablePort()).toString(),
+			);
+		}
+		const server = spawn(
+			process.platform === "win32" ? "pnpm.cmd" : "pnpm",
+			devArgs,
+			{
+				cwd: template.path,
+				stdio: "pipe",
+				detached: process.platform !== "win32",
+				env: {
+					...process.env,
+					NEXT_TELEMETRY_DEBUG: "1",
+					NEXT_TELEMETRY_DISABLED: "1",
+					WRANGLER_SEND_METRICS: "false",
+				},
+			},
 		);
-
-		// Copy example env files if they exist
-		this.copyEnvFiles(template.path);
-
-		const server = spawn("npm", ["run", "dev"], {
-			cwd: template.path,
-			stdio: "pipe",
-			shell: true,
-			detached: true, // Create a new process group
-		});
-		let serverOutput = "";
-		const captureOutput = (chunk: Buffer | string) => {
-			serverOutput = `${serverOutput}${chunk.toString()}`.slice(-20000);
+		const logs: string[] = [];
+		const appendLog = (chunk: unknown) => {
+			logs.push(String(chunk));
+			if (logs.length > 200) logs.shift();
 		};
-		server.stdout?.on("data", captureOutput);
-		server.stderr?.on("data", captureOutput);
+		for (const stream of [server.stdout, server.stderr]) {
+			stream?.on("data", appendLog);
+		}
+		server.on("error", appendLog);
 
-		this.servers.set(templateName, server);
+		const baseUrl = `http://localhost:${port}`;
+		this.servers.set(templateName, {
+			process: server,
+			url: baseUrl,
+			logs,
+			createdEnvFiles,
+		});
 
 		// Wait for server to be ready
-		const baseUrl = `http://localhost:${template.port}`;
 		const healthCheckUrl = template.healthCheckPath
 			? `${baseUrl}${template.healthCheckPath}`
 			: baseUrl;
 		try {
-			await this.waitForServer(
-				healthCheckUrl,
-				30000,
-				server,
-				() => serverOutput,
-			); // 30 second timeout
+			await this.waitForServer(healthCheckUrl, server, logs, 30000);
 		} catch (error) {
 			await this.stopServer(templateName);
 			throw error;
@@ -208,36 +233,24 @@ export class TemplateServerManager {
 	}
 
 	private getLiveUrl(templateName: string): string {
-		// Get the wrangler name from the template's wrangler.json
-		const fs = require("fs");
-		const template = this.templates.find((t) => t.name === templateName);
-		if (!template) {
-			throw new Error(`Template ${templateName} not found`);
-		}
+		const template = this.templates.find((item) => item.name === templateName);
+		if (!template) throw new Error(`Template ${templateName} not found`);
 
 		try {
-			const wranglerPath = join(template.path, "wrangler.json");
-			const wranglerJsoncPath = join(template.path, "wrangler.jsonc");
-
-			let wranglerConfig;
-			if (fs.existsSync(wranglerPath)) {
-				wranglerConfig = JSON.parse(fs.readFileSync(wranglerPath, "utf8"));
-			} else if (fs.existsSync(wranglerJsoncPath)) {
-				// Simple JSONC parser - remove comments and parse
-				const content = fs.readFileSync(wranglerJsoncPath, "utf8");
-				const jsonContent = content.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
-				wranglerConfig = JSON.parse(jsonContent);
-			} else {
+			const configPath = [
+				join(template.path, "wrangler.jsonc"),
+				join(template.path, "wrangler.json"),
+			].find(existsSync);
+			if (!configPath) {
 				throw new Error(`No wrangler.json found for ${templateName}`);
 			}
-
-			const wranglerName = wranglerConfig.name;
+			const config = readFileSync(configPath, "utf8");
+			const wranglerName = config.match(/"name"\s*:\s*"([^"]+)"/)?.[1];
 			if (!wranglerName) {
 				throw new Error(`No name found in wrangler config for ${templateName}`);
 			}
-
 			return `https://${wranglerName}.templates.workers.dev`;
-		} catch (error) {
+		} catch {
 			console.warn(
 				`Could not determine live URL for ${templateName}, falling back to template name`,
 			);
@@ -251,19 +264,22 @@ export class TemplateServerManager {
 			return;
 		}
 
-		const server = this.servers.get(templateName);
-		if (server && server.pid) {
+		const runningServer = this.servers.get(templateName);
+		if (!runningServer) return;
+
+		if (runningServer.process.pid) {
 			console.log(
-				`Stopping server for ${templateName} (PID: ${server.pid})...`,
+				`Stopping server for ${templateName} (PID: ${runningServer.process.pid})...`,
 			);
-
-			// Kill the entire process tree
-			await killProcessTree(server.pid);
-
-			this.servers.delete(templateName);
-
-			// Give it a moment to fully clean up
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await killProcessTree(runningServer.process.pid);
+		}
+		this.servers.delete(templateName);
+		for (const envFile of runningServer.createdEnvFiles) {
+			try {
+				unlinkSync(envFile);
+			} catch {
+				// The server or test may have already removed the temporary file.
+			}
 		}
 	}
 
@@ -274,46 +290,65 @@ export class TemplateServerManager {
 		await Promise.all(promises);
 	}
 
-	private copyEnvFiles(templatePath: string): void {
+	private copyEnvFiles(templatePath: string): string[] {
 		const envFileMappings = [
 			{ example: ".dev.vars.example", target: ".dev.vars" },
 			{ example: ".env.local.example", target: ".env.local" },
 		];
 
+		const createdFiles: string[] = [];
 		for (const { example, target } of envFileMappings) {
 			const examplePath = join(templatePath, example);
 			const targetPath = join(templatePath, target);
 
 			if (existsSync(examplePath) && !existsSync(targetPath)) {
 				copyFileSync(examplePath, targetPath);
+				createdFiles.push(targetPath);
 				console.log(`Copied ${example} to ${target}`);
 			}
 		}
+		return createdFiles;
+	}
+
+	private async getAvailablePort(): Promise<number> {
+		return new Promise((resolve, reject) => {
+			const server = createServer();
+			server.unref();
+			server.once("error", reject);
+			server.listen(0, "127.0.0.1", () => {
+				const address = server.address();
+				if (!address || typeof address === "string") {
+					server.close();
+					reject(new Error("Unable to allocate a local port"));
+					return;
+				}
+				server.close((error) =>
+					error ? reject(error) : resolve(address.port),
+				);
+			});
+		});
 	}
 
 	private async waitForServer(
 		url: string,
-		timeout: number,
 		server: ChildProcess,
-		getServerOutput: () => string,
+		logs: string[],
+		timeout: number,
 	): Promise<void> {
 		const start = Date.now();
 
 		while (Date.now() - start < timeout) {
-			if (server.exitCode !== null || server.signalCode !== null) {
-				const outcome =
-					server.exitCode !== null
-						? `code ${server.exitCode}`
-						: `signal ${server.signalCode}`;
+			if (server.exitCode !== null) {
 				throw new Error(
-					`Server process for ${url} exited with ${outcome}${this.formatServerOutput(getServerOutput())}`,
+					`Server process exited with code ${server.exitCode}.\n${logs.join("")}`,
 				);
 			}
-
 			try {
-				const response = await fetch(url);
-				if (response.status < 500) {
-					return; // Server is responding
+				const response = await fetch(url, {
+					signal: AbortSignal.timeout(2000),
+				});
+				if (response.ok) {
+					return;
 				}
 			} catch (error) {
 				// Server not ready yet
@@ -323,28 +358,8 @@ export class TemplateServerManager {
 		}
 
 		throw new Error(
-			`Server at ${url} did not become ready within ${timeout}ms${this.formatServerOutput(getServerOutput())}`,
+			`Server at ${url} did not become ready within ${timeout}ms.\n${logs.join("")}`,
 		);
-	}
-
-	private formatServerOutput(output: string): string {
-		const trimmedOutput = output.trim();
-		return trimmedOutput ? `\n\nServer output:\n${trimmedOutput}` : "";
-	}
-
-	private async runCommand(command: string, cwd: string): Promise<void> {
-		return new Promise((resolve, reject) => {
-			const [cmd, ...args] = command.split(" ");
-			const proc = spawn(cmd, args, { cwd, stdio: "inherit" });
-
-			proc.on("close", (code) => {
-				if (code === 0) {
-					resolve();
-				} else {
-					reject(new Error(`Command failed with code ${code}`));
-				}
-			});
-		});
 	}
 
 	getTemplates(): Template[] {
@@ -354,7 +369,8 @@ export class TemplateServerManager {
 	getTemplate(name: string): Template | undefined {
 		return this.templates.find((t) => t.name === name);
 	}
-}
 
-// Global instance
-export const templateServerManager = new TemplateServerManager();
+	getServerLogs(name: string): string {
+		return this.servers.get(name)?.logs.join("") ?? "";
+	}
+}

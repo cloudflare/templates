@@ -16,7 +16,7 @@
       "package_json_hash": "531901e6a5e1bda3a15a60534ecd40a2babb62ae"
     },
     "llm-chat-app-template": {
-      "package_json_hash": "abfdfbeb96b71cbd25209c803db3cfea44fcb373"
+      "package_json_hash": "d2500cd7f2eb025b75587fcedc8c0bf2bc770899"
     },
     "multiplayer-globe-template": {
       "package_json_hash": "194451c918203b9f320dc791bf71210da6f3ddc4"
@@ -43,10 +43,10 @@
       "package_json_hash": "3e1478d8b4dc8d5ed3a57375b0c2dd0c3e0df946"
     },
     "saas-admin-template": {
-      "package_json_hash": "674e225c7d582b6a7dc18c0fa22f4861891276d1"
+      "package_json_hash": "81ab92fd8784fc7add573044cf1d437e5f75f5da"
     },
     "text-to-image-template": {
-      "package_json_hash": "8fb9be4dfec79971923c4cf07d8a934e25a24efa"
+      "package_json_hash": "31a15de27b0d69d4b361a615e4b2ab70dd248129"
     },
     "to-do-list-kv-template": {
       "package_json_hash": "57ddbd437bb74fe175154c122db825c974d9d7cf"
@@ -55,10 +55,10 @@
       "package_json_hash": "05c92d94abccfea2b751cc784d9f4fb2baed7b58"
     },
     "worker-publisher-template": {
-      "package_json_hash": "fa809b4977bc768a415bec1bfcaeafba338208ae"
+      "package_json_hash": "3168c9bcb1ca249e0cad68f7d30ba369c0120a5f"
     },
     "containers-template": {
-      "package_json_hash": "b2afbb3e0f234bacf6c7bb059d2ca51ce14e5a9c"
+      "package_json_hash": "ac11ba7a84aed940fe7ccdb40036f2c99e314d10"
     },
     "d1-starter-sessions-api-template": {
       "package_json_hash": "5668f7824b265f63796c84f954f1346fc9c6217e"
@@ -70,7 +70,7 @@
       "package_json_hash": "5f143242d2fce2db6e5fca1ff42e10d9964b3bf0"
     },
     "nlweb-template": {
-      "package_json_hash": "c81ed4c230cf7ec3604e9865b959e39e4b7b200e"
+      "package_json_hash": "f96f878cab536f33b6154c85735142f966d3d6c0"
     },
     "nodejs-http-server-template": {
       "package_json_hash": "2bf599d6e71abb9fee29871d9459f14f5ad2357b"
@@ -88,10 +88,10 @@
       "package_json_hash": "61516050b40ccfaab285efad5c50719c3aff4f2c"
     },
     "workers-for-platforms-template": {
-      "package_json_hash": "272fdcfb5efd1fed655b5daaafa88761f45aa8b4"
+      "package_json_hash": "d060cc14820326e6233392305e28b1b88b0b65f0"
     },
     "microfrontend-template": {
-      "package_json_hash": "8a11ef9122321d047d483e1fcf495eddcd456896"
+      "package_json_hash": "ade3a0c7df2c00dc60fea082fc8351e72d6a0b30"
     },
     "workers-builds-notifications-template": {
       "package_json_hash": "6cfe18a9555106217af4337e203dac703328a66d"
