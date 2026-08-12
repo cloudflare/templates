@@ -26,6 +26,31 @@ const BUILTIN_PROTECTED_PATHS: ProtectedRouteConfig[] = [
 const BUILT_IN_PUBLIC_PATHS = ["/__x402/health", "/__x402/config"];
 
 /**
+ * Get the request path without parsing the URL so normalization changes can be
+ * detected before making an authorization decision.
+ */
+function getRawPath(url: string): string {
+	const authorityStart = url.indexOf("://");
+	const pathStart = url.indexOf("/", authorityStart + 3);
+	if (pathStart === -1) {
+		return "/";
+	}
+
+	const queryStart = url.indexOf("?", pathStart);
+	return url.slice(pathStart, queryStart === -1 ? undefined : queryStart);
+}
+
+/**
+ * Reject paths whose resource identity changes when parsed as a URL. Forwarding
+ * such a path could make the authorization check and origin resolve it
+ * differently.
+ */
+function hasNonCanonicalPath(url: string): boolean {
+	const rawPath = getRawPath(url);
+	return rawPath !== new URL(url).pathname || rawPath.includes("//");
+}
+
+/**
  * Proxy a request to the origin server.
  *
  * Three modes:
@@ -102,7 +127,8 @@ async function proxyToOrigin(request: Request, env: Env): Promise<Response> {
  */
 function pathMatchesPattern(path: string, pattern: string): boolean {
 	if (pattern.endsWith("/*")) {
-		return path.startsWith(pattern.slice(0, -2));
+		const prefix = pattern.slice(0, -2);
+		return path === prefix || path.startsWith(`${prefix}/`);
 	}
 	return path === pattern;
 }
@@ -128,6 +154,10 @@ function findProtectedRouteConfig(
  * take precedence by being registered after this middleware
  */
 app.use("*", async (c, next) => {
+	if (hasNonCanonicalPath(c.req.url)) {
+		return c.json({ error: "Non-canonical request path" }, 400);
+	}
+
 	const path = c.req.path;
 	const protectedPatterns = c.env.PROTECTED_PATTERNS || [];
 

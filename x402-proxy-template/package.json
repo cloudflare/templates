@@ -44,6 +44,7 @@
 		"format:check": "prettier --check .",
 		"lint": "npm run typecheck && npm run format:check && eslint .",
 		"lint:fix": "prettier --write . && eslint . --fix",
+		"test": "tsx --test test/index.test.ts",
 		"test:client": "tsx test-client.ts",
 		"typecheck": "tsc --noEmit"
 	},
