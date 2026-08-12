@@ -1,9 +1,7 @@
 name: "Update Dependencies"
 
 on:
-  schedule:
-    - cron: "0 13 * * 1"
-  workflow_dispatch: # allows us to trigger this manually
+  workflow_dispatch:
 
 jobs:
   update-dependencies:

@@ -1,7 +1,6 @@
 import {
 	createExecutionContext,
 	env,
-	fetchMock,
 	waitOnExecutionContext,
 } from "cloudflare:test";
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
@@ -15,6 +14,7 @@ import {
 	vi,
 } from "vitest";
 import { resetJwksCache } from "../src/access";
+import { fetchMock } from "./fetch-mock";
 import app, { resetDbInitialized } from "../src/index";
 
 // ── Test JWT helpers ─────────────────────────────────────────────────────────

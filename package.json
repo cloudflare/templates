@@ -10,13 +10,16 @@
 		"prettier": "3.7.4",
 		"syncpack": "13.0.4",
 		"turbo": "2.6.1",
-		"vitest": "4.0.14"
+		"vitest": "4.1.10"
 	},
 	"engines": {
 		"node": ">=20.16.0 || >=22.3.0"
 	},
 	"packageManager": "pnpm@10.2.0",
 	"pnpm": {
+		"overrides": {
+			"@cloudflare/workers-types": "4.20260702.1"
+		},
 		"onlyBuiltDependencies": [
 			"esbuild",
 			"sharp",
@@ -24,7 +27,7 @@
 		]
 	},
 	"scripts": {
-		"check": "pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",
+		"check": "pnpm run check:deps && pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",
 		"check:deps": "syncpack lint",
 		"check:lockfiles": "templates lint-npm-lockfiles .",
 		"check:prettier": "prettier . --check",

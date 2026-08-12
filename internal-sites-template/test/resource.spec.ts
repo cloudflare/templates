@@ -1,8 +1,8 @@
-import { fetchMock } from "cloudflare:test";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { Env } from "../src/env";
 import { PutStaticSiteInDispatchNamespace } from "../src/resource";
 import type { UploadedAsset } from "../src/types";
+import { fetchMock } from "./fetch-mock";
 
 const API_ORIGIN = "https://api.cloudflare.com";
 const SCRIPT_NAME = "mime-types-test";

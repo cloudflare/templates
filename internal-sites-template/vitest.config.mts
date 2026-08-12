@@ -1,5 +1,4 @@
 import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
-
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -7,12 +6,11 @@ export default defineConfig({
 		cloudflareTest({
 			remoteBindings: false,
 			wrangler: {
-				configPath: "./wrangler.json",
+				configPath: "./wrangler.jsonc",
 			},
 		}),
 	],
-
 	test: {
-		testTimeout: 60000,
+		exclude: ["playwright-tests/**", "node_modules/**"],
 	},
 });
