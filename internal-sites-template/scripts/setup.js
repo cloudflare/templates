@@ -24,6 +24,7 @@ const PROJECT_ROOT = path.join(__dirname, "..");
 
 // ── Colors ───────────────────────────────────────────────────────────────────
 
+const red = "\x1b[31m";
 const green = "\x1b[32m";
 const yellow = "\x1b[33m";
 const blue = "\x1b[34m";
@@ -82,9 +83,8 @@ function ensureDispatchNamespace(namespaceName) {
 		const output = stdout + "\n" + stderr;
 
 		if (
-			output.includes("already exists") ||
-			output.includes("A namespace with this name") ||
-			output.includes("namespace with that name already exists")
+			output.includes("already exist") ||
+			output.includes("A namespace with this name")
 		) {
 			log(green, `  Dispatch namespace '${namespaceName}' already exists.`);
 			return true;
@@ -209,10 +209,11 @@ function setWranglerSecrets() {
 	const dispatchToken = getVar("DISPATCH_NAMESPACE_API_TOKEN");
 	if (dispatchToken) {
 		try {
-			execSync(
-				`echo "${dispatchToken}" | npx wrangler secret put DISPATCH_NAMESPACE_API_TOKEN`,
-				{ stdio: "pipe", cwd: PROJECT_ROOT },
-			);
+			execSync("npx wrangler secret put DISPATCH_NAMESPACE_API_TOKEN", {
+				input: dispatchToken,
+				stdio: ["pipe", "pipe", "pipe"],
+				cwd: PROJECT_ROOT,
+			});
 			log(green, "  Set DISPATCH_NAMESPACE_API_TOKEN secret.");
 		} catch (error) {
 			log(
@@ -246,15 +247,31 @@ function main() {
 	log(cyan, `    Namespace: ${namespaceName}`);
 	console.log("");
 
+	// Monorepo checks run the build script without deployment bindings.
+	// Provision only when Deploy to Cloudflare supplies an account context.
+	if (!accountId && !process.argv.includes("--set-secrets")) {
+		log(
+			yellow,
+			"  ACCOUNT_ID is not available; skipping Cloudflare resource setup.",
+		);
+		return;
+	}
+
 	// 1. Write ACCOUNT_ID into wrangler.jsonc (so wrangler deploy picks it up)
 	if (accountId) {
 		updateWranglerConfig(accountId);
 	}
 	console.log("");
 
-	// 2. Create dispatch namespace
-	ensureDispatchNamespace(namespaceName);
+	// 2. Create dispatch namespace (required -- stop if it fails)
+	const nsCreated = ensureDispatchNamespace(namespaceName);
 	console.log("");
+
+	if (!nsCreated) {
+		log(red, "  Setup failed: could not create the dispatch namespace.");
+		log(red, "  The platform requires Workers for Platforms to be enabled.");
+		process.exit(1);
+	}
 
 	// 3. Check token
 	if (dispatchToken) {

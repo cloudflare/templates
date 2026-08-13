@@ -29,7 +29,8 @@
 		"DISPATCH_NAMESPACE_NAME": "internal-sites",
 		"SITE_DOMAIN": "internal-company.com",
 		"DEPLOY_PATH": "/deploy",
-		"ACCOUNT_ID": ""
+		"ACCOUNT_ID": "",
+		"ACCESS_TEAM_DOMAIN": ""
 	},
 	"upload_source_maps": true
 }

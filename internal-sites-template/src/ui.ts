@@ -9,6 +9,8 @@
  * a dotted "drop canvas", soft cards, and pill buttons.
  */
 
+import { escapeHtml, jsonForScript } from "./html";
+
 // ── Public renderers ─────────────────────────────────────────────────────────
 
 export function renderShell(
@@ -25,10 +27,10 @@ export function renderShell(
 	const deployPath = options.deployPath || "/deploy";
 
 	const eyebrow = options.eyebrow
-		? `<p class="eyebrow">${esc(options.eyebrow)}</p>`
+		? `<p class="eyebrow">${escapeHtml(options.eyebrow)}</p>`
 		: "";
 	const heading = options.heading
-		? `<h1 class="display-tight page-title${options.eyebrow ? " has-eyebrow" : ""}">${esc(options.heading)}</h1>`
+		? `<h1 class="display-tight page-title${options.eyebrow ? " has-eyebrow" : ""}">${escapeHtml(options.heading)}</h1>`
 		: "";
 
 	return `<!doctype html>
@@ -36,7 +38,7 @@ export function renderShell(
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${esc(title)}</title>
+  <title>${escapeHtml(title)}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -45,9 +47,9 @@ export function renderShell(
 <body>
   <div class="page-glow">
     <header class="site-header">
-      <a href="${esc(deployPath)}" class="brand">Internal Sites</a>
+      <a href="${escapeHtml(deployPath)}" class="brand">Internal Sites</a>
       <nav class="nav">
-        <a href="${esc(deployPath)}" class="nav-link">Deploy</a>
+        <a href="${escapeHtml(deployPath)}" class="nav-link">Deploy</a>
         <a href="/admin" class="nav-link">Admin</a>
       </nav>
     </header>
@@ -58,8 +60,8 @@ export function renderShell(
     </main>
   </div>
   <script>
-    window.INTERNAL_SITE_DOMAIN = ${JSON.stringify(options.siteDomain || "")};
-    window.INTERNAL_DEPLOY_PATH = ${JSON.stringify(options.deployPath || "/deploy")};
+    window.INTERNAL_SITE_DOMAIN = ${jsonForScript(options.siteDomain || "")};
+    window.INTERNAL_DEPLOY_PATH = ${jsonForScript(options.deployPath || "/deploy")};
   </script>
 </body>
 </html>`;
@@ -85,7 +87,7 @@ export function renderDeployPage(options: {
           <span>Internal URL</span>
           <div class="url-row">
             <input id="site-slug" name="slug" required pattern="[a-z0-9-]+" placeholder="team-handbook" autocomplete="off">
-            <strong>.${esc(options.siteDomain)}</strong>
+            <strong>.${escapeHtml(options.siteDomain)}</strong>
           </div>
         </label>
       </div>
@@ -137,7 +139,7 @@ export function renderNotFound(siteDomain: string, deployPath: string): string {
 	return renderShell(
 		`
     <p class="lede">No site is configured for this URL.</p>
-    <a class="link-button" href="${esc(deployPath)}">Deploy a site</a>
+    <a class="link-button" href="${escapeHtml(deployPath)}">Deploy a site</a>
   `,
 		{
 			title: "Site not found",
@@ -147,17 +149,6 @@ export function renderNotFound(siteDomain: string, deployPath: string): string {
 			deployPath,
 		},
 	);
-}
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-function esc(value: string): string {
-	return value
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#39;");
 }
 
 // ── Styles ───────────────────────────────────────────────────────────────────
@@ -888,28 +879,57 @@ form.addEventListener("submit", async function (event) {
       throw new Error(data.error || "Deploy failed");
     }
 
-    result.innerHTML =
-      '<div class="result-card success">' +
-      '<p class="result-title">Site deployed.</p>' +
-      '<a class="result-url" href="' + data.url + '" target="_blank" rel="noreferrer">' + data.url + "</a>" +
-      '<div class="result-actions">' +
-      '<a class="action-primary" href="' + data.url + '" target="_blank" rel="noreferrer">Open site</a>' +
-      '<button class="action-secondary" type="button" id="copy-link">Copy link</button>' +
-      "</div></div>";
+    var card = document.createElement("div");
+    card.className = "result-card success";
 
-    var copyButton = document.getElementById("copy-link");
-    if (copyButton) {
-      copyButton.addEventListener("click", async function () {
-        await navigator.clipboard.writeText(data.url);
-        copyButton.textContent = "Copied";
-        setTimeout(function () { copyButton.textContent = "Copy link"; }, 1400);
-      });
-    }
+    var titleEl = document.createElement("p");
+    titleEl.className = "result-title";
+    titleEl.textContent = "Site deployed.";
+    card.appendChild(titleEl);
+
+    var link = document.createElement("a");
+    link.className = "result-url";
+    link.href = data.url;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = data.url;
+    card.appendChild(link);
+
+    var actions = document.createElement("div");
+    actions.className = "result-actions";
+
+    var openLink = document.createElement("a");
+    openLink.className = "action-primary";
+    openLink.href = data.url;
+    openLink.target = "_blank";
+    openLink.rel = "noreferrer";
+    openLink.textContent = "Open site";
+    actions.appendChild(openLink);
+
+    var copyBtn = document.createElement("button");
+    copyBtn.className = "action-secondary";
+    copyBtn.type = "button";
+    copyBtn.textContent = "Copy link";
+    copyBtn.addEventListener("click", async function () {
+      await navigator.clipboard.writeText(data.url);
+      copyBtn.textContent = "Copied";
+      setTimeout(function () { copyBtn.textContent = "Copy link"; }, 1400);
+    });
+    actions.appendChild(copyBtn);
+
+    card.appendChild(actions);
+    result.appendChild(card);
   } catch (error) {
-    result.innerHTML =
-      '<div class="result-card error"><p class="result-title">Deploy failed.</p><p>' +
-      escapeHtml(error.message) +
-      "</p></div>";
+    var errCard = document.createElement("div");
+    errCard.className = "result-card error";
+    var errTitle = document.createElement("p");
+    errTitle.className = "result-title";
+    errTitle.textContent = "Deploy failed.";
+    errCard.appendChild(errTitle);
+    var errMsg = document.createElement("p");
+    errMsg.textContent = error.message;
+    errCard.appendChild(errMsg);
+    result.appendChild(errCard);
   } finally {
     deployButton.textContent = "Deploy site";
     // Re-evaluate validation state (don't just check length — limits may apply)
@@ -1043,17 +1063,28 @@ function renderFileSummary() {
   var anyFail = checks.some(function (c) { return !c.pass; });
 
   if (anyFail) {
-    var items = checks.map(function (c) {
-      var cls = c.pass ? "pass" : "fail";
-      var icon = c.pass ? "&#x2713;" : "&#x2717;";
-      var text = c.label + (c.detail ? " \u2014 " + escapeHtml(c.detail) : "");
-      return '<li class="check-item ' + cls + '"><span class="check-icon">' + icon + '</span>' + text + "</li>";
-    }).join("");
-    validation.innerHTML =
-      '<div class="result-card error">' +
-      '<p class="result-title">Missing requirements</p>' +
-      '<ul class="check-list">' + items + "</ul>" +
-      "</div>";
+    validation.innerHTML = "";
+    var vCard = document.createElement("div");
+    vCard.className = "result-card error";
+    var vTitle = document.createElement("p");
+    vTitle.className = "result-title";
+    vTitle.textContent = "Missing requirements";
+    vCard.appendChild(vTitle);
+    var vList = document.createElement("ul");
+    vList.className = "check-list";
+    checks.forEach(function (c) {
+      var li = document.createElement("li");
+      li.className = "check-item " + (c.pass ? "pass" : "fail");
+      var iconSpan = document.createElement("span");
+      iconSpan.className = "check-icon";
+      iconSpan.textContent = c.pass ? "\u2713" : "\u2717";
+      li.appendChild(iconSpan);
+      var text = c.label + (c.detail ? " \u2014 " + c.detail : "");
+      li.appendChild(document.createTextNode(text));
+      vList.appendChild(li);
+    });
+    vCard.appendChild(vList);
+    validation.appendChild(vCard);
     deployButton.disabled = true;
   } else {
     validation.innerHTML = "";

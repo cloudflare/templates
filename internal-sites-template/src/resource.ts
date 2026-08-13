@@ -52,32 +52,53 @@ const STATIC_ASSET_WORKER = `export default {
 
 // ── Public API ───────────────────────────────────────────────────────────────
 
-/** List all scripts in the dispatch namespace. */
+/** List all scripts in the dispatch namespace. Throws on API failure. */
 export async function GetScriptsInDispatchNamespace(env: Env) {
-	const data = (await (
-		await fetch(ScriptsURI(env), {
-			method: "GET",
-			headers: AuthHeaders(env),
-		})
-	).json()) as {
-		result: Array<{
-			id: string;
-			modified_on: string;
-			created_on: string;
-		}>;
-	};
+	const response = await fetch(ScriptsURI(env), {
+		method: "GET",
+		headers: AuthHeaders(env),
+	});
+
+	type ScriptRecord = { id: string; modified_on: string; created_on: string };
+
+	const data = await readCloudflareResponse<ScriptRecord[]>(
+		response,
+		"Could not list scripts in dispatch namespace",
+	);
+
+	if (!data.success) {
+		throw new Error(
+			formatCloudflareError(
+				"Could not list scripts in dispatch namespace",
+				data,
+			),
+		);
+	}
+
 	return data.result;
 }
 
-/** Delete a script from the dispatch namespace. */
+/**
+ * Delete a script from the dispatch namespace.
+ *
+ * Throws if Cloudflare reports a failure. A 404 (Worker already gone)
+ * is treated as success so the caller can safely clean up D1.
+ */
 export async function DeleteScriptInDispatchNamespace(
 	env: Env,
 	scriptName: string,
-): Promise<Response> {
-	return await fetch(`${ScriptsURI(env)}/${scriptName}`, {
+): Promise<void> {
+	const response = await fetch(`${ScriptsURI(env)}/${scriptName}`, {
 		method: "DELETE",
 		headers: AuthHeaders(env),
 	});
+
+	// 404 means the Worker was already removed -- not an error.
+	if (response.status === 404) return;
+
+	if (!response.ok) {
+		await readCloudflareResponse(response, "Could not delete site Worker");
+	}
 }
 
 /**

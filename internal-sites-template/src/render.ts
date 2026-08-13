@@ -8,6 +8,7 @@
  */
 
 import type { DeploymentWithSite } from "./db";
+import { escapeHtml } from "./html";
 import type { ResourceValues, Site } from "./types";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -16,15 +17,6 @@ function formatBytes(bytes: number): string {
 	if (bytes < 1024) return `${bytes} B`;
 	if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KiB`;
 	return `${(bytes / (1024 * 1024)).toFixed(1)} MiB`;
-}
-
-function escapeHtml(text: string): string {
-	return text
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;")
-		.replace(/'/g, "&#39;");
 }
 
 function emptyState(message: string): string {

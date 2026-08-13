@@ -4,7 +4,7 @@
 	"description": "Deploy an internal static site platform for your company. Employees drag-and-drop files to publish sites behind Cloudflare Access.",
 	"license": "Apache-2.0",
 	"engines": {
-		"node": ">=18"
+		"node": ">=22"
 	},
 	"cloudflare": {
 		"label": "Internal Static Sites Platform",
@@ -25,6 +25,9 @@
 			},
 			"SITE_DOMAIN": {
 				"description": "Your company's internal domain, e.g. `internal-company.com`. Sites deploy to `site-name.internal-company.com`."
+			},
+			"ACCESS_TEAM_DOMAIN": {
+				"description": "Your Cloudflare One team domain, e.g. `https://mycompany.cloudflareaccess.com`. Find it at https://one.dash.cloudflare.com/?to=/:account/settings"
 			}
 		}
 	},
@@ -37,7 +40,8 @@
 	},
 	"dependencies": {
 		"fflate": "^0.8.2",
-		"hono": "^4.7.0"
+		"hono": "^4.7.0",
+		"jose": "6.2.8"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.8.71",
