@@ -175,13 +175,13 @@ Sites previewed on workers.dev share a web address with the deploy and admin pag
 npm test
 ```
 
-Unit tests run entirely in Miniflare -- no login, no network, no Cloudflare resources created.
+`npm test` runs fully locally in Miniflare. It requires no Cloudflare login or account, makes no Cloudflare API calls, and creates no remote resources.
 
-### Full local setup
+### Local platform with remote site Workers
 
 To deploy test sites from the local UI, you need a Cloudflare account with [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) enabled.
 
-> **What runs where:** The main Worker and D1 database run on your computer via Miniflare. However, deploying a site from the local UI calls the Cloudflare API and **creates a real Worker in your Cloudflare account**. Use `npm test` to avoid creating any real resources.
+> **What runs where:** `npm run dev` starts the platform Worker at `http://localhost:8787`. The platform Worker and D1 run locally in Miniflare, and D1 data persists under `.wrangler/state`. The `dispatcher` binding keeps `"remote": true`, so the dispatch namespace and uploaded site Workers are real remote Cloudflare resources. Deploying a site from the local UI creates or updates a real Worker in your Cloudflare account.
 
 **1. Install dependencies**
 
@@ -193,13 +193,17 @@ This runs the local-only build/type check and does not contact Cloudflare or cre
 
 **2. Sign in to Cloudflare**
 
+The remote dispatch binding requires a Cloudflare login and selection of the account that contains the dispatch namespace:
+
 ```bash
 npm exec -- wrangler login
 ```
 
+If Wrangler prompts you to choose an account, select the account you will configure in the next step.
+
 **3. Set your Account ID**
 
-Find your Account ID on the [Cloudflare dashboard](https://dash.cloudflare.com/) (copy from the right sidebar of the account home page). Set it in `wrangler.jsonc`:
+Find your Account ID on the [Cloudflare dashboard](https://dash.cloudflare.com/) (copy from the right sidebar of the account home page). Set it in `wrangler.jsonc` so the remote dispatch binding and deployment API use the intended account:
 
 ```jsonc
 "vars": {
@@ -255,7 +259,7 @@ npm run dev
 
 Open [http://localhost:8787/deploy](http://localhost:8787/deploy) to use the platform.
 
-Local dev uses path-based routing automatically (`/sites/site-name/`). JWT verification is bypassed on localhost -- a placeholder identity (`local-dev@localhost`) is used automatically.
+Local dev uses path-based routing automatically (`/sites/site-name/`). Access verification is skipped only for localhost requests, where a placeholder identity (`local-dev@localhost`) is used automatically. Requests to any non-localhost hostname still require valid Cloudflare Access verification.
 
 ---
 

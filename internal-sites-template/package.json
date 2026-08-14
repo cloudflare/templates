@@ -35,7 +35,7 @@
 		"build": "tsc",
 		"check": "npm run build && wrangler deploy --dry-run",
 		"deploy": "npm run setup && wrangler deploy",
-		"dev": "wrangler dev --remote",
+		"dev": "wrangler dev",
 		"setup": "node scripts/setup.js",
 		"test": "node --test scripts/test-setup.js && vitest run"
 	},
