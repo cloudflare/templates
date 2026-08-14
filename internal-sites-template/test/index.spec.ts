@@ -184,18 +184,28 @@ describe("Internal Sites Platform", () => {
 		expect(body).not.toContain("Missing Cf-Access-Jwt-Assertion header");
 	});
 
-	it("rejects a valid Access JWT issued for the wrong audience", async () => {
+	it("rejects a site request with a JWT issued for the wrong audience", async () => {
 		mockJwksEndpoint();
 
+		let dispatchCalls = 0;
+		const mockDispatcher = {
+			get() {
+				dispatchCalls += 1;
+				throw new Error("Site request must be authenticated first");
+			},
+		};
 		const token = await signTestJwt();
 		const request = new Request(
-			"https://my-worker.my-account.workers.dev/deploy",
+			"https://my-worker.my-account.workers.dev/sites/test-site/index.html",
 			{ headers: { "Cf-Access-Jwt-Assertion": token } },
 		);
 		const ctx = createExecutionContext();
 		const response = await app.fetch(
 			request,
-			envWithAccess({ ACCESS_AUD: "different-audience" }),
+			envWithAccess({
+				ACCESS_AUD: "different-audience",
+				dispatcher: mockDispatcher,
+			}),
 			ctx,
 		);
 		await waitOnExecutionContext(ctx);
@@ -207,6 +217,7 @@ describe("Internal Sites Platform", () => {
 		);
 		expect(body).toContain("confirm ACCESS_TEAM_DOMAIN and ACCESS_AUD");
 		expect(body).not.toContain("Setup required: Enable Cloudflare Access");
+		expect(dispatchCalls).toBe(0);
 	});
 
 	// ── Custom domain without Access ────────────────────────────────────
@@ -334,9 +345,9 @@ describe("Internal Sites Platform", () => {
 		expect(data.error).toBe("Site not found");
 	});
 
-	// ── Site serving does not touch D1 or require JWT ────────────────────
+	// ── Authenticated site serving without D1 ────────────────────────────
 
-	it("does not call D1 when loading a site file", async () => {
+	it("serves a localhost site without a JWT or D1 access", async () => {
 		const throwingDb = new Proxy(
 			{},
 			{
@@ -348,14 +359,16 @@ describe("Internal Sites Platform", () => {
 			},
 		);
 
+		let dispatchedSlug: string | null = null;
 		const mockDispatcher = {
-			get() {
-				throw new Error("Worker not found");
+			get(slug: string) {
+				dispatchedSlug = slug;
+				return {
+					fetch: async () => new Response("body { color: green; }"),
+				};
 			},
 		};
 
-		// Request a CSS file via path-based routing on localhost.
-		// The wildcard handler dispatches without auth or D1.
 		const request = new Request(
 			"http://localhost/sites/my-test-site/style.css",
 		);
@@ -368,33 +381,106 @@ describe("Internal Sites Platform", () => {
 		const response = await app.fetch(request, noDbEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
-		expect(response.status).toBe(404);
+		expect(response.status).toBe(200);
+		expect(await response.text()).toBe("body { color: green; }");
+		expect(dispatchedSlug).toBe("my-test-site");
 	});
 
-	it("serves site files without JWT on workers.dev (auth at edge)", async () => {
+	it("rejects a workers.dev site request before redirecting or dispatching when JWT is missing", async () => {
+		let dispatchCalls = 0;
 		const mockDispatcher = {
 			get() {
-				throw new Error("Worker not found");
+				dispatchCalls += 1;
+				throw new Error("Site request must be authenticated first");
 			},
 		};
 
-		// No JWT header, no ACCESS vars — site serving still works.
 		const request = new Request(
-			"https://my-worker.my-account.workers.dev/sites/test-site/index.html",
+			"https://my-worker.my-account.workers.dev/sites/test-site",
 		);
-		const workerEnv = {
-			...env,
-			dispatcher: mockDispatcher,
-		};
+		const workerEnv = envWithAccess({ dispatcher: mockDispatcher });
 		const ctx = createExecutionContext();
 		const response = await app.fetch(request, workerEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
-		// 404 from "Worker not found" — not 401. Proves no auth check ran.
-		expect(response.status).toBe(404);
+		expect(response.status).toBe(401);
+		expect(await response.text()).toContain(
+			"Setup required: Enable Cloudflare Access",
+		);
+		expect(dispatchCalls).toBe(0);
+	});
+
+	it("rejects a custom-subdomain site request before dispatching when JWT is missing", async () => {
+		let dispatchCalls = 0;
+		const mockDispatcher = {
+			get() {
+				dispatchCalls += 1;
+				throw new Error("Site request must be authenticated first");
+			},
+		};
+
+		const request = new Request("https://docs.mycompany.com/index.html");
+		const customEnv = envWithAccess({
+			SITE_DOMAIN: "mycompany.com",
+			dispatcher: mockDispatcher,
+		});
+		const ctx = createExecutionContext();
+		const response = await app.fetch(request, customEnv, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(401);
+		expect(await response.text()).toContain(
+			"Setup required: Enable Cloudflare Access",
+		);
+		expect(dispatchCalls).toBe(0);
+	});
+
+	it("dispatches an authenticated workers.dev site request without accessing D1", async () => {
+		mockJwksEndpoint();
+
+		const throwingDb = new Proxy(
+			{},
+			{
+				get(_target, prop) {
+					throw new Error(
+						`D1 should not be called when serving site files, but "${String(prop)}" was accessed`,
+					);
+				},
+			},
+		);
+		let dispatchedPath: string | null = null;
+		const mockDispatcher = {
+			get(slug: string) {
+				expect(slug).toBe("test-site");
+				return {
+					fetch: async (siteRequest: Request) => {
+						dispatchedPath = new URL(siteRequest.url).pathname;
+						return new Response("authenticated site content");
+					},
+				};
+			},
+		};
+		const token = await signTestJwt();
+		const request = new Request(
+			"https://my-worker.my-account.workers.dev/sites/test-site/style.css",
+			{ headers: { "Cf-Access-Jwt-Assertion": token } },
+		);
+		const workerEnv = envWithAccess({
+			DB: throwingDb as D1Database,
+			dispatcher: mockDispatcher,
+		});
+		const ctx = createExecutionContext();
+		const response = await app.fetch(request, workerEnv, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(200);
+		expect(await response.text()).toBe("authenticated site content");
+		expect(dispatchedPath).toBe("/style.css");
 	});
 
 	it("sandboxes path-based HTML without preserving its origin", async () => {
+		mockJwksEndpoint();
+
 		const mockDispatcher = {
 			get() {
 				return {
@@ -408,10 +494,12 @@ describe("Internal Sites Platform", () => {
 				};
 			},
 		};
+		const token = await signTestJwt();
 		const request = new Request(
 			"https://my-worker.my-account.workers.dev/sites/test-site/",
+			{ headers: { "Cf-Access-Jwt-Assertion": token } },
 		);
-		const workerEnv = { ...env, dispatcher: mockDispatcher };
+		const workerEnv = envWithAccess({ dispatcher: mockDispatcher });
 		const ctx = createExecutionContext();
 		const response = await app.fetch(request, workerEnv, ctx);
 		await waitOnExecutionContext(ctx);
@@ -511,7 +599,9 @@ describe("Internal Sites Platform", () => {
 
 	// ── Subdomain isolation ──────────────────────────────────────────────
 
-	it("dispatches subdomain requests to site Worker, not platform routes", async () => {
+	it("dispatches authenticated subdomain requests to the site Worker, not platform routes", async () => {
+		mockJwksEndpoint();
+
 		let dispatchedSlug: string | null = null;
 		const mockDispatcher = {
 			get(slug: string) {
@@ -527,12 +617,14 @@ describe("Internal Sites Platform", () => {
 
 		// Request docs.mycompany.com/deploy — should dispatch to the "docs" site
 		// Worker, NOT serve the deploy page.
-		const request = new Request("https://docs.mycompany.com/deploy");
-		const customEnv = {
-			...env,
+		const token = await signTestJwt();
+		const request = new Request("https://docs.mycompany.com/deploy", {
+			headers: { "Cf-Access-Jwt-Assertion": token },
+		});
+		const customEnv = envWithAccess({
 			SITE_DOMAIN: "mycompany.com",
 			dispatcher: mockDispatcher,
-		};
+		});
 		const ctx = createExecutionContext();
 		const response = await app.fetch(request, customEnv, ctx);
 		await waitOnExecutionContext(ctx);

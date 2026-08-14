@@ -61,9 +61,10 @@ async function ensureDb(db: D1Database): Promise<void> {
 // ── Subdomain isolation ──────────────────────────────────────────────────────
 
 /**
- * Intercept requests on site subdomains (slug.company.com) and dispatch
- * them directly to the site Worker. This runs before any platform routes
- * so that uploaded site JS can never reach /deploy, /admin, or /api/*.
+ * Intercept requests on site subdomains (slug.company.com), verify their
+ * Access identity, and dispatch them directly to the site Worker. This runs
+ * before any platform routes so uploaded site JS can never reach /deploy,
+ * /admin, or /api/*.
  */
 app.use("*", async (c, next) => {
 	const url = new URL(c.req.url);
@@ -72,6 +73,9 @@ app.use("*", async (c, next) => {
 	if (url.hostname !== domain && url.hostname.endsWith(`.${domain}`)) {
 		const slug = normalizeSlug(url.hostname.slice(0, -(domain.length + 1)));
 		if (slug) {
+			const identity = await requireAccessIdentity(c.req.raw, c.env);
+			if (identity instanceof Response) return identity;
+
 			return dispatchToSite(c, slug);
 		}
 	}
@@ -321,10 +325,7 @@ app.delete("/api/sites/:slug", async (c) => {
 	return c.json({ deleted: true });
 });
 
-// ── Wildcard: dispatch to user site ──────────────────────────────────────────
-//
-// No JWT verification here — site viewing relies on Cloudflare Access at the
-// edge. The Worker only verifies JWTs on platform routes (/deploy, /admin, /api/*).
+// ── Wildcard: authenticate and dispatch to user site ─────────────────────────
 
 app.get("*", async (c) => {
 	const slug = slugFromRequest(c.req.raw, c.env);
@@ -332,6 +333,10 @@ app.get("*", async (c) => {
 	if (!slug) {
 		return c.redirect(deployPath(c.env));
 	}
+
+	// Authenticate site requests before redirects or dispatch namespace access.
+	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	if (identity instanceof Response) return identity;
 
 	// Redirect /sites/slug to /sites/slug/ in path-based mode
 	if (shouldRedirectPathBasedRoot(c.req.raw, c.env, slug)) {

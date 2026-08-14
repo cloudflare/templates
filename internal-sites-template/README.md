@@ -19,7 +19,7 @@ Deploy an internal drag-and-drop static site platform for your company using [Wo
 
 1. **Workers for Platforms** - Each deployed site becomes an isolated Worker in a dispatch namespace. The platform routes requests to the correct site Worker
 2. **D1** - Stores site metadata (name, slug, owner, timestamps) and deployment history
-3. **Cloudflare Access** - Enforces company login. The platform verifies the signed JWT from Cloudflare Access to identify deployers
+3. **Cloudflare Access** - Enforces company login. Before serving platform routes or dispatching a deployed site, the platform verifies the signed JWT from Cloudflare Access
 
 ## Bindings Used
 
@@ -76,7 +76,7 @@ Protect your Worker with Cloudflare Access so only company employees can access 
 6. Optionally review the session duration
 7. Select **Apply Access**
 
-Every request now requires company login.
+Every request now requires company login. The Access application authenticates users at the edge, and the platform Worker verifies the signed Access JWT again before handling platform routes or dispatching deployed sites.
 
 **Configure audience verification (required).** After creating the Access application, set `ACCESS_AUD` so JWT verification only accepts tokens issued for this specific application.
 
@@ -90,7 +90,7 @@ npx wrangler secret put ACCESS_AUD
 # Paste the AUD tag when prompted
 ```
 
-The Worker will reject all non-localhost management requests until `ACCESS_AUD` is configured.
+The Worker will reject all non-localhost requests, including deployed-site requests, until `ACCESS_AUD` is configured.
 
 ### 6. Deploy your first site
 

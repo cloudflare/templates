@@ -45,7 +45,7 @@ export function isLocalDev(request: Request): boolean {
  *   - SITE_DOMAIN is empty or still the default placeholder
  *
  * This is separate from auth — workers.dev uses path-based routing but
- * still requires JWT verification for platform routes.
+ * still requires JWT verification for platform and deployed-site routes.
  */
 export function isTestingMode(request: Request, env: Env): boolean {
 	const hostname = new URL(request.url).hostname;
