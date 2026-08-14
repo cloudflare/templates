@@ -3,7 +3,6 @@ import {
 	env,
 	waitOnExecutionContext,
 } from "cloudflare:test";
-import { exportJWK, generateKeyPair, SignJWT } from "jose";
 import {
 	afterEach,
 	beforeAll,
@@ -13,60 +12,31 @@ import {
 	it,
 	vi,
 } from "vitest";
-import { resetJwksCache } from "../src/access";
 import { fetchMock } from "./fetch-mock";
 import app, { resetDbInitialized } from "../src/index";
 
-// ── Test JWT helpers ─────────────────────────────────────────────────────────
+// ── Test helpers ─────────────────────────────────────────────────────────────
 
-const TEST_TEAM_DOMAIN = "https://test-team.cloudflareaccess.com";
-const TEST_AUD = "test-aud-tag-1234567890";
-
-/** Shared key pair generated once before all tests. */
-let testPublicJwk: Record<string, unknown>;
-let testPrivateKey: CryptoKey;
-
-/** Sign a test JWT with the given claims. */
-async function signTestJwt(
-	overrides: Record<string, unknown> = {},
-): Promise<string> {
-	return new SignJWT({
-		email: "employee@company.com",
-		type: "app",
-		...overrides,
-	})
-		.setProtectedHeader({ alg: "RS256", kid: "test-key-id" })
-		.setIssuer(TEST_TEAM_DOMAIN)
-		.setAudience(TEST_AUD)
-		.setExpirationTime("1h")
-		.setIssuedAt()
-		.setSubject("test-user-id")
-		.sign(testPrivateKey);
-}
-
-/** Build an env with Access JWT verification configured. */
-function envWithAccess(extra: Record<string, unknown> = {}) {
-	return {
-		...env,
-		ACCESS_TEAM_DOMAIN: TEST_TEAM_DOMAIN,
-		ACCESS_AUD: TEST_AUD,
-		...extra,
+/**
+ * Create an ExecutionContext with a mock ctx.access object.
+ * This simulates what the Workers runtime provides when Cloudflare Access
+ * has authenticated a request.
+ */
+function createAccessContext(identity: Record<string, unknown> = { email: "employee@company.com" }) {
+	const ctx = createExecutionContext();
+	(ctx as Record<string, unknown>).access = {
+		aud: "test-aud-tag-1234567890",
+		getIdentity: async () => identity,
 	};
+	return ctx;
 }
 
-/** Set up fetchMock to return our test public key at the JWKS endpoint. */
-function mockJwksEndpoint() {
-	fetchMock
-		.get(TEST_TEAM_DOMAIN)
-		.intercept({ path: "/cdn-cgi/access/certs", method: "GET" })
-		.reply(
-			200,
-			JSON.stringify({
-				keys: [testPublicJwk],
-				public_certs: [],
-			}),
-			{ headers: { "content-type": "application/json" } },
-		);
+/**
+ * Create an ExecutionContext without ctx.access.
+ * This simulates a request that was NOT authenticated by Access.
+ */
+function createNoAccessContext() {
+	return createExecutionContext();
 }
 
 const deploymentEnv = {
@@ -141,20 +111,12 @@ function mockCloudflareDeploymentFailure(slug: string): void {
 // ── Setup ────────────────────────────────────────────────────────────────────
 
 beforeAll(async () => {
-	// Generate a key pair for signing test JWTs.
-	const pair = await generateKeyPair("RS256");
-	testPrivateKey = pair.privateKey as unknown as CryptoKey;
-	const jwk = await exportJWK(pair.publicKey);
-	testPublicJwk = { ...jwk, kid: "test-key-id", alg: "RS256", use: "sig" };
-
-	// Enable fetchMock for all tests (intercepts outbound fetch).
 	fetchMock.activate();
 	fetchMock.disableNetConnect();
 });
 
 beforeEach(() => {
 	resetDbInitialized();
-	resetJwksCache();
 });
 
 afterEach(() => {
@@ -165,16 +127,12 @@ afterEach(() => {
 // ── Tests ────────────────────────────────────────────────────────────────────
 
 describe("Internal Sites Platform", () => {
-	// ── Localhost (local dev bypass) ─────────────────────────────────────
+	// ── Authenticated access via ctx.access ──────────────────────────────
 
-	it("serves the deploy page on localhost without ACCESS_AUD or JWT", async () => {
+	it("serves the deploy page when ctx.access is present", async () => {
 		const request = new Request("http://localhost/deploy");
-		const ctx = createExecutionContext();
-		const response = await app.fetch(
-			request,
-			{ ...env, ACCESS_AUD: undefined },
-			ctx,
-		);
+		const ctx = createAccessContext();
+		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(200);
@@ -186,7 +144,7 @@ describe("Internal Sites Platform", () => {
 
 	it("redirects / to /deploy", async () => {
 		const request = new Request("http://localhost/");
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -196,80 +154,87 @@ describe("Internal Sites Platform", () => {
 
 	it("returns 204 for favicon.ico", async () => {
 		const request = new Request("http://localhost/favicon.ico");
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(204);
 	});
 
-	// ── Workers.dev no longer gets a free pass ──────────────────────────
+	// ── Unauthenticated: ctx.access is undefined ────────────────────────
 
-	it("returns 401 on workers.dev without ACCESS vars configured", async () => {
+	it("returns 401 when ctx.access is not present", async () => {
 		const request = new Request(
 			"https://my-worker.my-account.workers.dev/deploy",
 		);
-		const ctx = createExecutionContext();
-		const response = await app.fetch(
-			request,
-			{ ...env, ACCESS_TEAM_DOMAIN: undefined, ACCESS_AUD: undefined },
-			ctx,
-		);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(401);
-		const body = await response.text();
-		expect(body).toContain("Access verification is not configured");
-	});
-
-	it("returns setup guidance when ACCESS_TEAM_DOMAIN is set without ACCESS_AUD", async () => {
-		const token = await signTestJwt();
-		const request = new Request(
-			"https://my-worker.my-account.workers.dev/deploy",
-			{ headers: { "Cf-Access-Jwt-Assertion": token } },
-		);
-		const ctx = createExecutionContext();
-		const response = await app.fetch(
-			request,
-			envWithAccess({ ACCESS_AUD: undefined }),
-			ctx,
-		);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(401);
-		const body = await response.text();
-		expect(body).toContain(
-			"Cloudflare Access setup is incomplete: ACCESS_AUD is missing",
-		);
-		expect(body).toContain("Application Audience (AUD) Tag");
-		expect(body).toContain("npm exec -- wrangler secret put ACCESS_AUD");
-		expect(body).toContain(
-			"Workers & Pages > this Worker > Settings > Variables and Secrets",
-		);
-		expect(body).not.toContain("Setup required: Enable Cloudflare Access");
-	});
-
-	it("returns 401 on workers.dev with ACCESS vars but no JWT", async () => {
-		const request = new Request(
-			"https://my-worker.my-account.workers.dev/deploy",
-		);
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, envWithAccess(), ctx);
+		const ctx = createNoAccessContext();
+		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(401);
 		const body = await response.text();
 		expect(body).toContain("Setup required: Enable Cloudflare Access");
-		expect(body).toContain(
-			"https://dash.cloudflare.com/?to=/:account/workers-and-pages",
-		);
 		expect(body).toContain("Protect this Worker behind Access");
-		expect(body).not.toContain("Missing Cf-Access-Jwt-Assertion header");
 	});
 
-	it("rejects a site request with a JWT issued for the wrong audience", async () => {
-		mockJwksEndpoint();
+	it("returns 401 on custom domain without Access", async () => {
+		const request = new Request("https://mycompany.com/deploy");
+		const customEnv = {
+			...env,
+			SITE_DOMAIN: "mycompany.com",
+		};
+		const ctx = createNoAccessContext();
+		const response = await app.fetch(request, customEnv, ctx);
+		await waitOnExecutionContext(ctx);
 
+		expect(response.status).toBe(401);
+		const body = await response.text();
+		expect(body).toContain("Setup required: Enable Cloudflare Access");
+	});
+
+	it("returns 401 on custom domain API route without Access", async () => {
+		const request = new Request("https://mycompany.com/api/sites/test");
+		const customEnv = {
+			...env,
+			SITE_DOMAIN: "mycompany.com",
+		};
+		const ctx = createNoAccessContext();
+		const response = await app.fetch(request, customEnv, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(401);
+	});
+
+	// ── Authenticated on workers.dev and custom domains ──────────────────
+
+	it("serves the deploy page with ctx.access on workers.dev", async () => {
+		const request = new Request(
+			"https://my-worker.my-account.workers.dev/deploy",
+		);
+		const ctx = createAccessContext();
+		const response = await app.fetch(request, env, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(200);
+		const body = await response.text();
+		expect(body).toContain("Upload and deploy");
+	});
+
+	it("serves the deploy page with ctx.access on custom domain", async () => {
+		const request = new Request("https://mycompany.com/deploy");
+		const customEnv = { ...env, SITE_DOMAIN: "mycompany.com" };
+		const ctx = createAccessContext();
+		const response = await app.fetch(request, customEnv, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(200);
+		const body = await response.text();
+		expect(body).toContain("Upload and deploy");
+	});
+
+	// ── Site dispatch requires Access ────────────────────────────────────
+
+	it("rejects a site request before dispatching when ctx.access is missing", async () => {
 		let dispatchCalls = 0;
 		const mockDispatcher = {
 			get() {
@@ -277,126 +242,49 @@ describe("Internal Sites Platform", () => {
 				throw new Error("Site request must be authenticated first");
 			},
 		};
-		const token = await signTestJwt();
+
 		const request = new Request(
-			"https://my-worker.my-account.workers.dev/sites/test-site/index.html",
-			{ headers: { "Cf-Access-Jwt-Assertion": token } },
+			"https://my-worker.my-account.workers.dev/sites/test-site",
 		);
-		const ctx = createExecutionContext();
-		const response = await app.fetch(
-			request,
-			envWithAccess({
-				ACCESS_AUD: "different-audience",
-				dispatcher: mockDispatcher,
-			}),
-			ctx,
-		);
+		const workerEnv = { ...env, dispatcher: mockDispatcher };
+		const ctx = createNoAccessContext();
+		const response = await app.fetch(request, workerEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(401);
-		const body = await response.text();
-		expect(body).toContain(
-			"Your Cloudflare Access token could not be verified",
+		expect(await response.text()).toContain(
+			"Setup required: Enable Cloudflare Access",
 		);
-		expect(body).toContain("confirm ACCESS_TEAM_DOMAIN and ACCESS_AUD");
-		expect(body).not.toContain("Setup required: Enable Cloudflare Access");
 		expect(dispatchCalls).toBe(0);
 	});
 
-	// ── Custom domain without Access ────────────────────────────────────
-
-	it("returns 401 on custom domain without ACCESS vars configured", async () => {
-		const request = new Request("https://mycompany.com/deploy");
-		const customEnv = {
-			...env,
-			SITE_DOMAIN: "mycompany.com",
-			ACCESS_TEAM_DOMAIN: undefined,
-			ACCESS_AUD: undefined,
-		};
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, customEnv, ctx);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(401);
-		const body = await response.text();
-		expect(body).toContain("Access verification is not configured");
-	});
-
-	it("returns 401 on custom domain API route without JWT", async () => {
-		const request = new Request("https://mycompany.com/api/sites/test");
-		const customEnv = {
-			...env,
-			SITE_DOMAIN: "mycompany.com",
-			ACCESS_TEAM_DOMAIN: TEST_TEAM_DOMAIN,
-			ACCESS_AUD: TEST_AUD,
-		};
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, customEnv, ctx);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(401);
-	});
-
-	// ── Trusted email header alone is no longer sufficient ──────────────
-
-	it("rejects requests with only the email header (no JWT)", async () => {
-		const request = new Request("https://mycompany.com/deploy", {
-			headers: {
-				"Cf-Access-Authenticated-User-Email": "test@company.com",
+	it("rejects a custom-subdomain site request before dispatching when ctx.access is missing", async () => {
+		let dispatchCalls = 0;
+		const mockDispatcher = {
+			get() {
+				dispatchCalls += 1;
+				throw new Error("Site request must be authenticated first");
 			},
-		});
+		};
+
+		const request = new Request("https://docs.mycompany.com/index.html");
 		const customEnv = {
 			...env,
 			SITE_DOMAIN: "mycompany.com",
-			ACCESS_TEAM_DOMAIN: TEST_TEAM_DOMAIN,
-			ACCESS_AUD: TEST_AUD,
+			dispatcher: mockDispatcher,
 		};
-		const ctx = createExecutionContext();
+		const ctx = createNoAccessContext();
 		const response = await app.fetch(request, customEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(401);
-		const body = await response.text();
-		expect(body).toContain("Setup required: Enable Cloudflare Access");
-	});
-
-	// ── Valid JWT accepted ───────────────────────────────────────────────
-
-	it("accepts a valid Access JWT issued for the configured audience", async () => {
-		mockJwksEndpoint();
-
-		const token = await signTestJwt();
-		const request = new Request(
-			"https://my-worker.my-account.workers.dev/deploy",
-			{ headers: { "Cf-Access-Jwt-Assertion": token } },
+		expect(await response.text()).toContain(
+			"Setup required: Enable Cloudflare Access",
 		);
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, envWithAccess(), ctx);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(200);
-		const body = await response.text();
-		expect(body).toContain("Upload and deploy");
+		expect(dispatchCalls).toBe(0);
 	});
 
-	it("serves the deploy page with a valid JWT on custom domain", async () => {
-		mockJwksEndpoint();
-
-		const token = await signTestJwt();
-		const request = new Request("https://mycompany.com/deploy", {
-			headers: { "Cf-Access-Jwt-Assertion": token },
-		});
-		const customEnv = envWithAccess({ SITE_DOMAIN: "mycompany.com" });
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, customEnv, ctx);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(200);
-		const body = await response.text();
-		expect(body).toContain("Upload and deploy");
-	});
-
-	// ── API validation (localhost, auth bypassed) ────────────────────────
+	// ── API validation (with ctx.access) ────────────────────────────────
 
 	it("returns 400 when deploying with no files", async () => {
 		const formData = new FormData();
@@ -408,7 +296,7 @@ describe("Internal Sites Platform", () => {
 			method: "POST",
 			body: formData,
 		});
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -421,7 +309,7 @@ describe("Internal Sites Platform", () => {
 		const slug = "new-cloudflare-failure";
 		mockCloudflareDeploymentFailure(slug);
 
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(
 			deploymentRequest(slug),
 			deploymentEnv,
@@ -434,7 +322,7 @@ describe("Internal Sites Platform", () => {
 		expect(data.error).not.toContain("raw Cloudflare failure");
 		expect(data.error).not.toContain("test-api-token");
 
-		const lookupCtx = createExecutionContext();
+		const lookupCtx = createAccessContext();
 		const lookup = await app.fetch(
 			new Request(`http://localhost/api/sites/${slug}`),
 			deploymentEnv,
@@ -473,7 +361,7 @@ describe("Internal Sites Platform", () => {
 		const errorLog = vi.spyOn(console, "error").mockImplementation(() => {});
 		mockCloudflareDeploymentFailure(slug);
 
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(
 			deploymentRequest(slug),
 			cleanupFailingEnv,
@@ -501,7 +389,7 @@ describe("Internal Sites Platform", () => {
 		const slug = "existing-cloudflare-failure";
 		mockCloudflareDeploymentSuccess(slug);
 
-		const createCtx = createExecutionContext();
+		const createCtx = createAccessContext();
 		const createResponse = await app.fetch(
 			deploymentRequest(slug, "Original Site"),
 			deploymentEnv,
@@ -510,7 +398,7 @@ describe("Internal Sites Platform", () => {
 		await waitOnExecutionContext(createCtx);
 		expect(createResponse.status).toBe(201);
 
-		const beforeCtx = createExecutionContext();
+		const beforeCtx = createAccessContext();
 		const beforeResponse = await app.fetch(
 			new Request(`http://localhost/api/sites/${slug}`),
 			deploymentEnv,
@@ -520,7 +408,7 @@ describe("Internal Sites Platform", () => {
 		const originalSite = await beforeResponse.json();
 
 		mockCloudflareDeploymentFailure(slug);
-		const redeployCtx = createExecutionContext();
+		const redeployCtx = createAccessContext();
 		const redeployResponse = await app.fetch(
 			deploymentRequest(slug, "Attempted Rename"),
 			deploymentEnv,
@@ -529,7 +417,7 @@ describe("Internal Sites Platform", () => {
 		await waitOnExecutionContext(redeployCtx);
 		expect(redeployResponse.status).toBe(502);
 
-		const afterCtx = createExecutionContext();
+		const afterCtx = createAccessContext();
 		const afterResponse = await app.fetch(
 			new Request(`http://localhost/api/sites/${slug}`),
 			deploymentEnv,
@@ -552,7 +440,7 @@ describe("Internal Sites Platform", () => {
 		) as D1Database;
 		const failingEnv = { ...deploymentEnv, DB: failingDb };
 
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(
 			deploymentRequest("d1-failure"),
 			failingEnv,
@@ -568,7 +456,7 @@ describe("Internal Sites Platform", () => {
 
 	it("returns 404 for non-existent site via API", async () => {
 		const request = new Request("http://localhost/api/sites/nonexistent-slug");
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -579,7 +467,7 @@ describe("Internal Sites Platform", () => {
 
 	// ── Authenticated site serving without D1 ────────────────────────────
 
-	it("serves a localhost site without a JWT or D1 access", async () => {
+	it("serves a site with ctx.access without D1 access", async () => {
 		const throwingDb = new Proxy(
 			{},
 			{
@@ -609,7 +497,7 @@ describe("Internal Sites Platform", () => {
 			DB: throwingDb as D1Database,
 			dispatcher: mockDispatcher,
 		};
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, noDbEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -618,58 +506,7 @@ describe("Internal Sites Platform", () => {
 		expect(dispatchedSlug).toBe("my-test-site");
 	});
 
-	it("rejects a workers.dev site request before redirecting or dispatching when JWT is missing", async () => {
-		let dispatchCalls = 0;
-		const mockDispatcher = {
-			get() {
-				dispatchCalls += 1;
-				throw new Error("Site request must be authenticated first");
-			},
-		};
-
-		const request = new Request(
-			"https://my-worker.my-account.workers.dev/sites/test-site",
-		);
-		const workerEnv = envWithAccess({ dispatcher: mockDispatcher });
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, workerEnv, ctx);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(401);
-		expect(await response.text()).toContain(
-			"Setup required: Enable Cloudflare Access",
-		);
-		expect(dispatchCalls).toBe(0);
-	});
-
-	it("rejects a custom-subdomain site request before dispatching when JWT is missing", async () => {
-		let dispatchCalls = 0;
-		const mockDispatcher = {
-			get() {
-				dispatchCalls += 1;
-				throw new Error("Site request must be authenticated first");
-			},
-		};
-
-		const request = new Request("https://docs.mycompany.com/index.html");
-		const customEnv = envWithAccess({
-			SITE_DOMAIN: "mycompany.com",
-			dispatcher: mockDispatcher,
-		});
-		const ctx = createExecutionContext();
-		const response = await app.fetch(request, customEnv, ctx);
-		await waitOnExecutionContext(ctx);
-
-		expect(response.status).toBe(401);
-		expect(await response.text()).toContain(
-			"Setup required: Enable Cloudflare Access",
-		);
-		expect(dispatchCalls).toBe(0);
-	});
-
 	it("dispatches an authenticated workers.dev site request without accessing D1", async () => {
-		mockJwksEndpoint();
-
 		const throwingDb = new Proxy(
 			{},
 			{
@@ -692,16 +529,15 @@ describe("Internal Sites Platform", () => {
 				};
 			},
 		};
-		const token = await signTestJwt();
 		const request = new Request(
 			"https://my-worker.my-account.workers.dev/sites/test-site/style.css",
-			{ headers: { "Cf-Access-Jwt-Assertion": token } },
 		);
-		const workerEnv = envWithAccess({
+		const workerEnv = {
+			...env,
 			DB: throwingDb as D1Database,
 			dispatcher: mockDispatcher,
-		});
-		const ctx = createExecutionContext();
+		};
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, workerEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -711,8 +547,6 @@ describe("Internal Sites Platform", () => {
 	});
 
 	it("sandboxes path-based HTML without preserving its origin", async () => {
-		mockJwksEndpoint();
-
 		const mockDispatcher = {
 			get() {
 				return {
@@ -726,13 +560,11 @@ describe("Internal Sites Platform", () => {
 				};
 			},
 		};
-		const token = await signTestJwt();
 		const request = new Request(
 			"https://my-worker.my-account.workers.dev/sites/test-site/",
-			{ headers: { "Cf-Access-Jwt-Assertion": token } },
 		);
-		const workerEnv = envWithAccess({ dispatcher: mockDispatcher });
-		const ctx = createExecutionContext();
+		const workerEnv = { ...env, dispatcher: mockDispatcher };
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, workerEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -749,7 +581,7 @@ describe("Internal Sites Platform", () => {
 			method: "POST",
 			headers: { Origin: "null" },
 		});
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -762,7 +594,7 @@ describe("Internal Sites Platform", () => {
 			method: "POST",
 			headers: { Origin: "https://example.com" },
 		});
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -783,7 +615,7 @@ describe("Internal Sites Platform", () => {
 				Referer: "http://localhost/deploy",
 			},
 		});
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -801,7 +633,7 @@ describe("Internal Sites Platform", () => {
 			method: "POST",
 			body: formData,
 		});
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -817,7 +649,7 @@ describe("Internal Sites Platform", () => {
 			...env,
 			SITE_DOMAIN: "</script><script>alert(1)</script>",
 		};
-		const ctx = createExecutionContext();
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, maliciousEnv, ctx);
 		await waitOnExecutionContext(ctx);
 
@@ -832,8 +664,6 @@ describe("Internal Sites Platform", () => {
 	// ── Subdomain isolation ──────────────────────────────────────────────
 
 	it("dispatches authenticated subdomain requests to the site Worker, not platform routes", async () => {
-		mockJwksEndpoint();
-
 		let dispatchedSlug: string | null = null;
 		const mockDispatcher = {
 			get(slug: string) {
@@ -849,15 +679,13 @@ describe("Internal Sites Platform", () => {
 
 		// Request docs.mycompany.com/deploy — should dispatch to the "docs" site
 		// Worker, NOT serve the deploy page.
-		const token = await signTestJwt();
-		const request = new Request("https://docs.mycompany.com/deploy", {
-			headers: { "Cf-Access-Jwt-Assertion": token },
-		});
-		const customEnv = envWithAccess({
+		const request = new Request("https://docs.mycompany.com/deploy");
+		const customEnv = {
+			...env,
 			SITE_DOMAIN: "mycompany.com",
 			dispatcher: mockDispatcher,
-		});
-		const ctx = createExecutionContext();
+		};
+		const ctx = createAccessContext();
 		const response = await app.fetch(request, customEnv, ctx);
 		await waitOnExecutionContext(ctx);
 

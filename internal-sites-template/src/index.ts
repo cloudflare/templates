@@ -73,7 +73,7 @@ app.use("*", async (c, next) => {
 	if (url.hostname !== domain && url.hostname.endsWith(`.${domain}`)) {
 		const slug = normalizeSlug(url.hostname.slice(0, -(domain.length + 1)));
 		if (slug) {
-			const identity = await requireAccessIdentity(c.req.raw, c.env);
+			const identity = await requireAccessIdentity(c.executionCtx);
 			if (identity instanceof Response) return identity;
 
 			return dispatchToSite(c, slug);
@@ -91,7 +91,7 @@ app.get("/", (c) => c.redirect(deployPath(c.env)));
 
 // Deploy page
 app.get("/deploy", async (c) => {
-	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	const identity = await requireAccessIdentity(c.executionCtx);
 	if (identity instanceof Response) return identity;
 
 	return c.html(
@@ -105,7 +105,7 @@ app.get("/deploy", async (c) => {
 // ── Admin dashboard ──────────────────────────────────────────────────────────
 
 app.get("/admin", async (c) => {
-	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	const identity = await requireAccessIdentity(c.executionCtx);
 	if (identity instanceof Response) return identity;
 
 	await ensureDb(c.env.DB);
@@ -200,7 +200,7 @@ app.use("/api/*", async (c, next) => {
 // ── Deploy API ───────────────────────────────────────────────────────────────
 
 app.post("/api/sites/deploy", async (c) => {
-	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	const identity = await requireAccessIdentity(c.executionCtx);
 	if (identity instanceof Response) return identity;
 
 	let upload: Awaited<ReturnType<typeof parseStaticSiteUpload>>;
@@ -305,7 +305,7 @@ app.post("/api/sites/deploy", async (c) => {
 // ── Site info ────────────────────────────────────────────────────────────────
 
 app.get("/api/sites/:slug", async (c) => {
-	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	const identity = await requireAccessIdentity(c.executionCtx);
 	if (identity instanceof Response) return identity;
 
 	await ensureDb(c.env.DB);
@@ -326,7 +326,7 @@ app.get("/api/sites/:slug", async (c) => {
 // ── Delete site ──────────────────────────────────────────────────────────────
 
 app.delete("/api/sites/:slug", async (c) => {
-	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	const identity = await requireAccessIdentity(c.executionCtx);
 	if (identity instanceof Response) return identity;
 
 	await ensureDb(c.env.DB);
@@ -371,7 +371,7 @@ app.get("*", async (c) => {
 	}
 
 	// Authenticate site requests before redirects or dispatch namespace access.
-	const identity = await requireAccessIdentity(c.req.raw, c.env);
+	const identity = await requireAccessIdentity(c.executionCtx);
 	if (identity instanceof Response) return identity;
 
 	// Redirect /sites/slug to /sites/slug/ in path-based mode

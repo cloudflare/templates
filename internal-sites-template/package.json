@@ -20,16 +20,12 @@
 			},
 			"SITE_DOMAIN": {
 				"description": "Your company's internal domain, e.g. `internal-company.com`. Sites deploy to `site-name.internal-company.com`."
-			},
-			"ACCESS_TEAM_DOMAIN": {
-				"description": "Your Cloudflare One team domain, e.g. `https://mycompany.cloudflareaccess.com`. Find it at https://one.dash.cloudflare.com/?to=/:account/settings"
 			}
 		}
 	},
 	"dependencies": {
 		"fflate": "0.8.2",
-		"hono": "4.11.1",
-		"jose": "6.2.8"
+		"hono": "4.11.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.21.3",

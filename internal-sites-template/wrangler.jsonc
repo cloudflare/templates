@@ -29,8 +29,15 @@
 		"DISPATCH_NAMESPACE_NAME": "internal-sites",
 		"SITE_DOMAIN": "internal-company.com",
 		"DEPLOY_PATH": "/deploy",
-		"ACCOUNT_ID": "",
-		"ACCESS_TEAM_DOMAIN": ""
+		"ACCOUNT_ID": ""
+	},
+	"access": {
+		"dev": {
+			"aud": "local-dev-aud",
+			"identity": {
+				"email": "local-dev@localhost"
+			}
+		}
 	},
 	"env": {
 		"local": {
@@ -52,8 +59,7 @@
 				"DISPATCH_NAMESPACE_NAME": "internal-sites",
 				"SITE_DOMAIN": "internal-company.com",
 				"DEPLOY_PATH": "/deploy",
-				"ACCOUNT_ID": "",
-				"ACCESS_TEAM_DOMAIN": ""
+				"ACCOUNT_ID": ""
 			}
 		}
 	},
