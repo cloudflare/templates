@@ -289,7 +289,13 @@ async function uploadAssetBucket(
 			throw new Error(`Asset bucket referenced unknown hash ${hash}`);
 		}
 
-		formData.append(hash, bytesToBase64(asset.content));
+		formData.append(
+			hash,
+			new File([bytesToBase64(asset.content)], hash, {
+				type: asset.contentType || "application/null",
+			}),
+			hash,
+		);
 	}
 
 	const response = await fetch(`${BaseURI(env)}/assets/upload?base64=true`, {
