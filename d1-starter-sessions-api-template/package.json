@@ -18,13 +18,13 @@
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1343611f-f30d-4c8e-4de9-a9bb0f3e7e00/public"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.16.20",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
 		"@vitest/runner": "4.1.10",
 		"@vitest/snapshot": "4.1.10",
 		"durable-utils": "0.3.5",
 		"typescript": "5.9.3",
 		"vitest": "4.1.10",
-		"wrangler": "4.88.0"
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {
