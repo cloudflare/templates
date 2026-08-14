@@ -5,7 +5,15 @@ import {
 	waitOnExecutionContext,
 } from "cloudflare:test";
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import {
+	afterEach,
+	beforeAll,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vitest";
 import { resetJwksCache } from "../src/access";
 import app, { resetDbInitialized } from "../src/index";
 
@@ -61,6 +69,75 @@ function mockJwksEndpoint() {
 		);
 }
 
+const deploymentEnv = {
+	...env,
+	ACCOUNT_ID: "test-account",
+	DISPATCH_NAMESPACE_NAME: "internal-sites",
+	DISPATCH_NAMESPACE_API_TOKEN: "test-api-token",
+};
+
+function deploymentRequest(slug: string, name = "Test Site"): Request {
+	const formData = new FormData();
+	formData.set("name", name);
+	formData.set("slug", slug);
+	formData.set("paths", JSON.stringify(["index.html"]));
+	formData.append(
+		"files",
+		new File(["<!doctype html><title>Test</title>"], "index.html", {
+			type: "text/html",
+		}),
+	);
+
+	return new Request("http://localhost/api/sites/deploy", {
+		method: "POST",
+		body: formData,
+	});
+}
+
+function mockCloudflareDeploymentSuccess(slug: string): void {
+	const scriptPath = `/client/v4/accounts/test-account/workers/dispatch/namespaces/internal-sites/scripts/${slug}`;
+
+	fetchMock
+		.get("https://api.cloudflare.com")
+		.intercept({
+			path: `${scriptPath}/assets-upload-session`,
+			method: "POST",
+		})
+		.reply(
+			200,
+			JSON.stringify({
+				success: true,
+				result: { jwt: "test-upload-jwt", buckets: [] },
+			}),
+			{ headers: { "content-type": "application/json" } },
+		);
+
+	fetchMock
+		.get("https://api.cloudflare.com")
+		.intercept({ path: scriptPath, method: "PUT" })
+		.reply(200, JSON.stringify({ success: true, result: {} }), {
+			headers: { "content-type": "application/json" },
+		});
+}
+
+function mockCloudflareDeploymentFailure(slug: string): void {
+	fetchMock
+		.get("https://api.cloudflare.com")
+		.intercept({
+			path: `/client/v4/accounts/test-account/workers/dispatch/namespaces/internal-sites/scripts/${slug}/assets-upload-session`,
+			method: "POST",
+		})
+		.reply(
+			500,
+			JSON.stringify({
+				success: false,
+				result: null,
+				errors: [{ message: "raw Cloudflare failure" }],
+			}),
+			{ headers: { "content-type": "application/json" } },
+		);
+}
+
 // ── Setup ────────────────────────────────────────────────────────────────────
 
 beforeAll(async () => {
@@ -81,6 +158,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+	vi.restoreAllMocks();
 	fetchMock.assertNoPendingInterceptors();
 });
 
@@ -332,6 +410,155 @@ describe("Internal Sites Platform", () => {
 		expect(response.status).toBe(400);
 		const data = (await response.json()) as { error: string };
 		expect(data.error).toContain("folder or ZIP");
+	});
+
+	it("returns 502 and removes a new site when Cloudflare deployment fails", async () => {
+		const slug = "new-cloudflare-failure";
+		mockCloudflareDeploymentFailure(slug);
+
+		const ctx = createExecutionContext();
+		const response = await app.fetch(
+			deploymentRequest(slug),
+			deploymentEnv,
+			ctx,
+		);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(502);
+		const data = (await response.json()) as { error: string };
+		expect(data.error).not.toContain("raw Cloudflare failure");
+		expect(data.error).not.toContain("test-api-token");
+
+		const lookupCtx = createExecutionContext();
+		const lookup = await app.fetch(
+			new Request(`http://localhost/api/sites/${slug}`),
+			deploymentEnv,
+			lookupCtx,
+		);
+		await waitOnExecutionContext(lookupCtx);
+
+		expect(lookup.status).toBe(404);
+	});
+
+	it("logs deployment and cleanup errors without exposing them to the user", async () => {
+		const slug = "cleanup-failure";
+		const baseDb = deploymentEnv.DB;
+		const cleanupError = new Error("private cleanup failure details");
+		const cleanupFailingDb = {
+			prepare(query: string) {
+				if (query === "DELETE FROM sites WHERE id = ?") {
+					return {
+						bind() {
+							return {
+								run: async () => {
+									throw cleanupError;
+								},
+							};
+						},
+					};
+				}
+
+				return baseDb.prepare(query);
+			},
+			batch(statements: D1PreparedStatement[]) {
+				return baseDb.batch(statements);
+			},
+		} as D1Database;
+		const cleanupFailingEnv = { ...deploymentEnv, DB: cleanupFailingDb };
+		const errorLog = vi.spyOn(console, "error").mockImplementation(() => {});
+		mockCloudflareDeploymentFailure(slug);
+
+		const ctx = createExecutionContext();
+		const response = await app.fetch(
+			deploymentRequest(slug),
+			cleanupFailingEnv,
+			ctx,
+		);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(502);
+		expect(errorLog).toHaveBeenCalledTimes(2);
+		expect(errorLog.mock.calls[0][0]).toBe("Cloudflare deployment failed");
+		expect(errorLog.mock.calls[1]).toEqual([
+			"Provisional site cleanup failed after Cloudflare deployment failure",
+			{
+				deploymentError: expect.any(Error),
+				cleanupError,
+			},
+		]);
+
+		const data = (await response.json()) as { error: string };
+		expect(data.error).not.toContain("raw Cloudflare failure");
+		expect(data.error).not.toContain("private cleanup failure details");
+	});
+
+	it("returns 502 and leaves an existing site unchanged when redeployment fails", async () => {
+		const slug = "existing-cloudflare-failure";
+		mockCloudflareDeploymentSuccess(slug);
+
+		const createCtx = createExecutionContext();
+		const createResponse = await app.fetch(
+			deploymentRequest(slug, "Original Site"),
+			deploymentEnv,
+			createCtx,
+		);
+		await waitOnExecutionContext(createCtx);
+		expect(createResponse.status).toBe(201);
+
+		const beforeCtx = createExecutionContext();
+		const beforeResponse = await app.fetch(
+			new Request(`http://localhost/api/sites/${slug}`),
+			deploymentEnv,
+			beforeCtx,
+		);
+		await waitOnExecutionContext(beforeCtx);
+		const originalSite = await beforeResponse.json();
+
+		mockCloudflareDeploymentFailure(slug);
+		const redeployCtx = createExecutionContext();
+		const redeployResponse = await app.fetch(
+			deploymentRequest(slug, "Attempted Rename"),
+			deploymentEnv,
+			redeployCtx,
+		);
+		await waitOnExecutionContext(redeployCtx);
+		expect(redeployResponse.status).toBe(502);
+
+		const afterCtx = createExecutionContext();
+		const afterResponse = await app.fetch(
+			new Request(`http://localhost/api/sites/${slug}`),
+			deploymentEnv,
+			afterCtx,
+		);
+		await waitOnExecutionContext(afterCtx);
+
+		expect(afterResponse.status).toBe(200);
+		expect(await afterResponse.json()).toEqual(originalSite);
+	});
+
+	it("returns 500 for an unexpected D1 failure", async () => {
+		const failingDb = new Proxy(
+			{},
+			{
+				get() {
+					throw new Error("private D1 failure details");
+				},
+			},
+		) as D1Database;
+		const failingEnv = { ...deploymentEnv, DB: failingDb };
+
+		const ctx = createExecutionContext();
+		const response = await app.fetch(
+			deploymentRequest("d1-failure"),
+			failingEnv,
+			ctx,
+		);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(500);
+		const data = (await response.json()) as { error: string };
+		expect(data.error).toContain("internal error");
+		expect(data.error).not.toContain("private D1 failure details");
 	});
 
 	it("returns 404 for non-existent site via API", async () => {

@@ -34,7 +34,7 @@ import {
 	GetScriptsInDispatchNamespace,
 	PutStaticSiteInDispatchNamespace,
 } from "./resource";
-import type { Deployment, Site } from "./types";
+import type { DeployResult, Deployment, Site } from "./types";
 import { renderDeployPage, renderNotFound, renderShell } from "./ui";
 
 // ── App ──────────────────────────────────────────────────────────────────────
@@ -203,10 +203,16 @@ app.post("/api/sites/deploy", async (c) => {
 	const identity = await requireAccessIdentity(c.req.raw, c.env);
 	if (identity instanceof Response) return identity;
 
-	await ensureDb(c.env.DB);
+	let upload: Awaited<ReturnType<typeof parseStaticSiteUpload>>;
+	try {
+		upload = await parseStaticSiteUpload(c.req.raw);
+	} catch (error) {
+		return c.json({ error: errorMessage(error) }, 400);
+	}
 
 	try {
-		const upload = await parseStaticSiteUpload(c.req.raw);
+		await ensureDb(c.env.DB);
+
 		const existingSite = await GetSiteBySlug(c.env.DB, upload.slug);
 		const now = new Date().toISOString();
 		const site =
@@ -223,15 +229,39 @@ app.post("/api/sites/deploy", async (c) => {
 			);
 		}
 
-		if (!existingSite) {
+		const createdSite = !existingSite;
+		if (createdSite) {
 			await CreateSite(c.env.DB, site);
 		}
 
-		const deploy = await PutStaticSiteInDispatchNamespace(
-			c.env,
-			upload.slug,
-			upload.assets,
-		);
+		let deploy: DeployResult;
+		try {
+			deploy = await PutStaticSiteInDispatchNamespace(
+				c.env,
+				upload.slug,
+				upload.assets,
+			);
+		} catch (deploymentError) {
+			console.error("Cloudflare deployment failed", deploymentError);
+
+			if (createdSite) {
+				try {
+					await DeleteSite(c.env.DB, site.id);
+				} catch (cleanupError) {
+					console.error(
+						"Provisional site cleanup failed after Cloudflare deployment failure",
+						{ deploymentError, cleanupError },
+					);
+				}
+			}
+
+			return c.json(
+				{
+					error: "Cloudflare could not deploy the site. Please try again.",
+				},
+				502,
+			);
+		}
 
 		const deployment: Deployment = {
 			id: deploy.deploymentId,
@@ -261,8 +291,14 @@ app.post("/api/sites/deploy", async (c) => {
 			201,
 		);
 	} catch (error) {
-		console.error("Deploy failed", error);
-		return c.json({ error: errorMessage(error) }, 400);
+		console.error("Deploy failed due to an internal error", error);
+		return c.json(
+			{
+				error:
+					"Could not deploy the site due to an internal error. Please try again.",
+			},
+			500,
+		);
 	}
 });
 
