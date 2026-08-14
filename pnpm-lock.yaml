@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@cloudflare/workers-types': 4.20260702.1
-
 importers:
 
   .:
@@ -55,9 +52,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@types/react':
         specifier: 19.2.7
         version: 19.2.7
@@ -98,9 +92,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@types/react':
         specifier: 19.2.7
         version: 19.2.7
@@ -147,9 +138,6 @@ importers:
       '@cloudflare/vite-plugin':
         specifier: 1.52.1
         version: 1.52.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))(wrangler@4.123.0(@cloudflare/workers-types@4.20260702.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@react-router/dev':
         specifier: 7.9.6
         version: 7.9.6(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(react-router@7.9.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(terser@5.16.9)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))(wrangler@4.123.0(@cloudflare/workers-types@4.20260702.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10))(yaml@2.8.1)
@@ -286,9 +274,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@types/react':
         specifier: 19.2.7
         version: 19.2.7
@@ -366,8 +351,8 @@ importers:
         specifier: 5.1.6
         version: 5.1.6
       partyserver:
-        specifier: 0.0.75
-        version: 0.0.75(@cloudflare/workers-types@4.20260702.1)
+        specifier: 0.5.10
+        version: 0.5.10(@cloudflare/workers-types@4.20260702.1)
       partysocket:
         specifier: 1.1.6
         version: 1.1.6
@@ -381,9 +366,6 @@ importers:
         specifier: 7.9.6
         version: 7.9.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
     devDependencies:
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@types/react':
         specifier: 19.2.7
         version: 19.2.7
@@ -424,9 +406,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@vitest/runner':
         specifier: 4.1.10
         version: 4.1.10
@@ -448,9 +427,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@types/node':
         specifier: 24.10.1
         version: 24.10.1
@@ -475,9 +451,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@vitest/runner':
         specifier: 4.1.10
         version: 4.1.10
@@ -500,8 +473,8 @@ importers:
         specifier: 0.6.5
         version: 0.6.5
       partyserver:
-        specifier: 0.0.75
-        version: 0.0.75(@cloudflare/workers-types@4.20260702.1)
+        specifier: 0.5.10
+        version: 0.5.10(@cloudflare/workers-types@4.20260702.1)
       partysocket:
         specifier: 1.1.6
         version: 1.1.6
@@ -512,9 +485,6 @@ importers:
         specifier: 19.2.1
         version: 19.2.1(react@19.2.1)
     devDependencies:
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@types/react':
         specifier: 19.2.7
         version: 19.2.7
@@ -626,9 +596,6 @@ importers:
         specifier: 4.1.13
         version: 4.1.13
     devDependencies:
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -806,9 +773,6 @@ importers:
       '@cloudflare/vite-plugin':
         specifier: 1.52.1
         version: 1.52.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))(wrangler@4.123.0(@cloudflare/workers-types@4.20260702.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@react-router/dev':
         specifier: 7.9.6
         version: 7.9.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(react-router@7.9.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(terser@5.16.9)(tsx@4.21.0)(typescript@5.9.3)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))(wrangler@4.123.0(@cloudflare/workers-types@4.20260702.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10))(yaml@2.8.1)
@@ -1000,7 +964,7 @@ importers:
         version: 18.3.1(react@18.3.1)
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20260702.1
+        specifier: ^4.20260702.1
         version: 4.20260702.1
       '@remix-run/dev':
         specifier: 2.17.2
@@ -1170,7 +1134,7 @@ importers:
         specifier: 0.11.1
         version: 0.11.1(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@3.2.7)(@vitest/snapshot@3.2.7)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@3.2.7(@types/debug@4.1.12)(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1))
       '@cloudflare/workers-types':
-        specifier: 4.20260702.1
+        specifier: ^4.20260702.1
         version: 4.20260702.1
       '@remix-run/dev':
         specifier: 2.17.2
@@ -1297,9 +1261,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@slack/types':
         specifier: 2.19.0
         version: 2.19.0
@@ -1331,9 +1292,6 @@ importers:
       '@cloudflare/vitest-pool-workers':
         specifier: 0.21.3
         version: 0.21.3(@cloudflare/workers-types@4.20260702.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.8.1)))
-      '@cloudflare/workers-types':
-        specifier: 4.20260702.1
-        version: 4.20260702.1
       '@vitest/runner':
         specifier: 4.1.10
         version: 4.1.10
@@ -4719,7 +4677,7 @@ packages:
     resolution: {integrity: sha512-aLJdXZ6Uwos61Ct00KP5IluMylvwl8pMS0Zus+O7MtimG1k+CpcmqAwuiIku6WGNNsL9EZPPDfoJd1HFRGQwxA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': ^4.0.0
       typescript: ^5.1.0
     peerDependenciesMeta:
       typescript:
@@ -9872,6 +9830,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.16:
+    resolution: {integrity: sha512-kVrnsrJqMR8+oLJnGEmSWw9BivK5mt7H3FZatVRjrc5wGqFYuBxX1yG7+A7Gi5AefkX6t/oCkizcQgpu0cY1dQ==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   nanoid@5.1.6:
     resolution: {integrity: sha512-c7+7RQ+dMB5dPwwCp4ee1/iV/q2P6aK1mTZcfr1BTuVlyW9hJYiMPybJCcnBlQtuSmTIWNeazm/zqNoZSSElBg==}
     engines: {node: ^18 || >=20}
@@ -10215,7 +10178,12 @@ packages:
   partyserver@0.0.75:
     resolution: {integrity: sha512-i/18vvdxuGjx+rpQ+fDdExlvQoRb7EfTF+6b+kA2ILEpHemtpLWV8NdgDrOPEklRNdCc/4WlzDtYn05d17aZAQ==}
     peerDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': ^4.20240729.0
+
+  partyserver@0.5.10:
+    resolution: {integrity: sha512-t2B3mhTL1IOxCsj8rZgn4TxTuub7oLhypjc1/fGPNsbgnn9OsHms6uR3QEd5bFJ/7xrFo771j3DdUlll8cxgBg==}
+    peerDependencies:
+      '@cloudflare/workers-types': ^4.20260424.1 || ^5.20260703.1
 
   partysocket@1.1.6:
     resolution: {integrity: sha512-LkEk8N9hMDDsDT0iDK0zuwUDFVrVMUXFXCeN3850Ng8wtjPqPBeJlwdeY6ROlJSEh3tPoTTasXoSBYH76y118w==}
@@ -12311,7 +12279,7 @@ packages:
     engines: {node: '>=16.17.0'}
     hasBin: true
     peerDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': ^4.20250408.0
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
@@ -12331,7 +12299,7 @@ packages:
     engines: {node: '>=20.0.0'}
     hasBin: true
     peerDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': ^4.20251118.0
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
@@ -12342,7 +12310,7 @@ packages:
     deprecated: Version 4.55.0 and 4.56.0 can incorrectly automatically delegate 'wrangler deploy' to 'opennextjs-cloudflare'. Use an older or newer version.
     hasBin: true
     peerDependencies:
-      '@cloudflare/workers-types': 4.20260702.1
+      '@cloudflare/workers-types': ^4.20251217.0
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
@@ -24352,6 +24320,8 @@ snapshots:
 
   nanoid@3.3.11: {}
 
+  nanoid@5.1.16: {}
+
   nanoid@5.1.6: {}
 
   napi-postinstall@0.2.4: {}
@@ -24791,6 +24761,11 @@ snapshots:
     dependencies:
       '@cloudflare/workers-types': 4.20260702.1
       nanoid: 5.1.6
+
+  partyserver@0.5.10(@cloudflare/workers-types@4.20260702.1):
+    dependencies:
+      '@cloudflare/workers-types': 4.20260702.1
+      nanoid: 5.1.16
 
   partysocket@1.1.6:
     dependencies:

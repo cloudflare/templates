@@ -6,7 +6,7 @@
 		"strict": true,
 		"jsx": "react-jsx",
 		"types": [
-			"@cloudflare/workers-types",
+			"./worker-configuration.d.ts",
 			"@cloudflare/vitest-pool-workers/types"
 		],
 		"lib": ["ES2022", "WebWorker"],
