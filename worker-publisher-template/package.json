@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"tsx": "4.21.0",
 		"typescript": "5.9.3",
-		"wrangler": "4.88.0"
+		"wrangler": "4.103.0"
 	},
 	"private": true,
 	"scripts": {
