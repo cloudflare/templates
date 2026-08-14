@@ -32,8 +32,8 @@
 		"react-dom": "19.2.1"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "1.15.3",
-		"@cloudflare/vitest-pool-workers": "0.16.20",
+		"@cloudflare/vite-plugin": "1.52.1",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
 		"@cloudflare/workers-types": "^4.20260702.1",
 		"@types/react": "19.2.7",
 		"@types/react-dom": "19.2.3",
@@ -41,7 +41,7 @@
 		"typescript": "5.9.3",
 		"vite": "^7.0.0",
 		"vitest": "4.1.10",
-		"wrangler": "4.88.0"
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {

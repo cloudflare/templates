@@ -20,14 +20,14 @@
 		"pg": "8.16.3"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.16.20",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
 		"@types/node": "24.10.1",
 		"@types/pg": "8.15.6",
 		"@vitest/runner": "4.1.10",
 		"@vitest/snapshot": "4.1.10",
 		"typescript": "5.9.3",
 		"vitest": "4.1.10",
-		"wrangler": "4.88.0"
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {

@@ -72,7 +72,7 @@ const KV_CACHE_KEY = "enriched-catalog";
 
 async function getEnrichedCatalog(
 	env: Env,
-	ctx?: ExecutionContext,
+	ctx?: Pick<ExecutionContext, "waitUntil">,
 ): Promise<EnrichedProduct[]> {
 	const config = getMerchantConfig(env);
 	const cacheTtlSeconds = config.cacheTtl;
