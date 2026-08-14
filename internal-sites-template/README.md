@@ -19,7 +19,7 @@ Deploy an internal drag-and-drop static site platform for your company using [Wo
 
 1. **Workers for Platforms** - Each deployed site becomes an isolated Worker in a dispatch namespace. The platform routes requests to the correct site Worker
 2. **D1** - Stores site metadata (name, slug, owner, timestamps) and deployment history
-3. **Cloudflare Access** - Enforces company login. Before serving platform routes or dispatching a deployed site, the platform verifies the signed JWT from Cloudflare Access
+3. **Cloudflare Access** - Enforces company login. The platform reads authenticated user identity via `ctx.access` — no manual JWT verification or secrets required
 
 ## Bindings Used
 
@@ -32,16 +32,7 @@ Deploy an internal drag-and-drop static site platform for your company using [Wo
 
 ## Setup
 
-### 1. Find your team domain
-
-The platform verifies every request using your Cloudflare Zero Trust team domain. You'll enter this during deployment.
-
-1. Go to [**Zero Trust Settings**](https://one.dash.cloudflare.com/?to=/:account/settings)
-2. Note your **team domain** (e.g. `https://mycompany.cloudflareaccess.com`)
-
-> **Note:** If you don't have a Zero Trust organization yet, one will be created when you first visit the Zero Trust dashboard.
-
-### 2. Create your API token
+### 1. Create your API token
 
 The platform needs an API token to deploy Workers into the dispatch namespace.
 
@@ -51,11 +42,11 @@ The platform needs an API token to deploy Workers into the dispatch namespace.
 4. Scope it to your account only
 5. Copy the token — you will enter it when prompted during the Deploy to Cloudflare flow
 
-### 3. Deploy the template
+### 2. Deploy the template
 
-Click the **Deploy to Cloudflare** button above and follow the prompts. Enter your **team domain** and **API token** when prompted.
+Click the **Deploy to Cloudflare** button above and follow the prompts. Enter your **API token** when prompted.
 
-### 4. Enable your Worker URL
+### 3. Enable your Worker URL
 
 After deployment completes:
 
@@ -64,7 +55,7 @@ After deployment completes:
 3. Go to **Settings** > **Domains & Routes**
 4. Under **Worker URL**, click **Enable** and confirm — this enables your `workers.dev` URL
 
-### 5. Require company login
+### 4. Require company login
 
 Protect your Worker with Cloudflare Access so only company employees can access it.
 
@@ -76,41 +67,9 @@ Protect your Worker with Cloudflare Access so only company employees can access 
 6. Optionally review the session duration
 7. Select **Apply Access**
 
-Every request now requires company login. The Access application authenticates users at the edge, and the platform Worker verifies the signed Access JWT again before handling platform routes or dispatching deployed sites.
+Every request now requires company login. The platform Worker reads the authenticated user's identity via [`ctx.access`](https://developers.cloudflare.com/workers/configuration/cloudflare-access/) — no manual JWT verification or secrets required. Access handles authentication at the edge before your Worker runs.
 
-### Connect the Worker to your Access application
-
-Cloudflare Access issues a JWT after a user successfully signs in. Each JWT contains an application-specific Audience (`aud`) value.
-
-This Worker checks that value to confirm the token was issued for this Access application, rather than another Access application in the same Cloudflare account. Therefore, `ACCESS_AUD` is required.
-
-#### Find the AUD tag
-
-1. Open [Cloudflare Access applications](https://one.dash.cloudflare.com/?to=/:account/access/apps).
-2. Select **Configure** for the application protecting this Worker.
-3. Open **Additional settings**.
-4. Copy the **Application Audience (AUD) Tag**.
-
-#### Add it using Wrangler
-
-```bash
-npm exec -- wrangler secret put ACCESS_AUD
-```
-
-Paste the AUD tag when prompted.
-
-#### Or add it using the dashboard
-
-1. Go to **Workers & Pages** and select this Worker.
-2. Open **Settings** > **Variables and Secrets**.
-3. Select **Add** and choose **Secret**.
-4. Enter `ACCESS_AUD` as the name.
-5. Paste the **Application Audience (AUD) Tag** as the value.
-6. Select **Deploy**.
-
-Reload the Worker URL and sign in again.
-
-### 6. Deploy your first site
+### 5. Deploy your first site
 
 1. Go back to [**Workers & Pages**](https://dash.cloudflare.com/?to=/:account/workers-and-pages) and select your Worker
 2. On the **Overview** tab, click the `workers.dev` link to open the platform
@@ -285,23 +244,21 @@ npm run dev:remote
 
 Open [http://localhost:8787/deploy](http://localhost:8787/deploy) to use the platform.
 
-Local dev uses path-based routing automatically (`/sites/site-name/`). Access verification is skipped only for localhost requests, where a placeholder identity (`local-dev@localhost`) is used automatically. Requests to any non-localhost hostname still require valid Cloudflare Access verification.
+Local dev uses path-based routing automatically (`/sites/site-name/`). Cloudflare Access is simulated locally using the `access.dev` block in `wrangler.jsonc`, which provides a mock identity (`local-dev@localhost`) via `ctx.access`. To test as a different user, change the identity fields in the `access.dev` block.
 
 ---
 
 ## Troubleshooting
 
-| Problem                                                        | Solution                                                                                                                                                                 |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "Setup required: Enable Cloudflare Access"                     | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
-| "Cloudflare Access token could not be verified"                | Sign in again. If the problem continues, confirm `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` match your Access application                                                     |
-| "Could not create asset upload session"                        | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
-| "Dispatch namespace not found"                                 | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
-| 404 on deployed sites                                          | Ensure uploaded files include `index.html` at the root                                                                                                                   |
-| Database errors                                                | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
-| "Access verification is not configured"                        | Set `ACCESS_TEAM_DOMAIN`. See **Find your team domain** in the Setup section above                                                                                       |
-| "Cloudflare Access setup is incomplete: ACCESS_AUD is missing" | Set `ACCESS_AUD` to the Application Audience (AUD) Tag. See **Connect the Worker to your Access application** in the Setup section above                                 |
-| "Could not delete site from Cloudflare"                        | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
+| Problem                                    | Solution                                                                                                                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Setup required: Enable Cloudflare Access" | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
+| "Could not read your Access identity"      | Sign in again. If the problem continues, confirm Access is enabled on this Worker                                                                                        |
+| "Could not create asset upload session"    | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
+| "Dispatch namespace not found"             | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
+| 404 on deployed sites                      | Ensure uploaded files include `index.html` at the root                                                                                                                   |
+| Database errors                            | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
+| "Could not delete site from Cloudflare"    | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
 
 **View logs:**
 

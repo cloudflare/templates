@@ -17,6 +17,12 @@
 	],
 	"versionGroups": [
 		{
+			"label": "Use Workers types v5 for ctx.access",
+			"packages": ["internal-sites-template"],
+			"dependencies": ["@cloudflare/workers-types"],
+			"pinVersion": "^5.20260811.1"
+		},
+		{
 			"label": "Pin Zod 3.x for chanfana template due to chanfana peer dep",
 			"packages": ["chanfana-openapi-template"],
 			"dependencies": ["zod"],
