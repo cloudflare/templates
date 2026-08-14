@@ -23,6 +23,7 @@
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"e2e:dev": "node e2e/dev.mjs",
 		"test": "vitest run",
 		"types": "tsc --noEmit"
 	}

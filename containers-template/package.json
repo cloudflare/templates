@@ -28,6 +28,7 @@
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --enable-containers=false",
 		"start": "wrangler dev"
 	}
 }

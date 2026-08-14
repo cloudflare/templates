@@ -45,6 +45,7 @@
 		"build": "node scripts/setup-quick.js",
 		"deploy": "wrangler deploy && node scripts/setup-quick.js --set-secrets",
 		"dev": "wrangler dev --remote",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
 		"setup": "node scripts/setup.js",
 		"setup:quick": "node scripts/setup-quick.js",
 		"test": "vitest run",
