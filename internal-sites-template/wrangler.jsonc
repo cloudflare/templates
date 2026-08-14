@@ -1,0 +1,36 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "internal-sites-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"workers_dev": true,
+	"placement": {
+		"mode": "smart"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"dispatch_namespaces": [
+		{
+			"binding": "dispatcher",
+			"namespace": "internal-sites",
+			"remote": true
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "internal-sites-platform",
+			"database_id": ""
+		}
+	],
+	"vars": {
+		"DISPATCH_NAMESPACE_NAME": "internal-sites",
+		"SITE_DOMAIN": "internal-company.com",
+		"DEPLOY_PATH": "/deploy",
+		"ACCOUNT_ID": "",
+		"ACCESS_TEAM_DOMAIN": ""
+	},
+	"upload_source_maps": true
+}
