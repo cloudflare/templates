@@ -48,23 +48,21 @@ export function isTestingMode(request: Request, env: Env): boolean {
 	);
 }
 
-// ── Access type ──────────────────────────────────────────────────────────────
-
-interface CtxAccess {
-	aud?: string;
-	getIdentity?: () => Promise<Record<string, unknown>>;
-}
-
-/**
- * Extract the ctx.access object from the execution context.
- * Uses an `unknown` cast because the `access` property is not yet part of
- * the standard ExecutionContext type definition.
- */
-function getCtxAccess(ctx: unknown): CtxAccess | undefined {
-	return (ctx as { access?: CtxAccess }).access;
-}
-
 // ── Public auth API ──────────────────────────────────────────────────────────
+
+function toAccessIdentity(
+	identity: CloudflareAccessIdentity | undefined,
+): AccessIdentity {
+	return {
+		email: identity?.email ?? "unknown",
+		userId: identity?.user_uuid,
+	};
+}
+
+/** Hono's execution context type does not expose the runtime's access property yet. */
+function getCtxAccess(ctx: unknown): CloudflareAccessContext | undefined {
+	return (ctx as { access?: CloudflareAccessContext }).access;
+}
 
 /**
  * Extract the verified identity from the execution context.
@@ -76,17 +74,12 @@ export async function getAccessIdentity(
 	ctx: unknown,
 ): Promise<AccessIdentity | null> {
 	const access = getCtxAccess(ctx);
-
 	if (!access) {
 		return null;
 	}
 
 	try {
-		const identity = await access.getIdentity?.();
-		return {
-			email: (identity?.email as string) || "unknown",
-			userId: (identity?.sub as string) || undefined,
-		};
+		return toAccessIdentity(await access.getIdentity());
 	} catch {
 		return null;
 	}
@@ -102,7 +95,6 @@ export async function requireAccessIdentity(
 	ctx: unknown,
 ): Promise<AccessIdentity | Response> {
 	const access = getCtxAccess(ctx);
-
 	if (!access) {
 		return new Response(
 			"Setup required: Enable Cloudflare Access\n\n" +
@@ -122,13 +114,7 @@ export async function requireAccessIdentity(
 	}
 
 	try {
-		const identity = await access.getIdentity?.();
-		const email = (identity?.email as string) || "unknown";
-
-		return {
-			email,
-			userId: (identity?.sub as string) || undefined,
-		};
+		return toAccessIdentity(await access.getIdentity());
 	} catch (error) {
 		const detail = error instanceof Error ? error.message : "Unknown error";
 		return new Response(
