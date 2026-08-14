@@ -38,7 +38,10 @@ test("deploy provisions before invoking Wrangler deploy", () => {
 		fs.readFileSync(path.join(PROJECT_ROOT, "package.json"), "utf-8"),
 	);
 
-	assert.equal(packageJson.scripts.deploy, "npm run setup && wrangler deploy");
+	assert.equal(
+		packageJson.scripts.deploy,
+		'npm run setup && wrangler deploy --env=""',
+	);
 });
 
 test("explicit setup propagates provisioning failures", () => {

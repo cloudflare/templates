@@ -177,6 +177,12 @@ export class TemplateServerManager {
 			shell: true,
 			detached: true, // Create a new process group
 		});
+		let serverOutput = "";
+		const captureOutput = (chunk: Buffer | string) => {
+			serverOutput = `${serverOutput}${chunk.toString()}`.slice(-20000);
+		};
+		server.stdout?.on("data", captureOutput);
+		server.stderr?.on("data", captureOutput);
 
 		this.servers.set(templateName, server);
 
@@ -185,7 +191,17 @@ export class TemplateServerManager {
 		const healthCheckUrl = template.healthCheckPath
 			? `${baseUrl}${template.healthCheckPath}`
 			: baseUrl;
-		await this.waitForServer(healthCheckUrl, 30000); // 30 second timeout
+		try {
+			await this.waitForServer(
+				healthCheckUrl,
+				30000,
+				server,
+				() => serverOutput,
+			); // 30 second timeout
+		} catch (error) {
+			await this.stopServer(templateName);
+			throw error;
+		}
 
 		console.log(`Server for ${template.name} ready at ${baseUrl}`);
 		return baseUrl;
@@ -275,10 +291,25 @@ export class TemplateServerManager {
 		}
 	}
 
-	private async waitForServer(url: string, timeout: number): Promise<void> {
+	private async waitForServer(
+		url: string,
+		timeout: number,
+		server: ChildProcess,
+		getServerOutput: () => string,
+	): Promise<void> {
 		const start = Date.now();
 
 		while (Date.now() - start < timeout) {
+			if (server.exitCode !== null || server.signalCode !== null) {
+				const outcome =
+					server.exitCode !== null
+						? `code ${server.exitCode}`
+						: `signal ${server.signalCode}`;
+				throw new Error(
+					`Server process for ${url} exited with ${outcome}${this.formatServerOutput(getServerOutput())}`,
+				);
+			}
+
 			try {
 				const response = await fetch(url);
 				if (response.status < 500) {
@@ -292,8 +323,13 @@ export class TemplateServerManager {
 		}
 
 		throw new Error(
-			`Server at ${url} did not become ready within ${timeout}ms`,
+			`Server at ${url} did not become ready within ${timeout}ms${this.formatServerOutput(getServerOutput())}`,
 		);
+	}
+
+	private formatServerOutput(output: string): string {
+		const trimmedOutput = output.trim();
+		return trimmedOutput ? `\n\nServer output:\n${trimmedOutput}` : "";
 	}
 
 	private async runCommand(command: string, cwd: string): Promise<void> {

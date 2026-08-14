@@ -47,9 +47,10 @@
 	"private": true,
 	"scripts": {
 		"build": "tsc",
-		"check": "npm run build && wrangler deploy --dry-run",
-		"deploy": "npm run setup && wrangler deploy",
-		"dev": "wrangler dev",
+		"check": "npm run build && wrangler deploy --dry-run --env=\"\"",
+		"deploy": "npm run setup && wrangler deploy --env=\"\"",
+		"dev": "wrangler dev --env local --local",
+		"dev:remote": "wrangler dev --env=\"\"",
 		"setup": "node scripts/setup.js",
 		"test": "node --test scripts/test-setup.js && vitest run"
 	}

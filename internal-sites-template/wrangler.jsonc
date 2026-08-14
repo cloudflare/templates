@@ -32,5 +32,30 @@
 		"ACCOUNT_ID": "",
 		"ACCESS_TEAM_DOMAIN": ""
 	},
+	"env": {
+		"local": {
+			"dispatch_namespaces": [
+				{
+					"binding": "dispatcher",
+					"namespace": "internal-sites",
+					"remote": true
+				}
+			],
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "internal-sites-platform-local",
+					"database_id": "00000000-0000-0000-0000-000000000000"
+				}
+			],
+			"vars": {
+				"DISPATCH_NAMESPACE_NAME": "internal-sites",
+				"SITE_DOMAIN": "internal-company.com",
+				"DEPLOY_PATH": "/deploy",
+				"ACCOUNT_ID": "",
+				"ACCESS_TEAM_DOMAIN": ""
+			}
+		}
+	},
 	"upload_source_maps": true
 }
