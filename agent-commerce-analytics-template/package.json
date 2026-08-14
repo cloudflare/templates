@@ -32,7 +32,7 @@
 		"react-dom": "19.2.1"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "1.15.3",
+		"@cloudflare/vite-plugin": "1.52.1",
 		"@cloudflare/vitest-pool-workers": "0.16.20",
 		"@cloudflare/workers-types": "^4.20260702.1",
 		"@types/react": "19.2.7",
