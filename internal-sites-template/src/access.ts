@@ -13,6 +13,7 @@
  *   - Real custom domain                          → subdomain routing (slug.company.com)
  */
 
+import type { ExecutionContext } from "hono";
 import type { Env } from "./env";
 
 export interface AccessIdentity {
@@ -59,11 +60,6 @@ function toAccessIdentity(
 	};
 }
 
-/** Hono's execution context type does not expose the runtime's access property yet. */
-function getCtxAccess(ctx: unknown): CloudflareAccessContext | undefined {
-	return (ctx as { access?: CloudflareAccessContext }).access;
-}
-
 /**
  * Extract the verified identity from the execution context.
  *
@@ -71,15 +67,14 @@ function getCtxAccess(ctx: unknown): CloudflareAccessContext | undefined {
  * authenticates the request. Returns null if Access did not run.
  */
 export async function getAccessIdentity(
-	ctx: unknown,
+	ctx: ExecutionContext,
 ): Promise<AccessIdentity | null> {
-	const access = getCtxAccess(ctx);
-	if (!access) {
+	if (!ctx.access) {
 		return null;
 	}
 
 	try {
-		return toAccessIdentity(await access.getIdentity());
+		return toAccessIdentity(await ctx.access.getIdentity());
 	} catch {
 		return null;
 	}
@@ -92,10 +87,9 @@ export async function getAccessIdentity(
  * If ctx.access is undefined, Access is not enabled on this Worker.
  */
 export async function requireAccessIdentity(
-	ctx: unknown,
+	ctx: ExecutionContext,
 ): Promise<AccessIdentity | Response> {
-	const access = getCtxAccess(ctx);
-	if (!access) {
+	if (!ctx.access) {
 		return new Response(
 			"Setup required: Enable Cloudflare Access\n\n" +
 				"This Worker is not protected by Cloudflare Access.\n\n" +
@@ -114,7 +108,7 @@ export async function requireAccessIdentity(
 	}
 
 	try {
-		return toAccessIdentity(await access.getIdentity());
+		return toAccessIdentity(await ctx.access.getIdentity());
 	} catch (error) {
 		const detail = error instanceof Error ? error.message : "Unknown error";
 		return new Response(
