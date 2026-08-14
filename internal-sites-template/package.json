@@ -1,11 +1,6 @@
 {
 	"name": "internal-sites-template",
-	"private": true,
 	"description": "Deploy an internal static site platform for your company. Employees drag-and-drop files to publish sites behind Cloudflare Access.",
-	"license": "Apache-2.0",
-	"engines": {
-		"node": ">=22"
-	},
 	"cloudflare": {
 		"label": "Internal Static Sites Platform",
 		"products": [
@@ -31,6 +26,25 @@
 			}
 		}
 	},
+	"dependencies": {
+		"fflate": "0.8.2",
+		"hono": "4.11.1",
+		"jose": "6.2.8"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/workers-types": "^4.20260702.1",
+		"@vitest/runner": "3.2.4",
+		"@vitest/snapshot": "3.2.4",
+		"typescript": "5.9.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"license": "Apache-2.0",
+	"private": true,
 	"scripts": {
 		"build": "tsc",
 		"check": "npm run build && wrangler deploy --dry-run",
@@ -38,19 +52,5 @@
 		"dev": "wrangler dev",
 		"setup": "node scripts/setup.js",
 		"test": "node --test scripts/test-setup.js && vitest run"
-	},
-	"dependencies": {
-		"fflate": "^0.8.2",
-		"hono": "^4.7.0",
-		"jose": "6.2.8"
-	},
-	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.71",
-		"@cloudflare/workers-types": "4.20260702.1",
-		"@vitest/runner": "3.2.4",
-		"@vitest/snapshot": "3.2.4",
-		"typescript": "5.9.3",
-		"vitest": "3.2.4",
-		"wrangler": "4.88.0"
 	}
 }

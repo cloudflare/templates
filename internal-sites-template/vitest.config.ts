@@ -5,6 +5,7 @@ export default defineWorkersConfig({
 		exclude: ["playwright-tests/**", "node_modules/**"],
 		poolOptions: {
 			workers: {
+				remoteBindings: false,
 				wrangler: {
 					configPath: "./wrangler.jsonc",
 				},

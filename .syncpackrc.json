@@ -64,6 +64,7 @@
 			"packages": [
 				"chanfana-openapi-template",
 				"d1-starter-sessions-api-template",
+				"internal-sites-template",
 				"llm-chat-app-template",
 				"microfrontend-template",
 				"mysql-hyperdrive-template",
