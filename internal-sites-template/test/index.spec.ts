@@ -238,9 +238,14 @@ describe("Internal Sites Platform", () => {
 
 		expect(response.status).toBe(401);
 		const body = await response.text();
-		expect(body).toContain("Access audience verification is not configured");
+		expect(body).toContain(
+			"Cloudflare Access setup is incomplete: ACCESS_AUD is missing",
+		);
 		expect(body).toContain("Application Audience (AUD) Tag");
 		expect(body).toContain("npm exec -- wrangler secret put ACCESS_AUD");
+		expect(body).toContain(
+			"Workers & Pages > this Worker > Settings > Variables and Secrets",
+		);
 		expect(body).not.toContain("Setup required: Enable Cloudflare Access");
 	});
 

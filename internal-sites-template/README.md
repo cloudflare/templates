@@ -78,19 +78,37 @@ Protect your Worker with Cloudflare Access so only company employees can access 
 
 Every request now requires company login. The Access application authenticates users at the edge, and the platform Worker verifies the signed Access JWT again before handling platform routes or dispatching deployed sites.
 
-**Configure audience verification (required).** After creating the Access application, set `ACCESS_AUD` so JWT verification only accepts tokens issued for this specific application.
+### Connect the Worker to your Access application
 
-1. Go to [**Zero Trust**](https://one.dash.cloudflare.com/) > **Access** > **Applications**
-2. Select your application and open **Additional settings**
-3. Copy the **Application Audience (AUD) Tag**
-4. Set it:
+Cloudflare Access issues a JWT after a user successfully signs in. Each JWT contains an application-specific Audience (`aud`) value.
+
+This Worker checks that value to confirm the token was issued for this Access application, rather than another Access application in the same Cloudflare account. Therefore, `ACCESS_AUD` is required.
+
+#### Find the AUD tag
+
+1. Open [Cloudflare Access applications](https://one.dash.cloudflare.com/?to=/:account/access/apps).
+2. Select **Configure** for the application protecting this Worker.
+3. Open **Additional settings**.
+4. Copy the **Application Audience (AUD) Tag**.
+
+#### Add it using Wrangler
 
 ```bash
 npm exec -- wrangler secret put ACCESS_AUD
-# Paste the AUD tag when prompted
 ```
 
-The Worker will reject all non-localhost requests, including deployed-site requests, until `ACCESS_AUD` is configured.
+Paste the AUD tag when prompted.
+
+#### Or add it using the dashboard
+
+1. Go to **Workers & Pages** and select this Worker.
+2. Open **Settings** > **Variables and Secrets**.
+3. Select **Add** and choose **Secret**.
+4. Enter `ACCESS_AUD` as the name.
+5. Paste the **Application Audience (AUD) Tag** as the value.
+6. Select **Deploy**.
+
+Reload the Worker URL and sign in again.
 
 ### 6. Deploy your first site
 
@@ -265,17 +283,17 @@ Local dev uses path-based routing automatically (`/sites/site-name/`). Access ve
 
 ## Troubleshooting
 
-| Problem                                          | Solution                                                                                                                                                                 |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "Setup required: Enable Cloudflare Access"       | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
-| "Cloudflare Access token could not be verified"  | Sign in again. If the problem continues, confirm `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` match your Access application                                                     |
-| "Could not create asset upload session"          | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
-| "Dispatch namespace not found"                   | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
-| 404 on deployed sites                            | Ensure uploaded files include `index.html` at the root                                                                                                                   |
-| Database errors                                  | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
-| "Access verification is not configured"          | Set `ACCESS_TEAM_DOMAIN`. See **Find your team domain** in the Setup section above                                                                                       |
-| "Access audience verification is not configured" | Set `ACCESS_AUD` to the Application Audience (AUD) Tag. See **Require company login** in the Setup section above                                                         |
-| "Could not delete site from Cloudflare"          | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
+| Problem                                                        | Solution                                                                                                                                                                 |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Setup required: Enable Cloudflare Access"                     | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
+| "Cloudflare Access token could not be verified"                | Sign in again. If the problem continues, confirm `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` match your Access application                                                     |
+| "Could not create asset upload session"                        | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
+| "Dispatch namespace not found"                                 | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
+| 404 on deployed sites                                          | Ensure uploaded files include `index.html` at the root                                                                                                                   |
+| Database errors                                                | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
+| "Access verification is not configured"                        | Set `ACCESS_TEAM_DOMAIN`. See **Find your team domain** in the Setup section above                                                                                       |
+| "Cloudflare Access setup is incomplete: ACCESS_AUD is missing" | Set `ACCESS_AUD` to the Application Audience (AUD) Tag. See **Connect the Worker to your Access application** in the Setup section above                                 |
+| "Could not delete site from Cloudflare"                        | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
 
 **View logs:**
 
