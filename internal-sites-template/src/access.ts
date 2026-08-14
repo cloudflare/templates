@@ -201,11 +201,15 @@ export async function requireAccessIdentity(
 
 	if (!env.ACCESS_AUD?.trim()) {
 		return new Response(
-			"Access audience verification is not configured.\n\n" +
-				"Set ACCESS_AUD to the Application Audience (AUD) Tag for this Access application.\n" +
-				"Find it in Zero Trust > Access > Applications > your application > Additional settings.\n" +
-				"Then run: npm exec -- wrangler secret put ACCESS_AUD\n" +
-				"See the README for setup instructions.",
+			"Cloudflare Access setup is incomplete: ACCESS_AUD is missing.\n\n" +
+				"ACCESS_AUD ensures that Access tokens were issued specifically for this application, rather than another application in your Cloudflare account.\n\n" +
+				"Find the Application Audience (AUD) Tag here:\n" +
+				"https://one.dash.cloudflare.com/?to=/:account/access/apps\n\n" +
+				"Select Configure for the application protecting this Worker, then open Additional settings.\n\n" +
+				"Add the tag as the ACCESS_AUD secret:\n\n" +
+				"npm exec -- wrangler secret put ACCESS_AUD\n\n" +
+				"Alternatively, add it under:\n" +
+				"Workers & Pages > this Worker > Settings > Variables and Secrets",
 			{
 				status: 401,
 				headers: { "Content-Type": "text/plain; charset=utf-8" },
