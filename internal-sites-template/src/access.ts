@@ -204,7 +204,7 @@ export async function requireAccessIdentity(
 			"Access audience verification is not configured.\n\n" +
 				"Set ACCESS_AUD to the Application Audience (AUD) Tag for this Access application.\n" +
 				"Find it in Zero Trust > Access > Applications > your application > Additional settings.\n" +
-				"Then run: npx wrangler secret put ACCESS_AUD\n" +
+				"Then run: npm exec -- wrangler secret put ACCESS_AUD\n" +
 				"See the README for setup instructions.",
 			{
 				status: 401,

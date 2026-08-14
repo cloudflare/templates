@@ -86,7 +86,7 @@ Every request now requires company login. The Access application authenticates u
 4. Set it:
 
 ```bash
-npx wrangler secret put ACCESS_AUD
+npm exec -- wrangler secret put ACCESS_AUD
 # Paste the AUD tag when prompted
 ```
 
@@ -131,8 +131,10 @@ Update `SITE_DOMAIN` in `wrangler.jsonc` to your domain. The platform switches t
 **c. Redeploy:**
 
 ```bash
-npx wrangler deploy
+npm run deploy
 ```
+
+`npm run deploy` provisions the dispatch namespace first and stops without deploying if provisioning fails.
 
 ---
 
@@ -181,13 +183,21 @@ To deploy test sites from the local UI, you need a Cloudflare account with [Work
 
 > **What runs where:** The main Worker and D1 database run on your computer via Miniflare. However, deploying a site from the local UI calls the Cloudflare API and **creates a real Worker in your Cloudflare account**. Use `npm test` to avoid creating any real resources.
 
-**1. Sign in to Cloudflare**
+**1. Install dependencies**
 
 ```bash
-npx wrangler login
+npm install
 ```
 
-**2. Set your Account ID**
+This runs the local-only build/type check and does not contact Cloudflare or create resources.
+
+**2. Sign in to Cloudflare**
+
+```bash
+npm exec -- wrangler login
+```
+
+**3. Set your Account ID**
 
 Find your Account ID on the [Cloudflare dashboard](https://dash.cloudflare.com/) (copy from the right sidebar of the account home page). Set it in `wrangler.jsonc`:
 
@@ -197,18 +207,18 @@ Find your Account ID on the [Cloudflare dashboard](https://dash.cloudflare.com/)
 }
 ```
 
-**3. Create the dispatch namespace**
+**4. Provision the dispatch namespace**
 
-This is the Workers for Platforms namespace where deployed sites are stored:
+This explicit setup command creates the Workers for Platforms namespace where deployed sites are stored. It exits with an error if provisioning fails:
 
 ```bash
-npx wrangler dispatch-namespace create internal-sites
+npm run setup
 ```
 
-**4. Create the D1 database**
+**5. Create the D1 database**
 
 ```bash
-npx wrangler d1 create internal-sites-platform
+npm exec -- wrangler d1 create internal-sites-platform
 ```
 
 Copy the `database_id` from the output and paste it into `wrangler.jsonc`:
@@ -223,7 +233,7 @@ Copy the `database_id` from the output and paste it into `wrangler.jsonc`:
 ]
 ```
 
-**5. Create an API token**
+**6. Create an API token**
 
 The platform needs a token to deploy Workers into the dispatch namespace:
 
@@ -237,10 +247,9 @@ cp .dev.vars.example .dev.vars
 
 Edit `.dev.vars` and replace `your-token-here` with the real token.
 
-**6. Install and run**
+**7. Run locally**
 
 ```bash
-npm install
 npm run dev
 ```
 
@@ -257,7 +266,7 @@ Local dev uses path-based routing automatically (`/sites/site-name/`). JWT verif
 | "Setup required: Enable Cloudflare Access"       | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
 | "Cloudflare Access token could not be verified"  | Sign in again. If the problem continues, confirm `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` match your Access application                                                     |
 | "Could not create asset upload session"          | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
-| "Dispatch namespace not found"                   | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npx wrangler dispatch-namespace create internal-sites`          |
+| "Dispatch namespace not found"                   | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
 | 404 on deployed sites                            | Ensure uploaded files include `index.html` at the root                                                                                                                   |
 | Database errors                                  | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
 | "Access verification is not configured"          | Set `ACCESS_TEAM_DOMAIN`. See **Find your team domain** in the Setup section above                                                                                       |
@@ -267,7 +276,7 @@ Local dev uses path-based routing automatically (`/sites/site-name/`). JWT verif
 **View logs:**
 
 ```bash
-npx wrangler tail
+npm exec -- wrangler tail
 ```
 
 ---

@@ -32,11 +32,12 @@
 		}
 	},
 	"scripts": {
-		"build": "node scripts/setup.js",
-		"check": "tsc && wrangler deploy --dry-run",
-		"deploy": "wrangler deploy && node scripts/setup.js --set-secrets",
+		"build": "tsc",
+		"check": "npm run build && wrangler deploy --dry-run",
+		"deploy": "npm run setup && wrangler deploy",
 		"dev": "wrangler dev --remote",
-		"test": "vitest run"
+		"setup": "node scripts/setup.js",
+		"test": "node --test scripts/test-setup.js && vitest run"
 	},
 	"dependencies": {
 		"fflate": "^0.8.2",

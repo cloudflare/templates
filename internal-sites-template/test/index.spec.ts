@@ -162,7 +162,7 @@ describe("Internal Sites Platform", () => {
 		const body = await response.text();
 		expect(body).toContain("Access audience verification is not configured");
 		expect(body).toContain("Application Audience (AUD) Tag");
-		expect(body).toContain("npx wrangler secret put ACCESS_AUD");
+		expect(body).toContain("npm exec -- wrangler secret put ACCESS_AUD");
 		expect(body).not.toContain("Setup required: Enable Cloudflare Access");
 	});
 
