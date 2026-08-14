@@ -28,13 +28,13 @@
 		"workers-qb": "0.1.1"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.11.1",
+		"@cloudflare/vitest-pool-workers": "0.16.18",
 		"@cloudflare/workers-types": "^4.20260507.1",
 		"@vitest/runner": "3.2.4",
 		"@vitest/snapshot": "3.2.4",
 		"typescript": "5.9.3",
 		"vitest": "3.2.4",
-		"wrangler": "4.88.0"
+		"wrangler": "4.103.0"
 	},
 	"engines": {
 		"node": ">=18"
