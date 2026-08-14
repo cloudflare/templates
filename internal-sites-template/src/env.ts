@@ -31,7 +31,7 @@ export interface Env {
 	/** Path where the deploy UI is served. Defaults to "/deploy". */
 	DEPLOY_PATH?: string;
 
-	// ── Access JWT verification (optional) ──────────────────────────────
+	// ── Access JWT verification (required outside local development) ──────────
 
 	/**
 	 * Cloudflare One team domain, e.g. "https://mycompany.cloudflareaccess.com".
@@ -42,8 +42,8 @@ export interface Env {
 
 	/**
 	 * Application Audience (AUD) Tag from the Access application.
-	 * Optional -- when set, JWT verification also checks that the token
-	 * was issued for this specific application (recommended).
+	 * Required outside local development so JWT verification checks that the
+	 * token was issued for this specific application.
 	 * Found in Zero Trust > Access > Applications > your app > Additional settings.
 	 */
 	ACCESS_AUD?: string;

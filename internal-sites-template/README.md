@@ -78,7 +78,7 @@ Protect your Worker with Cloudflare Access so only company employees can access 
 
 Every request now requires company login.
 
-**Optional: add audience verification.** For additional security, set `ACCESS_AUD` to scope JWT verification to this specific Access application. This prevents tokens from other Access applications on the same account from being accepted.
+**Configure audience verification (required).** After creating the Access application, set `ACCESS_AUD` so JWT verification only accepts tokens issued for this specific application.
 
 1. Go to [**Zero Trust**](https://one.dash.cloudflare.com/) > **Access** > **Applications**
 2. Select your application and open **Additional settings**
@@ -89,6 +89,8 @@ Every request now requires company login.
 npx wrangler secret put ACCESS_AUD
 # Paste the AUD tag when prompted
 ```
+
+The Worker will reject all non-localhost management requests until `ACCESS_AUD` is configured.
 
 ### 6. Deploy your first site
 
@@ -250,16 +252,17 @@ Local dev uses path-based routing automatically (`/sites/site-name/`). JWT verif
 
 ## Troubleshooting
 
-| Problem                                         | Solution                                                                                                                                                                 |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "Setup required: Enable Cloudflare Access"      | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
-| "Cloudflare Access token could not be verified" | Sign in again. If the problem continues, confirm `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` match your Access application                                                     |
-| "Could not create asset upload session"         | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
-| "Dispatch namespace not found"                  | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npx wrangler dispatch-namespace create internal-sites`          |
-| 404 on deployed sites                           | Ensure uploaded files include `index.html` at the root                                                                                                                   |
-| Database errors                                 | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
-| "Access verification is not configured"         | Set `ACCESS_TEAM_DOMAIN`. See **Find your team domain** in the Setup section above                                                                                       |
-| "Could not delete site from Cloudflare"         | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
+| Problem                                          | Solution                                                                                                                                                                 |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Setup required: Enable Cloudflare Access"       | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
+| "Cloudflare Access token could not be verified"  | Sign in again. If the problem continues, confirm `ACCESS_TEAM_DOMAIN` and `ACCESS_AUD` match your Access application                                                     |
+| "Could not create asset upload session"          | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
+| "Dispatch namespace not found"                   | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npx wrangler dispatch-namespace create internal-sites`          |
+| 404 on deployed sites                            | Ensure uploaded files include `index.html` at the root                                                                                                                   |
+| Database errors                                  | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
+| "Access verification is not configured"          | Set `ACCESS_TEAM_DOMAIN`. See **Find your team domain** in the Setup section above                                                                                       |
+| "Access audience verification is not configured" | Set `ACCESS_AUD` to the Application Audience (AUD) Tag. See **Require company login** in the Setup section above                                                         |
+| "Could not delete site from Cloudflare"          | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
 
 **View logs:**
 

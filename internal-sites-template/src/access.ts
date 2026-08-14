@@ -104,16 +104,16 @@ async function verifyAccessJwt(
 	}
 
 	const teamDomain = normalizeTeamDomain(env.ACCESS_TEAM_DOMAIN || "");
+	const audience = env.ACCESS_AUD?.trim();
+	if (!audience) {
+		throw new Error("ACCESS_AUD is not configured");
+	}
 	const jwks = getJwks(teamDomain);
 
-	const verifyOptions: { issuer: string; audience?: string } = {
+	const { payload } = await jwtVerify(token, jwks, {
 		issuer: teamDomain,
-	};
-	if (env.ACCESS_AUD) {
-		verifyOptions.audience = env.ACCESS_AUD;
-	}
-
-	const { payload } = await jwtVerify(token, jwks, verifyOptions);
+		audience,
+	});
 
 	const email = payload.email as string | undefined;
 	if (!email) {
@@ -156,8 +156,8 @@ export async function getAccessIdentity(
 		return { email: "local-dev@localhost" };
 	}
 
-	// JWT verification requires the team domain
-	if (!env.ACCESS_TEAM_DOMAIN) {
+	// JWT verification requires both the team domain and application audience
+	if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD?.trim()) {
 		return null;
 	}
 
@@ -172,8 +172,8 @@ export async function getAccessIdentity(
  * Require a verified identity. Returns the identity or a 401 Response.
  *
  * - localhost: returns a placeholder identity (no JWT needed)
- * - Everywhere else with ACCESS_TEAM_DOMAIN set: verifies JWT
- * - Everywhere else without ACCESS_TEAM_DOMAIN: returns 401 with configuration help
+ * - Everywhere else with Access configured: verifies JWT and its audience
+ * - Everywhere else without ACCESS_TEAM_DOMAIN or ACCESS_AUD: returns 401 with configuration help
  * - Everywhere else without an Access token: returns 401 with Access setup help
  */
 export async function requireAccessIdentity(
@@ -191,6 +191,20 @@ export async function requireAccessIdentity(
 			"Access verification is not configured.\n\n" +
 				"Set ACCESS_TEAM_DOMAIN as an environment variable.\n" +
 				"Find your team domain at: https://one.dash.cloudflare.com/?to=/:account/settings\n" +
+				"See the README for setup instructions.",
+			{
+				status: 401,
+				headers: { "Content-Type": "text/plain; charset=utf-8" },
+			},
+		);
+	}
+
+	if (!env.ACCESS_AUD?.trim()) {
+		return new Response(
+			"Access audience verification is not configured.\n\n" +
+				"Set ACCESS_AUD to the Application Audience (AUD) Tag for this Access application.\n" +
+				"Find it in Zero Trust > Access > Applications > your application > Additional settings.\n" +
+				"Then run: npx wrangler secret put ACCESS_AUD\n" +
 				"See the README for setup instructions.",
 			{
 				status: 401,

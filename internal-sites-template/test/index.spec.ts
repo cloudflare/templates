@@ -89,10 +89,14 @@ afterEach(() => {
 describe("Internal Sites Platform", () => {
 	// ── Localhost (local dev bypass) ─────────────────────────────────────
 
-	it("serves the deploy page on localhost without JWT", async () => {
+	it("serves the deploy page on localhost without ACCESS_AUD or JWT", async () => {
 		const request = new Request("http://localhost/deploy");
 		const ctx = createExecutionContext();
-		const response = await app.fetch(request, env, ctx);
+		const response = await app.fetch(
+			request,
+			{ ...env, ACCESS_AUD: undefined },
+			ctx,
+		);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(200);
@@ -140,6 +144,28 @@ describe("Internal Sites Platform", () => {
 		expect(body).toContain("Access verification is not configured");
 	});
 
+	it("returns setup guidance when ACCESS_TEAM_DOMAIN is set without ACCESS_AUD", async () => {
+		const token = await signTestJwt();
+		const request = new Request(
+			"https://my-worker.my-account.workers.dev/deploy",
+			{ headers: { "Cf-Access-Jwt-Assertion": token } },
+		);
+		const ctx = createExecutionContext();
+		const response = await app.fetch(
+			request,
+			envWithAccess({ ACCESS_AUD: undefined }),
+			ctx,
+		);
+		await waitOnExecutionContext(ctx);
+
+		expect(response.status).toBe(401);
+		const body = await response.text();
+		expect(body).toContain("Access audience verification is not configured");
+		expect(body).toContain("Application Audience (AUD) Tag");
+		expect(body).toContain("npx wrangler secret put ACCESS_AUD");
+		expect(body).not.toContain("Setup required: Enable Cloudflare Access");
+	});
+
 	it("returns 401 on workers.dev with ACCESS vars but no JWT", async () => {
 		const request = new Request(
 			"https://my-worker.my-account.workers.dev/deploy",
@@ -158,7 +184,7 @@ describe("Internal Sites Platform", () => {
 		expect(body).not.toContain("Missing Cf-Access-Jwt-Assertion header");
 	});
 
-	it("distinguishes an invalid Access token from missing Access setup", async () => {
+	it("rejects a valid Access JWT issued for the wrong audience", async () => {
 		mockJwksEndpoint();
 
 		const token = await signTestJwt();
@@ -242,7 +268,7 @@ describe("Internal Sites Platform", () => {
 
 	// ── Valid JWT accepted ───────────────────────────────────────────────
 
-	it("serves the deploy page with a valid JWT on workers.dev", async () => {
+	it("accepts a valid Access JWT issued for the configured audience", async () => {
 		mockJwksEndpoint();
 
 		const token = await signTestJwt();
