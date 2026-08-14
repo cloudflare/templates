@@ -368,43 +368,72 @@ describe("Internal Sites Platform", () => {
 		expect(response.status).toBe(404);
 	});
 
-	// ── CSRF protection ─────────────────────────────────────────────────
+	it("sandboxes path-based HTML without preserving its origin", async () => {
+		const mockDispatcher = {
+			get() {
+				return {
+					fetch: async () =>
+						new Response(
+							"<html><script>document.body.textContent = 'ok'</script></html>",
+							{
+								headers: { "content-type": "text/html" },
+							},
+						),
+				};
+			},
+		};
+		const request = new Request(
+			"https://my-worker.my-account.workers.dev/sites/test-site/",
+		);
+		const workerEnv = { ...env, dispatcher: mockDispatcher };
+		const ctx = createExecutionContext();
+		const response = await app.fetch(request, workerEnv, ctx);
+		await waitOnExecutionContext(ctx);
 
-	it("rejects mutating API requests from uploaded site paths", async () => {
-		const formData = new FormData();
-		formData.set("name", "Evil Site");
-		formData.set("slug", "evil");
-		formData.set("paths", "[]");
+		const csp = response.headers.get("content-security-policy");
+		expect(csp).toContain("sandbox");
+		expect(csp).toContain("allow-scripts");
+		expect(csp).not.toContain("allow-same-origin");
+	});
 
-		// Simulate a POST from JS running inside an uploaded site.
+	// ── Origin protection ───────────────────────────────────────────────
+
+	it("rejects a POST with an opaque browser origin and no Referer", async () => {
 		const request = new Request("http://localhost/api/sites/deploy", {
 			method: "POST",
-			body: formData,
-			headers: {
-				Referer: "http://localhost/sites/evil-site/index.html",
-			},
+			headers: { Origin: "null" },
+		});
+		const ctx = createExecutionContext();
+		const response = await app.fetch(request, env, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(request.headers.has("Referer")).toBe(false);
+		expect(response.status).toBe(403);
+	});
+
+	it("rejects a POST from another website", async () => {
+		const request = new Request("http://localhost/api/sites/deploy", {
+			method: "POST",
+			headers: { Origin: "https://example.com" },
 		});
 		const ctx = createExecutionContext();
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
 		expect(response.status).toBe(403);
-		const data = (await response.json()) as { error: string };
-		expect(data.error).toContain("deployed sites are not allowed");
 	});
 
-	it("allows mutating API requests from the deploy page", async () => {
+	it("allows a same-origin POST from the deploy page", async () => {
 		const formData = new FormData();
 		formData.set("name", "Test Site");
 		formData.set("slug", "test-site");
 		formData.set("paths", "[]");
 
-		// Same POST but Referer is the deploy page — should pass CSRF check
-		// and reach the actual handler (which returns 400 due to no files).
 		const request = new Request("http://localhost/api/sites/deploy", {
 			method: "POST",
 			body: formData,
 			headers: {
+				Origin: "http://localhost",
 				Referer: "http://localhost/deploy",
 			},
 		});
@@ -412,8 +441,25 @@ describe("Internal Sites Platform", () => {
 		const response = await app.fetch(request, env, ctx);
 		await waitOnExecutionContext(ctx);
 
-		// 400 means it passed the CSRF check and reached the deploy handler,
-		// which rejected it because there are no files — correct behavior.
+		// The handler returns 400 because there are no files.
+		expect(response.status).toBe(400);
+	});
+
+	it("allows a POST without Origin for non-browser clients", async () => {
+		const formData = new FormData();
+		formData.set("name", "Test Site");
+		formData.set("slug", "test-site");
+		formData.set("paths", "[]");
+
+		const request = new Request("http://localhost/api/sites/deploy", {
+			method: "POST",
+			body: formData,
+		});
+		const ctx = createExecutionContext();
+		const response = await app.fetch(request, env, ctx);
+		await waitOnExecutionContext(ctx);
+
+		expect(request.headers.has("Origin")).toBe(false);
 		expect(response.status).toBe(400);
 	});
 
@@ -467,6 +513,7 @@ describe("Internal Sites Platform", () => {
 
 		expect(dispatchedSlug).toBe("docs");
 		expect(response.status).toBe(200);
+		expect(response.headers.get("content-security-policy")).toBeNull();
 		const body = await response.text();
 		// Should be the site content, NOT the deploy page
 		expect(body).toContain("site content");

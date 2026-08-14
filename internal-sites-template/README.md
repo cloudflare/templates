@@ -11,7 +11,7 @@ Deploy an internal drag-and-drop static site platform for your company using [Wo
 - **Drag & drop deploy** - Upload a folder or ZIP file and get a live URL instantly
 - **Protected by Access** - Every site sits behind Cloudflare Access. Employees sign in with your company identity provider
 - **Subdomain routing** - Each site gets its own subdomain: `site-name.yourcompany.com`
-- **Works on workers.dev** - Test immediately after deploy, no custom domain required
+- **Works on workers.dev** - Preview HTML, CSS, and JavaScript immediately, no custom domain required
 - **Deployment tracking** - Tracks who deployed what and when, stored in D1
 - **Admin dashboard** - View all deployed sites and deployment history at `/admin`
 
@@ -158,6 +158,8 @@ On workers.dev (testing mode), sites use path-based routing instead:
 your-worker.workers.dev/deploy          → Deploy UI
 your-worker.workers.dev/sites/docs/     → Deployed site
 ```
+
+Sites previewed on workers.dev share a web address with the deploy and admin pages, so previews have extra browser restrictions to keep those management tools safe. Regular HTML, CSS, and JavaScript still work. If a site needs browser storage such as `localStorage` or needs to install a service worker, set up custom subdomains first.
 
 ---
 

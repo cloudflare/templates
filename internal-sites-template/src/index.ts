@@ -170,33 +170,24 @@ app.get("/admin", async (c) => {
 	);
 });
 
-// ── CSRF protection for mutating API routes ──────────────────────────────────
+// ── Origin protection for mutating API routes ────────────────────────────────
 //
-// On workers.dev (path-based routing), uploaded sites at /sites/slug/ share
-// the same origin as the platform API. Without this check, JS in an uploaded
-// site could POST to /api/sites/deploy or DELETE /api/sites/:slug using the
-// viewer's Access JWT. We reject mutating API requests whose Referer
-// originates from a /sites/ path — that means the request came from an
-// uploaded site, not the platform's own deploy page.
+// Sandboxed workers.dev previews have an opaque origin, so browser requests
+// from them send `Origin: null`. Only the management origin may make browser
+// mutations. Requests without Origin remain available to curl and other
+// non-browser clients.
 
 app.use("/api/*", async (c, next) => {
 	if (c.req.method !== "POST" && c.req.method !== "DELETE") {
 		return next();
 	}
 
-	const referer = c.req.header("Referer");
-	if (referer) {
-		try {
-			const refererPath = new URL(referer).pathname;
-			if (refererPath.startsWith("/sites/")) {
-				return c.json(
-					{ error: "Requests from deployed sites are not allowed" },
-					403,
-				);
-			}
-		} catch {
-			// Malformed Referer — allow the request through (same as no Referer).
-		}
+	const origin = c.req.header("Origin");
+	if (origin !== undefined && origin !== new URL(c.req.url).origin) {
+		return c.json(
+			{ error: "Requests from other origins are not allowed" },
+			403,
+		);
 	}
 
 	return next();
@@ -486,6 +477,14 @@ async function responseForSite(
 	if (!headers.get("content-type")?.includes("text/html")) {
 		headers.set("content-type", "text/html; charset=utf-8");
 	}
+
+	// Path-based previews share a hostname with the management UI. Give the
+	// uploaded document an opaque origin while preserving common static-page
+	// features. In particular, never add allow-same-origin here.
+	headers.set(
+		"content-security-policy",
+		"sandbox allow-downloads allow-forms allow-modals allow-popups allow-presentation allow-scripts",
+	);
 
 	return new Response(rewrittenHtml, {
 		status: response.status,
