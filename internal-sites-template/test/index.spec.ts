@@ -22,7 +22,9 @@ import app, { resetDbInitialized } from "../src/index";
  * This simulates what the Workers runtime provides when Cloudflare Access
  * has authenticated a request.
  */
-function createAccessContext(identity: Record<string, unknown> = { email: "employee@company.com" }) {
+function createAccessContext(
+	identity: Record<string, unknown> = { email: "employee@company.com" },
+) {
 	const ctx = createExecutionContext();
 	(ctx as Record<string, unknown>).access = {
 		aud: "test-aud-tag-1234567890",

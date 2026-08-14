@@ -250,15 +250,15 @@ Local dev uses path-based routing automatically (`/sites/site-name/`). Cloudflar
 
 ## Troubleshooting
 
-| Problem                                                        | Solution                                                                                                                                                                 |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| "Setup required: Enable Cloudflare Access"                     | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
-| "Could not read your Access identity"                          | Sign in again. If the problem continues, confirm Access is enabled on this Worker                                                                                        |
-| "Could not create asset upload session"                        | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
-| "Dispatch namespace not found"                                 | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
-| 404 on deployed sites                                          | Ensure uploaded files include `index.html` at the root                                                                                                                   |
-| Database errors                                                | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
-| "Could not delete site from Cloudflare"                        | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
+| Problem                                    | Solution                                                                                                                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Setup required: Enable Cloudflare Access" | Open [Workers & Pages](https://dash.cloudflare.com/?to=/:account/workers-and-pages), select your Worker, and follow **Require company login** in the Setup section above |
+| "Could not read your Access identity"      | Sign in again. If the problem continues, confirm Access is enabled on this Worker                                                                                        |
+| "Could not create asset upload session"    | Check that `DISPATCH_NAMESPACE_API_TOKEN` is set with Workers Scripts Edit permission                                                                                    |
+| "Dispatch namespace not found"             | Enable [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) and run `npm run setup`                                                  |
+| 404 on deployed sites                      | Ensure uploaded files include `index.html` at the root                                                                                                                   |
+| Database errors                            | Tables auto-create on first request. Check the D1 database in the Cloudflare dashboard                                                                                   |
+| "Could not delete site from Cloudflare"    | Check that `DISPATCH_NAMESPACE_API_TOKEN` is valid and has Workers Scripts Edit permission                                                                               |
 
 **View logs:**
 
