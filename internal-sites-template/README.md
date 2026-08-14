@@ -195,11 +195,19 @@ npm test
 
 `npm test` runs fully locally in Miniflare. It requires no Cloudflare login or account, makes no Cloudflare API calls, and creates no remote resources.
 
+### Preview the local UI (no Cloudflare account required)
+
+```bash
+npm run dev
+```
+
+This starts the platform Worker with a local D1 database at [http://localhost:8787](http://localhost:8787). Dispatch namespaces cannot run locally, so deploying or opening uploaded sites requires the remote setup below.
+
 ### Local platform with remote site Workers
 
 To deploy test sites from the local UI, you need a Cloudflare account with [Workers for Platforms](https://dash.cloudflare.com/?to=/:account/workers-for-platforms) enabled.
 
-> **What runs where:** `npm run dev` starts the platform Worker at `http://localhost:8787`. The platform Worker and D1 run locally in Miniflare, and D1 data persists under `.wrangler/state`. The `dispatcher` binding keeps `"remote": true`, so the dispatch namespace and uploaded site Workers are real remote Cloudflare resources. Deploying a site from the local UI creates or updates a real Worker in your Cloudflare account.
+> **What runs where:** `npm run dev:remote` starts the platform Worker at `http://localhost:8787`. The platform Worker and D1 run locally in Miniflare, and D1 data persists under `.wrangler/state`. The `dispatcher` binding keeps `"remote": true`, so the dispatch namespace and uploaded site Workers are real remote Cloudflare resources. Deploying a site from the local UI creates or updates a real Worker in your Cloudflare account.
 
 **1. Install dependencies**
 
@@ -269,10 +277,10 @@ cp .dev.vars.example .dev.vars
 
 Edit `.dev.vars` and replace `your-token-here` with the real token.
 
-**7. Run locally**
+**7. Run locally with the remote dispatch namespace**
 
 ```bash
-npm run dev
+npm run dev:remote
 ```
 
 Open [http://localhost:8787/deploy](http://localhost:8787/deploy) to use the platform.
