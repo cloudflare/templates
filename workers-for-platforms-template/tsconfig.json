@@ -4,7 +4,7 @@
 		"lib": ["es2021"],
 		"module": "es2022",
 		"moduleResolution": "node",
-		"types": ["@cloudflare/workers-types"],
+		"types": ["./worker-configuration.d.ts"],
 		"resolveJsonModule": true,
 		"allowJs": true,
 		"checkJs": true,

@@ -33,7 +33,6 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.21.3",
-		"@cloudflare/workers-types": "^4.20260702.1",
 		"@vitest/runner": "4.1.10",
 		"@vitest/snapshot": "4.1.10",
 		"typescript": "5.9.3",
@@ -47,6 +46,7 @@
 	"private": true,
 	"scripts": {
 		"build": "tsc",
+		"cf-typegen": "wrangler types",
 		"check": "npm run build && wrangler deploy --dry-run --env=\"\"",
 		"deploy": "npm run setup && wrangler deploy --env=\"\"",
 		"dev": "wrangler dev --env local --local",
