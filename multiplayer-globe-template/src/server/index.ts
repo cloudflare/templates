@@ -20,9 +20,10 @@ export class Globe extends Server {
 			console.warn(`Missing position information for connection ${conn.id}`);
 			return;
 		}
+		// Truncate lat/lon to single decimal for privacy
 		const position = {
-			lat: parseFloat(latitude),
-			lng: parseFloat(longitude),
+			lat: Math.trunc(parseFloat(latitude) * 10) / 10,
+			lng: Math.trunc(parseFloat(longitude) * 10) / 10,
 			id: conn.id,
 		};
 		// And save this on the connection's state
