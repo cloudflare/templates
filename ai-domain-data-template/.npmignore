@@ -1,0 +1,9 @@
+node_modules/
+.wrangler/
+*.log
+.DS_Store
+.env
+.env.local
+tsconfig.json
+wrangler.toml.example
+
