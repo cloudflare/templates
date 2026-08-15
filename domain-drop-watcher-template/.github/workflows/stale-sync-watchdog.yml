@@ -1,0 +1,28 @@
+name: Stale sync watchdog
+on:
+  schedule:
+    - cron: "0 14 * * MON"  # weekly, Monday 14:00 UTC
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find last successful sync
+        id: last
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LAST=$(gh run list --workflow=sync-cf-templates.yml --status=success --limit=1 --json updatedAt -q '.[0].updatedAt')
+          echo "last=$LAST" >> $GITHUB_OUTPUT
+          AGE_DAYS=$(( ( $(date +%s) - $(date -d "$LAST" +%s) ) / 86400 ))
+          echo "age_days=$AGE_DAYS" >> $GITHUB_OUTPUT
+      - name: Open issue if stale
+        if: steps.last.outputs.age_days > 30
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo oitray/domain-drop-watcher \
+            --title "Sync to cloudflare/templates is stale (${{ steps.last.outputs.age_days }} days)" \
+            --body "Last successful sync: ${{ steps.last.outputs.last }}. Cut a new tag or run the sync workflow manually."
