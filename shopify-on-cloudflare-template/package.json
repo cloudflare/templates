@@ -86,7 +86,7 @@
 		"react-router-dom": "^6.6.1"
 	},
 	"devDependencies": {
-		"@cloudflare/vite-plugin": "1.46.0",
+		"@cloudflare/vite-plugin": "1.52.1",
 		"@playwright/test": "^1.49.0",
 		"@types/node": "^20.12.8",
 		"@types/react": "^18.0.28",
@@ -105,6 +105,6 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.0.0",
 		"vitest": "^4.1.9",
-		"wrangler": "4.113.0"
+		"wrangler": "4.123.0"
 	}
 }
