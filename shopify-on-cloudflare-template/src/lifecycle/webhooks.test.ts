@@ -89,4 +89,24 @@ describe("handleWebhook", () => {
 		expect(response.status).toBe(401);
 		expect(await response.json()).toEqual({ error: "Unauthorized" });
 	});
+
+	it("returns 401 for a signature of the wrong length", async () => {
+		const body = JSON.stringify({ id: 123 });
+		const hmac = await computeHmac("test-secret", body);
+		const ctx = createMockContext({
+			headers: {
+				// Truncated signature: base64 length leaks no secret bytes, but a
+				// naive length check that returns early would still be a timing
+				// oracle. timingSafeEqual must reject without early exit.
+				"X-Shopify-Hmac-Sha256": hmac.slice(0, hmac.length - 4),
+				"X-Shopify-Topic": "products/create",
+				"X-Shopify-Shop-Domain": "test.myshopify.com",
+			},
+			rawBody: body,
+		});
+
+		const response = await handleWebhook(ctx);
+		expect(response.status).toBe(401);
+		expect(await response.json()).toEqual({ error: "Unauthorized" });
+	});
 });

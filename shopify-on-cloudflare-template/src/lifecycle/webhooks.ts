@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { Context } from "hono";
 import type { Env } from "../types/env";
+import { timingSafeEqual } from "../lib/timingSafeEqual";
 
 // Starter registers only APP_UNINSTALLED. To register more topics, add to this
 // list and to the dispatch switch in the webhook handler below. Common topics:
@@ -11,6 +12,7 @@ import type { Env } from "../types/env";
 //   'customers/data_request', 'customers/redact', 'shop/redact'  // GDPR
 const WEBHOOK_TOPICS = ["app/uninstalled"] as const;
 
+// SECURITY AUDIT 2026-08-16: verified safe — this is outbound webhook REGISTRATION via Shopify Admin API (authenticated by X-Shopify-Access-Token header), not an inbound webhook handler. HMAC verification lives in handleWebhook below.
 export async function registerWebhooks(
 	shopDomain: string,
 	accessToken: string,
@@ -71,7 +73,7 @@ export async function handleWebhook(
 	);
 	const computedHmac = btoa(String.fromCharCode(...new Uint8Array(signature)));
 
-	if (computedHmac !== hmacHeader) {
+	if (!timingSafeEqual(computedHmac, hmacHeader)) {
 		return c.json({ error: "Unauthorized" }, 401);
 	}
 
