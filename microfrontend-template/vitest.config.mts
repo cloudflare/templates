@@ -1,4 +1,6 @@
-import { defineWorkersProject } from "@cloudflare/vitest-pool-workers/config";
+import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+
+import { defineConfig } from "vitest/config";
 
 // Stub Worker A - Returns HTML with asset references for testing URL rewriting
 const workerAScript = /* javascript */ `
@@ -66,33 +68,32 @@ export default {
 };
 `;
 
-export default defineWorkersProject({
-	test: {
-		poolOptions: {
-			workers: {
-				singleWorker: true,
-				wrangler: {
-					configPath: "./wrangler.jsonc",
-				},
-				miniflare: {
-					workers: [
-						{
-							name: "worker-a",
-							modules: [
-								{ type: "ESModule", path: "index.js", contents: workerAScript },
-							],
-							compatibilityDate: "2024-01-01",
-						},
-						{
-							name: "worker-b",
-							modules: [
-								{ type: "ESModule", path: "index.js", contents: workerBScript },
-							],
-							compatibilityDate: "2024-01-01",
-						},
-					],
-				},
+export default defineConfig({
+	plugins: [
+		cloudflareTest({
+			wrangler: {
+				configPath: "./wrangler.jsonc",
 			},
-		},
-	},
+			miniflare: {
+				workers: [
+					{
+						name: "worker-a",
+						modules: [
+							{ type: "ESModule", path: "index.js", contents: workerAScript },
+						],
+						compatibilityDate: "2024-01-01",
+					},
+					{
+						name: "worker-b",
+						modules: [
+							{ type: "ESModule", path: "index.js", contents: workerBScript },
+						],
+						compatibilityDate: "2024-01-01",
+					},
+				],
+			},
+		}),
+	],
+
+	test: {},
 });
