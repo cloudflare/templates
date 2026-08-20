@@ -40,7 +40,7 @@
       "package_json_hash": "c17bfb2562b9b6bc8badf785c9d65473fd7733da"
     },
     "remix-starter-template": {
-      "package_json_hash": "af8bfd5fc959cb584b300d75d35e9b2b64e0ce26"
+      "package_json_hash": "39b65ac0effd3fec92563f912d625baec1d0cbbd"
     },
     "saas-admin-template": {
       "package_json_hash": "a8d8876b71d507b0af65d9da51eda0500dd176d0"
@@ -49,7 +49,7 @@
       "package_json_hash": "379bcc5a435e172ae3ab2ad313fe5c5c1c9f5580"
     },
     "to-do-list-kv-template": {
-      "package_json_hash": "d0f49403a399eda1cb065eea39d30faef87dd1b8"
+      "package_json_hash": "b254513ae110e3e8ac7ec127696cd51e79d6e09e"
     },
     "vite-react-template": {
       "package_json_hash": "4b02afef64609c6f85307877f1b7327c2f0adfb1"
@@ -82,10 +82,10 @@
       "package_json_hash": "2414103ce8a2eb42c5144cc11b5b6473dd6d3666"
     },
     "x402-proxy-template": {
-      "package_json_hash": "1a1848c09849b3d033cfc4b16f406c64ab3b989d"
+      "package_json_hash": "ffe3ab599cbd4d49e1e65307836f33831700dc64"
     },
     "workflows-starter-template": {
-      "package_json_hash": "8723c87fa4f9e45a6396a448b08eccf6ef98a59a"
+      "package_json_hash": "88bc54451cf6e8d6f5a1b44e376d65444e12d879"
     },
     "workers-for-platforms-template": {
       "package_json_hash": "8f74775aa029eceed67c2957a34d9e3d9366aca9"
@@ -112,7 +112,7 @@
       "package_json_hash": "741321d7071039e408481633f62cad502cffdb57"
     },
     "shopify-on-cloudflare-template": {
-      "package_json_hash": "f840b9c1041b85439772e6977e820a0d5bb89678"
+      "package_json_hash": "17513a969b2e9a92b6fedd36a3d3e1af75ceb5a5"
     }
   }
 }
