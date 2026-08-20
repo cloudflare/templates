@@ -1,23 +1,25 @@
-import { defineWorkersProject } from "@cloudflare/vitest-pool-workers/config";
+import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
 
-export default defineWorkersProject({
-	test: {
-		testTimeout: 60000,
-		poolOptions: {
-			workers: {
-				singleWorker: true,
-				wrangler: {
-					configPath: "./wrangler.jsonc",
-				},
-				miniflare: {
-					// Enable the destructive DELETE /api/events endpoint for tests.
-					// In production this is set with `wrangler secret put ADMIN_TOKEN`
-					// and omitted from wrangler.jsonc.
-					bindings: {
-						ADMIN_TOKEN: "test-admin-token",
-					},
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+	plugins: [
+		cloudflareTest({
+			wrangler: {
+				configPath: "./wrangler.jsonc",
+			},
+			miniflare: {
+				// Enable the destructive DELETE /api/events endpoint for tests.
+				// In production this is set with `wrangler secret put ADMIN_TOKEN`
+				// and omitted from wrangler.jsonc.
+				bindings: {
+					ADMIN_TOKEN: "test-admin-token",
 				},
 			},
-		},
+		}),
+	],
+
+	test: {
+		testTimeout: 60000,
 	},
 });

@@ -16,13 +16,14 @@
 	},
 	"devDependencies": {
 		"typescript": "5.9.3",
-		"wrangler": "4.88.0"
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"check": "tsc && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
-		"dev": "wrangler dev"
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc"
 	}
 }

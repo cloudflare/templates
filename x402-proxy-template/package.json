@@ -32,7 +32,7 @@
 		"prettier": "3.7.4",
 		"tsx": "4.21.0",
 		"viem": "2.43.1",
-		"wrangler": "4.88.0",
+		"wrangler": "4.123.0",
 		"x402": "1.0.1"
 	},
 	"private": true,
@@ -44,6 +44,7 @@
 		"format:check": "prettier --check .",
 		"lint": "npm run typecheck && npm run format:check && eslint .",
 		"lint:fix": "prettier --write . && eslint . --fix",
+		"test": "tsx --test test/index.test.ts",
 		"test:client": "tsx test-client.ts",
 		"typecheck": "tsc --noEmit"
 	},

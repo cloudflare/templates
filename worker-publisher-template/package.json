@@ -23,13 +23,14 @@
 	"devDependencies": {
 		"tsx": "4.21.0",
 		"typescript": "5.9.3",
-		"wrangler": "4.88.0"
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {
 		"deploy": "npm run deploy:wfp && wrangler deploy",
 		"deploy:wfp": "tsx scripts/deploy-wfp.ts",
 		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
 		"start": "wrangler dev"
 	}
 }

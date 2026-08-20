@@ -54,10 +54,11 @@ test.describe("Shopify on Cloudflare Template", () => {
 		const github = page.getByRole("link", { name: /View on GitHub/i });
 		await expect(github).toHaveAttribute("href", REPO_URL);
 		// Attribution backlink to Devkind.
-		await expect(page.getByRole("link", { name: "Devkind" })).toHaveAttribute(
-			"href",
-			DEVKIND_URL,
-		);
+		// `exact: true` — the GitHub repo link below contains "devkindhq" and
+		// would otherwise match the non-exact accessible-name query (strict mode).
+		await expect(
+			page.getByRole("link", { name: "Devkind", exact: true }),
+		).toHaveAttribute("href", DEVKIND_URL);
 	});
 
 	test("public preview makes no authenticated Shopify request", async ({

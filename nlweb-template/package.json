@@ -22,14 +22,16 @@
 		"zod": "4.1.13"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20260702.1",
 		"typescript": "5.9.3",
-		"wrangler": "4.88.0"
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
 		"start": "wrangler dev"
 	}
 }

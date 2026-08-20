@@ -17,6 +17,12 @@
 	],
 	"versionGroups": [
 		{
+			"label": "Use Workers types v5 for ctx.access",
+			"packages": ["internal-sites-template"],
+			"dependencies": ["@cloudflare/workers-types"],
+			"pinVersion": "^5.20260811.1"
+		},
+		{
 			"label": "Pin Zod 3.x for chanfana template due to chanfana peer dep",
 			"packages": ["chanfana-openapi-template"],
 			"dependencies": ["zod"],
@@ -29,12 +35,8 @@
 			"pinVersion": "5.4.14"
 		},
 		{
-			"label": "Keep React 18 for other templates",
-			"packages": [
-				"durable-chat-template",
-				"remix-starter-template",
-				"to-do-list-kv-template"
-			],
+			"label": "Keep React 18 for legacy Remix templates",
+			"packages": ["remix-starter-template", "to-do-list-kv-template"],
 			"dependencies": [
 				"react",
 				"react-dom",
@@ -42,6 +44,41 @@
 				"@types/react-dom"
 			],
 			"pinVersion": "^18.0.0"
+		},
+		{
+			"label": "Keep React 18 for Shopify template (App Bridge + Polaris peer deps cap at 18)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": [
+				"react",
+				"react-dom",
+				"@types/react",
+				"@types/react-dom"
+			],
+			"pinVersion": "^18.0.0"
+		},
+		{
+			"label": "Keep ESLint 8 for Shopify template (eslint-config-airbnb does not support ESLint 9)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["eslint"],
+			"pinVersion": "8.57.1"
+		},
+		{
+			"label": "Keep react-hooks 4 for Shopify template (eslint-config-airbnb peers eslint-plugin-react-hooks ^4.3.0)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["eslint-plugin-react-hooks"],
+			"pinVersion": "4.6.0"
+		},
+		{
+			"label": "Patched hono for Shopify template (GHSA-3vhc-576x-3qv4, GHSA-f67f-6cw9-8mq4, GHSA-9r54-q6cx-xmh5 affect <=4.12.33)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["hono"],
+			"pinVersion": "4.13.2"
+		},
+		{
+			"label": "Patched react-router-dom for Shopify template (GHSA-2w69-qvjg-hvjx, GHSA-8v8x-cx79-35w7, GHSA-49rj-9fvp-4h2h affect <=7.17.0)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["react-router-dom"],
+			"pinVersion": "7.18.2"
 		},
 		{
 			"label": "Allow tailwind 3.x for some templates",
@@ -60,21 +97,16 @@
 			"pinVersion": "^3.114.4"
 		},
 		{
-			"label": "Pin vitest 3.x for templates using @cloudflare/vitest-pool-workers",
-			"packages": [
-				"chanfana-openapi-template",
-				"d1-starter-sessions-api-template",
-				"llm-chat-app-template",
-				"microfrontend-template",
-				"mysql-hyperdrive-template",
-				"postgres-hyperdrive-template",
-				"to-do-list-kv-template",
-				"workers-builds-notifications-template",
-				"workers-for-platforms-template",
-				"workflows-starter-template"
-			],
+			"label": "Keep Vitest 3 for the legacy Vite 5 template",
+			"packages": ["to-do-list-kv-template"],
 			"dependencies": ["@vitest/runner", "@vitest/snapshot", "vitest"],
-			"pinVersion": "3.2.4"
+			"pinVersion": "3.2.7"
+		},
+		{
+			"label": "Keep the compatible Workers pool for Vitest 3",
+			"packages": ["to-do-list-kv-template"],
+			"dependencies": ["@cloudflare/vitest-pool-workers"],
+			"pinVersion": "0.11.1"
 		},
 		{
 			"label": "Set vite to v7",

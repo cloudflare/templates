@@ -17,14 +17,14 @@
 		"publish": true
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.11.1",
-		"@cloudflare/workers-types": "^4.20260507.1",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@cloudflare/workers-types": "^4.20260702.1",
 		"@types/node": "24.10.1",
-		"@vitest/runner": "3.2.4",
-		"@vitest/snapshot": "3.2.4",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
 		"typescript": "5.9.3",
-		"vitest": "3.2.4",
-		"wrangler": "4.88.0"
+		"vitest": "4.1.10",
+		"wrangler": "4.123.0"
 	},
 	"private": true,
 	"scripts": {
@@ -32,6 +32,7 @@
 		"check": "tsc --noEmit && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
 		"start": "wrangler dev",
 		"test": "vitest"
 	}

@@ -1,6 +1,9 @@
-import type { Env } from "../src/lib/types";
+import type { Env as WorkerEnv } from "../src/lib/types";
 
-// Type the bindings available via `env` from "cloudflare:test".
-declare module "cloudflare:test" {
-	interface ProvidedEnv extends Env {}
+declare global {
+	namespace Cloudflare {
+		interface Env extends WorkerEnv {}
+	}
 }
+
+export {};

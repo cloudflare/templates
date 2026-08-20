@@ -15,7 +15,7 @@ env:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}-check
       cancel-in-progress: true
@@ -28,6 +28,12 @@ jobs:
 
       - name: Run tests
         run: pnpm -w test
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run E2E tests
+        run: pnpm test:e2e
 
       - name: Save PR ID
         run: echo "$PR_ID" > ${{ env.PR_ID_FILE }}
