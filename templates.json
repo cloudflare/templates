@@ -110,6 +110,9 @@
     },
     "internal-sites-template": {
       "package_json_hash": "741321d7071039e408481633f62cad502cffdb57"
+    },
+    "shopify-on-cloudflare-template": {
+      "package_json_hash": "17513a969b2e9a92b6fedd36a3d3e1af75ceb5a5"
     }
   }
 }

@@ -46,6 +46,41 @@
 			"pinVersion": "^18.0.0"
 		},
 		{
+			"label": "Keep React 18 for Shopify template (App Bridge + Polaris peer deps cap at 18)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": [
+				"react",
+				"react-dom",
+				"@types/react",
+				"@types/react-dom"
+			],
+			"pinVersion": "^18.0.0"
+		},
+		{
+			"label": "Keep ESLint 8 for Shopify template (eslint-config-airbnb does not support ESLint 9)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["eslint"],
+			"pinVersion": "8.57.1"
+		},
+		{
+			"label": "Keep react-hooks 4 for Shopify template (eslint-config-airbnb peers eslint-plugin-react-hooks ^4.3.0)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["eslint-plugin-react-hooks"],
+			"pinVersion": "4.6.0"
+		},
+		{
+			"label": "Patched hono for Shopify template (GHSA-3vhc-576x-3qv4, GHSA-f67f-6cw9-8mq4, GHSA-9r54-q6cx-xmh5 affect <=4.12.33)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["hono"],
+			"pinVersion": "4.13.2"
+		},
+		{
+			"label": "Patched react-router-dom for Shopify template (GHSA-2w69-qvjg-hvjx, GHSA-8v8x-cx79-35w7, GHSA-49rj-9fvp-4h2h affect <=7.17.0)",
+			"packages": ["shopify-on-cloudflare-template"],
+			"dependencies": ["react-router-dom"],
+			"pinVersion": "7.18.2"
+		},
+		{
 			"label": "Allow tailwind 3.x for some templates",
 			"packages": [
 				"saas-admin-template",
