@@ -41,7 +41,7 @@
 		"typescript": "5.9.3",
 		"vite": "^7.0.0",
 		"vitest": "4.1.10",
-		"wrangler": "4.123.0"
+		"wrangler": "4.127.0"
 	},
 	"private": true,
 	"scripts": {
