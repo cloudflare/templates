@@ -23,6 +23,24 @@
 			"pinVersion": "^5.20260811.1"
 		},
 		{
+			"label": "Use current Workers types for the voice agent template",
+			"packages": ["voice-agent-template"],
+			"dependencies": ["@cloudflare/workers-types"],
+			"pinVersion": "^5.20260831.1"
+		},
+		{
+			"label": "Use current Agents SDK for the voice agent template",
+			"packages": ["voice-agent-template"],
+			"dependencies": ["agents"],
+			"pinVersion": "0.22.0"
+		},
+		{
+			"label": "Use the Agents SDK MCP peer version for the voice agent template",
+			"packages": ["voice-agent-template"],
+			"dependencies": ["@modelcontextprotocol/sdk"],
+			"pinVersion": "1.30.0"
+		},
+		{
 			"label": "Pin Zod 3.x for chanfana template due to chanfana peer dep",
 			"packages": ["chanfana-openapi-template"],
 			"dependencies": ["zod"],

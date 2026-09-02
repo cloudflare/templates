@@ -1,0 +1,53 @@
+{
+	"name": "voice-agent-template",
+	"description": "Deploy a fixed Cloudflare Docs voice agent powered by Workers AI, Durable Objects, and the Agents SDK.",
+	"cloudflare": {
+		"label": "Cloudflare Docs Voice Agent",
+		"products": [
+			"Workers",
+			"Workers AI",
+			"Durable Objects"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/agents/",
+		"healthCheckPath": "/health",
+		"bindings": {
+			"VOICE_AGENT_TOKEN": {
+				"description": "Generate a strong random bearer token, for example with `openssl rand -hex 32`. Keep it out of browser code and URLs."
+			}
+		}
+	},
+	"dependencies": {
+		"@cloudflare/voice": "0.4.0",
+		"@modelcontextprotocol/sdk": "1.30.0",
+		"agents": "0.22.0",
+		"ai": "7.0.89",
+		"workers-ai-provider": "4.0.0",
+		"workers-tagged-logger": "1.0.1",
+		"zod": "4.1.13"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-plugin": "1.1.3",
+		"@cloudflare/workers-types": "^5.20260831.1",
+		"@types/node": "24.10.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.127.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types worker-configuration.d.ts --include-runtime false",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
+		"test": "npm run test:unit && npm run test:harness",
+		"test:harness": "vitest run --config vitest.harness.config.ts",
+		"test:unit": "vitest run --config vitest.config.ts"
+	},
+	"type": "module"
+}

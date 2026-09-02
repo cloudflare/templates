@@ -110,6 +110,9 @@
     },
     "internal-sites-template": {
       "package_json_hash": "26661fa56bcae892afaf849ba8cbdb9d4f79be43"
+    },
+    "voice-agent-template": {
+      "package_json_hash": "cbf235ffeb3f740c49b38ca0d7e8914a7d1f85e6"
     }
   }
 }
