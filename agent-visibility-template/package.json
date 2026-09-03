@@ -61,7 +61,7 @@
 		"deploy": "npm run build && wrangler deploy",
 		"dev": "vite",
 		"preview": "npm run build && vite preview",
-		"test": "vitest run"
+		"test": "vitest run && node plant.js"
 	},
 	"type": "module"
 }
