@@ -56,12 +56,6 @@
 			"pinVersion": "^3.4.0"
 		},
 		{
-			"label": "Allow Wrangler 3.x for Remix templates due to @remix-run/dev peer dep",
-			"packages": ["remix-starter-template", "to-do-list-kv-template"],
-			"dependencies": ["wrangler"],
-			"pinVersion": "^3.114.4"
-		},
-		{
 			"label": "Keep Vitest 3 for the legacy Vite 5 template",
 			"packages": ["to-do-list-kv-template"],
 			"dependencies": ["@vitest/runner", "@vitest/snapshot", "vitest"],
