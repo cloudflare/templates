@@ -4,7 +4,7 @@
 		"browser": true,
 		"es2021": true
 	},
-	"extends": ["airbnb"],
+	"extends": ["airbnb", "prettier"],
 	"parserOptions": {
 		"ecmaVersion": 2021,
 		"sourceType": "module"
@@ -18,9 +18,8 @@
 				"ecmaFeatures": { "jsx": true }
 			},
 			"plugins": ["react-hooks", "@typescript-eslint"],
-			"extends": ["plugin:@typescript-eslint/recommended"],
+			"extends": ["plugin:@typescript-eslint/recommended", "prettier"],
 			"rules": {
-				"quotes": [2, "single"],
 				"react/jsx-filename-extension": [
 					"error",
 					{ "extensions": [".jsx", ".tsx"] }
