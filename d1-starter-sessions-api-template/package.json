@@ -24,7 +24,7 @@
 		"durable-utils": "0.3.5",
 		"typescript": "5.9.3",
 		"vitest": "4.1.10",
-		"wrangler": "4.123.0"
+		"wrangler": "4.127.0"
 	},
 	"private": true,
 	"scripts": {
