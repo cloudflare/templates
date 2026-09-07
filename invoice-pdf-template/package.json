@@ -22,7 +22,7 @@
 		}
 	},
 	"dependencies": {
-		"@formepdf/html": "0.20.0",
+		"@formepdf/html": "0.20.1",
 		"hono": "4.11.1"
 	},
 	"devDependencies": {
