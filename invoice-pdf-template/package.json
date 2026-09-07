@@ -1,0 +1,43 @@
+{
+	"name": "invoice-pdf-template",
+	"description": "Generate invoice PDFs from HTML and print CSS inside a Worker, store them in R2, and index them in KV.",
+	"cloudflare": {
+		"label": "Invoice PDF Generator",
+		"products": [
+			"Workers",
+			"R2",
+			"KV"
+		],
+		"categories": [
+			"storage"
+		],
+		"docs_url": "https://developers.cloudflare.com/r2/",
+		"bindings": {
+			"INVOICES": {
+				"description": "R2 bucket that stores the rendered invoice PDFs. Created automatically on deploy."
+			},
+			"INVOICE_INDEX": {
+				"description": "KV namespace that indexes invoice metadata (number, client, total, R2 key) so the list persists. Created automatically on deploy."
+			}
+		}
+	},
+	"dependencies": {
+		"@formepdf/html": "0.20.1",
+		"hono": "4.11.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.127.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
