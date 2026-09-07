@@ -647,7 +647,10 @@ importers:
     dependencies:
       '@openauthjs/openauth':
         specifier: 0.4.3
-        version: 0.4.3(arctic@2.3.4)(hono@4.13.5)
+        version: 0.4.3(arctic@2.3.4)(hono@4.11.1)
+      hono:
+        specifier: 4.11.1
+        version: 4.11.1
       valibot:
         specifier: 1.2.0
         version: 1.2.0(typescript@5.9.3)
@@ -16729,12 +16732,12 @@ snapshots:
     dependencies:
       which: 3.0.1
 
-  '@openauthjs/openauth@0.4.3(arctic@2.3.4)(hono@4.13.5)':
+  '@openauthjs/openauth@0.4.3(arctic@2.3.4)(hono@4.11.1)':
     dependencies:
       '@standard-schema/spec': 1.0.0-beta.3
       arctic: 2.3.4
       aws4fetch: 1.0.20
-      hono: 4.13.5
+      hono: 4.11.1
       jose: 5.9.6
 
   '@opennextjs/aws@3.9.0':

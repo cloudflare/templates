@@ -15,6 +15,7 @@
 	},
 	"dependencies": {
 		"@openauthjs/openauth": "0.4.3",
+		"hono": "4.11.1",
 		"valibot": "1.2.0"
 	},
 	"devDependencies": {
