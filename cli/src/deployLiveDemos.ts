@@ -32,7 +32,7 @@ export default async function deployLiveDemos({
 	const templates = getPublishedTemplates(templateDirectory);
 	await Promise.all(
 		templates.map(({ path: templatePath }) => {
-			runCommand("npm install", templatePath);
+			runCommand("npm ci --legacy-peer-deps", templatePath);
 			runCommand("npm run build --if-present", templatePath);
 			runCommand("npm run deploy", templatePath);
 		}),
