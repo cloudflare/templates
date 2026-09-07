@@ -19,6 +19,8 @@ The backend includes trusted agent instructions, input and output guardrails, bo
 
 <!-- dash-content-end -->
 
+A live public deployment is available at [https://voice-agent-template.templates.workers.dev](https://voice-agent-template.templates.workers.dev).
+
 ## Setup
 
 1. Install dependencies:
