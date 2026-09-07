@@ -110,6 +110,9 @@
     },
     "internal-sites-template": {
       "package_json_hash": "26661fa56bcae892afaf849ba8cbdb9d4f79be43"
+    },
+    "invoice-pdf-template": {
+      "package_json_hash": "6c56c5456c59a94e01cc67ebc5cf9703c8dd60fc"
     }
   }
 }
