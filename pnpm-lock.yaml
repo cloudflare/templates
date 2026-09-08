@@ -1277,25 +1277,25 @@ importers:
     dependencies:
       '@cloudflare/voice':
         specifier: 0.4.0
-        version: 0.4.0(agents@0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.1.13))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.1.13))(partysocket@1.3.0(react@19.2.1))(react@19.2.1)
+        version: 0.4.0(agents@0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.5.4))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.5.4))(partysocket@1.3.0(react@19.2.1))(react@19.2.1)
       '@modelcontextprotocol/sdk':
         specifier: 1.30.0
-        version: 1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13)
+        version: 1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4)
       agents:
         specifier: 0.22.0
-        version: 0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.1.13))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.1.13)
+        version: 0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.5.4))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.5.4)
       ai:
         specifier: 7.0.89
-        version: 7.0.89(zod@4.1.13)
+        version: 7.0.89(zod@4.5.4)
       workers-ai-provider:
         specifier: 4.0.0
-        version: 4.0.0(@ai-sdk/provider@4.0.10)(ai@7.0.89(zod@4.1.13))
+        version: 4.0.0(@ai-sdk/provider@4.0.10)(ai@7.0.89(zod@4.5.4))
       workers-tagged-logger:
         specifier: 1.0.1
         version: 1.0.1
       zod:
-        specifier: 4.1.13
-        version: 4.1.13
+        specifier: 4.5.4
+        version: 4.5.4
     devDependencies:
       '@cloudflare/vitest-plugin':
         specifier: 1.1.3
@@ -13011,6 +13011,9 @@ packages:
   zod@4.4.3:
     resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
 
+  zod@4.5.4:
+    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
+
   zustand@5.0.0:
     resolution: {integrity: sha512-LE+VcmbartOPM+auOjCCLQOsQ05zUTp8RkgwRzefUk+2jISdMMFnxvyTjA4YNWr5ZGXYbVsEMZosttuxUBkojQ==}
     engines: {node: '>=12.20.0'}
@@ -13084,12 +13087,12 @@ snapshots:
       '@vercel/oidc': 3.0.5
       zod: 3.25.76
 
-  '@ai-sdk/gateway@4.0.71(zod@4.1.13)':
+  '@ai-sdk/gateway@4.0.71(zod@4.5.4)':
     dependencies:
       '@ai-sdk/provider': 4.0.10
-      '@ai-sdk/provider-utils': 5.0.35(zod@4.1.13)
+      '@ai-sdk/provider-utils': 5.0.35(zod@4.5.4)
       '@vercel/oidc': 3.2.0
-      zod: 4.1.13
+      zod: 4.5.4
 
   '@ai-sdk/openai@2.0.72(zod@3.25.76)':
     dependencies:
@@ -13104,14 +13107,14 @@ snapshots:
       eventsource-parser: 3.0.6
       zod: 3.25.76
 
-  '@ai-sdk/provider-utils@5.0.35(zod@4.1.13)':
+  '@ai-sdk/provider-utils@5.0.35(zod@4.5.4)':
     dependencies:
       '@ai-sdk/provider': 4.0.10
       '@standard-schema/spec': 1.1.0
       '@workflow/serde': 4.1.0
       eventsource-parser: 3.1.1
       undici: 7.29.0
-      zod: 4.1.13
+      zod: 4.5.4
 
   '@ai-sdk/provider@2.0.0':
     dependencies:
@@ -14979,9 +14982,9 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@cloudflare/voice@0.4.0(agents@0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.1.13))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.1.13))(partysocket@1.3.0(react@19.2.1))(react@19.2.1)':
+  '@cloudflare/voice@0.4.0(agents@0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.5.4))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.5.4))(partysocket@1.3.0(react@19.2.1))(react@19.2.1)':
     dependencies:
-      agents: 0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.1.13))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.1.13)
+      agents: 0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.5.4))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.5.4)
     optionalDependencies:
       partysocket: 1.3.0(react@19.2.1)
       react: 19.2.1
@@ -16517,11 +16520,11 @@ snapshots:
       eventsource-parser: 3.1.1
       jose: 6.1.3
       pkce-challenge: 5.0.0
-      zod: 4.4.3
+      zod: 4.5.4
 
   '@modelcontextprotocol/core@2.0.0':
     dependencies:
-      zod: 4.4.3
+      zod: 4.5.4
 
   '@modelcontextprotocol/sdk@1.23.0(@cfworker/json-schema@4.1.1)(zod@4.1.13)':
     dependencies:
@@ -16567,7 +16570,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13)':
+  '@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4)':
     dependencies:
       '@hono/node-server': 2.1.1(hono@4.13.5)
       ajv: 8.17.1
@@ -16584,8 +16587,8 @@ snapshots:
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.0
       raw-body: 3.0.0
-      zod: 4.1.13
-      zod-to-json-schema: 3.25.1(zod@4.1.13)
+      zod: 4.5.4
+      zod-to-json-schema: 3.25.1(zod@4.5.4)
     optionalDependencies:
       '@cfworker/json-schema': 4.1.1
     transitivePeerDependencies:
@@ -16594,7 +16597,7 @@ snapshots:
   '@modelcontextprotocol/server@2.0.0':
     dependencies:
       '@modelcontextprotocol/core': 2.0.0
-      zod: 4.4.3
+      zod: 4.5.4
 
   '@napi-rs/wasm-runtime@0.2.11':
     dependencies:
@@ -21017,6 +21020,12 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
       zod: 4.1.13
+    optional: true
+
+  abitype@1.2.3(typescript@5.9.3)(zod@4.5.4):
+    optionalDependencies:
+      typescript: 5.9.3
+      zod: 4.5.4
 
   abort-controller@3.0.0:
     dependencies:
@@ -21071,12 +21080,12 @@ snapshots:
       - supports-color
       - typescript
 
-  agents@0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.1.13))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.1.13):
+  agents@0.22.0(@babel/core@7.28.5)(@babel/runtime@7.28.4)(@modelcontextprotocol/client@2.0.0)(@modelcontextprotocol/sdk@1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4))(@modelcontextprotocol/server@2.0.0)(@x402/core@2.0.0)(ai@7.0.89(zod@4.5.4))(react@19.2.1)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))(zod@4.5.4):
     dependencies:
       '@babel/plugin-proposal-decorators': 8.0.2(@babel/core@7.28.5)
       '@cfworker/json-schema': 4.1.1
       '@modelcontextprotocol/client': 2.0.0
-      '@modelcontextprotocol/sdk': 1.30.0(@cfworker/json-schema@4.1.1)(zod@4.1.13)
+      '@modelcontextprotocol/sdk': 1.30.0(@cfworker/json-schema@4.1.1)(zod@4.5.4)
       '@modelcontextprotocol/server': 2.0.0
       '@rolldown/plugin-babel': 0.2.3(@babel/core@7.28.5)(@babel/runtime@7.28.4)(rolldown@1.2.7)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))
       cron-schedule: 6.0.0
@@ -21085,10 +21094,10 @@ snapshots:
       nanoid: 5.1.16
       partysocket: 1.3.0(react@19.2.1)
       yaml: 2.9.0
-      zod: 4.1.13
+      zod: 4.5.4
     optionalDependencies:
       '@x402/core': 2.0.0
-      ai: 7.0.89(zod@4.1.13)
+      ai: 7.0.89(zod@4.5.4)
       react: 19.2.1
       vite: 7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0)
     transitivePeerDependencies:
@@ -21110,12 +21119,12 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       zod: 3.25.76
 
-  ai@7.0.89(zod@4.1.13):
+  ai@7.0.89(zod@4.5.4):
     dependencies:
-      '@ai-sdk/gateway': 4.0.71(zod@4.1.13)
+      '@ai-sdk/gateway': 4.0.71(zod@4.5.4)
       '@ai-sdk/provider': 4.0.10
-      '@ai-sdk/provider-utils': 5.0.35(zod@4.1.13)
-      zod: 4.1.13
+      '@ai-sdk/provider-utils': 5.0.35(zod@4.5.4)
+      zod: 4.5.4
 
   ajv-formats@3.0.1(ajv@8.17.1):
     optionalDependencies:
@@ -22703,8 +22712,8 @@ snapshots:
       '@babel/parser': 7.28.5
       eslint: 9.39.2(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.1.13
-      zod-validation-error: 4.0.2(zod@4.1.13)
+      zod: 4.5.4
+      zod-validation-error: 4.0.2(zod@4.5.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -25614,7 +25623,7 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  ox@0.9.17(typescript@5.9.3)(zod@4.1.13):
+  ox@0.9.17(typescript@5.9.3)(zod@4.5.4):
     dependencies:
       '@adraffy/ens-normalize': 1.11.1
       '@noble/ciphers': 1.3.0
@@ -25622,7 +25631,7 @@ snapshots:
       '@noble/hashes': 1.8.0
       '@scure/bip32': 1.7.0
       '@scure/bip39': 1.6.0
-      abitype: 1.2.3(typescript@5.9.3)(zod@4.1.13)
+      abitype: 1.2.3(typescript@5.9.3)(zod@4.5.4)
       eventemitter3: 5.0.1
     optionalDependencies:
       typescript: 5.9.3
@@ -25875,9 +25884,9 @@ snapshots:
       hono: 4.11.1
       idb-keyval: 6.2.2
       mipd: 0.0.7(typescript@5.9.3)
-      ox: 0.9.17(typescript@5.9.3)(zod@4.1.13)
+      ox: 0.9.17(typescript@5.9.3)(zod@4.5.4)
       viem: 2.43.1(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@3.25.67)
-      zod: 4.1.13
+      zod: 4.5.4
       zustand: 5.0.9(@types/react@19.2.7)(react@19.2.1)(use-sync-external-store@1.4.0(react@19.2.1))
     optionalDependencies:
       '@tanstack/react-query': 5.90.11(react@19.2.1)
@@ -25895,9 +25904,9 @@ snapshots:
       hono: 4.11.1
       idb-keyval: 6.2.2
       mipd: 0.0.7(typescript@5.9.3)
-      ox: 0.9.17(typescript@5.9.3)(zod@4.1.13)
+      ox: 0.9.17(typescript@5.9.3)(zod@4.5.4)
       viem: 2.43.1(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.1.13)
-      zod: 4.1.13
+      zod: 4.5.4
       zustand: 5.0.9(@types/react@19.2.7)(react@19.2.1)(use-sync-external-store@1.4.0(react@19.2.1))
     optionalDependencies:
       '@tanstack/react-query': 5.90.11(react@19.2.1)
@@ -28344,16 +28353,16 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20260831.1
       '@cloudflare/workerd-windows-64': 1.20260831.1
 
-  workers-ai-provider@4.0.0(@ai-sdk/provider@4.0.10)(ai@7.0.89(zod@4.1.13)):
+  workers-ai-provider@4.0.0(@ai-sdk/provider@4.0.10)(ai@7.0.89(zod@4.5.4)):
     dependencies:
       '@ai-sdk/provider': 4.0.10
-      ai: 7.0.89(zod@4.1.13)
+      ai: 7.0.89(zod@4.5.4)
 
   workers-qb@0.1.1: {}
 
   workers-tagged-logger@1.0.1:
     dependencies:
-      zod: 4.1.13
+      zod: 4.5.4
     optionalDependencies:
       hono: 4.11.1
 
@@ -28798,9 +28807,9 @@ snapshots:
     dependencies:
       zod: 3.25.76
 
-  zod-to-json-schema@3.25.1(zod@4.1.13):
+  zod-to-json-schema@3.25.1(zod@4.5.4):
     dependencies:
-      zod: 4.1.13
+      zod: 4.5.4
 
   zod-to-ts@1.2.0(typescript@5.9.3)(zod@3.25.76):
     dependencies:
@@ -28812,9 +28821,9 @@ snapshots:
       typescript: 5.9.3
       zod: 3.25.76
 
-  zod-validation-error@4.0.2(zod@4.1.13):
+  zod-validation-error@4.0.2(zod@4.5.4):
     dependencies:
-      zod: 4.1.13
+      zod: 4.5.4
 
   zod@3.22.3: {}
 
@@ -28827,6 +28836,8 @@ snapshots:
   zod@4.1.13: {}
 
   zod@4.4.3: {}
+
+  zod@4.5.4: {}
 
   zustand@5.0.0(@types/react@19.2.7)(react@19.2.1)(use-sync-external-store@1.4.0(react@19.2.1)):
     optionalDependencies:

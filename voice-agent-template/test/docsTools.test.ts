@@ -65,6 +65,10 @@ afterEach(() => {
 });
 
 describe("Cloudflare Docs MCP tool", () => {
+	it("uses a Zod version that can convert MCP JSON schemas", () => {
+		expect(typeof z.fromJSONSchema).toBe("function");
+	});
+
 	it("exposes only the exact read-only Docs search tool", () => {
 		const docsRuntime = runtime(() => "result");
 		expect(Object.keys(docsRuntime.tools)).toEqual([CLOUDFLARE_DOCS_TOOL_KEY]);

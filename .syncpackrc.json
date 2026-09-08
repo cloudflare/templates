@@ -41,6 +41,12 @@
 			"pinVersion": "1.30.0"
 		},
 		{
+			"label": "Use Zod JSON Schema conversion for the voice agent template",
+			"packages": ["voice-agent-template"],
+			"dependencies": ["zod"],
+			"pinVersion": "4.5.4"
+		},
+		{
 			"label": "Pin Zod 3.x for chanfana template due to chanfana peer dep",
 			"packages": ["chanfana-openapi-template"],
 			"dependencies": ["zod"],
