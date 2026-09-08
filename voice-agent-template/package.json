@@ -12,6 +12,7 @@
 			"ai"
 		],
 		"docs_url": "https://developers.cloudflare.com/agents/",
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/8c4137a3-661e-46e9-d779-88c4d68ea200/public",
 		"healthCheckPath": "/health",
 		"bindings": {
 			"VOICE_AGENT_TOKEN": {
