@@ -1,0 +1,274 @@
+:root {
+	font-family:
+		Inter,
+		ui-sans-serif,
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		sans-serif;
+	color: #f5f7ff;
+	background: #080a0f;
+	font-synthesis: none;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	background:
+		radial-gradient(
+			circle at 20% 10%,
+			rgba(120, 87, 255, 0.2),
+			transparent 30%
+		),
+		radial-gradient(
+			circle at 85% 80%,
+			rgba(255, 120, 56, 0.15),
+			transparent 28%
+		),
+		#080a0f;
+}
+
+.shell {
+	width: min(1120px, calc(100% - 32px));
+	margin: 0 auto;
+	padding: 72px 0 32px;
+}
+
+.hero {
+	max-width: 850px;
+	margin-bottom: 48px;
+}
+
+.eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+	color: #aeb4c7;
+	font-size: 0.78rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+
+.eyebrow span,
+.status-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #8bffb0;
+	box-shadow: 0 0 16px rgba(139, 255, 176, 0.8);
+}
+
+h1 {
+	margin: 0;
+	font-size: clamp(2.8rem, 7vw, 6.2rem);
+	font-weight: 650;
+	letter-spacing: -0.065em;
+	line-height: 0.94;
+}
+
+h1 em {
+	color: #a794ff;
+	font-style: normal;
+}
+
+.hero > p {
+	max-width: 680px;
+	margin: 28px 0;
+	color: #aeb4c7;
+	font-size: clamp(1rem, 2vw, 1.2rem);
+	line-height: 1.7;
+}
+
+.stack {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	color: #cfd4e5;
+	font-size: 0.86rem;
+}
+
+.stack span {
+	padding: 8px 12px;
+	border: 1px solid #292d39;
+	border-radius: 999px;
+	background: rgba(17, 20, 29, 0.72);
+}
+
+.stack b {
+	color: #676d7e;
+}
+
+.chat {
+	overflow: hidden;
+	border: 1px solid #292d39;
+	border-radius: 20px;
+	background: rgba(14, 17, 24, 0.88);
+	box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+	backdrop-filter: blur(18px);
+}
+
+.chat-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 18px 22px;
+	border-bottom: 1px solid #252934;
+}
+
+.chat-header > div {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.chat-header code {
+	color: #858c9e;
+	font-size: 0.75rem;
+}
+
+.messages {
+	display: flex;
+	min-height: 260px;
+	max-height: 480px;
+	flex-direction: column;
+	gap: 18px;
+	overflow-y: auto;
+	padding: 28px 22px;
+}
+
+.message {
+	display: flex;
+	max-width: 78%;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.message p {
+	margin: 0;
+	padding: 13px 16px;
+	border-radius: 4px 16px 16px 16px;
+	background: #1c202b;
+	color: #dfe3ef;
+	line-height: 1.55;
+	white-space: pre-wrap;
+}
+
+.message.user {
+	align-self: flex-end;
+}
+
+.message.user p {
+	border-radius: 16px 4px 16px 16px;
+	background: #6d54dc;
+	color: white;
+}
+
+.avatar {
+	display: grid;
+	width: 34px;
+	height: 34px;
+	flex: 0 0 34px;
+	place-items: center;
+	border-radius: 9px;
+	background: linear-gradient(145deg, #8e73ff, #5c3ee0);
+	font-size: 0.68rem;
+	font-weight: 800;
+}
+
+form {
+	display: flex;
+	gap: 12px;
+	padding: 16px;
+	border-top: 1px solid #252934;
+	background: #0d1017;
+}
+
+textarea {
+	min-height: 48px;
+	max-height: 160px;
+	flex: 1;
+	resize: vertical;
+	border: 1px solid #303542;
+	border-radius: 12px;
+	outline: none;
+	background: #151922;
+	color: #f5f7ff;
+	padding: 13px 15px;
+	font: inherit;
+}
+
+textarea:focus {
+	border-color: #8f79f5;
+	box-shadow: 0 0 0 3px rgba(143, 121, 245, 0.14);
+}
+
+button {
+	align-self: stretch;
+	border: 0;
+	border-radius: 12px;
+	background: #f5f7ff;
+	color: #11131a;
+	padding: 0 20px;
+	font: inherit;
+	font-weight: 750;
+	cursor: pointer;
+}
+
+button:hover {
+	background: #dcd4ff;
+}
+
+button:disabled {
+	cursor: wait;
+	opacity: 0.55;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	gap: 32px;
+	padding-top: 24px;
+	color: #686f81;
+	font-size: 0.78rem;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+	.shell {
+		padding-top: 44px;
+	}
+
+	.message {
+		max-width: 94%;
+	}
+
+	form {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	button {
+		min-height: 46px;
+	}
+
+	footer {
+		flex-wrap: wrap;
+		gap: 12px 22px;
+	}
+}
