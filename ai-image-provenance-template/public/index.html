@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>AI Image Provenance Checker</title>
+		<style>
+			:root {
+				color-scheme: light dark;
+				font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+			}
+			body {
+				margin: 0;
+				background: #f7f7f8;
+				color: #1f2937;
+			}
+			main {
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+			}
+			.signals {
+				padding-left: 1.2rem;
+				line-height: 1.7;
+			}
+			label {
+				display: block;
+				margin: 1rem 0 0.35rem;
+				font-weight: 700;
+			}
+			input,
+			select,
+			button {
+				box-sizing: border-box;
+				font: inherit;
+				font-size: 1rem;
+				padding: 0.65rem;
+			}
+			input {
+				width: 100%;
+			}
+			button {
+				margin-top: 1rem;
+				border: 0;
+				background: #f6821f;
+				color: #111827;
+				cursor: pointer;
+			}
+			button:disabled {
+				opacity: 0.6;
+				cursor: wait;
+			}
+			pre {
+				margin-top: 1.5rem;
+				padding: 1rem;
+				overflow-x: auto;
+				border-radius: 4px;
+				background: #eef1f4;
+			}
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #111827;
+					color: #f8fafc;
+				}
+				pre {
+					background: #1f2937;
+				}
+				button {
+					background: #f6821f;
+					color: #111827;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>AI Image Provenance Checker</h1>
+			<p>Inspect an image using independent signals:</p>
+			<ul class="signals">
+				<li>Workers AI detection score</li>
+				<li>C2PA manifest validation</li>
+				<li>EXIF and XMP metadata hints</li>
+			</ul>
+			<p>These signals provide context, not proof of authenticity.</p>
+
+			<form id="form">
+				<label for="url">Public HTTPS image URL</label>
+				<input
+					id="url"
+					type="url"
+					placeholder="https://example.com/image.jpg"
+					required
+				/>
+				<label for="mode">Detection mode</label>
+				<select id="mode">
+					<option value="fast">Fast</option>
+					<option value="basic" selected>Basic</option>
+					<option value="advanced">Advanced</option>
+				</select>
+				<button type="submit">Start analysis</button>
+			</form>
+			<pre id="result" role="status" aria-live="polite" hidden></pre>
+		</main>
+
+		<script type="module">
+			async function requestJson(url, options) {
+				const response = await fetch(url, options);
+				const body = await response.json();
+				if (!response.ok)
+					throw new Error(
+						body.error ?? `Request failed with status ${response.status}`,
+					);
+				return body;
+			}
+
+			const form = document.getElementById("form");
+			const button = form.querySelector("button");
+			const result = document.getElementById("result");
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				const url = document.getElementById("url").value;
+				const mode = document.getElementById("mode").value;
+				result.hidden = false;
+				result.textContent = "Queuing...";
+				button.disabled = true;
+				try {
+					const queued = await requestJson("/analyze", {
+						method: "POST",
+						headers: { "content-type": "application/json" },
+						body: JSON.stringify({ url, mode }),
+					});
+
+					for (let attempt = 0; attempt < 60; attempt += 1) {
+						const job = await requestJson(
+							`/jobs/${encodeURIComponent(queued.job_id)}`,
+						);
+						result.textContent = JSON.stringify(job, null, 2);
+						if (job.status === "complete" || job.status === "failed") return;
+						await new Promise((resolve) => setTimeout(resolve, 1000));
+					}
+					throw new Error(
+						"Analysis is still running. Poll the job endpoint to continue.",
+					);
+				} catch (error) {
+					result.textContent =
+						error instanceof Error ? error.message : "Request failed";
+				} finally {
+					button.disabled = false;
+				}
+			});
+		</script>
+	</body>
+</html>

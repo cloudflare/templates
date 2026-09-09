@@ -1,0 +1,76 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ai-image-provenance-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["global_fetch_strictly_public"],
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"assets": {
+		"directory": "./public"
+	},
+	// D1 stores job status while Queues move slow analysis out of the request path.
+	"d1_databases": [
+		{
+			"binding": "JOBS",
+			"database_name": "ai-image-provenance-jobs",
+			"database_id": "00000000-0000-4000-8000-000000000000",
+			"migrations_dir": "migrations"
+		}
+	],
+	"queues": {
+		"producers": [
+			{
+				"queue": "ai-image-provenance-jobs",
+				"binding": "PROVENANCE_QUEUE"
+			}
+		],
+		"consumers": [
+			{
+				"queue": "ai-image-provenance-jobs",
+				"max_batch_size": 1,
+				"max_concurrency": 5,
+				"max_retries": 3,
+				"dead_letter_queue": "ai-image-provenance-jobs-dlq"
+			}
+		]
+	},
+	// C2PA verification uses the official native library in a Container.
+	"containers": [
+		{
+			"class_name": "C2PAContainer",
+			"image": "./container/Dockerfile",
+			"max_instances": 5
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "C2PAContainer",
+				"name": "C2PA_CONTAINER"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["C2PAContainer"]
+		}
+	],
+	"vars": {
+		"ALLOWED_ORIGINS": "*",
+		"DEFAULT_MODE": "basic",
+		"MAX_IMAGE_BYTES": 20971520,
+		"MAX_REDIRECTS": 3,
+		"FETCH_RETRIES": 2,
+		"FETCH_TIMEOUT_MS": 10000,
+		"ENABLE_C2PA": true,
+		"ENABLE_METADATA_CHECK": true,
+		"C2PA_TRUST_ANCHORS_URL": "https://raw.githubusercontent.com/c2pa-org/conformance-public/main/trust-list/C2PA-TRUST-LIST.pem"
+	}
+}
