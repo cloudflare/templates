@@ -1,0 +1,19 @@
+# Worker secrets + local env for development via `wrangler dev`.
+# Copy this file to .dev.vars and fill in your values.
+#
+# In production, set the secrets with `wrangler secret put <NAME>` instead,
+# and never commit .dev.vars to version control.
+
+# Marks the local runtime as development, which enables the x-shop-domain auth
+# fallback (see src/middleware/shopAuth.ts). Never set this in production.
+ENVIRONMENT=development
+
+# Public client ID from the Shopify Partner dashboard (App setup → Client ID)
+SHOPIFY_CLIENT_ID=your-shopify-client-id
+
+# API secret from the Shopify Partner dashboard (used to verify session tokens)
+SHOPIFY_API_SECRET=your-shopify-api-secret
+
+# Bare hostname of your deployed Worker, no protocol, no trailing slash.
+# e.g. shopify-on-cloudflare.yourname.workers.dev
+HOST=your-worker-hostname.workers.dev

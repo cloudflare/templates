@@ -113,6 +113,9 @@
     },
     "voice-agent-template": {
       "package_json_hash": "49cdbd36fa8fd269f88f67b84d0fc7e374a5ff87"
+    },
+    "shopify-on-cloudflare-template": {
+      "package_json_hash": "bc6935449675061884d830b09b83ca17c31b7cf5"
     }
   }
 }
