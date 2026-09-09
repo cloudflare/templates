@@ -1,0 +1,33 @@
+{
+	"name": "ai-image-detection-template",
+	"description": "Fetch an image from any URL and detect whether it was AI-generated using Workers AI.",
+	"cloudflare": {
+		"label": "AI Image Detection",
+		"products": [
+			"Workers",
+			"Workers AI"
+		],
+		"categories": [
+			"ai"
+		]
+	},
+	"dependencies": {
+		"hono": "4.11.1",
+		"zod": "4.1.13"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.127.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && tsc -p test/tsconfig.json && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
