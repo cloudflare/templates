@@ -1,0 +1,33 @@
+{
+	"name": "ai-image-detection-uploads-template",
+	"description": "Detect whether a user-uploaded image is AI-generated using Cloudflare Images direct creator uploads, storing the result in the image's own metadata.",
+	"cloudflare": {
+		"label": "AI Image Detection for Uploads",
+		"products": [
+			"Workers AI",
+			"Images"
+		],
+		"categories": [
+			"ai"
+		]
+	},
+	"dependencies": {
+		"hono": "4.11.1",
+		"zod": "4.1.13"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.127.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc && tsc -p test/tsconfig.json && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"test": "vitest run"
+	},
+	"type": "module"
+}

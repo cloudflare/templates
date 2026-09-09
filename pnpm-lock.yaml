@@ -175,6 +175,78 @@ importers:
         specifier: 4.127.0
         version: 4.127.0(@cloudflare/workers-types@4.20260702.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
+  ai-image-detection-template:
+    dependencies:
+      hono:
+        specifier: 4.11.1
+        version: 4.11.1
+      zod:
+        specifier: 4.1.13
+        version: 4.1.13
+    devDependencies:
+      '@cloudflare/vitest-pool-workers':
+        specifier: 0.21.3
+        version: 0.21.3(@cloudflare/workers-types@5.20260902.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0)))
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))
+      wrangler:
+        specifier: 4.127.0
+        version: 4.127.0(@cloudflare/workers-types@5.20260902.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
+  ai-image-detection-uploads-template:
+    dependencies:
+      hono:
+        specifier: 4.11.1
+        version: 4.11.1
+      zod:
+        specifier: 4.1.13
+        version: 4.1.13
+    devDependencies:
+      '@cloudflare/vitest-pool-workers':
+        specifier: 0.21.3
+        version: 0.21.3(@cloudflare/workers-types@5.20260902.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0)))
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))
+      wrangler:
+        specifier: 4.127.0
+        version: 4.127.0(@cloudflare/workers-types@5.20260902.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
+  ai-image-provenance-template:
+    dependencies:
+      '@cloudflare/containers':
+        specifier: 0.0.30
+        version: 0.0.30
+      hono:
+        specifier: 4.11.1
+        version: 4.11.1
+      zod:
+        specifier: 4.1.13
+        version: 4.1.13
+    devDependencies:
+      '@cloudflare/vitest-pool-workers':
+        specifier: 0.21.3
+        version: 0.21.3(@cloudflare/workers-types@5.20260902.1)(@vitest/runner@4.1.10)(@vitest/snapshot@4.1.10)(bufferutil@4.0.9)(utf-8-validate@5.0.10)(vitest@4.1.10(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0)))
+      '@types/node':
+        specifier: 24.10.1
+        version: 24.10.1
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: 4.1.10
+        version: 4.1.10(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))
+      wrangler:
+        specifier: 4.127.0
+        version: 4.127.0(@cloudflare/workers-types@5.20260902.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
   astro-blog-starter-template:
     dependencies:
       '@astrojs/cloudflare':
@@ -17732,7 +17804,7 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.8
       estree-walker: 2.0.2
-      picomatch: 4.0.3
+      picomatch: 4.0.7
     optionalDependencies:
       rollup: 4.53.5
 
@@ -28085,7 +28157,7 @@ snapshots:
       magic-string: 0.30.21
       obug: 2.1.1
       pathe: 2.0.3
-      picomatch: 4.0.3
+      picomatch: 4.0.7
       std-env: 4.2.0
       tinybench: 2.9.0
       tinyexec: 1.0.2
@@ -28113,7 +28185,7 @@ snapshots:
       magic-string: 0.30.21
       obug: 2.1.1
       pathe: 2.0.3
-      picomatch: 4.0.3
+      picomatch: 4.0.7
       std-env: 4.2.0
       tinybench: 2.9.0
       tinyexec: 1.0.2

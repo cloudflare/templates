@@ -1,0 +1,26 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ai-image-detection-uploads-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"images": {
+		"binding": "IMAGES"
+	},
+	"assets": {
+		"directory": "./public"
+	},
+	"vars": {
+		"ALLOWED_ORIGINS": "*",
+		"DEFAULT_MODE": "basic",
+		"UPLOAD_EXPIRES_IN": 1800,
+		"REQUIRE_SIGNED_URLS": true,
+		"MAX_IMAGE_BYTES": 20971520
+	}
+}
