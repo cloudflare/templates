@@ -13,6 +13,8 @@
 		],
 		"docs_url": "https://developers.cloudflare.com/agents/",
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/8c4137a3-661e-46e9-d779-88c4d68ea200/public",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true,
 		"healthCheckPath": "/health",
 		"bindings": {
 			"VOICE_AGENT_TOKEN": {
