@@ -1,0 +1,24 @@
+# These are filled in on the "Deploy to Cloudflare" screen — no CLI needed.
+# For local development, copy this file to `.dev.vars` and fill in real values.
+
+# Password that protects your send page (/admin). Use a long, random string.
+ADMIN_TOKEN=change-me-to-a-long-random-string
+
+# When you connect your own email provider (see src/email.ts), add its
+# secret(s) here too, e.g.:
+# EMAIL_API_KEY=
+
+# Optional bot protection with Cloudflare Turnstile (https://developers.cloudflare.com/turnstile).
+# Set BOTH the secret here and the public TURNSTILE_SITE_KEY var (wrangler.json)
+# to enable it. Leave unset to disable.
+# TURNSTILE_SECRET_KEY=
+
+# Your postal address, appended to the footer of every email. The US CAN-SPAM
+# Act requires a valid physical address in commercial email, and most other
+# anti-spam laws expect one too. In production, add it as a plain variable in
+# the dashboard (Settings -> Variables and Secrets).
+# SENDER_ADDRESS=Acme Inc., 123 Main St, Springfield, ST 12345, USA
+
+# Absolute URL of your privacy policy. When set, a link appears under the
+# signup form (the transparency EU privacy rules expect).
+# PRIVACY_URL=https://example.com/privacy
