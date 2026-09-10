@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>AI Image Detection for Uploads</title>
+		<style>
+			:root {
+				color-scheme: light dark;
+				font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+			}
+			body {
+				margin: 0;
+				background: #f7f7f8;
+				color: #1f2937;
+			}
+			main {
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+			}
+			section {
+				margin-top: 3rem;
+				padding-top: 2rem;
+				border-top: 1px solid #cfd4dc;
+			}
+			label {
+				display: block;
+				margin: 1rem 0 0.35rem;
+				font-weight: 700;
+			}
+			input,
+			select,
+			button {
+				box-sizing: border-box;
+				font: inherit;
+				font-size: 1rem;
+				padding: 0.65rem;
+			}
+			input[type="file"],
+			input[type="number"] {
+				width: 100%;
+			}
+			button {
+				margin-top: 1rem;
+				border: 0;
+				background: #f6821f;
+				color: #111827;
+				cursor: pointer;
+			}
+			button:disabled {
+				opacity: 0.6;
+				cursor: wait;
+			}
+			pre {
+				margin-top: 1.5rem;
+				padding: 1rem;
+				overflow-x: auto;
+				border-radius: 4px;
+				background: #eef1f4;
+			}
+			.score-fields {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+				gap: 1rem;
+			}
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #111827;
+					color: #f8fafc;
+				}
+				pre {
+					background: #1f2937;
+				}
+				button {
+					background: #f6821f;
+					color: #111827;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>AI Image Detection for Uploads</h1>
+			<p>
+				Upload to Cloudflare Images, run detection, and store the model response
+				as image metadata.
+			</p>
+			<p>The score is an estimate, not proof of how the image was created.</p>
+
+			<form id="upload-form">
+				<label for="file">Image</label>
+				<input
+					id="file"
+					type="file"
+					accept="image/jpeg,image/png,image/gif,image/webp"
+					required
+				/>
+				<label for="mode">Detection mode</label>
+				<select id="mode">
+					<option value="fast">Fast</option>
+					<option value="basic" selected>Basic</option>
+					<option value="advanced">Advanced</option>
+				</select>
+				<button type="submit">Upload and analyze</button>
+			</form>
+			<pre id="result" role="status" aria-live="polite" hidden></pre>
+
+			<section>
+				<h2>Browse stored results</h2>
+				<form id="browse-form">
+					<div class="score-fields">
+						<div>
+							<label for="min-score">Minimum score</label>
+							<input id="min-score" type="number" min="0" max="1" step="0.01" />
+						</div>
+						<div>
+							<label for="max-score">Maximum score</label>
+							<input id="max-score" type="number" min="0" max="1" step="0.01" />
+						</div>
+					</div>
+					<button type="submit">Browse images</button>
+				</form>
+				<pre id="browse-result" role="status" aria-live="polite" hidden></pre>
+			</section>
+		</main>
+
+		<script type="module">
+			async function requestJson(url, options) {
+				const response = await fetch(url, options);
+				const body = await response.json();
+				if (!response.ok)
+					throw new Error(
+						body.error ?? `Request failed with status ${response.status}`,
+					);
+				return body;
+			}
+
+			const uploadForm = document.getElementById("upload-form");
+			const uploadButton = uploadForm.querySelector("button");
+			const result = document.getElementById("result");
+			uploadForm.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				const file = document.getElementById("file").files[0];
+				const mode = document.getElementById("mode").value;
+				result.hidden = false;
+				result.textContent = "Requesting an upload URL...";
+				uploadButton.disabled = true;
+				try {
+					const created = await requestJson("/uploads", {
+						method: "POST",
+						headers: { "content-type": "application/json" },
+						body: JSON.stringify({ mode }),
+					});
+
+					result.textContent = "Uploading to Cloudflare Images...";
+					const form = new FormData();
+					form.append("file", file);
+					const uploadResponse = await fetch(created.upload_url, {
+						method: "POST",
+						body: form,
+					});
+					if (!uploadResponse.ok)
+						throw new Error(
+							`Direct upload failed with status ${uploadResponse.status}`,
+						);
+
+					result.textContent = "Analyzing...";
+					const analyzed = await requestJson(
+						`/uploads/${encodeURIComponent(created.id)}/analyze`,
+						{ method: "POST" },
+					);
+					result.textContent = JSON.stringify(analyzed, null, 2);
+				} catch (error) {
+					result.textContent =
+						error instanceof Error ? error.message : "Request failed";
+				} finally {
+					uploadButton.disabled = false;
+				}
+			});
+
+			const browseForm = document.getElementById("browse-form");
+			const browseButton = browseForm.querySelector("button");
+			const browseResult = document.getElementById("browse-result");
+			browseForm.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				const query = new URLSearchParams();
+				const minScore = document.getElementById("min-score").value;
+				const maxScore = document.getElementById("max-score").value;
+				if (minScore) query.set("min_score", minScore);
+				if (maxScore) query.set("max_score", maxScore);
+				browseResult.hidden = false;
+				browseResult.textContent = "Loading...";
+				browseButton.disabled = true;
+				try {
+					const body = await requestJson(`/images?${query}`);
+					browseResult.textContent = JSON.stringify(body, null, 2);
+				} catch (error) {
+					browseResult.textContent =
+						error instanceof Error ? error.message : "Request failed";
+				} finally {
+					browseButton.disabled = false;
+				}
+			});
+		</script>
+	</body>
+</html>

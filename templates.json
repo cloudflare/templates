@@ -113,6 +113,15 @@
     },
     "voice-agent-template": {
       "package_json_hash": "49cdbd36fa8fd269f88f67b84d0fc7e374a5ff87"
+    },
+    "ai-image-detection-template": {
+      "package_json_hash": "0d96318bfd813b2b613b154770a0c3068b3fb932"
+    },
+    "ai-image-detection-uploads-template": {
+      "package_json_hash": "579b29b4080ef34abfa892446d4cb15c49f9b2c8"
+    },
+    "ai-image-provenance-template": {
+      "package_json_hash": "53bba51922382f6e76048526d9b4a1cecc30c916"
     }
   }
 }

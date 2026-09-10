@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>AI Image Detection</title>
+		<style>
+			:root {
+				color-scheme: light dark;
+				font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+			}
+			body {
+				margin: 0;
+				background: #f7f7f8;
+				color: #1f2937;
+			}
+			main {
+				max-width: 680px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+			}
+			code,
+			pre {
+				background: #eef1f4;
+				border-radius: 4px;
+				padding: 0.15rem 0.4rem;
+			}
+			pre {
+				padding: 1rem;
+				overflow-x: auto;
+			}
+			input,
+			select,
+			button {
+				font: inherit;
+				font-size: 1rem;
+				padding: 0.65rem;
+			}
+			input {
+				width: 100%;
+				box-sizing: border-box;
+			}
+			label {
+				display: block;
+				margin: 1rem 0 0.35rem;
+				font-weight: 700;
+			}
+			button {
+				margin-top: 1rem;
+				background: #f6821f;
+				color: #111827;
+				border: 0;
+				cursor: pointer;
+			}
+			button:disabled {
+				opacity: 0.6;
+				cursor: wait;
+			}
+			#result {
+				margin-top: 1.5rem;
+			}
+			@media (prefers-color-scheme: dark) {
+				body {
+					background: #111827;
+					color: #f8fafc;
+				}
+				code,
+				pre {
+					background: #1f2937;
+				}
+				button {
+					background: #f6821f;
+					color: #111827;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>AI Image Detection</h1>
+			<p>
+				Analyze an image with Workers AI. The score is an estimate, not proof of
+				how the image was created.
+			</p>
+			<form id="form">
+				<label for="url">Public HTTPS image URL</label>
+				<input
+					id="url"
+					type="url"
+					placeholder="https://example.com/image.jpg"
+					required
+				/>
+				<label for="mode">Detection mode</label>
+				<select id="mode">
+					<option value="fast">Fast</option>
+					<option value="basic" selected>Basic</option>
+					<option value="advanced">Advanced</option>
+				</select>
+				<button type="submit">Analyze image</button>
+			</form>
+			<pre id="result" role="status" aria-live="polite" hidden></pre>
+		</main>
+		<script type="module">
+			const form = document.getElementById("form");
+			const result = document.getElementById("result");
+			const button = form.querySelector("button");
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				const url = document.getElementById("url").value;
+				const mode = document.getElementById("mode").value;
+				result.hidden = false;
+				result.textContent = "Analyzing...";
+				button.disabled = true;
+				try {
+					const response = await fetch("/analyze", {
+						method: "POST",
+						headers: { "content-type": "application/json" },
+						body: JSON.stringify({ url, mode }),
+					});
+					const body = await response.json();
+					if (!response.ok)
+						throw new Error(
+							body.error ?? `Request failed with status ${response.status}`,
+						);
+					result.textContent = JSON.stringify(body, null, 2);
+				} catch (error) {
+					result.textContent =
+						error instanceof Error ? error.message : "Request failed";
+				} finally {
+					button.disabled = false;
+				}
+			});
+		</script>
+	</body>
+</html>

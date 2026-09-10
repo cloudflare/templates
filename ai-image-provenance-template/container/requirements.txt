@@ -1,0 +1,6 @@
+c2pa-python==0.37.10
+fastapi==0.141.1
+httpx==0.28.1
+Pillow==12.3.0
+python-multipart==0.0.32
+uvicorn[standard]==0.52.4
