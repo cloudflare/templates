@@ -126,7 +126,8 @@ app.post("/uploads/:id/analyze", async (c) => {
 
 	const existing = asRecord(details.meta);
 	const storedMode = ModeSchema.safeParse(existing.mode);
-	const mode = query.data.mode ?? (storedMode.success ? storedMode.data : undefined);
+	const mode =
+		query.data.mode ?? (storedMode.success ? storedMode.data : undefined);
 	if (
 		existing.status === "complete" &&
 		storedMode.success &&
