@@ -8,7 +8,7 @@ export async function createJob(env: JobsEnv, job: QueueJob): Promise<void> {
 	await env.JOBS.prepare(
 		"INSERT INTO jobs (id, source_url, mode, status, created_at, updated_at) VALUES (?, ?, ?, 'queued', ?, ?)",
 	)
-		.bind(job.id, job.url, job.mode, now, now)
+		.bind(job.id, job.url, job.mode ?? null, now, now)
 		.run();
 }
 
@@ -74,7 +74,7 @@ export async function failJob(
 type JobRow = {
 	id: string;
 	source_url: string;
-	mode: Mode;
+	mode: Mode | null;
 	status: "queued" | "processing" | "retrying" | "complete" | "failed";
 	result_json: string | null;
 	error: string | null;

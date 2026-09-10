@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS jobs (
 	id TEXT PRIMARY KEY,
 	source_url TEXT NOT NULL,
-	mode TEXT NOT NULL CHECK (mode IN ('fast', 'basic', 'advanced')),
+	mode TEXT CHECK (mode IS NULL OR mode IN ('fast', 'basic', 'advanced')),
 	status TEXT NOT NULL CHECK (status IN ('queued', 'processing', 'retrying', 'complete', 'failed')),
 	result_json TEXT,
 	error TEXT,

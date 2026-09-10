@@ -40,6 +40,8 @@ Content-Type: application/json
 { "url": "https://example.com/image.jpg", "mode": "basic" }
 ```
 
+`mode` can be `fast`, `basic`, or `advanced`, and is optional. If omitted, the model applies its own default, currently `advanced`.
+
 ```json
 { "job_id": "5c1b...", "status": "queued" }
 ```
@@ -88,7 +90,6 @@ Unhandled delivery failures that exhaust their retries are retained in the `ai-i
 | Variable                 |         Default | Purpose                                                      |
 | ------------------------ | --------------: | ------------------------------------------------------------ |
 | `ALLOWED_ORIGINS`        |             `*` | Comma-separated browser origins, or `*` for any origin.      |
-| `DEFAULT_MODE`           |         `basic` | Detection mode used when the request omits one.              |
 | `MAX_IMAGE_BYTES`        |      `20971520` | Maximum downloaded image size.                               |
 | `MAX_REDIRECTS`          |             `3` | Maximum number of redirects.                                 |
 | `FETCH_RETRIES`          |             `2` | Retries after network errors or source `5xx` responses.      |

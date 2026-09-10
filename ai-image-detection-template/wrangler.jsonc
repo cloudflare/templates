@@ -16,7 +16,6 @@
 	},
 	"vars": {
 		"ALLOWED_ORIGINS": "*",
-		"DEFAULT_MODE": "basic",
 		"MAX_IMAGE_BYTES": 20971520,
 		"MAX_REDIRECTS": 3,
 		"FETCH_RETRIES": 2,

@@ -18,7 +18,6 @@
 	},
 	"vars": {
 		"ALLOWED_ORIGINS": "*",
-		"DEFAULT_MODE": "basic",
 		"UPLOAD_EXPIRES_IN": 1800,
 		"REQUIRE_SIGNED_URLS": true,
 		"MAX_IMAGE_BYTES": 20971520

@@ -29,6 +29,8 @@ The example routes are public by default. Add authentication and rate limiting b
    { "mode": "basic" }
    ```
 
+   `mode` can be `fast`, `basic`, or `advanced`, and is optional. `POST /uploads/<IMAGE_ID>/analyze` can also pass its own `?mode=`, which takes precedence. If neither is given anywhere, the model applies its own default, currently `advanced`.
+
 2. Upload a file to `upload_url` as multipart form field `file`.
 
 3. Analyze the stored image:
@@ -74,7 +76,6 @@ The Worker scopes all list and lookup operations to its fixed Images `creator` v
 | Variable              |    Default | Purpose                                                   |
 | --------------------- | ---------: | --------------------------------------------------------- |
 | `ALLOWED_ORIGINS`     |        `*` | Comma-separated browser origins, or `*` for any origin.   |
-| `DEFAULT_MODE`        |    `basic` | Detection mode used when the request omits one.           |
 | `UPLOAD_EXPIRES_IN`   |     `1800` | Direct upload URL lifetime in seconds (`120` to `21600`). |
 | `REQUIRE_SIGNED_URLS` |     `true` | Require signed delivery URLs for uploaded images.         |
 | `MAX_IMAGE_BYTES`     | `20971520` | Maximum image size read for analysis.                     |

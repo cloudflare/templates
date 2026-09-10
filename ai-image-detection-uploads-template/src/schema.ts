@@ -62,7 +62,7 @@ export const DetectionResultSchema = z
 export type DetectionResult = z.infer<typeof DetectionResultSchema>;
 
 export type UploadMetadata =
-	| { status: "pending"; mode: Mode }
+	| { status: "pending"; mode?: Mode }
 	| { status: "complete"; mode: Mode; ai_detection: DetectionResult };
 
 export type ErrorResponse = { error: string };

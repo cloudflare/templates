@@ -7,7 +7,7 @@ export type DetectionEnv = {
 	AI: {
 		run(
 			model: typeof MODEL,
-			input: { image: string; mode: Mode },
+			input: { image: string; mode?: Mode },
 		): Promise<unknown>;
 	};
 };
@@ -46,19 +46,24 @@ function unwrapModelResponse(value: unknown): unknown {
 	return undefined;
 }
 
+// mode is optional: the underlying model requires it and applies its own
+// default (currently "advanced") when the caller does not choose one.
 export async function detectImage(
 	env: DetectionEnv,
 	bytes: ArrayBuffer,
 	contentType: string,
-	mode: Mode,
+	mode?: Mode,
 ): Promise<ModelResult> {
 	const image = `data:${contentType};base64,${toBase64(bytes)}`;
-	const raw = await env.AI.run(MODEL, { image, mode });
+	const raw = await env.AI.run(
+		MODEL,
+		mode === undefined ? { image } : { image, mode },
+	);
 	const parsed = ModelResultSchema.safeParse(unwrapModelResponse(raw));
 	if (!parsed.success) {
 		throw new HttpError(502, "the model returned an unexpected response");
 	}
-	if (parsed.data.mode !== mode)
+	if (mode !== undefined && parsed.data.mode !== mode)
 		throw new HttpError(502, "the model returned an unexpected response");
 	return parsed.data;
 }

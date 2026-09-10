@@ -4,17 +4,14 @@ import { detectImage, MODEL, type DetectionEnv } from "./detection";
 import { HttpError } from "./errors";
 import {
 	AnalyzeRequest,
-	ModeSchema,
 	type DetectionResult,
 	type ErrorResponse,
-	type Mode,
 } from "./schema";
 import { fetchSource, type SourceEnv } from "./source";
 
 type Env = DetectionEnv &
 	SourceEnv & {
 		ALLOWED_ORIGINS: string;
-		DEFAULT_MODE: Mode;
 	};
 
 const app = new Hono<{ Bindings: Env }>();
@@ -33,10 +30,7 @@ app.post("/analyze", async (c) => {
 	}
 
 	try {
-		const defaultMode = ModeSchema.safeParse(c.env.DEFAULT_MODE);
-		if (!defaultMode.success)
-			throw new HttpError(500, "server misconfigured: DEFAULT_MODE is invalid");
-		const mode = parsed.data.mode ?? defaultMode.data;
+		const mode = parsed.data.mode;
 
 		const fetchStarted = performance.now();
 		const source = await fetchSource(parsed.data.url, c.env);

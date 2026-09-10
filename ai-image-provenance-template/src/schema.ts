@@ -60,4 +60,4 @@ export type JobResponse =
 
 export type ErrorResponse = { error: string };
 
-export type QueueJob = { id: string; url: string; mode: Mode };
+export type QueueJob = { id: string; url: string; mode?: Mode };

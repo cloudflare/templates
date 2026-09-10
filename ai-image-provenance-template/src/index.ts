@@ -5,13 +5,7 @@ import type { DetectionEnv } from "./detection";
 import { HttpError } from "./errors";
 import { createJob, failJob, getJob, type JobsEnv } from "./jobs";
 import { queueConsumer, type QueueEnv } from "./queue";
-import {
-	AnalyzeRequest,
-	ModeSchema,
-	type ErrorResponse,
-	type Mode,
-	type QueueJob,
-} from "./schema";
+import { AnalyzeRequest, type ErrorResponse, type QueueJob } from "./schema";
 import type { SourceEnv } from "./source";
 
 export { C2PAContainer } from "./c2pa";
@@ -22,7 +16,6 @@ type Env = DetectionEnv &
 	C2PAEnv &
 	QueueEnv & {
 		ALLOWED_ORIGINS: string;
-		DEFAULT_MODE: Mode;
 		PROVENANCE_QUEUE: Queue<QueueJob>;
 	};
 
@@ -43,7 +36,7 @@ app.post("/analyze", async (c) => {
 	const job: QueueJob = {
 		id: crypto.randomUUID(),
 		url: parsed.data.url,
-		mode: parsed.data.mode ?? parseDefaultMode(c.env.DEFAULT_MODE),
+		mode: parsed.data.mode,
 	};
 	await createJob(c.env, job);
 	try {
@@ -71,13 +64,6 @@ app.onError((error, c) => {
 	console.error("Provenance request failed", error);
 	return c.json<ErrorResponse>({ error: "request failed" }, 500);
 });
-
-function parseDefaultMode(value: Mode): Mode {
-	const mode = ModeSchema.safeParse(value);
-	if (!mode.success)
-		throw new HttpError(500, "server misconfigured: DEFAULT_MODE is invalid");
-	return mode.data;
-}
 
 export default {
 	fetch: app.fetch,

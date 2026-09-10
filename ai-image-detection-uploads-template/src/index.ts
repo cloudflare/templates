@@ -10,14 +10,12 @@ import {
 	ModeSchema,
 	type DetectionResult,
 	type ErrorResponse,
-	type Mode,
 	type UploadMetadata,
 } from "./schema";
 
 type Env = DetectionEnv & {
 	IMAGES: ImagesBinding;
 	ALLOWED_ORIGINS: string;
-	DEFAULT_MODE: Mode;
 	UPLOAD_EXPIRES_IN: number;
 	REQUIRE_SIGNED_URLS: boolean;
 	MAX_IMAGE_BYTES: number;
@@ -83,7 +81,7 @@ app.post("/uploads", async (c) => {
 		);
 	}
 
-	const mode = parsed.data.mode ?? defaultMode(c.env);
+	const mode = parsed.data.mode;
 	const metadata: UploadMetadata = { status: "pending", mode };
 	try {
 		const upload = await c.env.IMAGES.hosted.createDirectUpload({
@@ -128,9 +126,7 @@ app.post("/uploads/:id/analyze", async (c) => {
 
 	const existing = asRecord(details.meta);
 	const storedMode = ModeSchema.safeParse(existing.mode);
-	const mode =
-		query.data.mode ??
-		(storedMode.success ? storedMode.data : defaultMode(c.env));
+	const mode = query.data.mode ?? (storedMode.success ? storedMode.data : undefined);
 	if (
 		existing.status === "complete" &&
 		storedMode.success &&
@@ -162,7 +158,12 @@ app.post("/uploads/:id/analyze", async (c) => {
 	};
 
 	await c.env.IMAGES.hosted.image(id).update({
-		metadata: { ...existing, status: "complete", mode, ai_detection: result },
+		metadata: {
+			...existing,
+			status: "complete",
+			mode: detection.mode,
+			ai_detection: result,
+		},
 	});
 	return c.json(result, 200, { "cache-control": "no-store" });
 });
@@ -223,13 +224,6 @@ app.onError((error, c) => {
 	console.error("Images request failed", error);
 	return c.json<ErrorResponse>({ error: "request failed" }, 500);
 });
-
-function defaultMode(env: Env): Mode {
-	const mode = ModeSchema.safeParse(env.DEFAULT_MODE);
-	if (!mode.success)
-		throw new HttpError(500, "server misconfigured: DEFAULT_MODE is invalid");
-	return mode.data;
-}
 
 function validateConfig(env: Env): void {
 	const validExpiry =
