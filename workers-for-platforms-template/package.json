@@ -24,7 +24,7 @@
 		}
 	},
 	"dependencies": {
-		"hono": "4.11.1",
+		"hono": "4.12.25",
 		"workers-qb": "0.1.1"
 	},
 	"devDependencies": {
