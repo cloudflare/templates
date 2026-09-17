@@ -1,0 +1,61 @@
+name: Sync to cloudflare/templates
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build only, don't open PR"
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - name: Build template
+        run: bash scripts/build-template.sh /tmp/template-build/domain-drop-watcher-template "${GITHUB_REF_NAME:-manual}"
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with: { name: template-build, path: /tmp/template-build/ }
+      - name: Stop on dry-run
+        if: ${{ inputs.dry_run }}
+        run: exit 0
+      - name: Clone templates fork
+        env:
+          GH_TOKEN: ${{ secrets.CLOUDFLARE_TEMPLATES_PAT }}
+        run: |
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/oitray/templates.git" /tmp/cf-fork
+          cd /tmp/cf-fork
+          git remote add upstream https://github.com/cloudflare/templates.git
+          git fetch upstream main
+          git checkout -b "sync/ddw-${GITHUB_REF_NAME}" upstream/main
+      - name: Replace template directory
+        run: |
+          rm -rf /tmp/cf-fork/domain-drop-watcher-template
+          cp -r /tmp/template-build/domain-drop-watcher-template /tmp/cf-fork/
+      - name: Commit + push
+        env:
+          GH_TOKEN: ${{ secrets.CLOUDFLARE_TEMPLATES_PAT }}
+        run: |
+          cd /tmp/cf-fork
+          git config user.email "ray@oit.co"
+          git config user.name "Ray Orsini (sync bot)"
+          git add domain-drop-watcher-template
+          git commit -m "Sync domain-drop-watcher-template to ${GITHUB_REF_NAME}" || { echo "no changes"; exit 0; }
+          git push origin "sync/ddw-${GITHUB_REF_NAME}" --force
+      - name: Open PR upstream
+        env:
+          GH_TOKEN: ${{ secrets.CLOUDFLARE_TEMPLATES_PAT }}
+        run: |
+          gh pr create \
+            --repo cloudflare/templates \
+            --head "oitray:sync/ddw-${GITHUB_REF_NAME}" \
+            --base main \
+            --title "Sync domain-drop-watcher-template to ${GITHUB_REF_NAME}" \
+            --body "Sync from oitray/domain-drop-watcher@${GITHUB_REF_NAME}. See release notes: https://github.com/oitray/domain-drop-watcher/releases/tag/${GITHUB_REF_NAME}"

@@ -1,0 +1,25 @@
+name: Playwright E2E
+on:
+  pull_request:
+    paths: [src/**, public/**, playwright-tests/**, wrangler.json, package.json]
+  push:
+    branches: [main]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          EMAIL_STUB: "1"
+          RDAP_BASE_URL: "http://127.0.0.1:9999"
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/

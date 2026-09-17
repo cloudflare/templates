@@ -1,0 +1,38 @@
+{
+  "name": "domain-drop-watcher",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-04-22",
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "domain-drop-watcher",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "EVENTS",
+      "id": "00000000000000000000000000000001"
+    },
+    {
+      "binding": "BOOTSTRAP",
+      "id": "00000000000000000000000000000002"
+    }
+  ],
+  "send_email": [
+    {
+      "type": "send_email",
+      "name": "EMAIL"
+    }
+  ],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+}

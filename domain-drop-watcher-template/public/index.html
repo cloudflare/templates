@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Domain Drop Watcher</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    /* Inspired by Linear / Vercel / Tailwind zinc + indigo */
+    --bg:           #fafafa;
+    --surface:      #ffffff;
+    --surface-alt:  #f4f4f5;
+    --border:       #e4e4e7;
+    --border-strong:#d4d4d8;
+    --text:         #18181b;
+    --text-muted:   #71717a;
+    --text-subtle:  #a1a1aa;
+    --accent:       #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-soft:  #eef2ff;
+    --danger:       #dc2626;
+    --danger-soft:  #fef2f2;
+    --warning:      #d97706;
+    --warning-soft: #fffbeb;
+    --success:      #16a34a;
+    --success-soft: #f0fdf4;
+    --info:         #2563eb;
+    --info-soft:    #eff6ff;
+    /* Legacy aliases — kept so older selectors still resolve */
+    --red:          var(--danger);
+    --charcoal:     var(--text);
+    --green:        var(--success);
+    --yellow:       var(--warning);
+    --blue:         var(--info);
+    --gray:         var(--text-muted);
+    --light-gray:   var(--bg);
+    --white:        var(--surface);
+    --font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif;
+  }
+  body { font-family: var(--font); color: var(--text); background: var(--bg); font-size: 14px; -webkit-font-smoothing: antialiased; }
+  #header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--surface); color: var(--text);
+    padding: 0 24px;
+    display: flex; align-items: center; gap: 16px;
+    border-bottom: 1px solid var(--border);
+    min-height: 56px; flex-wrap: wrap;
+  }
+  #header h1 { font-size: 16px; font-weight: 600; color: var(--text); letter-spacing: -0.01em; flex: 0 0 auto; }
+  #budget-gauge { flex: 1; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  #budget-gauge .gauge-ok { color: var(--success); }
+  #budget-gauge .gauge-warn { color: var(--warning); }
+  #header-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+  #pause-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; white-space: nowrap; transition: all .15s; }
+  #pause-btn:hover { border-color: var(--border-strong); color: var(--text); }
+  #pause-btn.paused { border-color: var(--warning); color: var(--warning); background: var(--warning-soft); }
+  #logout-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; white-space: nowrap; transition: all .15s; }
+  #logout-btn:hover { border-color: var(--border-strong); color: var(--text); }
+  #tab-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 0; overflow-x: auto; }
+  .tab-btn { background: none; border: none; cursor: pointer; padding: 14px 18px; font-size: 14px; font-weight: 500; color: var(--text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s, border-color .15s; white-space: nowrap; }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  #main { padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: var(--white); border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,.1); margin-bottom: 20px; overflow: hidden; }
+  .card-header { padding: 14px 20px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+  .card-body { padding: 20px; }
+  label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; color: var(--charcoal); }
+  input[type=text], input[type=password], input[type=email], select, textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; font-family: var(--font); color: var(--charcoal); background: var(--white); }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,70,229,.15); }
+  textarea { resize: vertical; min-height: 100px; }
+  .form-row { margin-bottom: 14px; }
+  .form-inline { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .form-inline .form-row { margin-bottom: 0; flex: 1; min-width: 160px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 4px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; font-family: var(--font); white-space: nowrap; }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn-primary { background: var(--accent); color: var(--surface); }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface-alt); border-color: var(--border-strong); }
+  .btn-danger { background: var(--surface); color: var(--danger); border: 1px solid var(--border); }
+  .btn-danger:hover { background: var(--danger-soft); border-color: var(--danger); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .chip { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500; line-height: 1.6; }
+  .chip-available { background: #e8f8f0; color: var(--green); }
+  .chip-registered { background: #f0f0f0; color: var(--gray); }
+  .chip-dropping { background: #fdecea; color: var(--red); }
+  .chip-expiring { background: #fef9e7; color: #b7770d; }
+  .chip-indeterminate { background: #e8f4fd; color: var(--blue); }
+  .chip-null { background: #f0f0f0; color: #999; }
+  .chip-email { background: #f0e8fd; color: #6c2da0; }
+  .chip-webhook { background: #e8f4fd; color: var(--blue); }
+  .chip-paused { background: #fff3cd; color: #856404; }
+  .chip-kind-status { background: #e8f8f0; color: var(--green); }
+  .chip-kind-alert { background: #fdecea; color: var(--red); }
+  .chip-kind-check { background: #f0f0f0; color: var(--gray); }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 600; color: var(--gray); border-bottom: 2px solid var(--border); white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafafa; }
+  .toggle { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: #ccc; border-radius: 20px; cursor: pointer; transition: background .2s; }
+  .toggle-slider::before { content: ""; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: var(--white); border-radius: 50%; transition: transform .2s; }
+  .toggle input:checked + .toggle-slider { background: var(--green); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+  .cadence-select { width: 90px; padding: 4px 6px; font-size: 13px; }
+  .actions { display: flex; gap: 4px; flex-wrap: wrap; }
+  .notice { padding: 12px 16px; border-radius: 6px; font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
+  .notice-warn { background: #fef9e7; border-left: 4px solid var(--yellow); }
+  .notice-info { background: #e8f4fd; border-left: 4px solid var(--blue); }
+  .notice-error { background: #fdecea; border-left: 4px solid var(--red); }
+  .event-row { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); align-items: flex-start; font-size: 13px; }
+  .event-row:last-child { border-bottom: none; }
+  .event-ts { color: var(--gray); white-space: nowrap; flex: 0 0 120px; }
+  .event-fqdn { font-weight: 500; flex: 0 0 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .event-data { color: #555; font-family: monospace; font-size: 12px; flex: 1; word-break: break-all; }
+  .loading { color: var(--gray); font-size: 13px; padding: 20px; text-align: center; }
+  .empty { color: var(--gray); font-size: 13px; padding: 20px; text-align: center; }
+  .budget-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .budget-bar-track { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .budget-bar-fill { height: 100%; border-radius: 4px; transition: width .4s; }
+  .budget-bar-fill.ok { background: var(--green); }
+  .budget-bar-fill.warn { background: var(--yellow); }
+  .budget-bar-fill.over { background: var(--red); }
+  .budget-bar-label { font-size: 12px; color: var(--gray); white-space: nowrap; }
+  code { font-family: monospace; background: #f0f0f0; padding: 2px 5px; border-radius: 3px; font-size: 12px; }
+  .notice-success { background: #e8f8f0; border-left: 4px solid var(--green); }
+  #break-glass-banner { display: none; background: var(--warning-soft); border-bottom: 1px solid var(--border); padding: 10px 24px; font-size: 13px; color: var(--warning); }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  @media (max-width: 600px) {
+    #header { padding: 0 12px; }
+    #main { padding: 12px; }
+    .tab-btn { padding: 12px 10px; font-size: 13px; }
+    .form-inline { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div id="demo-banner" style="display:none;background:var(--accent-soft);color:var(--accent);padding:8px 16px;text-align:center;font-weight:500;font-size:13px;border-bottom:1px solid var(--border)">
+  Public demo — data resets daily at 04:00 UTC. Don't add real domains you care about.
+</div>
+
+<div id="landing-cta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:1000">
+  <div style="background:#fff;padding:40px;border-radius:8px;text-align:center;max-width:400px">
+    <h2 style="margin-bottom:16px;font-size:24px;color:var(--charcoal)">Domain Drop Watcher</h2>
+    <p style="margin-bottom:24px;color:var(--gray);font-size:14px">Monitor domain expiration and drops in real time.</p>
+    <a href="/login" class="btn btn-primary" data-hide-in-demo style="display:inline-flex">Sign In</a>
+  </div>
+</div>
+
+<div id="guest-banner" style="display:none;background:var(--accent-soft);color:var(--accent);padding:8px 16px;text-align:center;font-weight:500;font-size:13px;border-bottom:1px solid var(--border)">
+  Live demo &mdash; <a href="https://deploy.workers.cloudflare.com" style="color:var(--accent);font-weight:600">deploy your own</a> in under 5 minutes.
+</div>
+
+<div id="guest-toast" style="display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:2000;transition:opacity .3s;box-shadow:0 4px 12px rgba(0,0,0,.2)"></div>
+
+<div id="break-glass-banner" role="status" aria-live="polite">
+  You are signed in via break-glass. Add users at <strong>Settings &rarr; Users</strong> to enable email/passkey login.
+</div>
+
+<div id="header">
+  <h1>Domain Drop Watcher</h1>
+  <div id="budget-gauge">Loading budget&hellip;</div>
+  <div id="header-actions">
+    <button class="btn" id="pause-btn" style="display:none">&#9646;&#9646; Pause All</button>
+    <button class="btn" id="logout-btn" style="display:none" aria-label="Sign out">Sign out</button>
+  </div>
+</div>
+
+<div id="tab-bar" role="tablist" aria-label="Main navigation">
+  <button class="tab-btn active" data-tab="domains" role="tab" aria-selected="true" aria-controls="tab-domains">Domains</button>
+  <button class="tab-btn" data-tab="bulk" role="tab" aria-selected="false" aria-controls="tab-bulk">Bulk Add</button>
+  <button class="tab-btn" data-tab="channels" role="tab" aria-selected="false" aria-controls="tab-channels">Channels</button>
+  <button class="tab-btn" data-tab="events" role="tab" aria-selected="false" aria-controls="tab-events">Events</button>
+  <button class="tab-btn" data-tab="settings" role="tab" aria-selected="false" aria-controls="tab-settings">Settings</button>
+</div>
+
+<div id="main">
+
+  <div id="tab-domains" class="tab-panel active" role="tabpanel">
+    <div class="card">
+      <div class="card-header">
+        Monitored Domains
+        <button class="btn btn-primary btn-sm" id="add-domain-btn" style="margin-left:auto">+ Add Domain</button>
+      </div>
+      <div id="add-domain-form" style="display:none; padding:16px 20px; border-bottom:1px solid var(--border); background:#fafafa;">
+        <div class="form-inline">
+          <div class="form-row">
+            <label for="new-fqdn">FQDN</label>
+            <input type="text" id="new-fqdn" placeholder="example.com">
+          </div>
+          <div class="form-row">
+            <label for="new-cadence">Cadence</label>
+            <select id="new-cadence">
+              <option value="1">1 min</option>
+              <option value="5">5 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+              <option value="60" selected>60 min</option>
+              <option value="360">6 hr</option>
+              <option value="1440">24 hr</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="new-label">Label (optional)</label>
+            <input type="text" id="new-label" placeholder="My domain">
+          </div>
+        </div>
+        <div id="add-domain-error" class="notice notice-error" style="display:none;margin-top:10px"></div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary btn-sm" id="save-domain-btn">Save</button>
+          <button class="btn btn-secondary btn-sm" id="cancel-domain-btn">Cancel</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="domains-table">
+          <thead>
+            <tr>
+              <th>FQDN</th>
+              <th>Cadence</th>
+              <th>Status</th>
+              <th>Last Checked</th>
+              <th>Paused</th>
+              <th>Channels</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="domains-tbody">
+            <tr><td colspan="7" class="loading">Loading&hellip;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-bulk" class="tab-panel" role="tabpanel">
+    <div class="card">
+      <div class="card-header">Bulk Add Domains</div>
+      <div class="card-body">
+        <p style="font-size:13px; color:var(--gray); margin-bottom:12px">
+          One domain per line. All start at 60-min cadence.
+        </p>
+        <div class="form-row">
+          <label for="bulk-input">Domains</label>
+          <textarea id="bulk-input" placeholder="example.com&#10;anotherdomain.io&#10;dropcandidate.net"></textarea>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button class="btn btn-secondary" id="bulk-preview-btn">Preview</button>
+          <button class="btn btn-primary" id="bulk-commit-btn">Commit</button>
+        </div>
+        <div id="bulk-result" style="margin-top:16px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-channels" class="tab-panel" role="tabpanel">
+    <div class="card">
+      <div class="card-header">
+        Alert Channels
+        <button class="btn btn-primary btn-sm" id="add-channel-toggle" style="margin-left:auto">+ Add Channel</button>
+      </div>
+      <div id="add-channel-form" style="display:none; padding:16px 20px; border-bottom:1px solid var(--border); background:#fafafa;">
+        <div class="form-inline">
+          <div class="form-row">
+            <label for="ch-type">Type</label>
+            <select id="ch-type">
+              <option value="email">Email</option>
+              <option value="webhook">Webhook (auto-detect)</option>
+              <option value="webhook-generic">Webhook Generic</option>
+              <option value="webhook-teams">Webhook Teams</option>
+              <option value="webhook-slack">Webhook Slack</option>
+              <option value="webhook-discord">Webhook Discord</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="ch-target">Target (URL or email)</label>
+            <input type="text" id="ch-target" placeholder="https://... or user@example.com">
+          </div>
+          <div class="form-row">
+            <label for="ch-label">Label (optional)</label>
+            <input type="text" id="ch-label" placeholder="My channel">
+          </div>
+        </div>
+        <div class="notice notice-info" style="margin-top:10px; font-size:12px">
+          <b>Email channels:</b> Destination must be verified in Cloudflare Email Routing on your account.
+          Set <code>ALERT_FROM_ADDRESS</code> to a sender address @ your Email-Routing-enabled domain.
+        </div>
+        <div id="add-channel-error" class="notice notice-error" style="display:none; margin-top:10px"></div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary btn-sm" id="save-channel-btn">Save</button>
+          <button class="btn btn-secondary btn-sm" id="cancel-channel-btn">Cancel</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="channels-table">
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Target</th>
+              <th>Label</th>
+              <th>Disabled</th>
+              <th>Last Delivery</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="channels-tbody">
+            <tr><td colspan="6" class="loading">Loading&hellip;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-events" class="tab-panel" role="tabpanel">
+    <div class="card">
+      <div class="card-header">
+        Event Log
+        <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+          <label for="events-filter" style="margin:0; font-size:13px; font-weight:400;">Filter:</label>
+          <select id="events-filter" style="width:200px; padding:5px 8px;">
+            <option value="">All domains</option>
+          </select>
+          <button class="btn btn-secondary btn-sm" id="events-refresh-btn">&#8635; Refresh</button>
+        </div>
+      </div>
+      <div class="card-body" id="events-body">
+        <div class="loading">Loading&hellip;</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-settings" class="tab-panel" role="tabpanel">
+
+    <div id="email-status-card" class="card" style="display:none">
+      <div class="card-header">&#9888;&#65039; Email Configuration Issue</div>
+      <div class="card-body">
+        <div class="notice notice-warn">
+          Email alerts configured but delivery errors detected. Email alerts use Cloudflare Email Routing.
+          Enable Email Routing on a domain in your Cloudflare account, verify your destination addresses,
+          and set <code>ALERT_FROM_ADDRESS</code> in Cloudflare dashboard &rarr; Workers &rarr;
+          this worker &rarr; Settings &rarr; Variables.
+        </div>
+      </div>
+    </div>
+
+    <div id="settings-subtabs" style="display:flex; gap:0; border-bottom:2px solid var(--border); margin-bottom:20px; overflow-x:auto;">
+      <button class="tab-btn active" data-subtab="users" style="border-bottom-color:var(--accent)">Users</button>
+      <button class="tab-btn" data-subtab="config">Config</button>
+    </div>
+
+    <div id="subtab-users" class="subtab-panel">
+      <div class="card">
+        <div class="card-header">
+          User Allowlist
+          <button class="btn btn-primary btn-sm" id="add-user-toggle" style="margin-left:auto">+ Add User</button>
+        </div>
+        <div id="add-user-form" style="display:none; padding:16px 20px; border-bottom:1px solid var(--border); background:#fafafa;">
+          <div class="form-inline">
+            <div class="form-row">
+              <label for="new-user-email">Email address</label>
+              <input type="email" id="new-user-email" placeholder="user@example.com" autocomplete="off">
+            </div>
+          </div>
+          <p style="font-size:12px;color:var(--text-muted);margin-top:8px;line-height:1.5">
+            Adds the address to the sign-in allowlist. <strong>No email is sent.</strong> The user can then sign in by entering their email on the login page (a 6-digit code is mailed to them) or by using a passkey they've previously registered.
+          </p>
+          <div id="add-user-error" class="notice notice-error" style="display:none; margin-top:10px" role="alert"></div>
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <button class="btn btn-primary btn-sm" id="save-user-btn">Add</button>
+            <button class="btn btn-secondary btn-sm" id="cancel-user-btn">Cancel</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Added</th>
+                <th>Last Login</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="5" class="loading">Loading&hellip;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="subtab-config" class="subtab-panel" style="display:none">
+
+      <div class="card" id="config-alert-from-card">
+        <div class="card-header">Email Sender</div>
+        <div class="card-body">
+          <details style="margin-bottom:12px; font-size:13px; color:var(--gray)">
+            <summary style="cursor:pointer; font-weight:500">Help</summary>
+            <div style="margin-top:8px; line-height:1.6">
+              Address email alerts come from. Must be @ a domain you&apos;ve enabled Cloudflare Email Routing
+              on (e.g. <code>dropwatch@yourmsp.com</code>). Leave blank to disable email alerts.
+              Required for magic-link login.
+            </div>
+          </details>
+          <div class="form-row" style="margin-bottom:8px">
+            <label for="config-alert-from-input" style="font-size:13px">Sender address</label>
+            <input type="email" id="config-alert-from-input" placeholder="dropwatch@yourmsp.com"
+              autocomplete="off" style="max-width:340px">
+          </div>
+          <div id="config-alert-from-effective" style="font-size:12px; color:var(--gray); margin-bottom:10px; min-height:1em"></div>
+          <div id="config-alert-from-error" class="notice notice-error" style="display:none; margin-bottom:8px" role="alert"></div>
+          <button class="btn btn-primary btn-sm" id="config-alert-from-save">Save</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Admin Token (Break-glass)</div>
+        <div class="card-body">
+          <div class="notice notice-info" style="margin-bottom:14px">
+            Token rotation is managed via Wrangler CLI. Run: <code>wrangler secret put ADMIN_TOKEN</code>.
+            Keep this set for lockout recovery.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">Budget Summary</div>
+        <div class="card-body" id="settings-budget-body">Loading&hellip;</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div aria-live="polite" aria-atomic="true" class="sr-only" id="live-region"></div>
+
+<script src="/vendor/simplewebauthn-browser.js"></script>
+<script>
+var S = { domains: [], channels: [], paused: false };
+
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function relTime(ts) {
+  if (!ts) return "—";
+  var diff = Math.floor(Date.now() / 1000) - ts;
+  if (diff < 60) return diff + "s ago";
+  if (diff < 3600) return Math.floor(diff / 60) + "m ago";
+  if (diff < 86400) return Math.floor(diff / 3600) + "h ago";
+  return Math.floor(diff / 86400) + "d ago";
+}
+
+function absTime(ts) {
+  if (!ts) return "—";
+  return new Date(ts * 1000).toLocaleString();
+}
+
+function statusChip(status) {
+  var cls = status ? ("chip-" + status) : "chip-null";
+  var label = status || "unknown";
+  return "<span class=\"chip " + cls + "\">" + esc(label) + "</span>";
+}
+
+function channelTypeChip(type) {
+  var cls = type.startsWith("webhook") ? "chip-webhook" : "chip-email";
+  return "<span class=\"chip " + cls + "\">" + esc(type) + "</span>";
+}
+
+function maskTarget(type, target) {
+  if (type === "email") {
+    var parts = target.split("@");
+    if (parts.length < 2) return target;
+    return parts[0].slice(0, 2) + "***@" + parts[1];
+  }
+  try {
+    var url = new URL(target);
+    return url.host + "/***";
+  } catch(e) {
+    return target.slice(0, 20) + "…";
+  }
+}
+
+function parseLines(text) {
+  return text.split("\n").map(function(l) { return l.trim(); }).filter(Boolean).map(function(line) {
+    var parts = line.split(",");
+    var fqdn = (parts[0] || "").trim();
+    var cad = parts[1] ? parseInt(parts[1].trim(), 10) : NaN;
+    var label = parts[2] ? parts[2].trim() : null;
+    var obj = { fqdn: fqdn };
+    if (!isNaN(cad)) obj.cadenceMinutes = cad;
+    if (label) obj.label = label;
+    return obj;
+  });
+}
+
+function announce(msg) {
+  var el = document.getElementById("live-region");
+  el.textContent = "";
+  setTimeout(function() { el.textContent = msg; }, 50);
+}
+
+async function apiFetch(path, opts) {
+  opts = opts || {};
+  var method = (opts.method || "GET").toUpperCase();
+  if (S_guest && method !== "GET") {
+    guestToast();
+    return new Response(JSON.stringify({error: "read_only"}), { status: 403, headers: {"Content-Type": "application/json"} });
+  }
+  var headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
+  return fetch(path, Object.assign({}, opts, { headers: headers, credentials: "same-origin" }));
+}
+
+async function apiJson(path, opts) {
+  var res = await apiFetch(path, opts);
+  var body = {};
+  try { body = await res.json(); } catch(e) {}
+  return { ok: res.ok, status: res.status, body: body };
+}
+
+/* ---- Auth check ---- */
+var S_guest = false;
+function guestToast() {
+  var t = document.getElementById("guest-toast");
+  if (!t) return;
+  t.textContent = "Deploy your own instance to manage domains";
+  t.style.display = "block";
+  t.style.opacity = "1";
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function() { t.style.opacity = "0"; setTimeout(function() { t.style.display = "none"; }, 300); }, 2500);
+}
+function guardGuest(fn) {
+  return function(e) { if (S_guest) { e.preventDefault(); e.stopPropagation(); guestToast(); return; } return fn.call(this, e); };
+}
+async function checkAuth() {
+  var r = await apiJson("/domains");
+  if (r.status === 401) { location.href = "/login"; return false; }
+  var h = await apiJson("/auth/health");
+  if (h.ok && h.body.method === "demo-guest") {
+    S_guest = true;
+    var gb = document.getElementById("guest-banner");
+    if (gb) gb.style.display = "block";
+    var db = document.getElementById("demo-banner");
+    if (db) db.style.display = "none";
+  }
+  return true;
+}
+
+/* ---- Break-glass banner ---- */
+function updateBreakGlassBanner(method) {
+  var banner = document.getElementById("break-glass-banner");
+  banner.style.display = (method === "bearer-break-glass") ? "block" : "none";
+}
+
+/* ---- Tabs ---- */
+document.querySelectorAll(".tab-btn[data-tab]").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    var tab = btn.dataset.tab;
+    document.querySelectorAll(".tab-btn[data-tab]").forEach(function(b) {
+      b.classList.toggle("active", b === btn);
+      b.setAttribute("aria-selected", b === btn ? "true" : "false");
+    });
+    document.querySelectorAll(".tab-panel").forEach(function(p) { p.classList.toggle("active", p.id === "tab-" + tab); });
+    if (tab === "events") loadEvents();
+    if (tab === "settings") { loadSettings(); loadUsersTab(); }
+  });
+});
+
+/* ---- Settings subtabs ---- */
+document.querySelectorAll("#settings-subtabs .tab-btn[data-subtab]").forEach(function(btn) {
+  btn.addEventListener("click", function() {
+    var sub = btn.dataset.subtab;
+    document.querySelectorAll("#settings-subtabs .tab-btn").forEach(function(b) {
+      b.classList.toggle("active", b === btn);
+      b.style.borderBottomColor = b === btn ? "var(--accent)" : "";
+    });
+    document.querySelectorAll(".subtab-panel").forEach(function(p) {
+      p.style.display = p.id === "subtab-" + sub ? "" : "none";
+    });
+    if (sub === "users") loadUsersTab();
+    if (sub === "config") loadConfigSubtab();
+  });
+});
+
+/* ---- Budget gauge ---- */
+async function refreshBudget() {
+  var r = await apiJson("/budget");
+  var gauge = document.getElementById("budget-gauge");
+  if (!r.ok) { gauge.textContent = "Budget unavailable"; return; }
+  var b = r.body;
+  var icon = b.withinFreeTier ? "\u2705" : "\u26a0\ufe0f";
+  var cls = b.withinFreeTier ? "gauge-ok" : "gauge-warn";
+  var parts = [
+    "<span class=\"" + cls + "\">" + icon + " " + b.peakDuePerMinute + "/45 peak/min</span>",
+    "<span style=\"color:#888\">&bull;</span>",
+    "<span class=\"" + cls + "\">" + b.d1WritesPerDay + "/100k daily writes</span>",
+    "<span class=\"" + cls + "\">headroom: " + b.headroom + "</span>",
+  ];
+  if (b.warnings && b.warnings.length) parts.push("<span class=\"gauge-warn\">" + esc(b.warnings.join("; ")) + "</span>");
+  gauge.innerHTML = parts.join(" ");
+  return b;
+}
+
+/* ---- Global pause ---- */
+var pauseBtn = document.getElementById("pause-btn");
+pauseBtn.addEventListener("click", async function() {
+  if (S.paused) {
+    await apiFetch("/domains/resume-all", { method: "POST" });
+    S.paused = false;
+  } else {
+    await apiFetch("/domains/pause-all", { method: "POST" });
+    S.paused = true;
+  }
+  pauseBtn.textContent = S.paused ? "\u25b6 Resume All" : "\u23f8 Pause All";
+  pauseBtn.classList.toggle("paused", S.paused);
+  refreshBudget();
+});
+
+/* ---- Domains ---- */
+async function loadDomains() {
+  var r = await apiJson("/domains");
+  var tbody = document.getElementById("domains-tbody");
+  if (!r.ok) { tbody.innerHTML = "<tr><td colspan=\"7\" class=\"empty\">Failed to load domains.</td></tr>"; return; }
+  S.domains = r.body;
+  updateEventsFilter(r.body);
+  if (!r.body.length) {
+    tbody.innerHTML = "<tr><td colspan=\"7\" class=\"empty\">No domains yet. Add one above.</td></tr>";
+    return;
+  }
+  var rows = r.body.map(function(d) {
+    var chipsHtml = (d.channel_ids || []).map(function(id) {
+      var ch = S.channels.find(function(c) { return c.id === id; });
+      var label = ch ? (ch.label || ch.type) : id.slice(0, 8) + "\u2026";
+      var cls = ch && ch.type.startsWith("webhook") ? "chip-webhook" : "chip-email";
+      return "<span class=\"chip " + cls + "\">" + esc(label) + "</span>";
+    }).join(" ");
+    var cadOpts = [1,5,15,30,60,360,1440].map(function(v) {
+      var lbl = v < 60 ? v + " min" : v === 1440 ? "24 hr" : (v/60) + " hr";
+      return "<option value=\"" + v + "\"" + (d.cadence_minutes === v ? " selected" : "") + ">" + lbl + "</option>";
+    }).join("");
+    return "<tr>" +
+      "<td><strong>" + esc(d.fqdn) + "</strong>" + (d.label ? "<br><small style=\"color:var(--gray)\">" + esc(d.label) + "</small>" : "") + "</td>" +
+      "<td><select class=\"cadence-select\" data-fqdn=\"" + esc(d.fqdn) + "\" onchange=\"patchCadence(this)\" aria-label=\"Cadence for " + esc(d.fqdn) + "\">" + cadOpts + "</select></td>" +
+      "<td>" + statusChip(d.last_status) + "</td>" +
+      "<td style=\"color:var(--gray);font-size:13px\">" + relTime(d.last_checked_at) + "</td>" +
+      "<td><label class=\"toggle\"><span class=\"sr-only\">Paused</span><input type=\"checkbox\"" + (d.paused ? " checked" : "") + " onchange=\"patchPaused(\'" + esc(d.fqdn) + "\', this.checked)\"><span class=\"toggle-slider\"></span></label></td>" +
+      "<td>" + (chipsHtml || "<span style=\"color:var(--gray)\">none</span>") + "</td>" +
+      "<td><div class=\"actions\">" +
+        "<button class=\"btn btn-secondary btn-sm\" onclick=\"checkNow(\'" + esc(d.fqdn) + "\', this)\">&#9654; Check</button>" +
+        "<button class=\"btn btn-danger btn-sm\" onclick=\"deleteDomain(\'" + esc(d.fqdn) + "\', this)\" aria-label=\"Delete " + esc(d.fqdn) + "\">&#10005;</button>" +
+      "</div></td>" +
+      "</tr>";
+  });
+  tbody.innerHTML = rows.join("");
+}
+
+async function patchCadence(sel) {
+  var fqdn = sel.dataset.fqdn;
+  var cadenceMinutes = parseInt(sel.value, 10);
+  var r = await apiJson("/domains/" + encodeURIComponent(fqdn), { method: "PATCH", body: JSON.stringify({ cadenceMinutes: cadenceMinutes }) });
+  if (!r.ok) { alert("Failed to update cadence: " + (r.body.error || "unknown")); loadDomains(); }
+  else refreshBudget();
+}
+
+async function patchPaused(fqdn, paused) {
+  await apiJson("/domains/" + encodeURIComponent(fqdn), { method: "PATCH", body: JSON.stringify({ paused: paused }) });
+}
+
+async function checkNow(fqdn, btn) {
+  btn.disabled = true; btn.textContent = "\u2026";
+  var r = await apiJson("/check/" + encodeURIComponent(fqdn), { method: "POST" });
+  btn.disabled = false; btn.textContent = "\u25b6 Check";
+  if (r.ok) { alert(fqdn + ": " + (r.body.status || JSON.stringify(r.body))); loadDomains(); }
+  else alert("Check failed: " + (r.body.error || "unknown"));
+}
+
+async function deleteDomain(fqdn, btn) {
+  if (!confirm("Delete " + fqdn + "?")) return;
+  btn.disabled = true;
+  var r = await apiJson("/domains/" + encodeURIComponent(fqdn), { method: "DELETE" });
+  if (r.ok) { loadDomains(); refreshBudget(); }
+  else { btn.disabled = false; alert("Delete failed"); }
+}
+
+var addDomainBtn = document.getElementById("add-domain-btn");
+var addDomainForm = document.getElementById("add-domain-form");
+var cancelDomainBtn = document.getElementById("cancel-domain-btn");
+var saveDomainBtn = document.getElementById("save-domain-btn");
+var addDomainError = document.getElementById("add-domain-error");
+
+addDomainBtn.addEventListener("click", function() {
+  addDomainForm.style.display = addDomainForm.style.display === "none" ? "block" : "none";
+});
+cancelDomainBtn.addEventListener("click", function() {
+  addDomainForm.style.display = "none"; addDomainError.style.display = "none";
+});
+saveDomainBtn.addEventListener("click", async function() {
+  addDomainError.style.display = "none";
+  var fqdn = document.getElementById("new-fqdn").value.trim();
+  var cadenceMinutes = parseInt(document.getElementById("new-cadence").value, 10);
+  var labelVal = document.getElementById("new-label").value.trim() || undefined;
+  if (!fqdn) { showDomainError("FQDN is required"); return; }
+  saveDomainBtn.disabled = true;
+  var body = { fqdn: fqdn, cadenceMinutes: cadenceMinutes };
+  if (labelVal) body.label = labelVal;
+  var r = await apiJson("/domains", { method: "POST", body: JSON.stringify(body) });
+  saveDomainBtn.disabled = false;
+  if (r.ok) {
+    addDomainForm.style.display = "none";
+    document.getElementById("new-fqdn").value = "";
+    document.getElementById("new-label").value = "";
+    loadDomains(); refreshBudget();
+  } else {
+    showDomainError(r.body.error === "budget_exceeded"
+      ? "Budget would be exceeded. Reduce cadence or remove other domains."
+      : (r.body.details ? r.body.details.join("; ") : r.body.error || "Unknown error"));
+  }
+});
+
+function showDomainError(msg) {
+  addDomainError.textContent = msg;
+  addDomainError.style.display = "block";
+}
+
+/* ---- Bulk ---- */
+document.getElementById("bulk-preview-btn").addEventListener("click", function() { doBulk(true); });
+document.getElementById("bulk-commit-btn").addEventListener("click", function() { doBulk(false); });
+
+async function doBulk(dryRun) {
+  var text = document.getElementById("bulk-input").value;
+  var domains = parseLines(text);
+  if (!domains.length) { alert("No valid lines found"); return; }
+  var r = await apiJson("/domains/bulk", { method: "POST", body: JSON.stringify({ domains: domains, dryRun: dryRun }) });
+  var resultEl = document.getElementById("bulk-result");
+  if (!r.ok) { resultEl.innerHTML = "<div class=\"notice notice-error\">Request failed: " + esc(r.body.error || "unknown") + "</div>"; return; }
+  var before = r.body.budgetBefore; var after = r.body.budgetAfter;
+  var accepted = r.body.accepted || []; var rejected = r.body.rejected || [];
+  var budgetHtml = "<div style=\"font-size:13px;color:var(--gray);margin-bottom:10px\">" +
+    "Budget: <strong>" + before.peakDuePerMinute + "</strong>/min before &rarr; " +
+    "<strong>" + after.peakDuePerMinute + "</strong>/min after &nbsp;" +
+    (after.withinFreeTier ? "<span style=\"color:var(--green)\">\u2705 within free tier</span>" : "<span style=\"color:var(--red)\">\u26a0\ufe0f over free tier</span>") + "</div>";
+  var acceptedHtml = accepted.length ? "<div style=\"margin-bottom:10px\"><strong style=\"color:var(--green)\">\u2705 Accepted (" + accepted.length + ")</strong><ul style=\"margin:6px 0 0 16px;font-size:13px\">" +
+    accepted.map(function(d) { return "<li>" + esc(d.fqdn) + " &mdash; " + (d.cadence_minutes || "?") + " min</li>"; }).join("") + "</ul></div>" : "";
+  var rejectedHtml = rejected.length ? "<div><strong style=\"color:var(--red)\">&#10005; Rejected (" + rejected.length + ")</strong><ul style=\"margin:6px 0 0 16px;font-size:13px\">" +
+    rejected.map(function(r2) { return "<li>" + esc(String(r2.fqdn || "?")) + " &mdash; " + esc(r2.reason) + "</li>"; }).join("") + "</ul></div>" : "";
+  resultEl.innerHTML = "<div class=\"card\" style=\"margin-bottom:0\"><div class=\"card-header\">" +
+    (dryRun ? "&#128269; Preview (nothing saved)" : "&#10003; Committed") + "</div>" +
+    "<div class=\"card-body\">" + budgetHtml + acceptedHtml + rejectedHtml + "</div></div>";
+  if (!dryRun && accepted.length) { loadDomains(); refreshBudget(); }
+}
+
+/* ---- Channels ---- */
+async function loadChannels() {
+  var r = await apiJson("/channels");
+  var tbody = document.getElementById("channels-tbody");
+  if (!r.ok) { tbody.innerHTML = "<tr><td colspan=\"6\" class=\"empty\">Failed to load channels.</td></tr>"; return; }
+  S.channels = r.body;
+  if (!r.body.length) {
+    tbody.innerHTML = "<tr><td colspan=\"6\" class=\"empty\">No channels yet. Add one above.</td></tr>";
+    return;
+  }
+  var rows = r.body.map(function(ch) {
+    var lastDel = ch.last_delivery_result
+      ? "<span style=\"font-size:12px;color:" + (ch.last_delivery_result === "ok" ? "var(--green)" : "var(--red)") + "\">" + esc(ch.last_delivery_result) + "</span>"
+      : "<span style=\"color:var(--gray)\">&mdash;</span>";
+    return "<tr>" +
+      "<td>" + channelTypeChip(ch.type) + "</td>" +
+      "<td style=\"font-family:monospace;font-size:12px\">" + esc(S_guest ? ch.target : maskTarget(ch.type, ch.target)) + "</td>" +
+      "<td>" + (ch.label ? esc(ch.label) : "<span style=\"color:var(--gray)\">&mdash;</span>") + "</td>" +
+      "<td><label class=\"toggle\"><input type=\"checkbox\"" + (ch.disabled ? " checked" : "") + " onchange=\"patchChannel(\'" + esc(ch.id) + "\', {disabled: this.checked})\"><span class=\"toggle-slider\"></span></label></td>" +
+      "<td>" + lastDel + (ch.last_delivery_at ? "<br><span style=\"font-size:11px;color:var(--gray)\">" + relTime(ch.last_delivery_at) + "</span>" : "") + "</td>" +
+      "<td><div class=\"actions\">" +
+        "<button class=\"btn btn-secondary btn-sm\" onclick=\"testSendStub(\'" + esc(ch.id) + "\')\">&#9993; Test</button>" +
+        "<button class=\"btn btn-danger btn-sm\" onclick=\"deleteChannel(\'" + esc(ch.id) + "\', \'" + esc(ch.type) + "\', this)\">&#10005;</button>" +
+      "</div></td></tr>";
+  });
+  tbody.innerHTML = rows.join("");
+  var emailChannels = r.body.filter(function(c) { return c.type === "email"; });
+  var hasEmailError = emailChannels.some(function(c) { return c.last_delivery_result && c.last_delivery_result !== "ok"; });
+  document.getElementById("email-status-card").style.display = (emailChannels.length && hasEmailError) ? "block" : "none";
+}
+
+async function patchChannel(id, patch) {
+  await apiJson("/channels/" + id, { method: "PATCH", body: JSON.stringify(patch) });
+}
+
+function testSendStub(id) {
+  alert("Test send — run ./scripts/setup.sh --test-channel " + id + " in your terminal for now.");
+}
+
+async function deleteChannel(id, type, btn) {
+  if (!confirm("Delete this " + type + " channel?")) return;
+  btn.disabled = true;
+  var r = await apiJson("/channels/" + id, { method: "DELETE" });
+  if (r.ok) { loadChannels(); }
+  else if (r.status === 409) {
+    if (confirm("Channel is in use by: " + (r.body.domains || []).join(", ") + ". Force delete?")) {
+      var r2 = await apiJson("/channels/" + id + "?force=true", { method: "DELETE" });
+      if (r2.ok) loadChannels();
+      else { btn.disabled = false; alert("Force delete failed"); }
+    } else { btn.disabled = false; }
+  } else { btn.disabled = false; alert("Delete failed"); }
+}
+
+var addChannelToggle = document.getElementById("add-channel-toggle");
+var addChannelForm = document.getElementById("add-channel-form");
+var cancelChannelBtn = document.getElementById("cancel-channel-btn");
+var saveChannelBtn = document.getElementById("save-channel-btn");
+var addChannelError = document.getElementById("add-channel-error");
+
+addChannelToggle.addEventListener("click", function() {
+  addChannelForm.style.display = addChannelForm.style.display === "none" ? "block" : "none";
+});
+cancelChannelBtn.addEventListener("click", function() {
+  addChannelForm.style.display = "none"; addChannelError.style.display = "none";
+});
+saveChannelBtn.addEventListener("click", async function() {
+  addChannelError.style.display = "none";
+  var type = document.getElementById("ch-type").value;
+  var target = document.getElementById("ch-target").value.trim();
+  var labelVal = document.getElementById("ch-label").value.trim() || undefined;
+  if (!target) { showChannelError("Target is required"); return; }
+  saveChannelBtn.disabled = true;
+  var body = { type: type, target: target };
+  if (labelVal) body.label = labelVal;
+  var r = await apiJson("/channels", { method: "POST", body: JSON.stringify(body) });
+  saveChannelBtn.disabled = false;
+  if (r.ok) {
+    addChannelForm.style.display = "none";
+    document.getElementById("ch-target").value = "";
+    document.getElementById("ch-label").value = "";
+    loadChannels();
+  } else {
+    showChannelError(r.body.details ? r.body.details.join("; ") : r.body.error || "Unknown error");
+  }
+});
+
+function showChannelError(msg) {
+  addChannelError.textContent = msg; addChannelError.style.display = "block";
+}
+
+/* ---- Events ---- */
+function updateEventsFilter(domains) {
+  var sel = document.getElementById("events-filter");
+  var current = sel.value;
+  while (sel.children.length > 1) sel.removeChild(sel.lastChild);
+  domains.forEach(function(d) {
+    var opt = document.createElement("option");
+    opt.value = d.fqdn; opt.textContent = d.fqdn;
+    sel.appendChild(opt);
+  });
+  if (current) sel.value = current;
+}
+
+document.getElementById("events-filter").addEventListener("change", loadEvents);
+document.getElementById("events-refresh-btn").addEventListener("click", loadEvents);
+
+async function loadEvents() {
+  var fqdn = document.getElementById("events-filter").value;
+  var path = "/events" + (fqdn ? "?fqdn=" + encodeURIComponent(fqdn) + "&limit=100" : "?limit=100");
+  var r = await apiJson(path);
+  var container = document.getElementById("events-body");
+  if (!r.ok) { container.innerHTML = "<div class=\"empty\">Failed to load events.</div>"; return; }
+  if (!r.body.length) { container.innerHTML = "<div class=\"empty\">No events yet.</div>"; return; }
+  function kindChip(kind) {
+    var cls = kind === "status_change" ? "chip-kind-status" : kind === "alert_sent" ? "chip-kind-alert" : "chip-kind-check";
+    return "<span class=\"chip " + cls + "\">" + esc(kind) + "</span>";
+  }
+  container.innerHTML = r.body.map(function(ev) {
+    var dataStr = "";
+    try { dataStr = JSON.stringify(ev.data || {}); } catch(e) { dataStr = "{}"; }
+    if (dataStr.length > 200) dataStr = dataStr.slice(0, 200) + "\u2026";
+    return "<div class=\"event-row\">" +
+      "<span class=\"event-ts\">" + relTime(ev.ts) + "</span>" +
+      "<span>" + kindChip(ev.kind) + "</span>" +
+      "<span class=\"event-fqdn\">" + esc(ev.fqdn || "\u2014") + "</span>" +
+      "<span class=\"event-data\">" + esc(dataStr) + "</span>" +
+      "</div>";
+  }).join("");
+}
+
+/* ---- Settings: Users tab ---- */
+async function loadUsersTab() {
+  var tbody = document.getElementById("users-tbody");
+  if (!tbody) return;
+  var r = await apiJson("/users");
+  if (!r.ok) { tbody.innerHTML = "<tr><td colspan=\"6\" class=\"empty\">Failed to load users.</td></tr>"; return; }
+  var users = r.body;
+  if (!users.length) {
+    tbody.innerHTML = "<tr><td colspan=\"6\" class=\"empty\">No users. Add one above.</td></tr>";
+    return;
+  }
+  tbody.innerHTML = users.map(function(u) {
+    var statusHtml = u.disabled
+      ? "<span class=\"chip chip-dropping\">Disabled</span>"
+      : "<span class=\"chip chip-available\">Active</span>";
+    var toggleAction = u.disabled ? "enable" : "disable";
+    var toggleLabel = u.disabled ? "Enable" : "Disable";
+    return "<tr>" +
+      "<td>" + esc(u.email) + "</td>" +
+      "<td style=\"color:var(--gray);font-size:13px\">" + relTime(u.added_at) + "</td>" +
+      "<td style=\"color:var(--gray);font-size:13px\">" + (u.last_login_at ? relTime(u.last_login_at) : "—") + "</td>" +
+      "<td>" + statusHtml + "</td>" +
+      "<td><div class=\"actions\">" +
+        "<button class=\"btn btn-secondary btn-sm\" onclick=\"toggleUser(\'" + esc(u.email) + "\', \'" + toggleAction + "\')\">" + toggleLabel + "</button>" +
+        "<button class=\"btn btn-danger btn-sm\" onclick=\"deleteUser(\'" + esc(u.email) + "\')\" aria-label=\"Remove " + esc(u.email) + "\">Remove</button>" +
+      "</div></td>" +
+      "</tr>";
+  }).join("");
+}
+
+async function toggleUser(email, action) {
+  var r = await apiJson("/users/" + encodeURIComponent(email) + "/" + action, { method: "POST" });
+  if (!r.ok) { alert("Failed: " + (r.body.error || "unknown")); return; }
+  announce(email + " " + (action === "disable" ? "disabled" : "enabled"));
+  loadUsersTab();
+}
+
+async function deleteUser(email) {
+  if (!confirm("Remove " + email + " from the allowlist? Their sessions and passkeys will be deleted.")) return;
+  var r = await apiJson("/users/" + encodeURIComponent(email), { method: "DELETE" });
+  if (!r.ok) { alert("Failed: " + (r.body.error || "unknown")); return; }
+  announce(email + " removed");
+  loadUsersTab();
+}
+
+var addUserToggle = document.getElementById("add-user-toggle");
+var addUserForm = document.getElementById("add-user-form");
+var cancelUserBtn = document.getElementById("cancel-user-btn");
+var saveUserBtn = document.getElementById("save-user-btn");
+var addUserError = document.getElementById("add-user-error");
+
+addUserToggle.addEventListener("click", function() {
+  addUserForm.style.display = addUserForm.style.display === "none" ? "block" : "none";
+});
+cancelUserBtn.addEventListener("click", function() {
+  addUserForm.style.display = "none"; addUserError.style.display = "none";
+});
+saveUserBtn.addEventListener("click", async function() {
+  addUserError.style.display = "none";
+  var email = document.getElementById("new-user-email").value.trim();
+  if (!email) { showUserError("Email is required"); return; }
+  saveUserBtn.disabled = true;
+  var r = await apiJson("/users", { method: "POST", body: JSON.stringify({ email: email }) });
+  saveUserBtn.disabled = false;
+  if (r.ok) {
+    addUserForm.style.display = "none";
+    document.getElementById("new-user-email").value = "";
+    announce(email + " added");
+    loadUsersTab();
+  } else {
+    showUserError(r.body.error === "user_exists" ? "User already exists." : (r.body.details ? r.body.details.join("; ") : r.body.error || "Unknown error"));
+  }
+});
+
+function showUserError(msg) {
+  addUserError.textContent = msg; addUserError.style.display = "block";
+}
+
+/* ---- Config subtab ---- */
+var _configLoaded = false;
+
+async function loadConfigSubtab() {
+  if (_configLoaded) return;
+  _configLoaded = true;
+
+  var r = await apiJson("/config/app");
+  if (!r.ok) return;
+  var cfg = r.body;
+
+
+  var alertInput = document.getElementById("config-alert-from-input");
+  var alertEffective = document.getElementById("config-alert-from-effective");
+  if (alertInput) {
+    alertInput.value = cfg.alert_from_address || "";
+    if (alertEffective) {
+      alertEffective.textContent = cfg.alert_from_address
+        ? "Currently in use: " + cfg.alert_from_address
+        : "Unset — email alerts disabled";
+    }
+  }
+
+  var alertSave = document.getElementById("config-alert-from-save");
+  var alertError = document.getElementById("config-alert-from-error");
+  if (alertSave && alertInput) {
+    alertSave.addEventListener("click", async function() {
+      alertError.style.display = "none";
+      alertSave.disabled = true;
+      var res = await apiJson("/config/app/alert_from_address", {
+        method: "PUT",
+        body: JSON.stringify({ value: alertInput.value }),
+      });
+      alertSave.disabled = false;
+      if (!res.ok) {
+        alertError.textContent = res.body.reason || res.body.error || "Save failed";
+        alertError.style.display = "";
+      } else {
+        var saved = res.body.value || "";
+        alertInput.value = saved;
+        if (alertEffective) {
+          alertEffective.textContent = saved
+            ? "Currently in use: " + saved
+            : "Unset — email alerts disabled";
+        }
+        announce("Email sender saved");
+        _configLoaded = false;
+      }
+    });
+  }
+
+}
+
+/* ---- Settings entry point ---- */
+async function loadSettings() {
+  loadConfigSubtab();
+  var emailChannels = S.channels.filter(function(c) { return c.type === "email"; });
+  var hasEmailError = emailChannels.some(function(c) { return c.last_delivery_result && c.last_delivery_result !== "ok"; });
+  var card = document.getElementById("email-status-card");
+  if (card) card.style.display = (emailChannels.length && hasEmailError) ? "block" : "none";
+  var budgetBody = document.getElementById("settings-budget-body");
+  if (budgetBody) {
+    var br = await apiJson("/budget");
+    if (br.ok) {
+      var b = br.body;
+      var lines = [];
+      lines.push("Peak requests/min: " + b.peakDuePerMinute + " / 45");
+      lines.push("Daily D1 writes: " + b.d1WritesPerDay + " / 100k");
+      lines.push("Headroom: " + b.headroom);
+      lines.push("Free tier: " + (b.withinFreeTier ? "Yes" : "No"));
+      if (b.warnings && b.warnings.length) lines.push("Warnings: " + b.warnings.join("; "));
+      budgetBody.textContent = lines.join("\n");
+      budgetBody.style.whiteSpace = "pre-line";
+      budgetBody.style.fontSize = "14px";
+      budgetBody.style.lineHeight = "2";
+    } else {
+      budgetBody.textContent = "Failed to load budget.";
+    }
+  }
+}
+
+/* ---- Logout ---- */
+document.getElementById("logout-btn").addEventListener("click", async function() {
+  await apiFetch("/logout", { method: "POST" });
+  location.href = "/login";
+});
+
+/* ---- Boot ---- */
+async function initDashboard() {
+  fetch("/api/demo-mode").then(r => r.json()).then(d => {
+    if (d.demo) {
+      document.getElementById("demo-banner").style.display = "block";
+      document.querySelectorAll("[data-hide-in-demo]").forEach(el => el.style.display = "none");
+    }
+  }).catch(() => {});
+
+  var authed = await checkAuth();
+  if (!authed) return;
+
+  document.getElementById("pause-btn").style.display = "";
+  document.getElementById("logout-btn").style.display = "";
+
+  await Promise.all([loadChannels(), refreshBudget()]);
+  await loadDomains();
+  pauseBtn.textContent = S.paused ? "▶ Resume All" : "⏸ Pause All";
+
+  if (!S_guest) {
+    var sessionsRes = await apiJson("/sessions");
+    if (sessionsRes.ok && Array.isArray(sessionsRes.body) && sessionsRes.body.length) {
+      var current = sessionsRes.body[0];
+      if (current && current.auth_method === "bearer-break-glass") {
+        updateBreakGlassBanner("bearer-break-glass");
+      }
+    }
+  }
+}
+
+initDashboard();
+</script>
+</body>
+</html>
