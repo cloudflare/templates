@@ -23,8 +23,8 @@
 			"pinVersion": "^5.20260811.1"
 		},
 		{
-			"label": "Use current Workers types for the voice agent template",
-			"packages": ["voice-agent-template"],
+			"label": "Use current Workers types for templates requiring Workers types v5",
+			"packages": ["email-routing-template", "voice-agent-template"],
 			"dependencies": ["@cloudflare/workers-types"],
 			"pinVersion": "^5.20260831.1"
 		},

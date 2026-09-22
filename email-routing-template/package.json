@@ -1,0 +1,44 @@
+{
+	"name": "email-routing-template",
+	"description": "Route incoming email to a verified destination with an Email Routing Worker.",
+	"cloudflare": {
+		"label": "Email Routing Worker",
+		"products": [
+			"Workers",
+			"Email Routing"
+		],
+		"categories": [
+			"starter"
+		],
+		"docs_url": "https://developers.cloudflare.com/email-service/email-routing/",
+		"bindings": {
+			"ROUTE_ADDRESS": {
+				"description": "The Email Routing address shown on the setup page. Keep it in sync with the top-level addresses configuration."
+			},
+			"FORWARD_TO": {
+				"description": "A verified Email Routing destination address that receives forwarded messages."
+			},
+			"ALLOWED_SENDERS": {
+				"description": "A comma-separated list of sender addresses allowed to use this route."
+			}
+		}
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-plugin": "1.1.3",
+		"@cloudflare/workers-types": "^5.20260831.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.127.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types worker-configuration.d.ts --include-runtime false",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
