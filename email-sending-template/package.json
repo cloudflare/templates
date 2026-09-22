@@ -1,0 +1,48 @@
+{
+	"name": "email-sending-template",
+	"description": "Send a fixed transactional email securely with the Cloudflare Email Service binding.",
+	"cloudflare": {
+		"label": "Email Sending Worker",
+		"products": [
+			"Workers",
+			"Email Sending"
+		],
+		"categories": [
+			"starter"
+		],
+		"docs_url": "https://developers.cloudflare.com/email-service/email-sending/",
+		"bindings": {
+			"FROM_ADDRESS": {
+				"description": "The sender address. Its domain must be onboarded to Cloudflare Email Service."
+			},
+			"TO_ADDRESS": {
+				"description": "The fixed recipient address for this starter."
+			},
+			"SEND_EMAIL_AUTH_TOKEN": {
+				"description": "A strong bearer token that protects the send endpoint. Generate one with `openssl rand -hex 32`."
+			}
+		}
+	},
+	"dependencies": {
+		"hono": "4.11.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-plugin": "1.1.3",
+		"@cloudflare/workers-types": "^5.20260831.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.127.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types worker-configuration.d.ts --include-runtime false",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
