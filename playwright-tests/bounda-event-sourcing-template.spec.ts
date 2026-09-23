@@ -4,7 +4,7 @@ test.describe("Event Sourcing with Bounda Template", () => {
 	test("places an order and lists it", async ({ page, templateUrl }) => {
 		await page.goto(templateUrl);
 		await expect(
-			page.getByRole("heading", { name: "Bounda on Cloudflare" }),
+			page.getByRole("heading", { name: "Event-sourced orders" }),
 		).toBeVisible();
 
 		await page.getByLabel("Tenant").fill(`e2e-${Date.now()}`);
