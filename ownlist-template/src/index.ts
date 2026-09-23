@@ -8,6 +8,7 @@ import {
 	adminPage,
 	messagePage,
 	unsubscribePage,
+	creditUrl,
 } from "./html";
 import { EXTRA_FIELDS } from "./fields";
 import { fetchFeedItems, type FeedItem } from "./rss";
@@ -30,6 +31,8 @@ type Bindings = {
 	UNSUBSCRIBE_LABEL?: string;
 	CONFIRM_SUBJECT?: string;
 	CONFIRM_HTML?: string;
+	NOTIFY_EMAIL?: string;
+	SHOW_CREDIT?: string;
 };
 
 // One outgoing email, ready for delivery.
@@ -66,6 +69,21 @@ const listHeaders = (unsub: string): Record<string, string> => ({
 	"List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
 });
 
+// "Powered by" credit, switched by SHOW_CREDIT: "true" (default) = public
+// pages and email footer, "pages" or "email" = only there, "false" = off.
+const creditMode = (env: Bindings) =>
+	String(env.SHOW_CREDIT ?? "")
+		.trim()
+		.toLowerCase();
+const creditOnPages = (env: Bindings) =>
+	!["false", "email"].includes(creditMode(env));
+const creditInEmail = (env: Bindings) =>
+	!["false", "pages"].includes(creditMode(env));
+
+// Credit link for one public page, or undefined when the credit is off there.
+const pageCredit = (env: Bindings, content: string) =>
+	creditOnPages(env) ? creditUrl("page", content) : undefined;
+
 const escapeHtml = (s: string) =>
 	s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -83,7 +101,11 @@ function complianceFooter(env: Bindings, unsub: string): string {
 	return `<hr style="border:none;border-top:1px solid #ddd;margin:28px 0 12px">
     <p style="font-size:12px;line-height:1.6;color:#888">
       ${escapeHtml(text)}
-      <a href="${unsub}" style="color:#888">${escapeHtml(label)}</a>${address ? `<br>${escapeHtml(address)}` : ""}
+      <a href="${unsub}" style="color:#888">${escapeHtml(label)}</a>${address ? `<br>${escapeHtml(address)}` : ""}${
+				creditInEmail(env)
+					? `<br>Powered by <a href="${escapeHtml(creditUrl("email", "footer"))}" style="color:#888">Ownlist</a>`
+					: ""
+			}
     </p>`;
 }
 
@@ -352,13 +374,54 @@ async function readParams(c: any): Promise<Record<string, string>> {
 
 // --- Public: hosted signup form ---
 app.get("/", (c) =>
-	c.html(signupPage(c.env.TURNSTILE_SITE_KEY, c.env.PRIVACY_URL)),
+	c.html(
+		signupPage(
+			c.env.TURNSTILE_SITE_KEY,
+			c.env.PRIVACY_URL,
+			pageCredit(c.env, "signup"),
+		),
+	),
 );
 
 // --- Public: bare form for iframe/script embedding on your own site ---
 app.get("/embed", (c) =>
-	c.html(embedPage(c.env.TURNSTILE_SITE_KEY, c.env.PRIVACY_URL)),
+	c.html(
+		embedPage(
+			c.env.TURNSTILE_SITE_KEY,
+			c.env.PRIVACY_URL,
+			pageCredit(c.env, "embed"),
+		),
+	),
 );
+
+// Owner notification: when NOTIFY_EMAIL is set, a short heads-up email goes
+// out for every subscription that becomes active (single opt-in signup, or a
+// confirmed double opt-in). Best-effort — a failure here must never affect
+// the subscriber-facing flow.
+async function notifyOwner(
+	env: Bindings,
+	email: string,
+	name: string | null,
+	via: string,
+): Promise<void> {
+	const to = String(env.NOTIFY_EMAIL ?? "").trim();
+	if (!to || !isEmailConfigured(env)) return;
+	const lines = [
+		`Email: ${email}`,
+		name ? `Name: ${name}` : "",
+		`Via: ${via}`,
+	].filter(Boolean);
+	try {
+		await sendEmail(env, {
+			to,
+			subject: `New subscriber: ${email}`,
+			html: emailDocument(`<p>${lines.map(escapeHtml).join("<br>")}</p>`),
+			headers: {},
+		});
+	} catch (err) {
+		console.error("owner notification failed:", err);
+	}
+}
 
 // Allow the subscribe endpoint to be called from your own website's domain.
 app.use("/api/subscribe", cors());
@@ -451,7 +514,14 @@ app.post("/api/subscribe", async (c) => {
 		return c.json({ ok: true, pending: true });
 	}
 
-	// Single opt-in: active immediately.
+	// Single opt-in: active immediately. The prior status decides whether this
+	// is a genuinely new subscription (worth notifying the owner about) or just
+	// a re-submit by someone already on the list.
+	const prior = await c.env.DB.prepare(
+		`SELECT status FROM subscribers WHERE email = ?1`,
+	)
+		.bind(email)
+		.first<{ status: string }>();
 	await c.env.DB.prepare(
 		`INSERT INTO subscribers (email, name, status, unsub_token, data)
      VALUES (?1, ?2, 'subscribed', ?3, ?4)
@@ -462,6 +532,11 @@ app.post("/api/subscribe", async (c) => {
 	)
 		.bind(email, name || null, crypto.randomUUID(), dataJson)
 		.run();
+	if (prior?.status !== "subscribed") {
+		c.executionCtx.waitUntil(
+			notifyOwner(c.env, email, name || null, "single opt-in signup"),
+		);
+	}
 	return c.json({ ok: true });
 });
 
@@ -469,18 +544,25 @@ app.post("/api/subscribe", async (c) => {
 app.get("/confirm", async (c) => {
 	const token = c.req.query("t") || c.req.query("token") || "";
 	if (token) {
-		await c.env.DB.prepare(
+		const row = await c.env.DB.prepare(
 			`UPDATE subscribers SET status = 'subscribed', confirm_token = NULL,
          confirmed_at = datetime('now')
-       WHERE confirm_token = ?1 AND status = 'pending'`,
+       WHERE confirm_token = ?1 AND status = 'pending'
+       RETURNING email, name`,
 		)
 			.bind(token)
-			.run();
+			.first<{ email: string; name: string | null }>();
+		if (row) {
+			c.executionCtx.waitUntil(
+				notifyOwner(c.env, row.email, row.name, "confirmed double opt-in"),
+			);
+		}
 	}
 	return c.html(
 		messagePage(
 			"You're subscribed!",
 			"Thanks for confirming — you're all set.",
+			pageCredit(c.env, "confirm"),
 		),
 	);
 });
@@ -493,9 +575,13 @@ app.get("/unsubscribe", (c) => {
 	const token = c.req.query("t") || c.req.query("token") || "";
 	if (!token)
 		return c.html(
-			messagePage("Invalid link", "This unsubscribe link is incomplete."),
+			messagePage(
+				"Invalid link",
+				"This unsubscribe link is incomplete.",
+				pageCredit(c.env, "unsubscribe"),
+			),
 		);
-	return c.html(unsubscribePage(token));
+	return c.html(unsubscribePage(token, pageCredit(c.env, "unsubscribe")));
 });
 
 app.post("/unsubscribe", async (c) => {
@@ -517,6 +603,7 @@ app.post("/unsubscribe", async (c) => {
 				messagePage(
 					"You've been unsubscribed.",
 					"You won't receive further emails.",
+					pageCredit(c.env, "unsubscribed"),
 				),
 			)
 		: c.text("unsubscribed");

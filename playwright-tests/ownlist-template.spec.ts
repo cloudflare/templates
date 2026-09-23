@@ -1,6 +1,6 @@
 import { test, expect } from "./fixtures";
 
-test.describe("Newsletter Template", () => {
+test.describe("Ownlist Template", () => {
 	test("signup page loads with name and email fields", async ({
 		page,
 		templateUrl,
@@ -40,5 +40,16 @@ test.describe("Newsletter Template", () => {
 		await expect(
 			page.getByRole("button", { name: "Unsubscribe" }),
 		).toBeVisible();
+	});
+
+	test("signup page shows the credit link by default", async ({
+		page,
+		templateUrl,
+	}) => {
+		await page.goto(templateUrl);
+		await expect(page.getByRole("link", { name: "Ownlist" })).toHaveAttribute(
+			"href",
+			/rafaelpfister\.ch\/en\/blog\/serverless-newsletter.*utm_medium=page&utm_content=signup/,
+		);
 	});
 });

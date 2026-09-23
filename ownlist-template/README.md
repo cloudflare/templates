@@ -1,6 +1,8 @@
-# Newsletter
+# Ownlist
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/newsletter-template)
+Own your list: a serverless newsletter on your own Cloudflare account.
+
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/ownlist-template)
 
 <img src="docs/screenshot.png" alt="The hosted signup form" width="440">
 
@@ -44,7 +46,7 @@ That's it — your signup page is immediately live at
 `https://<your-worker>.workers.dev` and starts collecting subscribers right away.
 
 A live public deployment of this template is available at
-[https://newsletter-template.templates.workers.dev](https://newsletter-template.templates.workers.dev).
+[https://ownlist-template.templates.workers.dev](https://ownlist-template.templates.workers.dev).
 
 ### Options
 
@@ -71,6 +73,19 @@ Settings → Variables and Secrets_ (double opt-in can also be set on the deploy
   default to English. Set `FOOTER_TEXT` and `UNSUBSCRIBE_LABEL` for the footer,
   and `CONFIRM_SUBJECT` / `CONFIRM_HTML` (supports a `{{confirm_url}}` merge
   tag) for the confirmation email, to use your own language.
+- **New-subscriber notification (`NOTIFY_EMAIL`)** — set it to your own address
+  to receive a short email whenever a subscription becomes active (a single
+  opt-in signup, or a confirmed double opt-in). Requires email to be
+  configured. Leave blank to disable.
+- **Credit link (`SHOW_CREDIT`)** — a small "Powered by Ownlist" line with a
+  link to the project page appears under the signup and embed forms, on the
+  confirmation and unsubscribe pages, and in the email footer. It is on by
+  default and helps other people find the template. Set `SHOW_CREDIT` to
+  `"pages"` to keep it on the pages only, `"email"` for the email footer only,
+  or `"false"` to hide it everywhere; nothing else changes. The link carries
+  UTM parameters (`utm_source=ownlist`, `utm_medium=page` or `email`) so the
+  project page can count where visitors come from; no data about you or your
+  subscribers is attached.
 
 ## How it works
 
@@ -164,7 +179,7 @@ other file needs changing. In your emails you can personalize with the
 `{{name}}` merge tag.
 
 Already have a list? Import it with
-`npx wrangler d1 execute newsletter-template-db --remote --command "..."`.
+`npx wrangler d1 execute ownlist-template-db --remote --command "..."`.
 
 ## Sending email (connect your own provider)
 
@@ -264,9 +279,9 @@ into your account). To pull in a newer version:
 ```bash
 git remote add upstream https://github.com/cloudflare/templates
 git fetch upstream
-git merge -X subtree=newsletter-template -X theirs --allow-unrelated-histories --no-commit upstream/main
+git merge -X subtree=ownlist-template -X theirs --allow-unrelated-histories --no-commit upstream/main
 git checkout HEAD -- src/email.ts src/fields.ts wrangler.json
-git commit -m "Update template" && git push
+git commit -m "Update Ownlist" && git push
 ```
 
 `-X theirs` takes the upstream side of every change; the `git checkout` line

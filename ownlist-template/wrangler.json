@@ -1,5 +1,5 @@
 {
-	"name": "newsletter-template",
+	"name": "ownlist-template",
 	"main": "src/index.ts",
 	"compatibility_date": "2025-10-08",
 	"upload_source_maps": true,
@@ -7,7 +7,7 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "newsletter-template-db",
+			"database_name": "ownlist-template-db",
 			"database_id": "REPLACED_ON_DEPLOY"
 		}
 	],
@@ -18,6 +18,7 @@
 		"FROM_NAME": "My Newsletter",
 		"FROM_EMAIL": "newsletter@example.com",
 		"DOUBLE_OPT_IN": "false",
-		"SEND_BATCH": "40"
+		"SEND_BATCH": "40",
+		"SHOW_CREDIT": "true"
 	}
 }
