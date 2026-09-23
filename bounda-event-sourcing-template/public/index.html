@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Bounda on Cloudflare</title>
+		<style>
+			:root {
+				color-scheme: light dark;
+				--bg: #fafafa;
+				--fg: #09090b;
+				--muted: #52525b;
+				--surface: #ffffff;
+				--border: #e4e4e7;
+				--accent: #2563eb;
+			}
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--bg: #09090b;
+					--fg: #fafafa;
+					--muted: #a1a1aa;
+					--surface: #18181b;
+					--border: #27272a;
+					--accent: #3b82f6;
+				}
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				background: var(--bg);
+				color: var(--fg);
+				font:
+					16px/1.5 system-ui,
+					sans-serif;
+			}
+			main {
+				max-width: 40rem;
+				margin: 0 auto;
+				padding: 3rem 1rem;
+			}
+			h1 {
+				font-size: 1.75rem;
+				margin: 0 0 0.25rem;
+			}
+			p {
+				color: var(--muted);
+				margin: 0 0 1.5rem;
+			}
+			form,
+			section {
+				background: var(--surface);
+				border: 1px solid var(--border);
+				border-radius: 0.75rem;
+				padding: 1.25rem;
+				margin-bottom: 1rem;
+			}
+			label {
+				display: block;
+				font-size: 0.875rem;
+				color: var(--muted);
+				margin-bottom: 0.75rem;
+			}
+			input {
+				display: block;
+				width: 100%;
+				margin-top: 0.25rem;
+				padding: 0.5rem 0.625rem;
+				border: 1px solid var(--border);
+				border-radius: 0.5rem;
+				background: var(--bg);
+				color: var(--fg);
+				font: inherit;
+			}
+			button {
+				padding: 0.5rem 1rem;
+				border: 0;
+				border-radius: 0.5rem;
+				background: var(--accent);
+				color: #fff;
+				font: inherit;
+				cursor: pointer;
+			}
+			ul {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			li {
+				display: flex;
+				justify-content: space-between;
+				padding: 0.5rem 0;
+				border-bottom: 1px solid var(--border);
+			}
+			li:last-child {
+				border-bottom: 0;
+			}
+			code {
+				font-size: 0.875em;
+			}
+			#status {
+				min-height: 1.5rem;
+				font-size: 0.875rem;
+				color: var(--muted);
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>Bounda on Cloudflare</h1>
+			<p>
+				Each order is a command: an event stored in a Durable Object's SQLite,
+				projected into a read model before the request answers. Every tenant is
+				its own object.
+			</p>
+			<form id="place">
+				<label>Tenant <input name="tenant" value="demo" required /></label>
+				<label>Customer <input name="customer" value="ada" required /></label>
+				<label
+					>Total
+					<input
+						name="total"
+						type="number"
+						min="1"
+						step="0.01"
+						value="42"
+						required
+				/></label>
+				<button type="submit">Place order</button>
+				<div id="status" role="status"></div>
+			</form>
+			<section>
+				<strong id="summary">No orders yet</strong>
+				<ul id="orders"></ul>
+			</section>
+			<p>
+				<code>POST /commands/placeOrder</code> and
+				<code>POST /queries/listOrders</code>, with the tenant in
+				<code>x-bounda-tenant</code>. Docs:
+				<a href="https://docs.bounda.dev/adapters/cloudflare/"
+					>docs.bounda.dev</a
+				>.
+			</p>
+		</main>
+		<script type="module">
+			const form = document.getElementById("place");
+			const status = document.getElementById("status");
+			const call = async (path, tenant, body) => {
+				const response = await fetch(path, {
+					method: "POST",
+					headers: {
+						"content-type": "application/json",
+						"x-bounda-tenant": tenant,
+					},
+					body: JSON.stringify(body),
+				});
+				const json = await response.json();
+				if (!response.ok)
+					throw new Error(json.error?.message ?? response.statusText);
+				return json;
+			};
+			const list = async () => {
+				const data = new FormData(form);
+				const { orders, total } = await call(
+					"/queries/listOrders",
+					data.get("tenant"),
+					{
+						customerId: data.get("customer"),
+					},
+				);
+				document.getElementById("summary").textContent =
+					`${data.get("customer")}: ${orders.length} order(s), ${total} in total`;
+				const items = orders.map((order) => {
+					const item = document.createElement("li");
+					const id = document.createElement("span");
+					id.textContent = order.orderId.slice(0, 8);
+					const amount = document.createElement("span");
+					amount.textContent = String(order.total);
+					item.append(id, amount);
+					return item;
+				});
+				document.getElementById("orders").replaceChildren(...items);
+			};
+			form.addEventListener("submit", async (event) => {
+				event.preventDefault();
+				const data = new FormData(form);
+				status.textContent = "Placing…";
+				try {
+					const result = await call(
+						"/commands/placeOrder",
+						data.get("tenant"),
+						{
+							orderId: crypto.randomUUID(),
+							customerId: data.get("customer"),
+							total: Number(data.get("total")),
+						},
+					);
+					status.textContent = `Stored as version ${result.version}.`;
+					await list();
+				} catch (error) {
+					status.textContent = error.message;
+				}
+			});
+			form.addEventListener("change", () => list().catch(() => undefined));
+			list().catch(() => undefined);
+		</script>
+	</body>
+</html>

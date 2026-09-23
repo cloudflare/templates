@@ -1,0 +1,10 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"types": [
+			"../worker-configuration.d.ts",
+			"@cloudflare/vitest-pool-workers/types"
+		]
+	},
+	"include": ["./**/*.ts", "./**/*.mts", "../.bounda/**/*", "../app"]
+}

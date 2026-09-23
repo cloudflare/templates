@@ -1,0 +1,38 @@
+{
+	"name": "bounda-event-sourcing-template",
+	"description": "Event-sourced orders with Bounda: every change is an event in a Durable Object's SQLite, projected into a read model before the request answers.",
+	"cloudflare": {
+		"label": "Event Sourcing with Bounda",
+		"products": [
+			"Workers",
+			"Durable Objects"
+		],
+		"categories": [
+			"storage"
+		],
+		"docs_url": "https://docs.bounda.dev/adapters/cloudflare/"
+	},
+	"dependencies": {
+		"@bounda-dev/adapter-cloudflare": "0.1.0-alpha.7",
+		"@bounda-dev/core": "0.1.0-alpha.7"
+	},
+	"devDependencies": {
+		"@bounda-dev/cli": "0.1.0-alpha.7",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "7.0.2",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"build": "bounda generate",
+		"cf-typegen": "wrangler types",
+		"check": "bounda generate && tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "bounda generate && wrangler deploy",
+		"dev": "bounda generate && wrangler dev",
+		"start": "bounda generate && wrangler dev",
+		"test": "bounda generate && vitest run --config tests/vitest.config.mts"
+	}
+}
