@@ -130,6 +130,19 @@ describe("Email Sending Worker", () => {
 		expect(send).not.toHaveBeenCalled();
 	});
 
+	it("rejects a correct token without the Bearer scheme", async () => {
+		const response = await handleRequest(
+			request("/send", {
+				method: "POST",
+				headers: { authorization: "test-token" },
+			}),
+			createEnv(),
+		);
+
+		expect(response.status).toBe(401);
+		expect(send).not.toHaveBeenCalled();
+	});
+
 	it("fails closed when the authentication secret is missing", async () => {
 		const response = await handleRequest(
 			request("/send", { method: "POST" }),

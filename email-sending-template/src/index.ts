@@ -4,6 +4,21 @@ function isPlaceholderAddress(value: string): boolean {
 	return /@[a-z0-9.-]+\.example$/i.test(value.trim());
 }
 
+// Hash both values to a fixed size, then compare in constant time so neither
+// the token contents nor its length leak through response timing.
+async function verifyToken(
+	provided: string,
+	expected: string,
+): Promise<boolean> {
+	const encoder = new TextEncoder();
+	const [providedHash, expectedHash] = await Promise.all([
+		crypto.subtle.digest("SHA-256", encoder.encode(provided)),
+		crypto.subtle.digest("SHA-256", encoder.encode(expected)),
+	]);
+
+	return crypto.subtle.timingSafeEqual(providedHash, expectedHash);
+}
+
 async function renderSetupPage(request: Request, env: Env): Promise<Response> {
 	const response = await env.ASSETS.fetch(request);
 	if (!response.ok) {
@@ -58,7 +73,11 @@ app.post("/send", async (context) => {
 		return context.json({ error: "Email sending is not configured" }, 503);
 	}
 
-	if (context.req.header("authorization") !== `Bearer ${authToken}`) {
+	const authorized = await verifyToken(
+		context.req.header("authorization") ?? "",
+		`Bearer ${authToken}`,
+	);
+	if (!authorized) {
 		context.header("WWW-Authenticate", "Bearer");
 		return context.json({ error: "Unauthorized" }, 401);
 	}
