@@ -21,7 +21,7 @@ const listOrders = async (tenant: string, customerId: string) =>
 		total: number;
 	}>();
 
-describe("the orders API", () => {
+describe("the orders API, on the Durable Object", () => {
 	it("stores a command as the first version of its order", async () => {
 		const response = await placeOrder("stores", "ada", 42);
 		expect(response.status).toBe(200);
@@ -47,14 +47,16 @@ describe("the orders API", () => {
 		const response = await post(
 			"/commands/placeOrder",
 			{ customerId: "ada", total: -1 },
-			"invalid",
+			"bad",
 		);
 		expect(response.status).toBe(400);
+		expect(await response.json()).toMatchObject({
+			error: { code: "VALIDATION_FAILED", issues: expect.any(Array) },
+		});
 	});
 
 	it("refuses to place the same order twice", async () => {
-		const orderId = crypto.randomUUID();
-		const body = { orderId, customerId: "ada", total: 1 };
+		const body = { orderId: crypto.randomUUID(), customerId: "ada", total: 1 };
 		expect((await post("/commands/placeOrder", body, "twice")).status).toBe(
 			200,
 		);

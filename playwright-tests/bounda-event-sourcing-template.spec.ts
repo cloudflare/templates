@@ -1,4 +1,4 @@
-import { test, expect } from "./fixtures";
+import { expect, test } from "./fixtures";
 
 test.describe("Event Sourcing with Bounda Template", () => {
 	test("places an order and lists it", async ({ page, templateUrl }) => {

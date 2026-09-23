@@ -13,26 +13,29 @@
 		"docs_url": "https://docs.bounda.dev/adapters/cloudflare/"
 	},
 	"dependencies": {
-		"@bounda-dev/adapter-cloudflare": "0.1.0-alpha.7",
-		"@bounda-dev/core": "0.1.0-alpha.7"
+		"@bounda-dev/adapter-cloudflare": "0.1.0-alpha.8",
+		"@bounda-dev/core": "0.1.0-alpha.8"
 	},
 	"devDependencies": {
-		"@bounda-dev/cli": "0.1.0-alpha.7",
-		"@cloudflare/vitest-pool-workers": "0.21.3",
-		"@vitest/runner": "4.1.10",
-		"@vitest/snapshot": "4.1.10",
+		"@bounda-dev/cli": "0.1.0-alpha.8",
+		"@cloudflare/vitest-plugin": "1.1.3",
 		"typescript": "7.0.2",
 		"vitest": "4.1.10",
 		"wrangler": "4.136.1"
+	},
+	"engines": {
+		"node": ">=22.18"
 	},
 	"private": true,
 	"scripts": {
 		"build": "bounda generate",
 		"cf-typegen": "wrangler types",
-		"check": "bounda generate && tsc --noEmit && wrangler deploy --dry-run",
+		"check": "bounda generate && wrangler types && tsc --noEmit && wrangler deploy --dry-run",
 		"deploy": "bounda generate && wrangler deploy",
-		"dev": "bounda generate && wrangler dev",
-		"start": "bounda generate && wrangler dev",
-		"test": "bounda generate && vitest run --config tests/vitest.config.mts"
-	}
+		"dev": "bounda generate && wrangler types && wrangler dev",
+		"generate": "bounda generate && wrangler types",
+		"test": "bounda generate && vitest run",
+		"typecheck": "bounda generate && wrangler types && tsc --noEmit"
+	},
+	"type": "module"
 }
