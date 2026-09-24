@@ -1,3 +1,4 @@
+import path from "node:path";
 import { test as base } from "@playwright/test";
 import { Template, TemplateServerManager } from "./utils/template-server";
 
@@ -61,7 +62,7 @@ export const test = base.extend<TemplateFixtures, TemplateWorkerFixtures>({
 	},
 
 	template: async ({ templateServerManager }, use, testInfo) => {
-		const testFileName = testInfo.file.split("/").pop() || "";
+		const testFileName = path.basename(testInfo.file);
 		const templateName = testFileName.replace(".spec.ts", "");
 
 		const template = templateServerManager.getTemplate(templateName);

@@ -190,6 +190,8 @@ export class TemplateServerManager {
 			{
 				cwd: template.path,
 				stdio: "pipe",
+				// Node throws EINVAL when spawning .cmd files without a shell (CVE-2024-27980)
+				shell: process.platform === "win32",
 				detached: process.platform !== "win32",
 				env: {
 					...process.env,
