@@ -1,0 +1,41 @@
+{
+	"name": "grpc-container-template",
+	"description": "Proxy bidirectional gRPC streams through a Worker and Durable Object to a Container.",
+	"cloudflare": {
+		"label": "gRPC Container",
+		"products": [
+			"Workers",
+			"Durable Objects",
+			"Containers"
+		],
+		"categories": [
+			"starter"
+		],
+		"docs_url": "https://developers.cloudflare.com/containers/",
+		"healthCheckPath": "/health"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-plugin": "1.1.3",
+		"@grpc/grpc-js": "1.14.5",
+		"@grpc/proto-loader": "0.8.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --enable-containers=false",
+		"grpc:client": "npm --prefix container run client -- 127.0.0.1:8788",
+		"grpc:server": "npm --prefix container start",
+		"start": "wrangler dev",
+		"test": "vitest run",
+		"test:e2e": "node scripts/smoke-test.mjs"
+	},
+	"type": "module"
+}

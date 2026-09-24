@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package cloudflare.grpcdemo;
+
+service ByteStream {
+  rpc Chat(stream ByteChunk) returns (stream ByteChunk);
+}
+
+message ByteChunk {
+  bytes payload = 1;
+}
+
