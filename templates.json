@@ -119,6 +119,9 @@
     },
     "email-sending-template": {
       "package_json_hash": "c10ec46edff3e911c2675120d7b9f5787a514fc2"
+    },
+    "shopify-on-cloudflare-template": {
+      "package_json_hash": "e3b782c091965b76a2f42c98d84e47d42c6dded7"
     }
   }
 }
