@@ -1,0 +1,35 @@
+{
+	"name": "agentskit-agent-template",
+	"description": "Build a streaming AI agent with AgentsKit and Cloudflare Workers AI, with no external API key required.",
+	"cloudflare": {
+		"label": "AgentsKit Agent",
+		"products": [
+			"Workers",
+			"Workers AI"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers-ai/"
+	},
+	"dependencies": {
+		"@agentskit/adapters": "0.14.0",
+		"@agentskit/core": "1.12.5"
+	},
+	"devDependencies": {
+		"typescript": "5.9.3",
+		"vitest": "3.2.4",
+		"wrangler": "4.88.0"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev --local",
+		"dev:remote": "wrangler dev",
+		"start": "wrangler dev --local",
+		"test": "vitest run"
+	},
+	"type": "module"
+}

@@ -102,6 +102,9 @@
     "commerce-llms-txt-template": {
       "package_json_hash": "ecaf3267a8bcc62542398f4b02f7b76b775fc926"
     },
+    "agentskit-agent-template": {
+      "package_json_hash": "a222679d9b74809e62536ec367bd4341a7ce6bd6"
+    },
     "agent-commerce-analytics-template": {
       "package_json_hash": "ac6474641bdd899252e7c0547def6eb8a6b05b90"
     },
