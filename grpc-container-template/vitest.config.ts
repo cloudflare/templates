@@ -6,8 +6,8 @@ export default defineConfig({
 		cloudflareTest({
 			remoteBindings: false,
 			wrangler: {
-				// Unit tests only exercise the HTTP handler, so this configuration
-				// excludes Containers and the raw TCP trigger and does not need Docker.
+				// Unit tests exercise handler shape and the plain-text status response,
+				// so this config excludes Containers and does not require Docker.
 				configPath: "./wrangler.test.jsonc",
 			},
 		}),

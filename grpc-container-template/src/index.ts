@@ -123,6 +123,18 @@ export class GrpcContainer extends DurableObject<Env> {
 }
 
 const worker = {
+	async fetch(): Promise<Response> {
+		return new Response(
+			"gRPC Container accepts connections over inbound TCP.\n",
+			{
+				headers: {
+					"content-type": "text/plain; charset=utf-8",
+					"cache-control": "no-store",
+				},
+			},
+		);
+	},
+
 	async connect(socket, env): Promise<void> {
 		log("worker_connection_opened", { localPort: LOCAL_GRPC_PORT });
 		const container = env.GRPC_CONTAINER.getByName(CONTAINER_INSTANCE);

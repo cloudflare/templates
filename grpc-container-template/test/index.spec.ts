@@ -2,18 +2,22 @@ import { describe, expect, it } from "vitest";
 import worker, { GrpcContainer } from "../src/index";
 
 describe("gRPC Container Worker", () => {
-	it("exposes only the raw TCP handler", () => {
-		expect(Object.keys(worker)).toEqual(["connect"]);
+	it("exposes HTTP status and raw TCP handlers", () => {
+		expect(Object.keys(worker)).toEqual(["fetch", "connect"]);
 	});
 
 	it("exposes a Worker connect handler", () => {
 		expect(typeof worker.connect).toBe("function");
 	});
 
-	it("does not expose a Worker fetch handler", () => {
-		const handler = worker as ExportedHandler<Env>;
+	it("returns a plain-text status response without a UI", async () => {
+		const response = await worker.fetch();
 
-		expect(handler.fetch).toBeUndefined();
+		expect(response.status).toBe(200);
+		expect(response.headers.get("content-type")).toContain("text/plain");
+		expect(await response.text()).toBe(
+			"gRPC Container accepts connections over inbound TCP.\n",
+		);
 	});
 
 	it("exposes a Durable Object connect handler", () => {

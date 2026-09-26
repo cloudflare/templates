@@ -108,11 +108,14 @@ npm run deploy
 
 Inbound TCP is available for Workers attached to a Cloudflare zone on a Pro or
 Business plan. The public hostname and port for the raw TCP listener depend on
-the inbound TCP configuration for your zone.
+the inbound TCP configuration for your zone. The Worker's normal HTTP URL
+returns only a plain-text status response for live-demo and health checks; it
+does not serve a browser UI.
 
 ## Project Structure
 
-- `src/index.ts` implements the raw TCP Worker and Durable Object handlers.
+- `src/index.ts` implements the raw TCP Worker and Durable Object handlers plus
+  the plain-text HTTP status response.
 - `container/server.js` implements the bidirectional gRPC service.
 - `container/client.js` is a small test client.
 - `proto/bytes.proto` defines the streaming service.
