@@ -1,0 +1,39 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "sellerfeeds-personal-mcp-template",
+	"main": "src/index.mjs",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": { "enabled": true },
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"migrations_dir": "migrations"
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "REPORTS"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "RELAY",
+				"class_name": "ExtensionRelay"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["ExtensionRelay"]
+		}
+	],
+	"secrets": {
+		"required": ["OWNER_TOKEN"]
+	},
+	"triggers": {
+		"crons": ["17 */6 * * *"]
+	}
+}

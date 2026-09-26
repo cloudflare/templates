@@ -45,6 +45,9 @@
     "saas-admin-template": {
       "package_json_hash": "a06c230790fc49fb25cf7b583f94938a2c371287"
     },
+    "sellerfeeds-personal-mcp-template": {
+      "package_json_hash": "147fc7dd0cc536d947d701511553e48977544ecb"
+    },
     "text-to-image-template": {
       "package_json_hash": "aae2e3a020f503f09a9306a7fdc2b5713bee32e3"
     },
