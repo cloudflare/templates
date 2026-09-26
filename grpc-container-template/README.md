@@ -52,7 +52,7 @@ The gRPC listener uses port `8788` during local development.
 - Node.js 20.16 or newer
 - Docker running locally
 - Access to Cloudflare Containers for deployment
-- Access to inbound TCP Workers for a deployed gRPC endpoint
+- A Cloudflare zone on a Pro or Business plan for inbound TCP access
 
 ## Getting Started
 
@@ -106,8 +106,9 @@ Deploy the Worker and Container:
 npm run deploy
 ```
 
-The public hostname and port for the raw TCP listener depend on the inbound TCP
-configuration available to your Cloudflare account.
+Inbound TCP is available for Workers attached to a Cloudflare zone on a Pro or
+Business plan. The public hostname and port for the raw TCP listener depend on
+the inbound TCP configuration for your zone.
 
 ## Project Structure
 

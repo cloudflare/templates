@@ -11,7 +11,10 @@
 		"categories": [
 			"starter"
 		],
-		"docs_url": "https://developers.cloudflare.com/containers/"
+		"docs_url": "https://developers.cloudflare.com/containers/",
+		"preview_image_url": "https://raw.githubusercontent.com/cloudflare/templates/main/grpc-container-template/preview.png",
+		"preview_icon_url": "https://raw.githubusercontent.com/cloudflare/templates/main/grpc-container-template/preview.png",
+		"publish": true
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-plugin": "1.1.3",
