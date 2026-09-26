@@ -2,7 +2,7 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/x402-proxy-template)
 
-A Cloudflare Worker that acts as a transparent proxy with payment-gated access using the [x402 protocol](https://x402.org) and stateless cookie-based authentication.
+A Cloudflare Worker that acts as a transparent proxy with payment-gated access using the [x402 v2 protocol](https://x402.org) and stateless cookie-based authentication.
 
 **Live Demo** - Try the built-in endpoints (other routes will fail as no origin is configured):
 
@@ -21,7 +21,7 @@ This template implements a **smart proxy** that:
 4. **Issues JWT cookies** valid for 1 hour after payment
 5. **Allows access** to protected routes without additional payments during the valid period
 
-> **Note:** This template is configured for Base Sepolia testnet. For production, update `NETWORK` in `wrangler.jsonc` to a mainnet network (e.g., `"base"`).
+> **Note:** This template ships with Base Sepolia (`eip155:84532`) and Solana devnet (`solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`) out of the box. Set `NETWORK` to a single entry to advertise only one.
 
 ### Use Cases
 
@@ -109,11 +109,23 @@ Visit `http://localhost:8787` to see the proxy in action.
 - npm or yarn
 - Cloudflare account (for deployment)
 - A wallet address to receive payments (see [Getting a Wallet Address](#getting-a-wallet-address) below)
-- Testnet tokens for testing payments (get from [CDP Faucet](https://docs.cdp.coinbase.com/faucets/introduction/welcome))
+- Testnet USDC for testing payments on either chain (get it from the [Circle faucet](https://faucet.circle.com))
+- No testnet ETH or SOL is needed for the payment flow: EVM payments are signed offline with EIP-3009, Solana payments use the facilitator's `extra.feePayer`, and the facilitator submits the transaction
 
 ### Getting a Wallet Address
 
-You need a wallet address (`PAY_TO`) to receive payments. Any Ethereum-compatible wallet works—use an existing wallet (MetaMask, Coinbase Wallet, etc.) or create one programmatically with [Coinbase Developer Platform](https://docs.cdp.coinbase.com/server-wallets/v2/introduction/quickstart).
+You need a recipient address for every enabled network family:
+
+- `PAY_TO` for EVM networks. Any Ethereum-compatible wallet works—use an existing wallet (MetaMask, Coinbase Wallet, etc.) or create one programmatically with [CDP Server Wallets](https://docs.cdp.coinbase.com/server-wallets/v2/introduction/quickstart).
+- `PAY_TO_SOLANA` for Solana networks. Any standard Solana wallet works.
+
+> **Solana recipients need an existing token account.** The x402 v2 `exact`
+> scheme transfers to the recipient's associated token account but does not
+> create it. If `PAY_TO_SOLANA` has never held the payment asset (e.g. USDC),
+> send it any amount of that token once — payment verification fails with a
+> simulation error until the token account exists.
+
+The default Solana incinerator already has a token account for devnet USDC.
 
 ### Installation
 
@@ -127,15 +139,35 @@ npm install
 
 The proxy is configured via environment variables in `wrangler.jsonc`:
 
-| Variable             | Required | Description                                    | Example                          |
-| -------------------- | -------- | ---------------------------------------------- | -------------------------------- |
-| `PAY_TO`             | Yes      | Wallet address to receive payments             | `"0x..."`                        |
-| `NETWORK`            | Yes      | Blockchain network for payments                | `"base-sepolia"` or `"base"`     |
-| `JWT_SECRET`         | Yes      | Secret for signing auth tokens (set as secret) | (64 hex chars)                   |
-| `PROTECTED_PATTERNS` | Yes      | Array of route pricing configurations          | See below                        |
-| `ORIGIN_URL`         | No       | External URL to proxy to (if not using DNS)    | `"https://api.example.com"`      |
-| `ORIGIN_SERVICE`     | No       | Service Binding to origin Worker               | Configured in wrangler.jsonc     |
-| `FACILITATOR_URL`    | No       | x402 facilitator endpoint (defaults to CDP)    | `"https://x402.org/facilitator"` |
+| Variable             | Required   | Description                                      | Example                          |
+| -------------------- | ---------- | ------------------------------------------------ | -------------------------------- |
+| `PAY_TO`             | For EVM    | EVM wallet address to receive payments           | `"0x..."`                        |
+| `PAY_TO_SOLANA`      | For Solana | Base58 Solana wallet address to receive payments | `"YourSolanaWalletAddress"`      |
+| `NETWORK`            | Yes        | One CAIP-2 network or a comma-separated list     | `"eip155:84532"`                 |
+| `JWT_SECRET`         | Yes        | Secret for signing auth tokens (set as secret)   | (64 hex chars)                   |
+| `PROTECTED_PATTERNS` | Yes        | Array of route pricing configurations            | See below                        |
+| `ORIGIN_URL`         | No         | External URL to proxy to (if not using DNS)      | `"https://api.example.com"`      |
+| `ORIGIN_SERVICE`     | No         | Service Binding to origin Worker                 | Configured in wrangler.jsonc     |
+| `FACILITATOR_URL`    | No         | x402 facilitator endpoint                        | `"https://x402.org/facilitator"` |
+
+#### Networks
+
+`NETWORK` accepts a CAIP-2 identifier or a comma-separated list. Every protected route advertises one payment option per configured network.
+
+| Network        | CAIP-2 identifier                         |
+| -------------- | ----------------------------------------- |
+| Base Sepolia   | `eip155:84532`                            |
+| Base           | `eip155:8453`                             |
+| Solana mainnet | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` |
+| Solana devnet  | `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1` |
+
+Network identifiers are [CAIP-2](https://chainagnostic.org/CAIPs/caip-2). Live facilitator and network support is listed under [Facilitators](https://docs.x402.org/dev-tools/facilitators):
+
+```jsonc
+"NETWORK": "eip155:84532,solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+```
+
+When combining families, configure both `PAY_TO` and `PAY_TO_SOLANA`.
 
 #### PROTECTED_PATTERNS
 
@@ -155,6 +187,10 @@ Each entry defines a protected route and its payment requirements:
   }
 ]
 ```
+
+#### Facilitators
+
+The default `https://x402.org/facilitator` is for testnet development. Multiple facilitators are live in production, supporting various networks including Base, Solana, Polygon, Avalanche, and more. See [Facilitators](https://docs.x402.org/dev-tools/facilitators) for production options.
 
 #### Proxy Modes
 
@@ -316,8 +352,8 @@ The proxy uses a custom JWT implementation built on Web Crypto API:
 
 1. Client requests protected route (e.g., `/premium`) without cookie
 2. Proxy responds with `402 Payment Required` + payment details
-3. Client creates signed payment (e.g., for USDC on Base Sepolia)
-4. Client retries request with `X-PAYMENT` header
+3. Client creates a signed payment for one advertised EVM or Solana option
+4. Client retries the request with the v2 `PAYMENT-SIGNATURE` header
 5. x402 middleware verifies payment via facilitator
 6. Proxy issues JWT cookie + forwards request to origin
 7. Subsequent requests use cookie (valid for 1 hour) - no payment needed
@@ -345,7 +381,7 @@ Routes matching `PROTECTED_PATTERNS` require payment or a valid authentication c
 **Without payment or cookie:**
 
 - Returns `402 Payment Required`
-- Includes payment requirements in response body
+- Includes base64-encoded v2 payment requirements in the `PAYMENT-REQUIRED` header
 
 **With valid payment:**
 
@@ -366,7 +402,7 @@ curl https://your-worker.dev/premium
 # → 402 Payment Required
 
 # Request with payment
-curl https://your-worker.dev/premium -H "X-PAYMENT: <encoded-payment>"
+curl https://your-worker.dev/premium -H "PAYMENT-SIGNATURE: <encoded-payment>"
 # → Cookie issued + request proxied to origin
 
 # Subsequent requests with cookie
@@ -381,7 +417,14 @@ curl https://your-worker.dev/premium -H "Cookie: auth_token=..."
 Run the automated test client:
 
 ```bash
+# EVM
 PRIVATE_KEY=0x... npm run test:client
+
+# Solana (base58 private key; devnet RPC is the default)
+SOLANA_PRIVATE_KEY=... npm run test:client
+
+# Optional custom Solana RPC
+SOLANA_PRIVATE_KEY=... SOLANA_RPC_URL=https://... npm run test:client
 ```
 
 This will:
@@ -400,6 +443,7 @@ See [TESTING.md](./TESTING.md) for detailed testing instructions.
 
 ```bash
 curl http://localhost:8787/__x402/health
+# Should return: {"status":"ok","proxy":"x402-proxy","message":"This endpoint is always public",...}
 ```
 
 2. **Request protected endpoint (no payment):**
@@ -557,7 +601,7 @@ Without Bot Management, all traffic to protected routes requires payment.
 
 ### Production Deployment
 
-> **Important:** For production, update `NETWORK` in `wrangler.jsonc` to a mainnet network (e.g., `"base"`).
+> **Important:** For production, use a mainnet CAIP-2 network and a facilitator that supports it. The default x402.org facilitator is testnet-only.
 
 1. **Set up secrets:**
 
@@ -646,8 +690,9 @@ Simply add a new entry to `PROTECTED_PATTERNS` in `wrangler.jsonc`:
 
 ## Resources
 
-- [x402 Protocol Documentation](https://x402.gitbook.io/x402)
-- [x402 GitHub](https://github.com/coinbase/x402) - Open source repository
+- [x402 Protocol Documentation](https://docs.x402.org)
+- [x402 GitHub](https://github.com/x402-foundation/x402) - Open source repository
+- [Circle Faucet](https://faucet.circle.com) - Base Sepolia and Solana devnet USDC
 - [CDP Server Wallet Quickstart](https://docs.cdp.coinbase.com/server-wallets/v2/introduction/quickstart) - Create wallets programmatically
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
 - [Service Bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/service-bindings/) - Worker-to-Worker communication

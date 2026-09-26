@@ -139,8 +139,11 @@ Ask: **"Any more paths on `{domain}` to protect?"**
 
 Ask these together:
 
-1. **"What wallet address should receive payments (PAY_TO)?"**
-2. **"Which network: `base-sepolia` (testing) or `base` (production)?"**
+1. **"Which CAIP-2 network or comma-separated networks should accept payment?"**
+2. **"What EVM address should receive payments (`PAY_TO`), if using `eip155:*`?"**
+3. **"What Solana address should receive payments (`PAY_TO_SOLANA`), if using `solana:*`?"**
+
+Network identifiers use CAIP-2 format (e.g. `eip155:84532`, `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1`); live facilitator and network support is listed under [Facilitators](https://docs.x402.org/dev-tools/facilitators).
 
 #### If User Doesn't Have a Wallet Address
 
@@ -197,7 +200,7 @@ Based on gathered information, generate the complete configuration.
 	],
 	"vars": {
 		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
-		"NETWORK": "base-sepolia",
+		"NETWORK": "eip155:84532",
 		"PROTECTED_PATTERNS": [
 			{
 				"pattern": "/premium/*",
@@ -220,7 +223,7 @@ Requires Bot Management for Enterprise to enable bot filtering.
 	],
 	"vars": {
 		"PAY_TO": "0x000000000000000000000000000000000000dEaD",
-		"NETWORK": "base-sepolia",
+		"NETWORK": "eip155:84532",
 		"PROTECTED_PATTERNS": [
 			{
 				"pattern": "/premium/*",
@@ -432,12 +435,13 @@ If a bot isn't in the registry, the user can find its detection ID in the dashbo
 
 ### Required Variables
 
-| Variable             | Description                                      |
-| -------------------- | ------------------------------------------------ |
-| `PAY_TO`             | Wallet address to receive payments               |
-| `NETWORK`            | `"base-sepolia"` (test) or `"base"` (production) |
-| `JWT_SECRET`         | Secret for signing tokens (64 hex chars)         |
-| `PROTECTED_PATTERNS` | Array of protected route configurations          |
+| Variable             | Description                                  |
+| -------------------- | -------------------------------------------- |
+| `PAY_TO`             | Recipient for configured `eip155:*` networks |
+| `PAY_TO_SOLANA`      | Recipient for configured `solana:*` networks |
+| `NETWORK`            | CAIP-2 network or comma-separated networks   |
+| `JWT_SECRET`         | Secret for signing tokens (64 hex chars)     |
+| `PROTECTED_PATTERNS` | Array of protected route configurations      |
 
 ### Protected Pattern Schema
 
@@ -458,7 +462,7 @@ If a bot isn't in the registry, the user can find its detection ID in the dashbo
 | ----------------- | --------------------------------------------------- |
 | `ORIGIN_URL`      | External URL to proxy to (for External Origin Mode) |
 | `ORIGIN_SERVICE`  | Service Binding to origin Worker                    |
-| `FACILITATOR_URL` | Payment facilitator (defaults to CDP)               |
+| `FACILITATOR_URL` | Payment facilitator (defaults to x402.org testnet)  |
 
 ### Debug Endpoints
 
