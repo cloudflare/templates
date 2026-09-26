@@ -1,35 +1,40 @@
-import { test, expect } from "./fixtures";
+import { spawn } from "node:child_process";
+import { join } from "node:path";
+import { expect, test } from "@playwright/test";
 
-test("explains the gRPC Container architecture", async ({
-	page,
-	templateUrl,
-}) => {
-	await page.goto(templateUrl);
+function runGrpcSmokeTest(): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const child = spawn(
+			process.platform === "win32" ? "pnpm.cmd" : "pnpm",
+			["run", "test:e2e"],
+			{
+				cwd: join(process.cwd(), "grpc-container-template"),
+				stdio: ["ignore", "pipe", "pipe"],
+			},
+		);
 
-	await expect(
-		page.getByRole("heading", {
-			level: 1,
-			name: "Stream gRPC through a Worker.",
-		}),
-	).toBeVisible();
-	await expect(page.getByText("Worker connect()")).toBeVisible();
-	await expect(page.getByText("Durable Object connect()")).toBeVisible();
-	await expect(
-		page.getByRole("listitem").filter({ hasText: "ByteStream.Chat" }),
-	).toBeVisible();
-});
+		let output = "";
+		for (const stream of [child.stdout, child.stderr]) {
+			stream.on("data", (chunk) => {
+				output += chunk.toString();
+			});
+		}
 
-test("reports the local gRPC connection metadata", async ({
-	request,
-	templateUrl,
-}) => {
-	const response = await request.get(`${templateUrl}/api/status`);
-
-	expect(response.status()).toBe(200);
-	await expect(response.json()).resolves.toMatchObject({
-		name: "gRPC Container",
-		protocol: "gRPC over raw TCP",
-		localGrpcAddress: "127.0.0.1:8788",
-		containerPort: 50051,
+		child.once("error", reject);
+		child.once("close", (code) => {
+			if (code === 0) {
+				resolve(output);
+				return;
+			}
+			reject(new Error(`gRPC smoke test exited with code ${code}.\n${output}`));
+		});
 	});
+}
+
+test("proxies a bidirectional gRPC stream through the Container", async () => {
+	test.setTimeout(180_000);
+
+	const output = await runGrpcSmokeTest();
+
+	expect(output).toContain("Full gRPC tunnel smoke test passed.");
 });
