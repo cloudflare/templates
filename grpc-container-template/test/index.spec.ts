@@ -1,47 +1,33 @@
-import { exports } from "cloudflare:workers";
 import { describe, expect, it } from "vitest";
-import worker, { GrpcContainer, STATUS } from "../src/index";
+import worker, { GrpcContainer } from "../src/index";
 
 describe("gRPC Container Worker", () => {
-	it("exposes HTTP and raw TCP handlers", () => {
-		expect(typeof worker.fetch).toBe("function");
+	it("exposes only the raw TCP handler", () => {
+		expect(Object.keys(worker)).toEqual(["connect"]);
+	});
+
+	it("exposes a Worker connect handler", () => {
 		expect(typeof worker.connect).toBe("function");
 	});
 
-	it("exposes a Durable Object raw TCP handler", () => {
+	it("does not expose a Worker fetch handler", () => {
+		const handler = worker as ExportedHandler<Env>;
+
+		expect(handler.fetch).toBeUndefined();
+	});
+
+	it("exposes a Durable Object connect handler", () => {
 		expect(typeof GrpcContainer.prototype.connect).toBe("function");
 	});
 
-	it("renders the architecture overview", async () => {
-		const response = await exports.default.fetch("https://example.com/");
-		const html = await response.text();
+	it("does not expose a Durable Object fetch handler", () => {
+		const durableObject = GrpcContainer.prototype as DurableObject;
 
-		expect(response.status).toBe(200);
-		expect(response.headers.get("content-type")).toContain("text/html");
-		expect(html).toContain("Stream gRPC through a Worker.");
-		expect(html).toContain("ByteStream.Chat");
+		expect(durableObject.fetch).toBeUndefined();
 	});
 
-	it("returns machine-readable connection metadata", async () => {
-		const response = await exports.default.fetch(
-			"https://example.com/api/status",
-		);
-
-		expect(response.status).toBe(200);
-		expect(await response.json()).toEqual(STATUS);
-	});
-
-	it("provides a health endpoint", async () => {
-		const response = await exports.default.fetch("https://example.com/health");
-
-		expect(response.status).toBe(200);
-		expect(await response.text()).toBe("ok\n");
-	});
-
-	it("returns JSON for unknown routes", async () => {
-		const response = await exports.default.fetch("https://example.com/missing");
-
-		expect(response.status).toBe(404);
-		expect(await response.json()).toEqual({ error: "Not found" });
+	it("uses the expected connect handler signatures", () => {
+		expect(worker.connect).toHaveLength(2);
+		expect(GrpcContainer.prototype.connect).toHaveLength(1);
 	});
 });

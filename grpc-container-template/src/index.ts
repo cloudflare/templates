@@ -1,5 +1,4 @@
 import { DurableObject } from "cloudflare:workers";
-import { renderHomePage } from "./ui";
 
 const CONTAINER_INSTANCE = "grpc-demo";
 const GRPC_PORT = 50051;
@@ -17,28 +16,8 @@ const SOCKET_OPTIONS: SocketOptions = {
 	secureTransport: "off",
 };
 
-export const STATUS = {
-	name: "gRPC Container",
-	protocol: "gRPC over raw TCP",
-	localGrpcAddress: `127.0.0.1:${LOCAL_GRPC_PORT}`,
-	containerPort: GRPC_PORT,
-	path: [
-		"Worker connect()",
-		"Durable Object connect()",
-		`Container TCP port ${GRPC_PORT}`,
-		"ByteStream.Chat",
-	],
-} as const;
-
 function log(event: string, details: Record<string, unknown> = {}): void {
 	console.log(JSON.stringify({ event, ...details }));
-}
-
-function jsonResponse(value: unknown, init: ResponseInit = {}): Response {
-	const headers = new Headers(init.headers);
-	headers.set("content-type", "application/json; charset=utf-8");
-	headers.set("cache-control", "no-store");
-	return Response.json(value, { ...init, headers });
 }
 
 async function bridgeSockets(left: Socket, right: Socket): Promise<void> {
@@ -144,37 +123,6 @@ export class GrpcContainer extends DurableObject<Env> {
 }
 
 const worker = {
-	async fetch(request): Promise<Response> {
-		const url = new URL(request.url);
-
-		if (request.method === "GET" && url.pathname === "/") {
-			return new Response(renderHomePage(STATUS), {
-				headers: {
-					"content-type": "text/html; charset=utf-8",
-					"cache-control": "public, max-age=300",
-					"content-security-policy":
-						"default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; frame-ancestors 'none'",
-					"x-content-type-options": "nosniff",
-				},
-			});
-		}
-
-		if (request.method === "GET" && url.pathname === "/api/status") {
-			return jsonResponse(STATUS);
-		}
-
-		if (request.method === "GET" && url.pathname === "/health") {
-			return new Response("ok\n", {
-				headers: {
-					"content-type": "text/plain; charset=utf-8",
-					"cache-control": "no-store",
-				},
-			});
-		}
-
-		return jsonResponse({ error: "Not found" }, { status: 404 });
-	},
-
 	async connect(socket, env): Promise<void> {
 		log("worker_connection_opened", { localPort: LOCAL_GRPC_PORT });
 		const container = env.GRPC_CONTAINER.getByName(CONTAINER_INSTANCE);

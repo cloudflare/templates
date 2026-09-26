@@ -14,7 +14,6 @@ This template combines:
 - A Worker `connect()` handler for inbound TCP streams.
 - A Durable Object `connect()` handler that owns the Container instance.
 - The low-level Container TCP port API for reaching the gRPC server.
-- A small HTTP landing page that documents the running architecture.
 
 The Worker does not parse or terminate gRPC. It streams bytes in both directions,
 leaving HTTP/2 and gRPC handling to the service inside the Container.
@@ -46,8 +45,7 @@ GrpcContainer.connect()
 gRPC server in the Container
 ```
 
-The same Worker also serves an HTTP overview at port `8787` during local
-development. The gRPC listener uses port `8788`.
+The gRPC listener uses port `8788` during local development.
 
 ## Prerequisites
 
@@ -70,7 +68,6 @@ Start the Worker, Durable Object, and Container:
 npm run dev
 ```
 
-Open [http://localhost:8787](http://localhost:8787) to view the architecture.
 Wrangler listens for local gRPC traffic at `127.0.0.1:8788`.
 
 In another terminal, run the included streaming client:
@@ -110,14 +107,11 @@ npm run deploy
 ```
 
 The public hostname and port for the raw TCP listener depend on the inbound TCP
-configuration available to your Cloudflare account. The HTTP overview remains
-available at the Worker's normal URL.
+configuration available to your Cloudflare account.
 
 ## Project Structure
 
-- `src/index.ts` implements the HTTP and raw TCP Worker handlers plus the
-  Durable Object.
-- `src/ui.ts` renders the HTTP architecture overview.
+- `src/index.ts` implements the raw TCP Worker and Durable Object handlers.
 - `container/server.js` implements the bidirectional gRPC service.
 - `container/client.js` is a small test client.
 - `proto/bytes.proto` defines the streaming service.

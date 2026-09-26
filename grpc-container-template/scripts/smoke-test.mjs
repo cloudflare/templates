@@ -1,7 +1,9 @@
 import { spawn } from "node:child_process";
+import { createConnection } from "node:net";
 import process from "node:process";
 
-const HTTP_URL = "http://127.0.0.1:8787/health";
+const GRPC_HOST = "127.0.0.1";
+const GRPC_PORT = 8788;
 const CLIENT_TIMEOUT_MS = 120_000;
 const SERVER_TIMEOUT_MS = 60_000;
 
@@ -9,22 +11,37 @@ function delay(milliseconds) {
 	return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-async function waitForHttp(url, timeoutMs) {
+function canConnect(host, port) {
+	return new Promise((resolve) => {
+		const socket = createConnection({ host, port });
+
+		socket.setTimeout(1_000);
+		socket.once("connect", () => {
+			socket.destroy();
+			resolve(true);
+		});
+		socket.once("error", () => {
+			socket.destroy();
+			resolve(false);
+		});
+		socket.once("timeout", () => {
+			socket.destroy();
+			resolve(false);
+		});
+	});
+}
+
+async function waitForTcp(host, port, timeoutMs) {
 	const deadline = Date.now() + timeoutMs;
 
 	while (Date.now() < deadline) {
-		try {
-			const response = await fetch(url);
-			if (response.ok) {
-				return;
-			}
-		} catch {
-			// Wrangler is still starting.
+		if (await canConnect(host, port)) {
+			return;
 		}
 		await delay(500);
 	}
 
-	throw new Error(`Timed out waiting for ${url}`);
+	throw new Error(`Timed out waiting for ${host}:${port}`);
 }
 
 function runClient() {
@@ -37,7 +54,7 @@ function runClient() {
 				"run",
 				"client",
 				"--",
-				"127.0.0.1:8788",
+				`${GRPC_HOST}:${GRPC_PORT}`,
 				"2",
 				"25",
 			],
@@ -119,7 +136,7 @@ wrangler.stdout.on("data", (chunk) => process.stdout.write(chunk));
 wrangler.stderr.on("data", (chunk) => process.stderr.write(chunk));
 
 try {
-	await waitForHttp(HTTP_URL, SERVER_TIMEOUT_MS);
+	await waitForTcp(GRPC_HOST, GRPC_PORT, SERVER_TIMEOUT_MS);
 	const output = await runClient();
 
 	const expectedMessages = [
