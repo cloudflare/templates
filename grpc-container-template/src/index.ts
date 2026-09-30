@@ -21,59 +21,47 @@ function log(event: string, details: Record<string, unknown> = {}): void {
 }
 
 async function bridgeSockets(left: Socket, right: Socket): Promise<void> {
-	const results = await Promise.allSettled([
-		left.readable.pipeTo(right.writable),
-		right.readable.pipeTo(left.writable),
-	]);
-
-	for (const result of results) {
-		if (result.status === "rejected") {
-			log("socket_pipe_closed", {
-				reason:
-					result.reason instanceof Error
-						? result.reason.message
-						: String(result.reason),
-			});
-		}
+	try {
+		await Promise.all([
+			left.readable.pipeTo(right.writable),
+			right.readable.pipeTo(left.writable),
+		]);
+	} catch (error) {
+		log("socket_pipe_closed", {
+			reason: error instanceof Error ? error.message : String(error),
+		});
 	}
 }
 
 export class GrpcContainer extends DurableObject<Env> {
-	constructor(ctx: DurableObjectState, env: Env) {
-		super(ctx, env);
-
-		this.ctx.blockConcurrencyWhile(async () => {
-			if (!this.ctx.container) {
-				throw new Error("Container binding is unavailable");
-			}
-
-			if (!this.ctx.container.running) {
-				this.ctx.container.start({
-					enableInternet: false,
-					env: {
-						GRPC_PORT: String(GRPC_PORT),
-					},
-				});
-				// `running` indicates that the Container VM has started, but the
-				// process inside it still needs a moment to bind the gRPC port.
-				await scheduler.wait(CONTAINER_STARTUP_GRACE_MS);
-			}
-		});
-	}
+	private starting: Promise<void> | undefined;
 
 	private async openGrpcSocket(): Promise<Socket> {
-		if (!this.ctx.container) {
+		const container = this.ctx.container;
+		if (!container) {
 			throw new Error("Container binding is unavailable");
 		}
+
+		if (!container.running && !this.starting) {
+			container.start({
+				enableInternet: false,
+				env: { GRPC_PORT: String(GRPC_PORT) },
+			});
+			this.starting = scheduler.wait(CONTAINER_STARTUP_GRACE_MS).finally(() => {
+				this.starting = undefined;
+			});
+		}
+		await this.starting;
 
 		let lastError: unknown;
 
 		for (let attempt = 1; attempt <= CONTAINER_CONNECT_ATTEMPTS; attempt += 1) {
-			const candidate = this.ctx.container
-				.getTcpPort(GRPC_PORT)
-				.connect(`10.0.0.1:${GRPC_PORT}`, SOCKET_OPTIONS);
+			let candidate: Socket | undefined;
 
 			try {
+				candidate = container
+					.getTcpPort(GRPC_PORT)
+					.connect(`10.0.0.1:${GRPC_PORT}`, SOCKET_OPTIONS);
 				await candidate.opened;
 
 				// A connection can open and immediately close while the process inside
@@ -91,12 +79,12 @@ export class GrpcContainer extends DurableObject<Env> {
 					return candidate;
 				}
 
-				candidate.close();
 				lastError = new Error("Container port closed before becoming ready");
 			} catch (error) {
-				candidate.close();
 				lastError = error;
 			}
+
+			await candidate?.close().catch(() => {});
 
 			if (attempt < CONTAINER_CONNECT_ATTEMPTS) {
 				await scheduler.wait(CONTAINER_CONNECT_RETRY_MS);
@@ -110,13 +98,13 @@ export class GrpcContainer extends DurableObject<Env> {
 
 	async connect(socket: Socket): Promise<void> {
 		log("durable_object_connection_opened", { containerPort: GRPC_PORT });
-		const upstream = await this.openGrpcSocket();
+		let upstream: Socket | undefined;
 
 		try {
+			upstream = await this.openGrpcSocket();
 			await bridgeSockets(socket, upstream);
 		} finally {
-			socket.close();
-			upstream.close();
+			await Promise.allSettled([socket.close(), upstream?.close()]);
 			log("durable_object_connection_closed");
 		}
 	}
@@ -137,18 +125,18 @@ const worker = {
 
 	async connect(socket, env): Promise<void> {
 		log("worker_connection_opened", { localPort: LOCAL_GRPC_PORT });
-		const container = env.GRPC_CONTAINER.getByName(CONTAINER_INSTANCE);
-		const durableObjectSocket = container.connect(
-			`grpc-container:${GRPC_PORT}`,
-			SOCKET_OPTIONS,
-		);
+		let durableObjectSocket: Socket | undefined;
 
 		try {
+			const container = env.GRPC_CONTAINER.getByName(CONTAINER_INSTANCE);
+			durableObjectSocket = container.connect(
+				`grpc-container:${GRPC_PORT}`,
+				SOCKET_OPTIONS,
+			);
 			await durableObjectSocket.opened;
 			await bridgeSockets(socket, durableObjectSocket);
 		} finally {
-			socket.close();
-			durableObjectSocket.close();
+			await Promise.allSettled([socket.close(), durableObjectSocket?.close()]);
 			log("worker_connection_closed");
 		}
 	},

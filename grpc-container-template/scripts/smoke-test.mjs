@@ -31,10 +31,15 @@ function canConnect(host, port) {
 	});
 }
 
-async function waitForTcp(host, port, timeoutMs) {
+async function waitForTcp(host, port, timeoutMs, child) {
 	const deadline = Date.now() + timeoutMs;
 
 	while (Date.now() < deadline) {
+		if (child.exitCode !== null || child.signalCode !== null) {
+			throw new Error(
+				`Wrangler exited before opening ${host}:${port} (code ${child.exitCode}, signal ${child.signalCode})`,
+			);
+		}
 		if (await canConnect(host, port)) {
 			return;
 		}
@@ -126,6 +131,10 @@ async function stopProcessTree(child) {
 	}
 }
 
+if (await canConnect(GRPC_HOST, GRPC_PORT)) {
+	throw new Error(`Port ${GRPC_HOST}:${GRPC_PORT} is already in use`);
+}
+
 const wrangler = spawn("npm", ["run", "dev"], {
 	cwd: process.cwd(),
 	detached: process.platform !== "win32",
@@ -136,7 +145,7 @@ wrangler.stdout.on("data", (chunk) => process.stdout.write(chunk));
 wrangler.stderr.on("data", (chunk) => process.stderr.write(chunk));
 
 try {
-	await waitForTcp(GRPC_HOST, GRPC_PORT, SERVER_TIMEOUT_MS);
+	await waitForTcp(GRPC_HOST, GRPC_PORT, SERVER_TIMEOUT_MS, wrangler);
 	const output = await runClient();
 
 	const expectedMessages = [

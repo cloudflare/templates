@@ -112,6 +112,12 @@ the inbound TCP configuration for your zone. The Worker's normal HTTP URL
 returns only a plain-text status response for live-demo and health checks; it
 does not serve a browser UI.
 
+## Caveats
+
+The included client uses an unencrypted connection for local testing. Use a
+TLS-enabled endpoint and configure the client with TLS credentials before
+sending traffic over an untrusted network.
+
 ## Project Structure
 
 - `src/index.ts` implements the raw TCP Worker and Durable Object handlers plus
