@@ -13,13 +13,28 @@ import (
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	message := os.Getenv("MESSAGE")
-	instanceId := os.Getenv("CLOUDFLARE_DURABLE_OBJECT_ID")
+	instanceId := os.Getenv("INSTANCE_ID")
 	fmt.Fprintf(w, "Hi, I'm a container and this is my message: \"%s\", my instance ID is: %s", message, instanceId)
 
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request) {
-	panic("This is a panic")
+	// net/http recovers handler panics. Exit explicitly to demonstrate a
+	// container failure that the Durable Object observes with monitor().
+	log.Println("Exiting with code 1 for the /error demonstration")
+	os.Exit(1)
+}
+
+func newRouter() http.Handler {
+	router := http.NewServeMux()
+	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
+	router.HandleFunc("/", handler)
+	router.HandleFunc("/container", handler)
+	router.HandleFunc("/error", errorHandler)
+
+	return router
 }
 
 func main() {
@@ -27,14 +42,9 @@ func main() {
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
-	router := http.NewServeMux()
-	router.HandleFunc("/", handler)
-	router.HandleFunc("/container", handler)
-	router.HandleFunc("/error", errorHandler)
-
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: router,
+		Handler: newRouter(),
 	}
 
 	go func() {

@@ -10,8 +10,12 @@
 	"containers": [
 		{
 			"class_name": "MyContainer",
-			"image": "./Dockerfile",
-			"max_instances": 10
+			"scheduling_policy": "durable_object",
+			"images": {
+				"base": {
+					"dockerfile": "./Dockerfile"
+				}
+			}
 		}
 	],
 	"durable_objects": {
@@ -22,11 +26,11 @@
 			}
 		]
 	},
-	"migrations": [
-		{
-			"new_sqlite_classes": ["MyContainer"],
-			"tag": "v1"
+	"upload_source_maps": true,
+	"exports": {
+		"MyContainer": {
+			"type": "durable-object",
+			"storage": "sqlite"
 		}
-	],
-	"upload_source_maps": true
+	}
 }
