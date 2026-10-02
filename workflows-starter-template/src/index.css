@@ -1,6 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+	--font-mono:
+		ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+		"Courier New", monospace;
+}
 
 @layer base {
 	:root {
@@ -20,18 +24,10 @@
 	}
 }
 
-@layer utilities {
-	.font-mono {
-		font-family:
-			ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-			"Courier New", monospace;
-	}
+@utility ring-glass {
+	@apply ring-1 ring-black/5 dark:ring-white/10;
+}
 
-	.ring-glass {
-		@apply ring-1 ring-black/5 dark:ring-white/10;
-	}
-
-	.shadow-float {
-		@apply shadow-lg shadow-black/5 dark:shadow-black/20;
-	}
+@utility shadow-float {
+	@apply shadow-lg shadow-black/5 dark:shadow-black/20;
 }

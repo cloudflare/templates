@@ -15,11 +15,12 @@
 	},
 	"dependencies": {
 		"@openauthjs/openauth": "0.4.3",
+		"hono": "4.11.1",
 		"valibot": "1.2.0"
 	},
 	"devDependencies": {
 		"typescript": "5.9.3",
-		"wrangler": "4.56.0"
+		"wrangler": "4.136.1"
 	},
 	"private": true,
 	"scripts": {

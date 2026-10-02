@@ -1,0 +1,5 @@
+{
+	"name": "worker-b",
+	"main": "./worker-b.ts",
+	"compatibility_date": "2025-10-08"
+}

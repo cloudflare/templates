@@ -401,14 +401,29 @@ Playwright is installed
 
 2. **Basic test structure**:
 
+   <!-- prettier-ignore -->
    ```typescript
-   import { test, expect } from "@playwright/test";
+   import { test, expect } from "./fixtures";
 
-   test("homepage loads correctly", async ({ page }) => {
-   	await page.goto("/");
-   	await expect(page.locator("h1")).toBeVisible();
+   test("homepage loads correctly", async ({ page, templateUrl }) => {
+     await page.goto(templateUrl);
+     await expect(page.locator("h1")).toBeVisible();
    });
    ```
+
+3. **Use local E2E configuration for remote bindings**: If the normal `dev` script requires remote resources, add an `e2e:dev` script. The test harness prefers it automatically:
+
+   <!-- prettier-ignore -->
+   ```json
+   {
+     "scripts": {
+       "dev": "wrangler dev --remote",
+       "e2e:dev": "wrangler dev --config wrangler.e2e.jsonc"
+     }
+   }
+   ```
+
+   Mock only external binding boundaries; keep the production request handler in the E2E path.
 
 ### Using Playwright Codegen
 

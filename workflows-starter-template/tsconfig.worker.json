@@ -6,7 +6,7 @@
 		"types": [
 			"./worker-configuration.d.ts",
 			"vite/client",
-			"@cloudflare/vitest-pool-workers"
+			"@cloudflare/vitest-pool-workers/types"
 		]
 	},
 	"include": ["./worker-configuration.d.ts", "./worker", "./test"]

@@ -1,0 +1,22 @@
+import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+	plugins: [
+		cloudflareTest({
+			wrangler: { configPath: "./wrangler.jsonc" },
+			remoteBindings: false,
+			miniflare: {
+				// Mock bindings for testing
+				d1Databases: ["DB"],
+				bindings: {
+					DISPATCH_NAMESPACE_NAME: "test-namespace",
+					CUSTOM_DOMAIN: "",
+					// Required for API calls - mock values for testing
+					ACCOUNT_ID: "test-account-id",
+					DISPATCH_NAMESPACE_API_TOKEN: "test-api-token",
+				},
+			},
+		}),
+	],
+});

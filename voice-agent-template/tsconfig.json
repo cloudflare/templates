@@ -1,0 +1,8 @@
+{
+	"extends": "agents/tsconfig",
+	"compilerOptions": {
+		"types": ["@cloudflare/workers-types", "./worker-configuration.d.ts"]
+	},
+	"exclude": ["test", "vitest.config.ts"],
+	"include": ["worker-configuration.d.ts", "src/**/*.ts"]
+}

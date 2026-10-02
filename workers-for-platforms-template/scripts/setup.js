@@ -392,7 +392,7 @@ class SetupManager {
 	}
 
 	async ensureDispatchNamespace() {
-		const namespaceName = "workers-platform-template";
+		const namespaceName = "workers-for-platforms-template";
 
 		if (!this.config.wfpAvailable) {
 			log(
