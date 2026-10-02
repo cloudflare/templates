@@ -1,0 +1,21 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "grpc-container-template-test",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat", "experimental"],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "GRPC_CONTAINER",
+				"class_name": "GrpcContainer"
+			}
+		]
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": ["GrpcContainer"]
+		}
+	]
+}
