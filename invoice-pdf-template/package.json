@@ -22,14 +22,14 @@
 		}
 	},
 	"dependencies": {
-		"@formepdf/html": "0.20.1",
+		"@formepdf/html": "0.28.0",
 		"hono": "4.11.1"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.21.3",
 		"typescript": "5.9.3",
 		"vitest": "4.1.10",
-		"wrangler": "4.127.0"
+		"wrangler": "4.136.1"
 	},
 	"private": true,
 	"scripts": {
