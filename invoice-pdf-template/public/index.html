@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Invoice PDF Generator</title>
+		<style>
+			:root {
+				color-scheme: light;
+			}
+			body {
+				font-family:
+					system-ui,
+					-apple-system,
+					sans-serif;
+				max-width: 860px;
+				margin: 2rem auto;
+				padding: 0 1rem;
+				color: #222;
+				background: #fff;
+			}
+			h1 {
+				font-size: 1.5rem;
+				margin: 0 0 0.25rem;
+			}
+			h2 {
+				font-size: 1.1rem;
+				margin: 2rem 0 0.75rem;
+			}
+			.sub {
+				color: #666;
+				margin: 0 0 1.5rem;
+			}
+			form {
+				display: grid;
+				gap: 0.75rem;
+			}
+			.row {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+				gap: 0.75rem;
+			}
+			label {
+				display: grid;
+				gap: 0.25rem;
+				font-size: 0.85rem;
+				color: #444;
+			}
+			input,
+			textarea,
+			select,
+			button {
+				font: inherit;
+			}
+			input,
+			textarea,
+			select {
+				padding: 0.4rem 0.5rem;
+				border: 1px solid #bbb;
+				border-radius: 4px;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th,
+			td {
+				text-align: left;
+				padding: 0.4rem 0.5rem;
+				border-bottom: 1px solid #e5e5e5;
+				vertical-align: middle;
+			}
+			th {
+				font-size: 0.8rem;
+				color: #666;
+				text-transform: uppercase;
+			}
+			td input {
+				width: 100%;
+				box-sizing: border-box;
+			}
+			.num {
+				text-align: right;
+			}
+			.actions {
+				display: flex;
+				gap: 0.5rem;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+			button {
+				padding: 0.45rem 0.9rem;
+				border-radius: 4px;
+				border: 1px solid #888;
+				background: #f6f6f6;
+				cursor: pointer;
+			}
+			button.primary {
+				background: #222;
+				color: #fff;
+				border-color: #222;
+			}
+			button:disabled {
+				opacity: 0.5;
+				cursor: default;
+			}
+			.totals {
+				text-align: right;
+				color: #444;
+			}
+			.totals strong {
+				font-size: 1.1rem;
+				color: #222;
+			}
+			.status {
+				padding: 0.6rem 0.8rem;
+				border-radius: 4px;
+				background: #eef6ee;
+				border: 1px solid #b9dcb9;
+			}
+			.status.error {
+				background: #fbeaea;
+				border-color: #e5b4b4;
+			}
+			.empty {
+				color: #777;
+			}
+			footer {
+				margin-top: 3rem;
+				color: #888;
+				font-size: 0.85rem;
+			}
+			footer a {
+				color: inherit;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Invoice PDF Generator</h1>
+		<p class="sub">
+			Fill in the form, render a PDF in the Worker, and find it again in the
+			list below.
+		</p>
+
+		<form id="invoice-form">
+			<div class="row">
+				<label
+					>Client name
+					<input name="clientName" required value="Acme Corp" />
+				</label>
+				<label
+					>Client email
+					<input
+						name="clientEmail"
+						type="email"
+						placeholder="billing@acme.example"
+					/>
+				</label>
+				<label
+					>Invoice number
+					<input name="number" placeholder="Auto-generated if blank" />
+				</label>
+			</div>
+			<div class="row">
+				<label
+					>Issue date
+					<input name="issueDate" type="date" />
+				</label>
+				<label
+					>Due date
+					<input name="dueDate" type="date" />
+				</label>
+				<label
+					>Currency
+					<select name="currency">
+						<option>USD</option>
+						<option>EUR</option>
+						<option>GBP</option>
+						<option>CAD</option>
+						<option>AUD</option>
+					</select>
+				</label>
+				<label
+					>Tax rate (%)
+					<input name="taxRate" type="number" min="0" step="0.01" value="0" />
+				</label>
+			</div>
+
+			<table id="items">
+				<thead>
+					<tr>
+						<th>Description</th>
+						<th class="num" style="width: 6rem">Qty</th>
+						<th class="num" style="width: 8rem">Unit price</th>
+						<th class="num" style="width: 8rem">Amount</th>
+						<th style="width: 2.5rem"></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<div class="actions">
+				<button type="button" id="add-item">Add line item</button>
+				<div class="totals" style="margin-left: auto">
+					Subtotal <span id="subtotal">$0.00</span> &middot; Tax
+					<span id="tax">$0.00</span> &middot; Total
+					<strong id="total">$0.00</strong>
+				</div>
+			</div>
+
+			<label
+				>Notes
+				<textarea
+					name="notes"
+					rows="2"
+					placeholder="Payment terms, bank details, thanks..."
+				></textarea>
+			</label>
+
+			<div class="actions">
+				<button type="submit" class="primary" id="render">Render PDF</button>
+				<div id="status" hidden></div>
+			</div>
+		</form>
+
+		<h2>Previous invoices</h2>
+		<table id="list">
+			<thead>
+				<tr>
+					<th>Number</th>
+					<th>Client</th>
+					<th>Issued</th>
+					<th class="num">Total</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<p class="empty" id="empty">No invoices yet.</p>
+
+		<footer>
+			PDFs are rendered in the Worker by
+			<a href="https://www.npmjs.com/package/@formepdf/html">@formepdf/html</a>,
+			stored in R2, and indexed in KV.
+		</footer>
+
+		<script src="/app.js"></script>
+	</body>
+</html>
