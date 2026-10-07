@@ -1,0 +1,76 @@
+### Git ###
+*.orig
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+*.icloud
+
+### Node ###
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+coverage
+*.lcov
+.nyc_output
+node_modules/
+*.tsbuildinfo
+.npm
+.eslintcache
+.stylelintcache
+*.tgz
+.yarn-integrity
+.cache
+.parcel-cache
+.next
+.nuxt
+.docusaurus
+.serverless/
+.fusebox/
+.dynamodb/
+.svelte-kit
+
+### Wrangler ###
+.wrangler/
+.env*
+!.env.example
+.dev.vars*
+!.dev.vars.example
+
+### Playwright ###
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+### Project ###
+dist/
+.worktrees/
+.playwright-mcp/
+.gadget/
+.gadget.env
+.appwrite
+*.config.json
+config.json
+yarn.lock
