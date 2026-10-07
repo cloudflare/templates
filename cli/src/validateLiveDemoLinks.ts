@@ -1,9 +1,25 @@
 import { getPublishedTemplates } from "./util";
 import MarkdownError from "./MarkdownError";
+import { execFileSync } from "node:child_process";
 
 export type ValidateLiveDemoLinksConfig = {
 	templateDirectory: string;
 };
+
+function isNewPullRequestTemplate(name: string): boolean {
+	if (!process.env.GITHUB_BASE_REF) {
+		return false;
+	}
+
+	try {
+		execFileSync("git", ["cat-file", "-e", `HEAD^1:${name}/package.json`], {
+			stdio: "ignore",
+		});
+		return false;
+	} catch {
+		return true;
+	}
+}
 
 export async function validateLiveDemoLinks({
 	templateDirectory,
@@ -18,6 +34,13 @@ export async function validateLiveDemoLinks({
 				const url = `https://${name}.templates.workers.dev`;
 				const response = await fetch(url);
 				if (!response.ok) {
+					// A newly published template cannot have a live demo until the
+					// trusted post-merge workflow deploys it with Cloudflare credentials.
+					if (response.status === 404 && isNewPullRequestTemplate(name)) {
+						successes.push(`- ⏭️ ${url} (new template; deploys after merge)`);
+						return;
+					}
+
 					if (!retried) {
 						/**
 						 * For brand new workers, it may take some time for dns to propagate.

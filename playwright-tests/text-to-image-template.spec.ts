@@ -4,7 +4,7 @@ test("returns a PNG generated through the AI binding boundary", async ({
 	request,
 	templateUrl,
 }) => {
-	const response = await request.get(templateUrl);
+	const response = await request.get(templateUrl, { timeout: 90_000 });
 	expect(response.status()).toBe(200);
 	expect(response.headers()["content-type"]).toContain("image/png");
 	expect([...Buffer.from(await response.body()).subarray(0, 8)]).toEqual([

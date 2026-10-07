@@ -1,0 +1,14 @@
+# Dependencies
+/node_modules
+
+# Cloudflare
+/.dev.vars*
+!/.dev.vars.example
+/.wrangler
+
+# Test output
+/coverage
+/test-results
+
+# OS files
+.DS_Store

@@ -16,7 +16,7 @@
 	"kv_namespaces": [
 		{
 			"binding": "EVENT_STORE",
-			"id": "<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>"
+			"id": "c1af5ae34d4a40d88d6732fd5f11160a"
 		}
 	],
 	"vars": {

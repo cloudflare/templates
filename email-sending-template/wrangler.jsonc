@@ -1,0 +1,29 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "email-sending-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./public",
+		"run_worker_first": ["/", "/send"]
+	},
+	"secrets": {
+		"required": ["SEND_EMAIL_AUTH_TOKEN"]
+	},
+	"vars": {
+		"FROM_ADDRESS": "notifications@company.example",
+		"TO_ADDRESS": "recipient@mailbox.example"
+	},
+	"send_email": [
+		{
+			"name": "EMAIL",
+			// Remote development calls the real Email Service API.
+			"remote": true
+		}
+	]
+}
