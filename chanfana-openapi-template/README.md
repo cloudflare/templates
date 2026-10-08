@@ -25,7 +25,7 @@ Besides being able to see the OpenAPI schema (openapi.json) in the browser, you 
 Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/openapi-template
+npm create cloudflare@latest -- --template=cloudflare/templates/chanfana-openapi-template
 ```
 
 A live public deployment of this template is available at [https://openapi-template.templates.workers.dev](https://openapi-template.templates.workers.dev)
