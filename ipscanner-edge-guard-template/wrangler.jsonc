@@ -1,0 +1,25 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ipscanner-edge-guard-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	// Put the guard in front of an existing site by adding a route:
+	// "routes": [{ "pattern": "example.com/*", "zone_name": "example.com" }],
+	"vars": {
+		"MODE": "monitor",
+		"CHECK_AGENT": "true",
+		"CHECK_IP": "true",
+		"BLOCK_CLASSES": "malicious_automation",
+		"BLOCK_ANONYMIZED": "false",
+		"TIMEOUT_MS": "1500",
+		"AGENT_TTL": "600",
+		"IP_TTL": "3600",
+		"SKIP_PATHS": "^/(robots\\.txt|sitemap\\.xml|favicon\\.ico)$|\\.(css|js|mjs|map|png|jpe?g|gif|webp|avif|svg|ico|woff2?|ttf|otf|eot|mp4|webm)$",
+		"ORIGIN_URL": "",
+		"IPSCANNER_API_URL": "https://ipscanner.io"
+	}
+}

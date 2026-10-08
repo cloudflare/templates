@@ -1,0 +1,40 @@
+{
+	"name": "ipscanner-edge-guard-template",
+	"description": "Edge guard that runs IPScanner Agentscan and IP Detection on every visitor, then annotates or blocks requests before they reach your origin.",
+	"cloudflare": {
+		"label": "IPScanner Edge Guard",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"starter"
+		],
+		"docs_url": "https://ipscanner.io/api-documentation",
+		"bindings": {
+			"IPSCANNER_API_KEY": {
+				"description": "Your IPScanner API key. Get a free key at [ipscanner.io](https://ipscanner.io). Without a key the Worker passes requests through unchecked."
+			},
+			"MODE": {
+				"description": "`monitor` adds verdict headers only. `enforce` also blocks matching visitors with a 403."
+			},
+			"ORIGIN_URL": {
+				"description": "Backend to forward to when the Worker runs on a custom domain or workers.dev. Leave empty when deployed on a route in front of an existing origin."
+			}
+		}
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types --strict-vars=false --env-file .dev.vars.example",
+		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
