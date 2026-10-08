@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="A streaming AI agent built with AgentsKit and Cloudflare Workers AI."
+		/>
+		<title>AgentsKit on Cloudflare Workers</title>
+		<link rel="stylesheet" href="/styles.css" />
+	</head>
+	<body>
+		<main class="shell">
+			<header class="hero">
+				<div class="eyebrow"><span></span> Edge-native agent starter</div>
+				<h1>Build agents that run<br /><em>where your users are.</em></h1>
+				<p>
+					AgentsKit provides the streaming adapter contract. Cloudflare Workers
+					AI provides inference at the edge. No external API key required.
+				</p>
+				<div class="stack" aria-label="Technology stack">
+					<span>AgentsKit</span><b>×</b><span>Cloudflare Workers AI</span>
+				</div>
+			</header>
+
+			<section class="chat" aria-labelledby="chat-title">
+				<div class="chat-header">
+					<div>
+						<span class="status-dot"></span>
+						<strong id="chat-title">Edge agent</strong>
+					</div>
+					<code>llama-3.1-8b</code>
+				</div>
+				<div id="messages" class="messages" aria-live="polite">
+					<div class="message assistant">
+						<span class="avatar">AK</span>
+						<p>
+							Ask me anything. My response streams through the AgentsKit adapter
+							contract.
+						</p>
+					</div>
+				</div>
+				<form id="chat-form">
+					<label for="prompt" class="sr-only">Message your agent</label>
+					<textarea
+						id="prompt"
+						name="prompt"
+						rows="1"
+						maxlength="8000"
+						placeholder="Message your agent…"
+						required
+					></textarea>
+					<button type="submit" aria-label="Send message">
+						Send <span>↗</span>
+					</button>
+				</form>
+			</section>
+
+			<footer>
+				<span>One Worker</span><span>Native streaming</span
+				><span>Composable adapters</span>
+			</footer>
+		</main>
+		<script type="module" src="/app.js"></script>
+	</body>
+</html>
