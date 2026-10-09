@@ -11,6 +11,7 @@ A Worker that sits in front of your site and checks every visitor with [IPScanne
 - Verified search engines and AI crawlers on the Agentscan allowlist are never blocked.
 - Both checks run in parallel, are cached with the Cache API, and fail open: if the API is slow or unreachable, the request goes through unchanged.
 - Incoming `X-IPScanner-*` headers are stripped, so clients cannot spoof a verdict.
+- With `SITE_ID` set, mode and per class policy come from the [IPScanner dashboard](https://ipscanner.io/dashboard/sites), where the site's traffic shows up.
 - One JSON log line per checked request, ready for Workers Logs.
 
 ### How it works
@@ -72,13 +73,26 @@ All values are strings in the `vars` block of `wrangler.jsonc`.
 | `BLOCK_CLASSES`     | `malicious_automation` | Comma separated Agentscan classes to block in enforce mode: `human`, `known_bot`, `ai_agent`, `malicious_automation`. |
 | `BLOCK_ANONYMIZED`  | `false`                | In enforce mode, also block VPN, proxy and Tor traffic.                                                               |
 | `TIMEOUT_MS`        | `1500`                 | Timeout per API call. On timeout the request is forwarded.                                                            |
-| `AGENT_TTL`         | `600`                  | Seconds to cache an Agentscan verdict per IP and User-Agent.                                                          |
+| `AGENT_TTL`         | `600`                  | Seconds to cache an Agentscan verdict (the edge check verdict with `SITE_ID`) per IP and User-Agent.                  |
 | `IP_TTL`            | `3600`                 | Seconds to cache an IP lookup per IP.                                                                                 |
 | `SKIP_PATHS`        | static assets          | Case insensitive regex on the path. Matching requests are not checked. Empty checks everything.                       |
 | `ORIGIN_URL`        | empty                  | Backend to forward to. Leave empty on a route.                                                                        |
 | `IPSCANNER_API_URL` | `https://ipscanner.io` | API base URL.                                                                                                         |
+| `SITE_ID`           | empty                  | Site ID from the IPScanner dashboard. When set, mode and policy come from the dashboard. See [Sites](#sites).         |
+| `POLICY_TTL`        | `30`                   | Seconds to reuse a site policy before fetching it again. Used with `SITE_ID`.                                         |
 
 `OPTIONS` requests are never checked. All other methods are.
+
+## Sites
+
+1. Create a site in the [IPScanner dashboard](https://ipscanner.io/dashboard/sites).
+2. Set `SITE_ID` to the site's ID (`site_...`) in `wrangler.jsonc` and deploy.
+
+Mode and per class policy (`allow`, `flag` or `block`) then come from the dashboard, and changes apply without a redeploy. `MODE`, `CHECK_AGENT`, `CHECK_IP`, `BLOCK_CLASSES` and `BLOCK_ANONYMIZED` are ignored. Each uncached visitor costs one call to `POST /v1/edge/check`.
+
+The policy is cached per isolate and in the Cache API for `POLICY_TTL` seconds. If a refresh fails, the last policy is used for up to 24 hours. With no policy at all, requests pass. Policy and verdict share the `TIMEOUT_MS` budget.
+
+In `enforce` mode a class set to `block` gets the 403 page and a class set to `flag` is forwarded with `X-IPScanner-Action: flag`. `monitor` never blocks. Verified crawlers always pass.
 
 ## Headers
 
@@ -94,26 +108,28 @@ Added to the request forwarded to your origin:
 | `X-IPScanner-Anonymized`    | Both         | `true` or `false`                                        |
 | `X-IPScanner-Risk`          | IP Detection | `0` to `100`                                             |
 | `X-IPScanner-Country`       | IP Detection | `DE`                                                     |
+| `X-IPScanner-Traffic-Class` | Edge check   | `human`, `verified_bot`, `ai_agent`, `vpn`, ...          |
+| `X-IPScanner-Site`          | Guard        | `site_...`, set with `SITE_ID`                           |
 
 When a check fails or is skipped, only `X-IPScanner-Status` is set.
 
 ## Enforce rules
 
-In `enforce` mode a visitor gets a 403 page with the request ID when:
+Without `SITE_ID`, in `enforce` mode a visitor gets a 403 page with the request ID when:
 
 - Agentscan returns `action: block`, or
 - the class is listed in `BLOCK_CLASSES`, or
-- `BLOCK_ANONYMIZED` is `true` and either check reports the IP as anonymized.
+- `BLOCK_ANONYMIZED` is `true` and the IP is a VPN, residential proxy or Tor exit (anonymized hosting and private relays are not blocked by this flag).
 
 A visitor whose Agentscan signals include `allowlist_verified: true` is always allowed.
 
 ## Logs
 
-Each checked request writes one JSON line with `ip`, `path`, `class`, `action`, `networkClass`, `decision` (`allow`, `block`, or `would_block` in monitor mode) and cache hits. Observability is enabled in `wrangler.jsonc`, so these are searchable in [Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/).
+Each checked request writes one JSON line with `ip`, `path`, `class`, `action`, `networkClass`, `decision` (`allow`, `block`, or `would_block` in monitor mode) and cache hits. With `SITE_ID` the line also has `site`, `trafficClass`, the policy source and version, and `decision` can be `flag` or `would_flag`. Observability is enabled in `wrangler.jsonc`, so these are searchable in [Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/).
 
 ## Cost
 
-Each uncached visitor uses 1 request unit per enabled check, so 2 units with both checks on. Repeat visits within `AGENT_TTL` and `IP_TTL` are served from the cache. The [Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/) is local to each Cloudflare data center, so a visitor seen in one location is checked again in another. Raise the TTLs, narrow the route, or turn off one check to reduce usage.
+Each uncached visitor uses 1 request unit per enabled check, so 2 units with both checks on. Repeat visits within `AGENT_TTL` and `IP_TTL` are served from the cache. The [Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache/) is local to each Cloudflare data center, so a visitor seen in one location is checked again in another. Raise the TTLs, narrow the route, or turn off one check to reduce usage. With `SITE_ID`, the single edge check also costs 2 units per uncached visitor.
 
 ## Develop locally
 

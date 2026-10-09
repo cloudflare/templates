@@ -2,8 +2,12 @@ import { type Config, loadConfig } from "./config";
 import {
 	type AgentResult,
 	checkAgent,
+	checkEdge,
+	type EdgeResult,
+	getPolicy,
 	type IpResult,
 	lookupIp,
+	type SitePolicy,
 } from "./ipscanner";
 
 const PREFIX = "x-ipscanner-";
@@ -48,7 +52,7 @@ function preview(cfg: Config, headers: Headers): Response {
 	return page(
 		200,
 		"IPScanner edge guard",
-		`<h1>IPScanner edge guard</h1>${key}<p>Mode: <code>${cfg.enforce ? "enforce" : "monitor"}</code></p><p>No origin is configured. Add a route in front of your site or set <code>ORIGIN_URL</code>. Until then this page shows the headers your origin would receive.</p><table>${rows}</table>`,
+		`<h1>IPScanner edge guard</h1>${key}${cfg.siteId ? `<p>Site: <code>${escapeHtml(cfg.siteId)}</code></p>` : `<p>Mode: <code>${cfg.enforce ? "enforce" : "monitor"}</code></p>`}<p>No origin is configured. Add a route in front of your site or set <code>ORIGIN_URL</code>. Until then this page shows the headers your origin would receive.</p><table>${rows}</table>`,
 	);
 }
 
@@ -106,10 +110,120 @@ export function shouldBlock(
 		(agent.action === "block" || cfg.blockClasses.includes(agent.class))
 	)
 		return true;
-	return (
-		cfg.blockAnonymized &&
-		(agent?.signals?.anonymized === true || ip?.verdict?.anonymized === true)
+	if (!cfg.blockAnonymized) return false;
+	if (ip?.networkClass) return MASKING.has(ip.networkClass);
+	const origin = agent?.signals?.network_origin;
+	if (typeof origin === "string") return MASKING.has(origin);
+	return agent?.signals?.anonymized === true;
+}
+
+// Hosting and private relays are anonymized too, but BLOCK_ANONYMIZED means
+// VPN, proxy and Tor.
+const MASKING = new Set(["vpn", "residential_proxy", "tor"]);
+
+export type SiteAction = "allow" | "flag" | "block";
+
+export function siteAction(
+	verdict: EdgeResult,
+	policy: SitePolicy | null,
+): SiteAction {
+	if (!policy) return "allow";
+	if (
+		verdict.class === "verified_bot" ||
+		verdict.agent?.signals?.allowlist_verified === true
+	)
+		return "allow";
+	const action = policy.policy[verdict.class];
+	return action === "block" || action === "flag" ? action : "allow";
+}
+
+async function checkSite(
+	request: Request,
+	headers: Headers,
+	cfg: Config,
+	ctx: ExecutionContext,
+	url: URL,
+	ip: string,
+): Promise<Response> {
+	const requestId = request.headers.get("cf-ray") ?? crypto.randomUUID();
+	// One budget for the whole check: the verdict and the policy load in
+	// parallel and both abort at TIMEOUT_MS.
+	const signal = AbortSignal.timeout(cfg.timeoutMs);
+	const [outcome, policy] = await Promise.all([
+		checkEdge(
+			cfg,
+			ctx,
+			{
+				ip,
+				userAgent: request.headers.get("user-agent") ?? "",
+				ja4: ja4(request),
+				headers: agentHeaders(request.headers),
+				requestId,
+			},
+			signal,
+		),
+		getPolicy(cfg, ctx, signal),
+	]);
+
+	if (!outcome.ok) {
+		headers.set("X-IPScanner-Status", outcome.status);
+		console.log(
+			JSON.stringify({
+				ip,
+				path: url.pathname,
+				site: cfg.siteId,
+				status: outcome.status,
+				decision: "allow",
+			}),
+		);
+		return forward(request, headers, cfg, url);
+	}
+
+	const verdict = outcome.data;
+	const agent = verdict.agent ?? undefined;
+	const network = verdict.network ?? undefined;
+	const networkClass =
+		network?.networkClass ??
+		(agent?.signals?.network_origin as string | undefined);
+	const anonymized =
+		network?.anonymized === true || agent?.signals?.anonymized === true;
+
+	if (agent) {
+		headers.set("X-IPScanner-Class", agent.class);
+		headers.set("X-IPScanner-Action", agent.action);
+		headers.set("X-IPScanner-Confidence", String(agent.confidence));
+	}
+	if (networkClass) headers.set("X-IPScanner-Network-Class", networkClass);
+	headers.set("X-IPScanner-Anonymized", String(anonymized));
+	if (typeof network?.riskScore === "number")
+		headers.set("X-IPScanner-Risk", String(network.riskScore));
+	if (network?.country) headers.set("X-IPScanner-Country", network.country);
+	if (verdict.class) headers.set("X-IPScanner-Traffic-Class", verdict.class);
+	headers.set("X-IPScanner-Site", cfg.siteId);
+	headers.set("X-IPScanner-Status", "ok");
+
+	const action = siteAction(verdict, policy.policy);
+	const enforce = policy.policy?.mode === "enforce";
+	const decision =
+		action === "allow" ? "allow" : enforce ? action : `would_${action}`;
+	if (decision === "flag") headers.set("X-IPScanner-Action", "flag");
+	console.log(
+		JSON.stringify({
+			ip,
+			path: url.pathname,
+			site: cfg.siteId,
+			trafficClass: verdict.class,
+			class: agent?.class,
+			action: agent?.action,
+			networkClass,
+			decision,
+			policy: { source: policy.source, version: policy.policy?.version },
+			cache: { edge: outcome.cached ? "hit" : "miss" },
+		}),
 	);
+
+	if (decision === "block") return blocked(requestId);
+	return forward(request, headers, cfg, url);
 }
 
 export default {
@@ -136,12 +250,14 @@ export default {
 			!cfg.apiKey ||
 			!ip ||
 			request.method === "OPTIONS" ||
-			(!cfg.checkAgent && !cfg.checkIp) ||
+			(!cfg.siteId && !cfg.checkAgent && !cfg.checkIp) ||
 			cfg.skipPaths?.test(url.pathname);
 		if (skip) {
 			headers.set("X-IPScanner-Status", "skipped");
 			return forward(request, headers, cfg, url);
 		}
+
+		if (cfg.siteId) return checkSite(request, headers, cfg, ctx, url, ip);
 
 		const requestId = request.headers.get("cf-ray") ?? crypto.randomUUID();
 		const [agentOutcome, ipOutcome] = await Promise.all([

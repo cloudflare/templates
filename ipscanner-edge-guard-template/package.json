@@ -19,6 +19,12 @@
 			},
 			"ORIGIN_URL": {
 				"description": "Backend to forward to when the Worker runs on a custom domain or workers.dev. Leave empty when deployed on a route in front of an existing origin."
+			},
+			"SITE_ID": {
+				"description": "Site ID from the [IPScanner dashboard](https://ipscanner.io/dashboard/sites), for example `site_...`. When set, mode and policy come from the dashboard. Leave empty to use `MODE` and the other vars."
+			},
+			"POLICY_TTL": {
+				"description": "Seconds a site policy from the dashboard is reused before it is fetched again. Default `30`."
 			}
 		}
 	},

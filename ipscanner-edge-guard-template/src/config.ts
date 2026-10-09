@@ -11,6 +11,8 @@ export interface Config {
 	agentTtl: number;
 	ipTtl: number;
 	skipPaths: RegExp | null;
+	siteId: string;
+	policyTtl: number;
 }
 
 let skipSource: string | undefined;
@@ -60,5 +62,7 @@ export function loadConfig(env: Partial<Env>): Config {
 		agentTtl: int(env.AGENT_TTL, 600),
 		ipTtl: int(env.IP_TTL, 3600),
 		skipPaths: compileSkipPaths(env.SKIP_PATHS ?? ""),
+		siteId: (env.SITE_ID ?? "").trim(),
+		policyTtl: int(env.POLICY_TTL, 30),
 	};
 }

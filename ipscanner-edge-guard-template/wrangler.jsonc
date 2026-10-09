@@ -20,6 +20,9 @@
 		"IP_TTL": "3600",
 		"SKIP_PATHS": "^/(robots\\.txt|sitemap\\.xml|favicon\\.ico)$|\\.(css|js|mjs|map|png|jpe?g|gif|webp|avif|svg|ico|woff2?|ttf|otf|eot|mp4|webm)$",
 		"ORIGIN_URL": "",
-		"IPSCANNER_API_URL": "https://ipscanner.io"
+		"IPSCANNER_API_URL": "https://ipscanner.io",
+		// Site ID from the IPScanner dashboard. When set, mode and policy come from the dashboard.
+		"SITE_ID": "",
+		"POLICY_TTL": "30"
 	}
 }
