@@ -58,7 +58,7 @@
       "package_json_hash": "27def0cfeab213ea633f1371bef650b4d6be24f0"
     },
     "containers-template": {
-      "package_json_hash": "3a9adec07219222f5df513cb76beeed23920387e"
+      "package_json_hash": "e1d267fad54310a8a5feaf8acb87c48505c7904b"
     },
     "d1-starter-sessions-api-template": {
       "package_json_hash": "71eb6c2d8b2e14c168140a5c95e265eca2006eb5"
@@ -119,6 +119,9 @@
     },
     "email-sending-template": {
       "package_json_hash": "c10ec46edff3e911c2675120d7b9f5787a514fc2"
+    },
+    "grpc-container-template": {
+      "package_json_hash": "b77d3053c4e5aee2f7e7b3f5255b7a0dd6301437"
     },
     "bounda-event-sourcing-template": {
       "package_json_hash": "c0dfb7ac15f319d19b4d7f7a1075e4a8a333cfbf"
