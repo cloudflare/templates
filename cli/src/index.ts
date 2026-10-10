@@ -13,6 +13,7 @@ import { depsInfo } from "./depsInfo";
 import { depsUpdate } from "./depsUpdate";
 import deployLiveDemos from "./deployLiveDemos";
 import { preview } from "./preview";
+import { checkSourceMaps } from "./sourceMaps";
 
 const program = new Command();
 
@@ -63,6 +64,20 @@ program
 			}),
 		);
 	});
+
+program
+	.command("check-source-maps")
+	.description("validate external Worker maps after framework builds")
+	.argument(
+		"[path-to-template(s)]",
+		"path to directory containing template(s)",
+		".",
+	)
+	.action((templateDirectory) =>
+		actionWithSummary("Worker source maps", () =>
+			checkSourceMaps(templateDirectory),
+		),
+	);
 
 program
 	.command("lint")
