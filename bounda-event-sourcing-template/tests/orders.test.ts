@@ -1,4 +1,3 @@
-import { DomainError } from "@bounda-dev/core";
 import { createTestApp } from "@bounda-dev/core/testing";
 import { describe, expect, it } from "vitest";
 import { registry } from "../.bounda/registry.ts";
@@ -9,7 +8,7 @@ describe("orders", () => {
 	it("places an order and lists it for the customer", async () => {
 		const { app } = await createTestApp({ registry });
 		await app.commands.placeOrder({ orderId, customerId: "ada", total: 42 });
-		await app.processUntilIdle();
+		await app.runUntilIdle();
 
 		expect(await app.queries.listOrders({ customerId: "ada" })).toEqual({
 			orders: [
@@ -19,7 +18,7 @@ describe("orders", () => {
 		});
 		await expect(
 			app.commands.placeOrder({ orderId, customerId: "ada", total: 1 }),
-		).rejects.toBeInstanceOf(DomainError);
+		).rejects.toMatchObject({ rejected: "AlreadyPlaced" });
 		await app.stop();
 	});
 });
