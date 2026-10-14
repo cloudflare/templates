@@ -9,10 +9,6 @@ test("explains required configuration before starting a workspace", async ({
 		page.getByRole("heading", { name: "Set up Hermes Agent" }),
 	).toBeVisible();
 	await expect(
-		page.getByText("ACCESS_TEAM_DOMAIN", { exact: true }),
-	).toBeVisible();
-	await expect(page.getByText("ACCESS_AUD", { exact: true })).toBeVisible();
-	await expect(
 		page.getByRole("link", { name: "Follow the Hermes setup guide" }),
 	).toHaveAttribute(
 		"href",

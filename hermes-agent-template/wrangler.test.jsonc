@@ -10,9 +10,7 @@
 	],
 	"vars": {
 		"AI_GATEWAY_ID": "default",
-		"MODEL": "openai/gpt-4.1-mini",
-		"ACCESS_TEAM_DOMAIN": "YOUR-TEAM.cloudflareaccess.com",
-		"ACCESS_AUD": "YOUR-ACCESS-APPLICATION-AUD"
+		"MODEL": "openai/gpt-4.1-mini"
 	},
 	"durable_objects": {
 		"bindings": [

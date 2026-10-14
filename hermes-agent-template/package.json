@@ -15,17 +15,8 @@
 		"bindings": {
 			"AI_GATEWAY_ID": {
 				"description": "Your AI Gateway ID, with Unified Billing enabled for the configured model."
-			},
-			"ACCESS_TEAM_DOMAIN": {
-				"description": "Your Zero Trust team domain, such as example.cloudflareaccess.com."
-			},
-			"ACCESS_AUD": {
-				"description": "The audience tag of the Access application protecting the Worker hostname."
 			}
 		}
-	},
-	"dependencies": {
-		"jose": "6.2.12"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-plugin": "1.1.3",

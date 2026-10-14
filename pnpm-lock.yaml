@@ -495,10 +495,6 @@ importers:
         version: 4.136.1(@cloudflare/workers-types@5.20260902.1)(@types/node@24.10.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
   hermes-agent-template:
-    dependencies:
-      jose:
-        specifier: 6.2.12
-        version: 6.2.12
     devDependencies:
       '@cloudflare/vitest-plugin':
         specifier: 1.1.3

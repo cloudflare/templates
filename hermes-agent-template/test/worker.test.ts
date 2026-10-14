@@ -1,11 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import { createLocalJWKSet, exportJWK, generateKeyPair, SignJWT } from "jose";
-
-const auth = vi.hoisted(() => ({ keys: undefined as unknown }));
-vi.mock("jose", async (original) => ({
-	...(await original<typeof import("jose")>()),
-	createRemoteJWKSet: () => auth.keys,
-}));
+import { afterEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/index";
 import { Outbound } from "../src/outbound";
 import { HermesSandbox } from "../src/sandbox";
@@ -17,86 +10,87 @@ const gatewayEnv = {
 };
 const modelUrl = `${modelBaseUrl}/chat/completions`;
 const stream = (text: string) => new Response(text).body!;
-const issuer = "https://team.cloudflareaccess.com";
-let privateKey: CryptoKey;
-beforeAll(async () => {
-	const pair = await generateKeyPair("RS256");
-	privateKey = pair.privateKey;
-	auth.keys = createLocalJWKSet({ keys: [await exportJWK(pair.publicKey)] });
-});
 afterEach(() => {
 	vi.useRealTimers();
 	vi.unstubAllGlobals();
 });
-async function token(sub = "alice", aud = "app", expires = "1h") {
-	return new SignJWT({ sub })
-		.setProtectedHeader({ alg: "RS256" })
-		.setIssuer(issuer)
-		.setAudience(aud)
-		.setExpirationTime(expires)
-		.sign(privateKey);
+function context(user_uuid = "alice") {
+	return { access: { getIdentity: vi.fn().mockResolvedValue({ user_uuid }) } };
 }
 function boundary() {
 	const fetch = vi.fn().mockResolvedValue(new Response("dashboard"));
 	const idFromName = vi.fn((name) => name);
 	const env = {
 		...gatewayEnv,
-		ACCESS_TEAM_DOMAIN: "team.cloudflareaccess.com",
-		ACCESS_AUD: "app",
 		SANDBOX: { idFromName, get: vi.fn(() => ({ fetch })) },
 	};
 	return { env, fetch, idFromName };
 }
 describe("Access boundary", () => {
-	it("shows setup instructions for placeholder configuration without allocating a container", async () => {
+	it("shows setup instructions without allocating a container when Access is absent", async () => {
 		const { env, idFromName } = boundary();
-		env.ACCESS_TEAM_DOMAIN = "YOUR-TEAM.cloudflareaccess.com";
 		const response = await worker.fetch(
 			new Request("https://demo.test/"),
 			env as never,
+			{} as never,
 		);
 		expect(response.status).toBe(200);
 		expect(response.headers.get("Content-Type")).toContain("text/html");
 		expect(await response.text()).toContain("Set up Hermes Agent");
-		expect(
-			(
-				await worker.fetch(
-					new Request("https://demo.test/api/status"),
-					env as never,
-				)
-			).status,
-		).toBe(503);
+		// Caller-supplied headers cannot stand in for the platform Access context.
+		const api = await worker.fetch(
+			new Request("https://demo.test/api/status", {
+				headers: {
+					"Cf-Access-Jwt-Assertion": "forged",
+					"Cf-Access-Authenticated-User-Email": "alice@example.com",
+				},
+			}),
+			env as never,
+			{} as never,
+		);
+		expect(api.status).toBe(503);
 		expect(idFromName).not.toHaveBeenCalled();
 	});
-	it("rejects absent, invalid, expired and wrong-audience tokens before allocation", async () => {
+	it("requires a gateway before allocating a container", async () => {
 		const { env, idFromName } = boundary();
-		for (const jwt of [
-			"",
-			"forged",
-			await token("alice", "other"),
-			await token("alice", "app", "-1h"),
-		]) {
-			const r = await worker.fetch(
-				new Request("https://demo.test", {
-					headers: { "Cf-Access-Jwt-Assertion": jwt },
-				}),
+		env.AI_GATEWAY_ID = "";
+		const response = await worker.fetch(
+			new Request("https://demo.test/api/status"),
+			env as never,
+			context() as never,
+		);
+		expect(response.status).toBe(503);
+		expect(idFromName).not.toHaveBeenCalled();
+	});
+	it("rejects missing user identities and identity lookup failures before allocation", async () => {
+		const { env, idFromName } = boundary();
+		const ctx = context();
+		ctx.access.getIdentity
+			.mockResolvedValueOnce(undefined)
+			.mockResolvedValueOnce({})
+			.mockResolvedValueOnce({ user_uuid: "" })
+			.mockRejectedValueOnce(new Error("Identity unavailable"));
+		for (let i = 0; i < 4; i++) {
+			const response = await worker.fetch(
+				new Request("https://demo.test/"),
 				env as never,
+				ctx as never,
 			);
-			expect(r.status).toBe(401);
+			expect(response.status).toBe(401);
 		}
 		expect(idFromName).not.toHaveBeenCalled();
 	});
 	it("isolates signed-in users, while keeping one user's container stable", async () => {
 		const { env, idFromName } = boundary();
-		for (const sub of ["alice", "bob", "alice"]) {
+		for (const id of ["alice", "bob", "alice"]) {
 			await worker.fetch(
-				new Request("https://demo.test", {
+				new Request("https://demo.test/", {
 					headers: {
-						"Cf-Access-Jwt-Assertion": await token(sub),
 						"Cf-Access-Authenticated-User-Email": "spoofed@example.com",
 					},
 				}),
 				env as never,
+				context(id) as never,
 			);
 		}
 		expect(idFromName.mock.calls.map(([name]) => name)).toEqual([
@@ -107,29 +101,24 @@ describe("Access boundary", () => {
 	});
 	it("rejects cross-origin requests including WebSocket handshakes", async () => {
 		const { env, idFromName } = boundary();
-		const r = await worker.fetch(
+		const response = await worker.fetch(
 			new Request("https://demo.test/api/pty", {
-				headers: {
-					"Cf-Access-Jwt-Assertion": await token(),
-					Origin: "https://evil.test",
-					Upgrade: "websocket",
-				},
+				headers: { Origin: "https://evil.test", Upgrade: "websocket" },
 			}),
 			env as never,
+			context() as never,
 		);
-		expect(r.status).toBe(403);
+		expect(response.status).toBe(403);
 		expect(idFromName).not.toHaveBeenCalled();
 	});
 	it("logs out through Access", async () => {
 		const { env } = boundary();
-		const r = await worker.fetch(
-			new Request("https://demo.test/auth/logout", {
-				method: "POST",
-				headers: { "Cf-Access-Jwt-Assertion": await token() },
-			}),
+		const response = await worker.fetch(
+			new Request("https://demo.test/auth/logout", { method: "POST" }),
 			env as never,
+			context() as never,
 		);
-		expect(r.headers.get("Location")).toBe(
+		expect(response.headers.get("Location")).toBe(
 			"https://demo.test/cdn-cgi/access/logout",
 		);
 	});

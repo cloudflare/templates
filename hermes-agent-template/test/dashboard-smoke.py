@@ -2,7 +2,6 @@
 
 Run inside the image with test/ mounted at /test. All model calls use a local stub.
 """
-import importlib.util
 import os
 from pathlib import Path
 import subprocess
@@ -14,10 +13,8 @@ from http.server import ThreadingHTTPServer
 import requests
 from websockets.sync.client import connect
 
-spec = importlib.util.spec_from_file_location("model_stub", "/test/hermes-smoke.py")
-module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(module)
-Model = module.Model
+from model_stub import Model
+
 server = ThreadingHTTPServer(("127.0.0.1", 0), Model)
 threading.Thread(target=server.serve_forever, daemon=True).start()
 with tempfile.TemporaryDirectory() as tmp:

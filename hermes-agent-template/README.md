@@ -28,16 +28,14 @@ cd hermes-agent
 If prompted to deploy, choose **No** until you finish configuration. If you cloned this repository instead, run `npm ci` inside `hermes-agent-template`.
 
 1. Choose the Worker name in `wrangler.jsonc`. Its hostname is `<worker-name>.<workers-subdomain>.workers.dev`.
-2. Create a [self-hosted Access application](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/) for the entire hostname. Select your identity provider and add an **Allow** policy for your intended users.
+2. Create a [self-hosted Access application](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/) for the entire hostname. Select your identity provider and add an **Allow** policy for your intended users. Use a hostname-based application: Worker-level Access policies do not support the terminal's WebSocket connections.
 3. Create an [AI Gateway](https://developers.cloudflare.com/ai-gateway/get-started/) and configure [Unified Billing](https://developers.cloudflare.com/ai-gateway/features/unified-billing/).
 4. Set the variables below in `wrangler.jsonc`, then deploy with `npm run deploy`.
 
-| Variable             | Value                                                                                    |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| `ACCESS_TEAM_DOMAIN` | Your Zero Trust team domain, such as `example.cloudflareaccess.com`, without `https://`. |
-| `ACCESS_AUD`         | The application audience tag from your Access application.                               |
-| `AI_GATEWAY_ID`      | The ID of your AI Gateway.                                                               |
-| `MODEL`              | `openai/gpt-4.1-mini` by default.                                                        |
+| Variable        | Value                             |
+| --------------- | --------------------------------- |
+| `AI_GATEWAY_ID` | The ID of your AI Gateway.        |
+| `MODEL`         | `openai/gpt-4.1-mini` by default. |
 
 These are nonsecret identifiers. No Worker secrets or model API keys are required. Every admitted user can consume your model and container budget; set your Access policy and [AI Gateway rate limits](https://developers.cloudflare.com/ai-gateway/features/rate-limiting/) accordingly.
 
@@ -52,7 +50,7 @@ Approve tool requests when prompted. The Worker handles Hermes's private backend
 ```mermaid
 flowchart LR
     Browser --> Access[Cloudflare Access]
-    Access --> Worker[Worker verifies JWT]
+    Access --> Worker[Worker reads Access identity]
     Worker --> DO[Durable Object per identity]
     DO --> Hermes[Hermes dashboard and tools]
     Hermes -->|intercepted HTTPS| Outbound[Worker outbound handler]
@@ -62,7 +60,7 @@ flowchart LR
 
 The Dockerfile pins the upstream Hermes commit and builds the web and terminal assets. `start-dashboard.py` seeds the model settings and enables the `terminal` and `file` toolsets.
 
-The Worker verifies Access tokens and derives the Durable Object ID from the signed identity. Each Durable Object starts a container with Internet access disabled, waits for readiness, and forwards traffic to port 9119. It replaces incoming credentials with a private Hermes session and strips backend session cookies from responses. Hermes authentication stays enabled.
+The Worker reads the authenticated user UUID from [`ctx.access`](https://developers.cloudflare.com/workers/configuration/cloudflare-access/#read-authenticated-user-identity-with-ctxaccess) and derives the Durable Object ID from it. Requests without an authenticated user cannot start a container. Each Durable Object starts a container with Internet access disabled, waits for readiness, and forwards traffic to port 9119. It replaces incoming credentials with a private Hermes session and strips backend session cookies from responses. Hermes authentication stays enabled.
 
 The container intercepts HTTPS calls to `https://model.internal/v1`. The outbound handler accepts only the configured model, bounds the request size, and calls `env.AI.run()` with your gateway ID and `returnRawResponse: true`. Streaming output and tool calls pass through unchanged. `OPENAI_API_KEY=provided-by-worker` is only a client placeholder. For GPT-4.1 mini, the handler removes Hermes's unsupported `reasoning_effort` option.
 
@@ -77,7 +75,7 @@ npm ci
 npm run dev
 ```
 
-With placeholder Access settings, the local Worker displays a setup page and does not start a container. Access does not authenticate localhost requests automatically. Use a deployed, Access-protected Worker to exercise sign-in and paid inference. Local tests do not bypass authentication in production code.
+Without an Access identity, the local Worker displays a setup page and does not start a container. Access does not authenticate localhost requests automatically. Use a deployed, Access-protected Worker to exercise sign-in and paid inference. Local tests do not bypass authentication in production code.
 
 ```sh
 npm run check
@@ -86,12 +84,9 @@ docker build --platform linux/amd64 -t hermes-agent-template:test .
 docker run --rm --platform linux/amd64 --network none \
   -v "$PWD/test:/test:ro" hermes-agent-template:test \
   python3 /test/dashboard-smoke.py
-docker run --rm --platform linux/amd64 --network none \
-  -v "$PWD/test:/test:ro" hermes-agent-template:test \
-  python3 /test/hermes-smoke.py
 ```
 
-Unit tests verify token validation, identity isolation, credential stripping, container lifecycle, and the model bridge. The Docker smoke tests exercise the real dashboard, WebSocket terminal, and agent tools with a deterministic local model and no paid inference calls.
+Unit tests verify Access identity checks, identity isolation, credential stripping, container lifecycle, and the model bridge. The Docker smoke test exercises the real dashboard, WebSocket terminal, and agent tools with a deterministic local model and no paid inference calls.
 
 From the templates repository root, run the setup-page browser tests with:
 
