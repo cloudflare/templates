@@ -10,11 +10,27 @@ Run the [Hermes Agent](https://github.com/nousresearch/hermes-agent) web dashboa
 - [Containers](https://developers.cloudflare.com/containers/) run the unmodified Hermes dashboard. A [Durable Object](https://developers.cloudflare.com/durable-objects/) manages each user's container and proxies HTTP and WebSocket traffic.
 - [AI Gateway](https://developers.cloudflare.com/ai-gateway/) routes model requests through the Worker's AI binding. No model API key or Cloudflare API token enters the container.
 
-Workspaces are temporary. Files, sessions, memory, and settings are lost when a container stops or is replaced. Export your work before leaving.
+**This template provides temporary workspaces.** Project files, conversation history, saved memories, and settings are lost when a container stops or is replaced. It does not back up or restore workspace data.
 
 <!-- dash-content-end -->
 
 ![Hermes web dashboard with the embedded coding terminal and model selector](assets/preview.png)
+
+## Workspace lifetime and data loss
+
+Use this template to try Hermes or run tasks whose outputs you save elsewhere. Hermes stores its state on the local filesystem, which this template does not preserve across container restarts.
+
+When the container stops, it loses:
+
+- Project files in `/workspace`, including uncommitted changes and local Git commits.
+- Conversation history, saved memories, and settings in the Hermes home directory, `/workspace/.hermes`.
+- Running agent turns and terminal commands. Interrupted work does not resume automatically.
+
+The template sets a 15-minute inactivity timeout. [Platform events and process failures](https://developers.cloudflare.com/containers/faq/#how-long-can-instances-run-for-what-happens-when-a-host-server-is-shut-down) can also stop an active container. An open terminal can keep it active, but cannot guarantee that it stays running.
+
+The next request starts a fresh workspace from the image. The same signed-in user reaches the same Durable Object, but its storage retains only the private backend password, not the container filesystem or Hermes history. No snapshots, R2 backups, or restore logic are included.
+
+Save required files and outputs outside the container while it is running. A local Git commit alone does not protect your work. This template does not provide Hermes with memory or conversation continuity across container restarts.
 
 ## Getting started
 
@@ -65,8 +81,6 @@ The Worker reads the authenticated user UUID from [`ctx.access`](https://develop
 The container intercepts HTTPS calls to `https://model.internal/v1`. The outbound handler accepts only the configured model, bounds the request size, and calls `env.AI.run()` with your gateway ID and `returnRawResponse: true`. Streaming output and tool calls pass through unchanged. `OPENAI_API_KEY=provided-by-worker` is only a client placeholder. For GPT-4.1 mini, the handler removes Hermes's unsupported `reasoning_effort` option.
 
 The outbound handler also allows unauthenticated HTTPS requests to `github.com`. Other destinations, runtime package downloads, private repositories, and external integrations are not enabled. To support them, adapt the handler and build required tools into the image.
-
-Containers stop after 15 minutes of inactivity. Refreshing a page reuses a running container; an open WebSocket can keep it running. Durable Object storage retains the private backend password, but does not persist container files or Hermes sessions.
 
 ## Local development and tests
 

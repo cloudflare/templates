@@ -10,6 +10,7 @@ export default {
 					`<!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Set up Hermes Agent</title>
 <h1>Set up Hermes Agent</h1><p>Protect this hostname with Cloudflare Access and configure AI Gateway.</p>
+<p><strong>Temporary workspace:</strong> files, conversation history, and saved memories are lost when the container stops. No automatic backups are included.</p>
 <p><a href="https://developers.cloudflare.com/sandbox/coding-agents/hermes/">Follow the Hermes setup guide</a></p></html>`,
 					{
 						headers: {
