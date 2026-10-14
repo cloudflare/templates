@@ -17,6 +17,12 @@
 	],
 	"versionGroups": [
 		{
+			"label": "Use native Durable Object exports for the Hermes template",
+			"packages": ["hermes-agent-template"],
+			"dependencies": ["wrangler"],
+			"pinVersion": "4.150.0"
+		},
+		{
 			"label": "Use Workers types v5 for ctx.access",
 			"packages": ["internal-sites-template"],
 			"dependencies": ["@cloudflare/workers-types"],

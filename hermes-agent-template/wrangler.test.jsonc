@@ -1,0 +1,31 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "hermes-agent-test",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"enable_request_signal",
+		"enable_ctx_exports"
+	],
+	"vars": {
+		"AI_GATEWAY_ID": "default",
+		"MODEL": "openai/gpt-4.1-mini",
+		"ACCESS_TEAM_DOMAIN": "YOUR-TEAM.cloudflareaccess.com",
+		"ACCESS_AUD": "YOUR-ACCESS-APPLICATION-AUD"
+	},
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "SANDBOX",
+				"class_name": "HermesSandbox"
+			}
+		]
+	},
+	"exports": {
+		"HermesSandbox": {
+			"type": "durable-object",
+			"storage": "sqlite"
+		}
+	}
+}
