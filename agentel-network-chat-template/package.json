@@ -1,0 +1,94 @@
+{
+	"name": "agentel-network-chat-template",
+	"description": "A Cloudflare Agents chat starter for read-only network discovery through Agentel MCP.",
+	"allowScripts": {
+		"core-js-pure@3.49.0": true,
+		"esbuild@0.28.1": true,
+		"workerd@1.20260721.1": true,
+		"sharp@0.34.5": true,
+		"fsevents@2.3.3": true
+	},
+	"cloudflare": {
+		"label": "Agentel Network Chat",
+		"products": [
+			"Workers",
+			"Durable Objects"
+		],
+		"categories": [
+			"ai",
+			"starter"
+		],
+		"bindings": {
+			"AGENTEL_READER_KEY": {
+				"description": "Obtain your own read-only INFO Reader from https://agentel.tech/connect. Business reads can consume service allowance."
+			},
+			"DEMO_ACCESS_TOKEN": {
+				"description": "Set a random operator password of at least 24 characters. One operator per deployment."
+			},
+			"MODEL_API_KEY": {
+				"description": "Supply your own key for the model endpoint and protocol configured in the Worker. Provider charges are separate."
+			}
+		},
+		"healthCheckStatus": 401
+	},
+	"dependencies": {
+		"@agentel/sdk": "2.0.0",
+		"@ai-sdk/anthropic": "3.0.129",
+		"@ai-sdk/openai": "3.0.117",
+		"@cloudflare/ai-chat": "0.9.3",
+		"@cloudflare/kumo": "2.8.0",
+		"@phosphor-icons/react": "2.1.10",
+		"@streamdown/code": "1.1.1",
+		"agents": "0.17.4",
+		"ai": "6.0.233",
+		"react": "19.2.8",
+		"react-dom": "19.2.8",
+		"shiki": "3.21.0",
+		"streamdown": "2.5.0",
+		"zod": "4.4.3"
+	},
+	"devDependencies": {
+		"@babel/plugin-proposal-decorators": "8.0.2",
+		"@cloudflare/vite-plugin": "1.46.0",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@rolldown/plugin-babel": "0.2.3",
+		"@tailwindcss/vite": "4.3.3",
+		"@types/node": "26.1.1",
+		"@types/react": "19.2.17",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react": "6.0.4",
+		"oxfmt": "0.56.0",
+		"oxlint": "1.75.0",
+		"tailwindcss": "4.3.3",
+		"typescript": "6.0.3",
+		"vite": "8.1.5",
+		"vitest": "4.1.10",
+		"wrangler": "4.113.0"
+	},
+	"engines": {
+		"node": "^22.18.0 || >=24.11.0"
+	},
+	"keywords": [
+		"agents",
+		"ai",
+		"cloudflare"
+	],
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"cf-typegen": "wrangler types env.d.ts",
+		"check": "oxfmt --check . && oxlint src/ && tsc",
+		"deploy": "vite build && wrangler deploy",
+		"dev": "vite dev",
+		"e2e:dev": "npm run build && wrangler dev --config wrangler.e2e.jsonc --local --env e2e --env-file test/e2e.vars",
+		"format": "oxfmt --write .",
+		"lint": "oxlint src/",
+		"start": "vite dev",
+		"test": "npm run test:unit && npm run test:worker",
+		"test:unit": "node --experimental-strip-types --test test/*.test.mjs",
+		"test:worker": "npm run build && vitest run && vitest run --config vitest.missing.config.ts",
+		"types": "wrangler types env.d.ts"
+	},
+	"type": "module"
+}
