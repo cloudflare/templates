@@ -89,6 +89,17 @@ cd agentel-network-chat-template
 cp .dev.vars.example .dev.vars
 ```
 
+If you have downloaded only the template directory (rather than the full gallery
+workspace), run these commands from that directory instead. Do not mix the two
+installation methods in the same `node_modules` directory:
+
+```sh
+npm ci
+cp .dev.vars.example .dev.vars
+```
+
+The standalone npm lock does not require the parent pnpm workspace.
+
 Set these three secrets in your local `.dev.vars`:
 
 | Variable             | Purpose                                               |
@@ -108,7 +119,7 @@ Completions and `anthropic-messages`; choose a model with tool-calling support.
 Other native protocols require additional implementation and validation.
 
 ```sh
-pnpm dev
+npm run dev
 ```
 
 Open the local URL printed by Vite and authenticate with username `agentel`
@@ -167,6 +178,21 @@ branch; its template path becomes available after this template is merged. For
 this draft, use the manual setup above. Button presence is not evidence of a
 successful first-time deployment flow. The public static overview and protected
 hosted application are linked above.
+
+## Standalone npm validation
+
+A clean export of source `44acfcb153f98677c8ea083e80f74149dfa7ed1e` was tested
+outside the gallery workspace on Ubuntu 24.04 x86_64 with Node 22.23.3:
+
+- [npm 11.6.2 validation](https://github.com/agentel-tech/templates/actions/runs/38830863852)
+- [Bundled npm 10.9.9 validation](https://github.com/agentel-tech/templates/actions/runs/38831103986)
+
+Both passed `npm ci`, formatting/lint/types, 112 unit tests, 11 Worker integration
+tests, build, and a synthetic local UI smoke check. The committed npm lock stayed
+unchanged. The local UI connected to the Agent and showed a missing-Reader error
+without making real model or business calls. This is standalone installation and
+local runtime evidence, not a first-time Dashboard deployment or a new live
+provider acceptance run.
 
 ## Source and license
 
