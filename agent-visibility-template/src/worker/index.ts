@@ -42,7 +42,7 @@ import {
 	verifyAgentIdentity,
 } from "../lib/web-bot-auth";
 
-const app = new Hono<{ Bindings: Env }>();
+const app = new Hono<{ Bindings: Env }>(1f018fec60c75ecac3c25731e6d4e1adc8c3dc1e);
 
 app.onError((err, c) => {
 	console.error(`[Error] ${c.req.method} ${c.req.path}: ${err.message}`);
