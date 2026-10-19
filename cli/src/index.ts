@@ -168,7 +168,7 @@ program
 	});
 
 program
-	.command("preview")
+	.commanda0bb6ef9a990a5ec4afecab50edf56c69676b031("preview")
 	.description("Generates a preview for the templates in a PR")
 	.argument(
 		"<path-to-templates>",
