@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Spraay x402 Batch Payments</title>
+		<link rel="icon" type="image/svg+xml" href="/x402-icon.svg" />
+		<style>
+			:root {
+				--bg: #f7f7f8;
+				--card: #ffffff;
+				--text: #1a1a1a;
+				--muted: #5f6368;
+				--border: #e3e3e6;
+				--accent: #f6821f;
+				--ok: #1e8e3e;
+				--warn: #b06000;
+				--err: #c5221f;
+				--code: #f1f1f3;
+			}
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--bg: #121214;
+					--card: #1c1c1f;
+					--text: #ececee;
+					--muted: #a0a0a8;
+					--border: #2e2e33;
+					--code: #26262a;
+				}
+			}
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 0;
+				font-family:
+					system-ui,
+					-apple-system,
+					"Segoe UI",
+					Roboto,
+					sans-serif;
+				background: var(--bg);
+				color: var(--text);
+				line-height: 1.5;
+			}
+			main {
+				max-width: 880px;
+				margin: 0 auto;
+				padding: 32px 16px 64px;
+			}
+			h1 {
+				margin: 0 0 4px;
+				font-size: 1.75rem;
+			}
+			h2 {
+				margin: 0 0 12px;
+				font-size: 1.1rem;
+			}
+			p.lead {
+				margin: 0 0 24px;
+				color: var(--muted);
+			}
+			.card {
+				background: var(--card);
+				border: 1px solid var(--border);
+				border-radius: 10px;
+				padding: 20px;
+				margin-bottom: 16px;
+			}
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+				gap: 12px;
+			}
+			.stat .label {
+				font-size: 0.8rem;
+				color: var(--muted);
+			}
+			.stat .value {
+				font-weight: 600;
+				word-break: break-all;
+			}
+			label {
+				display: block;
+				font-size: 0.85rem;
+				color: var(--muted);
+				margin: 12px 0 4px;
+			}
+			input,
+			textarea {
+				width: 100%;
+				padding: 8px 10px;
+				border: 1px solid var(--border);
+				border-radius: 6px;
+				background: var(--bg);
+				color: var(--text);
+				font-family: ui-monospace, Menlo, Consolas, monospace;
+				font-size: 0.85rem;
+			}
+			textarea {
+				min-height: 96px;
+				resize: vertical;
+			}
+			.buttons {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px;
+				margin-top: 16px;
+			}
+			button {
+				border: 0;
+				border-radius: 6px;
+				padding: 9px 16px;
+				font-weight: 600;
+				cursor: pointer;
+				background: var(--accent);
+				color: #fff;
+			}
+			button.secondary {
+				background: transparent;
+				color: var(--text);
+				border: 1px solid var(--border);
+			}
+			pre {
+				background: var(--code);
+				border-radius: 6px;
+				padding: 12px;
+				overflow-x: auto;
+				font-size: 0.8rem;
+				margin: 12px 0 0;
+				white-space: pre-wrap;
+				word-break: break-all;
+			}
+			.status {
+				font-weight: 600;
+			}
+			.status.ok {
+				color: var(--ok);
+			}
+			.status.warn {
+				color: var(--warn);
+			}
+			.status.err {
+				color: var(--err);
+			}
+			ul.warnings {
+				margin: 12px 0 0;
+				padding-left: 20px;
+				color: var(--warn);
+			}
+			a {
+				color: var(--accent);
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>Spraay x402 Batch Payments</h1>
+			<p class="lead">
+				Pay up to 200 recipients in one transaction on Base. Estimates are free;
+				building the transaction costs a small
+				<a href="https://x402.org" target="_blank" rel="noopener">x402</a>
+				payment. You sign and broadcast it with your own wallet.
+			</p>
+
+			<section class="card">
+				<h2>Contract</h2>
+				<div class="grid" id="info">Loading…</div>
+				<ul class="warnings" id="warnings" hidden></ul>
+			</section>
+
+			<section class="card">
+				<h2>Build a batch</h2>
+				<label for="token">Token (ERC-20 address or ETH)</label>
+				<input id="token" value="ETH" />
+				<label for="recipients"
+					>Recipients, one per line: address,amount (base units)</label
+				>
+				<textarea id="recipients">
+0x1111111111111111111111111111111111111111,1000000000000000
+0x2222222222222222222222222222222222222222,2000000000000000</textarea
+				>
+				<div class="buttons">
+					<button id="estimate">Estimate (free)</button>
+					<button id="execute" class="secondary">
+						Build transaction (x402)
+					</button>
+				</div>
+				<p id="result-status" class="status"></p>
+				<pre id="result" hidden></pre>
+			</section>
+		</main>
+
+		<script>
+			const $ = (id) => document.getElementById(id);
+
+			function stat(label, value, href) {
+				const div = document.createElement("div");
+				div.className = "stat";
+				const l = document.createElement("div");
+				l.className = "label";
+				l.textContent = label;
+				const v = document.createElement(href ? "a" : "div");
+				v.className = "value";
+				v.textContent = value;
+				if (href) {
+					v.href = href;
+					v.target = "_blank";
+					v.rel = "noopener";
+				}
+				div.append(l, v);
+				return div;
+			}
+
+			async function loadInfo() {
+				try {
+					const info = await (await fetch("/info")).json();
+					$("info").replaceChildren(
+						stat("Spraay contract", info.spraayContract, info.basescanUrl),
+						stat("Chain", `Base (${info.chainId})`),
+						stat("Protocol fee", `${info.feeBps / 100}%`),
+						stat("Max recipients", String(info.MAX_RECIPIENTS)),
+						stat("x402 price", `${info.x402.price} on ${info.x402.network}`)
+					);
+					if (info.warnings.length) {
+						$("warnings").replaceChildren(
+							...info.warnings.map((w) => {
+								const li = document.createElement("li");
+								li.textContent = w;
+								return li;
+							})
+						);
+						$("warnings").hidden = false;
+					}
+				} catch (error) {
+					$("info").textContent = `Failed to load /info: ${error}`;
+				}
+			}
+
+			function readBatch() {
+				const rows = $("recipients")
+					.value.split("\n")
+					.map((line) => line.trim())
+					.filter(Boolean)
+					.map((line) => line.split(",").map((part) => part.trim()));
+				return {
+					token: $("token").value.trim(),
+					recipients: rows.map((row) => row[0]),
+					amounts: rows.map((row) => row[1] ?? ""),
+				};
+			}
+
+			async function call(path) {
+				const response = await fetch(path, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(readBatch()),
+				});
+				const body = await response.json().catch(() => null);
+				const status = $("result-status");
+				status.className = "status";
+				if (response.ok) {
+					status.classList.add("ok");
+					status.textContent = `${response.status} OK`;
+				} else if (response.status === 402) {
+					status.classList.add("warn");
+					status.textContent =
+						"402 Payment Required - pay with an x402 client (e.g. x402-fetch) to receive the unsigned transaction. Requirements:";
+				} else {
+					status.classList.add("err");
+					status.textContent = `${response.status} Error`;
+				}
+				$("result").textContent = JSON.stringify(body, null, 2);
+				$("result").hidden = false;
+			}
+
+			$("estimate").addEventListener("click", () => call("/batch/estimate"));
+			$("execute").addEventListener("click", () => call("/batch/execute"));
+			loadInfo();
+		</script>
+	</body>
+</html>
