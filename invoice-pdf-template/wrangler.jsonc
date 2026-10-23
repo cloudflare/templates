@@ -1,0 +1,40 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "invoice-pdf-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	// Smart Placement runs the Worker close to the KV/R2 backends it talks to.
+	"placement": {
+		"mode": "smart"
+	},
+	// The form UI is plain static files served by Workers Assets. Requests
+	// under /api/* skip the asset lookup and go straight to the Worker; the
+	// ASSETS binding lets the Worker hand anything else back to the assets.
+	"assets": {
+		"directory": "./public",
+		"binding": "ASSETS",
+		"run_worker_first": ["/api/*"]
+	},
+	// Rendered PDFs live in R2. The bucket is provisioned automatically when
+	// you use the Deploy to Cloudflare button; for a manual deploy run
+	// `wrangler r2 bucket create invoice-pdfs` first.
+	"r2_buckets": [
+		{
+			"binding": "INVOICES",
+			"bucket_name": "invoice-pdfs"
+		}
+	],
+	// Invoice metadata is indexed in KV so the "previous invoices" list
+	// survives across requests and isolates. Replace the id with the output of
+	// `wrangler kv namespace create INVOICE_INDEX` for a manual deploy.
+	"kv_namespaces": [
+		{
+			"binding": "INVOICE_INDEX",
+			"id": "<REPLACE_WITH_YOUR_KV_NAMESPACE_ID>"
+		}
+	]
+}
