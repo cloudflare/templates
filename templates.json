@@ -122,6 +122,9 @@
     },
     "grpc-container-template": {
       "package_json_hash": "b77d3053c4e5aee2f7e7b3f5255b7a0dd6301437"
+    },
+    "bounda-event-sourcing-template": {
+      "package_json_hash": "fcad06050b488ba6063547954f6e870612615560"
     }
   }
 }

@@ -1,0 +1,26 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"module": "esnext",
+		"target": "es2024",
+		"lib": ["es2024"],
+		"moduleResolution": "bundler",
+		"verbatimModuleSyntax": true,
+		"erasableSyntaxOnly": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		"noUncheckedIndexedAccess": true,
+		"exactOptionalPropertyTypes": true,
+		"types": ["./worker-configuration.d.ts", "@cloudflare/vitest-plugin/types"],
+		"skipLibCheck": true
+	},
+	"include": [
+		"app",
+		"src",
+		"tests",
+		".bounda/**/*",
+		"bounda.config.ts",
+		"vitest.config.ts",
+		"worker-configuration.d.ts"
+	]
+}
