@@ -12,7 +12,7 @@ declare module "@remix-run/cloudflare" {
 	}
 }
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
 	plugins: [
 		cloudflareDevProxyVitePlugin({
 			getLoadContext,
@@ -37,6 +37,7 @@ export default defineConfig({
 		mainFields: ["browser", "module", "main"],
 	},
 	build: {
+		sourcemap: isSsrBuild,
 		minify: true,
 	},
-});
+}));
