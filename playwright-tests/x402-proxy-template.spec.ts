@@ -37,37 +37,44 @@ test.describe("x402 Payment-Gated Proxy Template", () => {
 		page,
 		templateUrl,
 	}) => {
-		await page.goto(`${templateUrl}/__x402/protected`);
+		const response = await page.goto(`${templateUrl}/__x402/protected`);
 		const body = await page.textContent("body");
 
-		// Verify response contains payment-related information
-		expect(body).toContain("X-PAYMENT");
-		expect(body).toContain("base-sepolia");
-		expect(body).toContain("10000"); // Payment amount in smallest unit
+		expect(response?.status()).toBe(402);
+		expect(response?.headers()["payment-required"]).toBeDefined();
+		expect(body).toContain("Payment Required");
+		expect(body).toContain("install");
+		expect(body).toContain("@x402/paywall");
 	});
 
 	test("402 response includes proper payment structure", async ({
 		page,
 		templateUrl,
 	}) => {
-		// Use page.request to get raw JSON response (avoids browser rendering)
+		// API requests receive an empty JSON body; v2 requirements are in the header.
 		const response = await page.request.get(`${templateUrl}/__x402/protected`);
 		expect(response.status()).toBe(402);
 
-		const json = await response.json();
+		expect(await response.json()).toEqual({});
+		const encodedRequirements = response.headers()["payment-required"];
+		expect(encodedRequirements).toBeDefined();
+		const requirements = JSON.parse(
+			Buffer.from(encodedRequirements, "base64").toString("utf8"),
+		);
 
-		// Verify x402 payment structure
-		expect(json.error).toBe("X-PAYMENT header is required");
-		expect(json.accepts).toBeDefined();
-		expect(Array.isArray(json.accepts)).toBe(true);
-		expect(json.accepts.length).toBeGreaterThan(0);
-		expect(json.x402Version).toBe(1);
-
-		// Verify payment details
-		const paymentOption = json.accepts[0];
-		expect(paymentOption.network).toBe("base-sepolia");
-		expect(paymentOption.resource).toContain("/__x402/protected");
-		expect(paymentOption.description).toContain(
+		expect(requirements.x402Version).toBe(2);
+		expect(requirements.accepts).toHaveLength(2);
+		expect(requirements.accepts[0].network).toBe("eip155:84532");
+		expect(requirements.accepts[0].amount).toBe("10000");
+		expect(requirements.accepts[1].network).toBe(
+			"solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+		);
+		expect(requirements.accepts[1].payTo).toBe(
+			"1nc1nerator11111111111111111111111111111111",
+		);
+		expect(requirements.accepts[1].extra?.feePayer).toBeDefined();
+		expect(requirements.resource.url).toContain("/__x402/protected");
+		expect(requirements.resource.description).toBe(
 			"Access to test protected endpoint",
 		);
 	});
