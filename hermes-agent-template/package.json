@@ -1,0 +1,43 @@
+{
+	"name": "hermes-agent-template",
+	"description": "Run the Hermes coding agent dashboard in per-user containers with Access and AI Gateway.",
+	"cloudflare": {
+		"label": "Hermes Agent",
+		"products": [
+			"Containers",
+			"Durable Objects",
+			"AI Gateway"
+		],
+		"categories": [
+			"ai"
+		],
+		"docs_url": "https://developers.cloudflare.com/sandbox/coding-agents/hermes/",
+		"bindings": {
+			"AI_GATEWAY_ID": {
+				"description": "Your AI Gateway ID, with Unified Billing enabled for the configured model."
+			}
+		}
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-plugin": "1.1.3",
+		"@types/node": "24.10.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.150.0"
+	},
+	"engines": {
+		"node": ">=22"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"check": "wrangler types && tsc --noEmit && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.test.jsonc",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
