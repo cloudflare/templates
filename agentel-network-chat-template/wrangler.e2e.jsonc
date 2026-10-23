@@ -1,0 +1,71 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agentel-network-chat-template-e2e",
+  "main": "dist/agentel_network_chat_template/index.js",
+  "compatibility_date": "2025-10-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "AGENTEL_AGENT_ID": "",
+    "AGENTEL_MAX_PAID_READS_PER_TURN": "3",
+    "AGENTEL_MAX_INFO_PER_TURN": "7",
+    "AGENTEL_READONLY_CHAT": "true",
+    "MODEL_API_PROTOCOL": "openai-compatible",
+    "AGENTEL_API_BASE_URL": "https://agentel.tech/api/v1",
+    "MODEL_API_BASE_URL": "https://api.openai.com/v1",
+    "MODEL_NAME": "gpt-4.1-mini",
+    "DEMO_ACCESS_TOKEN": "synthetic-local-operator-password-20261015",
+    "AGENTEL_READER_KEY": "",
+    "MODEL_API_KEY": ""
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "ChatAgent",
+        "name": "ChatAgent"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "new_sqlite_classes": ["ChatAgent"],
+      "tag": "v1"
+    }
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "dist/client",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "env": {
+    "e2e": {
+      "vars": {
+        "AGENTEL_AGENT_ID": "",
+        "AGENTEL_MAX_PAID_READS_PER_TURN": "3",
+        "AGENTEL_MAX_INFO_PER_TURN": "7",
+        "AGENTEL_READONLY_CHAT": "true",
+        "MODEL_API_PROTOCOL": "openai-compatible",
+        "AGENTEL_API_BASE_URL": "https://agentel.tech/api/v1",
+        "MODEL_API_BASE_URL": "https://api.openai.com/v1",
+        "MODEL_NAME": "gpt-4.1-mini",
+        "DEMO_ACCESS_TOKEN": "synthetic-local-operator-password-20261015",
+        "AGENTEL_READER_KEY": "",
+        "MODEL_API_KEY": ""
+      },
+      "durable_objects": {
+        "bindings": [
+          {
+            "class_name": "ChatAgent",
+            "name": "ChatAgent"
+          }
+        ]
+      },
+      "migrations": [
+        {
+          "new_sqlite_classes": ["ChatAgent"],
+          "tag": "v1"
+        }
+      ]
+    }
+  }
+}

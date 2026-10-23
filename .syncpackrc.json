@@ -17,6 +17,108 @@
 	],
 	"versionGroups": [
 		{
+			"label": "Keep validated Agentel template agents 0.17.4",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["agents"],
+			"pinVersion": "0.17.4"
+		},
+		{
+			"label": "Keep validated Agentel template ai 6.0.233",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["ai"],
+			"pinVersion": "6.0.233"
+		},
+		{
+			"label": "Keep validated Agentel template react 19.2.8",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["react"],
+			"pinVersion": "19.2.8"
+		},
+		{
+			"label": "Keep validated Agentel template react-dom 19.2.8",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["react-dom"],
+			"pinVersion": "19.2.8"
+		},
+		{
+			"label": "Keep validated Agentel template zod 4.4.3",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["zod"],
+			"pinVersion": "4.4.3"
+		},
+		{
+			"label": "Keep validated Agentel template @cloudflare/vite-plugin 1.46.0",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@cloudflare/vite-plugin"],
+			"pinVersion": "1.46.0"
+		},
+		{
+			"label": "Keep validated Agentel template @cloudflare/vitest-pool-workers 0.21.3",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@cloudflare/vitest-pool-workers"],
+			"pinVersion": "0.21.3"
+		},
+		{
+			"label": "Keep validated Agentel template @tailwindcss/vite 4.3.3",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@tailwindcss/vite"],
+			"pinVersion": "4.3.3"
+		},
+		{
+			"label": "Keep validated Agentel template @types/node 26.1.1",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@types/node"],
+			"pinVersion": "26.1.1"
+		},
+		{
+			"label": "Keep validated Agentel template @types/react 19.2.17",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@types/react"],
+			"pinVersion": "19.2.17"
+		},
+		{
+			"label": "Keep validated Agentel template @types/react-dom 19.2.3",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@types/react-dom"],
+			"pinVersion": "19.2.3"
+		},
+		{
+			"label": "Keep validated Agentel template @vitejs/plugin-react 6.0.4",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["@vitejs/plugin-react"],
+			"pinVersion": "6.0.4"
+		},
+		{
+			"label": "Keep validated Agentel template tailwindcss 4.3.3",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["tailwindcss"],
+			"pinVersion": "4.3.3"
+		},
+		{
+			"label": "Keep validated Agentel template typescript 6.0.3",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["typescript"],
+			"pinVersion": "6.0.3"
+		},
+		{
+			"label": "Keep validated Agentel template vite 8.1.5",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["vite"],
+			"pinVersion": "8.1.5"
+		},
+		{
+			"label": "Keep validated Agentel template vitest 4.1.10",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["vitest"],
+			"pinVersion": "4.1.10"
+		},
+		{
+			"label": "Keep validated Agentel template wrangler 4.113.0",
+			"packages": ["agentel-network-chat-template"],
+			"dependencies": ["wrangler"],
+			"pinVersion": "4.113.0"
+		},
+		{
 			"label": "Use Workers types v5 for ctx.access",
 			"packages": ["internal-sites-template"],
 			"dependencies": ["@cloudflare/workers-types"],

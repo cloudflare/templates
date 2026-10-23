@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "trailingComma": "none",
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": ["package.json"],
+      "options": {
+        "useTabs": true,
+        "sortPackageJson": false
+      }
+    }
+  ]
+}

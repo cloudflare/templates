@@ -21,7 +21,14 @@
 			"esbuild",
 			"sharp",
 			"workerd"
-		]
+		],
+		"packageExtensions": {
+			"streamdown@2.5.0": {
+				"dependencies": {
+					"shiki": "3.21.0"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"check": "pnpm run check:deps && pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",

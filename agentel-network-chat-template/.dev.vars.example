@@ -1,0 +1,8 @@
+# Fill each value locally; never commit the populated .dev.vars file.
+# INFO allowance, model-provider charges and Cloudflare usage are separate.
+# Your own Agentel INFO Reader key.
+AGENTEL_READER_KEY=
+# Generate a strong random operator password with at least 24 characters.
+DEMO_ACCESS_TOKEN=
+# Match the provider configured in wrangler.jsonc (OpenAI by default).
+MODEL_API_KEY=
