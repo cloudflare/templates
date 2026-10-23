@@ -1,0 +1,4 @@
+# Copy to .dev.vars and set your key from https://ipscanner.io
+# Keys look like pk_live_<56 hex> (test keys start with pk_test_)
+# Leave empty to run the guard in passthrough mode
+IPSCANNER_API_KEY=
