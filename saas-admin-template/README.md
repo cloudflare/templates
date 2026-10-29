@@ -105,4 +105,22 @@ npx wrangler secret put API_TOKEN
 
 This project includes a fully functional admin dashboard with customer and subscription management capabilities. It also includes an API with token authentication to access resources via REST, returning JSON data.
 
-It also includes a "Customer Workflow", built with [Cloudflare Workflows](https://developers.cloudflare.com/workflows). This workflow can be triggered in the UI or via the REST API to do arbitrary actions in the background for any given user. See [`customer_workflow.ts`]() to learn more about what you can do in this workflow.
+It also includes a "Customer Workflow", built with [Cloudflare Workflows](https://developers.cloudflare.com/workflows). This workflow can be triggered in the UI or via the REST API to do arbitrary actions in the background for any given user. See [`customer_workflow.ts`](<>) to learn more about what you can do in this workflow.
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.
+
+This starter keeps Astro 5's Vite version for framework builds. Vite+ supplies the
+formatting and linting tools through its own bundled Vite; do not force Astro's
+Vite dependency to the Vite+ alias until upgrading to a compatible Astro release.

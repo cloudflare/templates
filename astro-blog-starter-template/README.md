@@ -62,3 +62,21 @@ Check out [our documentation](https://docs.astro.build) or jump into our [Discor
 ## Credit
 
 This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.
+
+This starter keeps Astro 5's Vite version for framework builds. Vite+ supplies the
+formatting and linting tools through its own bundled Vite; do not force Astro's
+Vite dependency to the Vite+ alias until upgrading to a compatible Astro release.

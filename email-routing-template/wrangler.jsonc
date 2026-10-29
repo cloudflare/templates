@@ -7,12 +7,12 @@
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./public",
-		"run_worker_first": ["/"]
+		"run_worker_first": ["/"],
 	},
 	"vars": {
 		"ROUTE_ADDRESS": "support@company.example",
 		"FORWARD_TO": "owner@mailbox.example",
-		"ALLOWED_SENDERS": "trusted@partner.example"
+		"ALLOWED_SENDERS": "trusted@partner.example",
 	},
 	// Uncomment this top-level section after replacing the example address.
 	// Each entry creates an Email Routing rule managed by Wrangler.
@@ -21,6 +21,6 @@
 	// 	// Use "*@company.example" instead to route every unmatched address.
 	// ],
 	"observability": {
-		"enabled": true
-	}
+		"enabled": true,
+	},
 }

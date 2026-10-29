@@ -31,16 +31,32 @@
 		"eslint-config-prettier": "10.1.8",
 		"prettier": "3.7.4",
 		"tsx": "4.21.0",
+		"typescript": "5.9.3",
 		"viem": "2.43.1",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
 		"wrangler": "4.136.1",
 		"x402": "1.0.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"check": "vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy --minify",
 		"dev": "wrangler dev",
-		"format": "prettier --write .",
+		"format": "vp fmt",
 		"format:check": "prettier --check .",
 		"lint": "npm run typecheck && npm run format:check && eslint .",
 		"lint:fix": "prettier --write . && eslint . --fix",

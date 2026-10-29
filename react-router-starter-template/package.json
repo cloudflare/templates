@@ -28,18 +28,32 @@
 		"@types/react-dom": "19.2.3",
 		"tailwindcss": "4.1.17",
 		"typescript": "5.9.3",
-		"vite": "^7.0.0",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
 		"vite-tsconfig-paths": "5.1.4",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"build": "react-router build",
 		"cf-typegen": "wrangler types && react-router typegen",
-		"check": "tsc && react-router build && wrangler deploy --dry-run",
+		"check": "tsc && react-router build && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy",
 		"dev": "react-router dev",
-		"preview": "npm run build && vite preview",
+		"format": "vp fmt",
+		"preview": "npm run build && vp preview",
 		"typecheck": "npm run typegen && tsc -b"
 	},
 	"type": "module"

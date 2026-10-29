@@ -10,10 +10,11 @@
 		"prettier": "3.7.4",
 		"syncpack": "13.0.4",
 		"turbo": "2.6.1",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
 		"vitest": "4.1.10"
 	},
 	"engines": {
-		"node": ">=20.16.0 || >=22.3.0"
+		"node": "^22.19.0 || ^24.11.0 || >=26.0.0"
 	},
 	"packageManager": "pnpm@10.2.0",
 	"pnpm": {
@@ -21,7 +22,10 @@
 			"esbuild",
 			"sharp",
 			"workerd"
-		]
+		],
+		"overrides": {
+			"vite@>=7.0.0": "npm:@voidzero-dev/vite-plus-core@1.4.0"
+		}
 	},
 	"scripts": {
 		"check": "pnpm run check:deps && pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",

@@ -14,24 +14,39 @@
 	},
 	"dependencies": {
 		"cobe": "0.6.5",
-		"partyserver": "0.0.75",
+		"partyserver": "0.5.10",
 		"partysocket": "1.1.6",
 		"react": "19.2.1",
 		"react-dom": "19.2.1"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20260702.1",
+		"@cloudflare/workers-types": "^5.20261023.1",
 		"@types/react": "19.2.7",
 		"@types/react-dom": "19.2.3",
 		"esbuild": "0.27.0",
 		"typescript": "5.9.3",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"cf-typegen": "wrangler types ./src/server/worker-configuration.d.ts",
-		"check": "tsc --project src/client && tsc --project src/server && wrangler deploy --dry-run",
+		"check": "tsc --project src/client && tsc --project src/server && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy",
-		"dev": "wrangler dev"
+		"dev": "wrangler dev",
+		"format": "vp fmt"
 	}
 }

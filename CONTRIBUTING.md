@@ -10,6 +10,24 @@ Code formatting, linting, and all other checks are covered under the `check` scr
 
 If CI is failing on your pull request, running `pnpm run fix` in the repository root might solve your problems.
 
+## Vite+ toolchain
+
+New JavaScript and TypeScript templates use Vite+ for checks and formatting,
+and for builds and tests when their framework supports it. Each compatible
+standalone starter declares the Vite alias, Vitest pin, and pnpm overrides.
+Update those together with Vite+ and regenerate the npm lockfile.
+
+Run `npm run check:toolchain` and `npm run check` from an extracted copy as well
+as the workspace. Preserve framework commands and provisioning steps in scripts.
+Deployment and resource mutations must not be cached.
+
+The Astro 5 starters use Vite+ for checks and formatting while keeping Astro's
+own Vite dependency for framework builds. Do not apply a global Vite override to
+these projects until their framework supports the Vite+ core version.
+
+The legacy `remix-starter-template` and `to-do-list-kv-template` still require
+Vite 5. Migrate their framework before adopting the Vite+ build toolchain.
+
 ## Requirements
 
 In order to introduce a new template to this collection, the following requirements must all be satisfied. For a boiled-down version of these requirements, scroll down to the [Checklist](#checklist).

@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vite-plus/test";
 import type { Env } from "../src/env";
 import { PutStaticSiteInDispatchNamespace } from "../src/resource";
 import type { UploadedAsset } from "../src/types";

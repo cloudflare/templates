@@ -8,10 +8,10 @@
 	"compatibility_date": "2025-10-08",
 	"main": "./workers/app.ts",
 	"vars": {
-		"VALUE_FROM_CLOUDFLARE": "Hello from Hono/CF"
+		"VALUE_FROM_CLOUDFLARE": "Hello from Hono/CF",
 	},
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	/**
 	 * Smart Placement
@@ -43,5 +43,5 @@
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
 	 */
 	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
-	"upload_source_maps": true
+	"upload_source_maps": true,
 }

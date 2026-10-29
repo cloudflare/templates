@@ -23,7 +23,7 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.52.1",
-		"@cloudflare/workers-types": "^4.20260702.1",
+		"@cloudflare/workers-types": "^5.20261023.1",
 		"@react-router/dev": "7.9.6",
 		"@tailwindcss/vite": "4.1.17",
 		"@types/node": "24.10.1",
@@ -31,17 +31,32 @@
 		"@types/react-dom": "19.2.3",
 		"tailwindcss": "4.1.17",
 		"typescript": "5.9.3",
-		"vite": "^7.0.0",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
 		"vite-tsconfig-paths": "5.1.4",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
+		"check": "vp check",
+		"check:toolchain": "vp check",
 		"deploy": "npm run build && wrangler deploy",
 		"dev": "react-router dev",
-		"preview": "npm run build && vite preview",
+		"format": "vp fmt",
+		"preview": "npm run build && vp preview",
 		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
 	},
 	"type": "module"

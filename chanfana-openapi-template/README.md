@@ -70,3 +70,17 @@ Test files are located in the `tests/` directory, with examples demonstrating ho
 2. Each endpoint has its own file in `src/endpoints/`.
 3. Integration tests are located in the `tests/` directory.
 4. For more information read the [chanfana documentation](https://chanfana.com/), [Hono documentation](https://hono.dev/docs), and [Vitest documentation](https://vitest.dev/guide/).
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

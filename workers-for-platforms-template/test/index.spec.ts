@@ -6,7 +6,7 @@ import {
 	createExecutionContext,
 	waitOnExecutionContext,
 } from "cloudflare:test";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vite-plus/test";
 import app from "../src/index";
 
 // Type for our test environment

@@ -138,3 +138,17 @@ INSIGHTS
 This template is the **visibility layer** of a broader exploration of agent commerce on Cloudflare — the loop where agents discover a merchant's catalog (e.g. via `/llms.txt`), get verified at the edge, and convert intent into checkout. Those other layers are out of scope for this template; this one stands on its own and can ingest events from any source that POSTs to `/events` or forwards `cf-agent-*` headers.
 
 A merchant running no other piece of that loop can still benefit from a commerce-specific analytics surface. It's stronger when composed with the rest: discovery events (`/llms.txt` reads, search queries), verified-agent signals from an edge ruleset, and demand patterns from an agent orchestrator all flow through the same event pipeline.
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

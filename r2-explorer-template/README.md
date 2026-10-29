@@ -80,3 +80,17 @@ By default this template is **readonly**.
 in order for you to enable editing, just update the `readonly` flag in your `src/index.ts` file.
 
 Its highly recommended that you setup security first, [learn more here](https://r2explorer.com/getting-started/security/).
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

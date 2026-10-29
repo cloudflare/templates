@@ -27,15 +27,30 @@
 		"eslint-config-next": "16.0.7",
 		"tailwindcss": "4.1.17",
 		"typescript": "5.9.3",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"build": "next build",
 		"cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
-		"check": "npm run build && tsc",
+		"check": "npm run build && tsc && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
 		"dev": "next dev",
+		"format": "vp fmt",
 		"lint": "next lint",
 		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
 		"start": "next start"

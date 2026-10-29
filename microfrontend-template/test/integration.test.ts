@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 
 describe("Microfrontend Router", () => {
 	describe("routing", () => {
@@ -72,7 +72,9 @@ describe("Microfrontend Router", () => {
 		it("rewrites redirect Location headers", async () => {
 			const response = await SELF.fetch(
 				"https://example.com/app2/redirect-test",
-				{ redirect: "manual" },
+				{
+					redirect: "manual",
+				},
 			);
 
 			expect(response.status).toBe(302);

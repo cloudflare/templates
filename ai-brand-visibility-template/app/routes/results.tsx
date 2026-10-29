@@ -184,7 +184,9 @@ export default function Results({ loaderData }: Route.ComponentProps) {
 		try {
 			const response = await fetch(
 				`/api/sites/${encodeURIComponent(site.domain)}/test`,
-				{ method: "POST" },
+				{
+					method: "POST",
+				},
 			);
 			const data = (await response.json()) as TestStart | ApiError;
 

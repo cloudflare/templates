@@ -296,3 +296,17 @@ The queue must be created before deploying. See [Step 1: Create a Queue](#1-crea
 - [Queue Event Subscriptions](https://developers.cloudflare.com/queues/event-subscriptions/)
 - [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/)
 - [Cloudflare Queues](https://developers.cloudflare.com/queues/)
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

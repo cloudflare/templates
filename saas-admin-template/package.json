@@ -39,22 +39,32 @@
 		"zod": "4.1.13"
 	},
 	"devDependencies": {
+		"typescript": "5.9.3",
+		"vite-plus": "1.4.0",
 		"wrangler": "4.136.1"
 	},
 	"engines": {
-		"node": ">=22"
+		"node": "^22.19.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vitest": "5.0.5"
 	},
 	"private": true,
+	"resolutions": {
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"astro": "astro",
 		"build": "astro build",
 		"cf-typegen": "wrangler types",
-		"check": "npm run build && npm run wrangler:wrapper && wrangler deploy --dry-run",
+		"check": "npm run build && npm run wrangler:wrapper && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"db:migrate": "wrangler d1 migrations apply DB --local",
 		"db:migrate:remote": "wrangler d1 migrations apply DB --remote",
 		"deploy": "npm run wrangler:wrapper && wrangler deploy",
 		"dev": "npm run db:migrate && npm run build && npm run wrangler:wrapper && npx wrangler dev --port 4321",
 		"e2e:dev": "npm run db:migrate && npm run build && npm run wrangler:wrapper && npx wrangler dev",
+		"format": "vp fmt",
 		"predeploy": "npm run db:migrate:remote",
 		"preview": "npm run build && npm run wrangler:wrapper && wrangler dev",
 		"wrangler:wrapper": "cp src/workflows/wrapper.js dist/index.js"

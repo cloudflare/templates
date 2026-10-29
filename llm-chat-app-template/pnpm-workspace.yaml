@@ -1,0 +1,16 @@
+packages:
+  - "."
+
+overrides:
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vitest: 5.0.5
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
+
+minimumReleaseAgeExclude:
+  - "@cloudflare/vitest-plugin@1.4.10"
+  - miniflare@5.20261023.2-beta
+  - wrangler@4.155.0

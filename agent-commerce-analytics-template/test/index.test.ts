@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 
 const ADMIN_TOKEN = "test-admin-token";
 

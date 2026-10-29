@@ -8,14 +8,14 @@
 		{
 			"binding": "DISPATCHER",
 			"namespace": "my-dispatch-namespace",
-			"remote": true
-		}
+			"remote": true,
+		},
 	],
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"vars": {
 		"CLOUDFLARE_ACCOUNT_ID": "",
-		"READONLY": "true"
-	}
+		"READONLY": "true",
+	},
 }

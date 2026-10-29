@@ -17,20 +17,54 @@
 	],
 	"versionGroups": [
 		{
-			"label": "Use Workers types v5 for ctx.access",
-			"packages": ["internal-sites-template"],
-			"dependencies": ["@cloudflare/workers-types"],
-			"pinVersion": "^5.20260811.1"
+			"label": "Align @cloudflare/vitest-plugin in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["@cloudflare/vitest-plugin"],
+			"pinVersion": "1.4.10"
 		},
 		{
-			"label": "Use current Workers types for templates requiring Workers types v5",
+			"label": "Align vitest in standalone starters",
 			"packages": [
-				"email-routing-template",
-				"email-sending-template",
-				"voice-agent-template"
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
 			],
+			"dependencies": ["vitest"],
+			"pinVersion": "5.0.5"
+		},
+		{
+			"label": "Align vite in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["vite"],
+			"pinVersion": "npm:@voidzero-dev/vite-plus-core@1.4.0"
+		},
+		{
+			"label": "Align vite-plus in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["vite-plus"],
+			"pinVersion": "1.4.0"
+		},
+		{
+			"label": "Keep legacy Remix Workers types",
+			"packages": ["remix-starter-template", "to-do-list-kv-template"],
 			"dependencies": ["@cloudflare/workers-types"],
-			"pinVersion": "^5.20260831.1"
+			"isIgnored": true
 		},
 		{
 			"label": "Use current Agents SDK for the voice agent template",
@@ -94,12 +128,6 @@
 			"packages": ["to-do-list-kv-template"],
 			"dependencies": ["@cloudflare/vitest-pool-workers"],
 			"pinVersion": "0.11.1"
-		},
-		{
-			"label": "Set vite to v7",
-			"packages": ["*"],
-			"dependencies": ["vite"],
-			"pinVersion": "^7.0.0"
 		}
 	]
 }

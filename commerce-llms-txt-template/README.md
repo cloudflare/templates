@@ -163,3 +163,17 @@ On the first request (or after the cache expires), the Worker:
 - **Workers AI cost on cache miss.** Each product requires one AI inference call for enrichment. A 250-product store triggers 250 calls (in batches of 5) on the first request. These are billed as standard [Workers AI inference requests](https://developers.cloudflare.com/workers-ai/platform/pricing/). Once cached, no AI calls are made until the cache expires.
 - **No webhook-based cache invalidation.** The cache expires on a timer (default: 1 hour). If you need instant updates when products change in Shopify, you'd need to add a webhook handler that clears the KV cache — not included in this template.
 - **Single-store only.** The template serves one Shopify store per Worker. For multi-store setups, deploy one Worker per store or extend the routing logic.
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

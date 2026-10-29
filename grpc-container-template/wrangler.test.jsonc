@@ -8,14 +8,14 @@
 		"bindings": [
 			{
 				"name": "GRPC_CONTAINER",
-				"class_name": "GrpcContainer"
-			}
-		]
+				"class_name": "GrpcContainer",
+			},
+		],
 	},
 	"migrations": [
 		{
 			"tag": "v1",
-			"new_sqlite_classes": ["GrpcContainer"]
-		}
-	]
+			"new_sqlite_classes": ["GrpcContainer"],
+		},
+	],
 }

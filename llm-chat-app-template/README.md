@@ -24,6 +24,7 @@ This template demonstrates how to build an AI-powered chat interface using Cloud
 - 📱 Mobile-friendly design
 - 🔄 Maintains chat history on the client
 - 🔎 Built-in Observability logging
+
 <!-- dash-content-end -->
 
 ## Getting Started
@@ -151,3 +152,17 @@ The UI styling is contained in the `<style>` section of `public/index.html`. You
 - [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
 - [Cloudflare Workers AI Documentation](https://developers.cloudflare.com/workers-ai/)
 - [Workers AI Models](https://developers.cloudflare.com/workers-ai/models/)
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 24.22 or later in
+Node.js 24, then install the dependencies with `npm install`. A global `vp`
+installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` also runs this starter's existing project checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 import { handleRequest } from "../src/index";
 
 type TestEnv = Omit<Env, "FROM_ADDRESS" | "TO_ADDRESS"> & {
