@@ -32,6 +32,7 @@
 	 * https://developers.cloudflare.com/durable-objects/
 	 */
 	"durable_objects": {
+		"code_update_strategy": { "mode": "deferred" },
 		"bindings": [
 			{
 				"name": "WORKFLOW_STATUS",

@@ -17,6 +17,7 @@
 		"command": "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist"
 	},
 	"durable_objects": {
+		"code_update_strategy": { "mode": "deferred" },
 		"bindings": [
 			{
 				"class_name": "Chat",

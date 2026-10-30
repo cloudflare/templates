@@ -15,6 +15,7 @@
 		"command": "npx esbuild src/client/index.tsx --bundle --outdir=public/dist --splitting --sourcemap --format=esm"
 	},
 	"durable_objects": {
+		"code_update_strategy": { "mode": "deferred" },
 		"bindings": [
 			{
 				"class_name": "Globe",

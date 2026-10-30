@@ -37,3 +37,7 @@ npm run deploy
 - [Cloudflare Workflows Documentation](https://developers.cloudflare.com/workflows)
 - [Durable Objects Documentation](https://developers.cloudflare.com/durable-objects)
 - [Workers Documentation](https://developers.cloudflare.com/workers)
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

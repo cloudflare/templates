@@ -133,3 +133,7 @@ sending traffic over an untrusted network.
 - [Durable Object Container API](https://developers.cloudflare.com/durable-objects/api/container/)
 - [Workers TCP sockets](https://developers.cloudflare.com/workers/runtime-apis/tcp-sockets/)
 - [Workers protocol support](https://developers.cloudflare.com/workers/reference/protocols/)
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

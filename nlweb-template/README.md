@@ -53,3 +53,7 @@ To learn more about NLWeb, take a look at the following resources:
 - [NLWeb Repo](https://github.com/nlweb-ai/NLWeb) - learn about NLWeb
 
 Your feedback and contributions are welcome!
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

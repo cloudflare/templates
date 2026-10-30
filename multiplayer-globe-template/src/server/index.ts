@@ -9,6 +9,8 @@ type ConnectionState = {
 };
 
 export class Globe extends Server {
+	static options = { hibernate: true };
+
 	onConnect(conn: Connection<ConnectionState>, ctx: ConnectionContext) {
 		// Whenever a fresh connection is made, we'll
 		// send the entire state to the new connection

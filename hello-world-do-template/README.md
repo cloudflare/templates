@@ -52,3 +52,7 @@ To learn more about Next.js, take a look at the following resources:
 - [Durable Objects](https://developers.cloudflare.com/durable-objects/) - learn about Durable Objects
 
 Your feedback and contributions are welcome!
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

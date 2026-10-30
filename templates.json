@@ -13,13 +13,13 @@
       "package_json_hash": "53956a7184176bfd9cb3fe8d18dd2ca63ef3dcb8"
     },
     "durable-chat-template": {
-      "package_json_hash": "80088de5e71be2953b817c4ad3d3925bd879e842"
+      "package_json_hash": "be757d626725c135bf2641b9f3683576b386ef96"
     },
     "llm-chat-app-template": {
       "package_json_hash": "e9f70c2f24bbb45afc99664ba630847cd662b78e"
     },
     "multiplayer-globe-template": {
-      "package_json_hash": "50225bf9246beb45767d46a4afd76a0826b33ea1"
+      "package_json_hash": "f55b6c11a93b1582dac893599c6489daf202ff19"
     },
     "next-starter-template": {
       "package_json_hash": "22e3356133a3a322930f9669764f877285cbbf44"
@@ -58,19 +58,19 @@
       "package_json_hash": "27def0cfeab213ea633f1371bef650b4d6be24f0"
     },
     "containers-template": {
-      "package_json_hash": "e1d267fad54310a8a5feaf8acb87c48505c7904b"
+      "package_json_hash": "302918514628309f82139fffc4800bbb65faa850"
     },
     "d1-starter-sessions-api-template": {
       "package_json_hash": "71eb6c2d8b2e14c168140a5c95e265eca2006eb5"
     },
     "hello-world-do-template": {
-      "package_json_hash": "f52873c561e4ec3d80ceccf307ad56436fe25547"
+      "package_json_hash": "397e007ffa3cabbb86d31da9f458de99de148610"
     },
     "mysql-hyperdrive-template": {
       "package_json_hash": "40c92113b00ffc66f05599f9712e99d566b4018e"
     },
     "nlweb-template": {
-      "package_json_hash": "54e0f118098f97e7b7044a04e0d44ad8f579d16f"
+      "package_json_hash": "b4e9cf8aec79a9adbc0572f08075b428eb8af754"
     },
     "nodejs-http-server-template": {
       "package_json_hash": "9276f76915cfc1986703e0341b8f3eef5de61622"
@@ -85,7 +85,7 @@
       "package_json_hash": "a3b4fefb68c5e8bf1a591303e05aff7a7d9f7ed8"
     },
     "workflows-starter-template": {
-      "package_json_hash": "222e9d996b9e78d61566cac3a5e705ce6cfe98ba"
+      "package_json_hash": "d54da58c74ddad436a413aed64b4789ded34a61b"
     },
     "workers-for-platforms-template": {
       "package_json_hash": "f7c0663fca93f2d422b0630f7d0e1d684bdfb55e"
@@ -112,7 +112,7 @@
       "package_json_hash": "18f977168261adae1afda9f9cc18b0ff7169e72f"
     },
     "voice-agent-template": {
-      "package_json_hash": "e926996d61e41c2e8e129fe6c1981e6777099c3d"
+      "package_json_hash": "fc1088eb692ceb24ca54d4d61a36fe037c07ec80"
     },
     "email-routing-template": {
       "package_json_hash": "acfc9ca0edaab800b8c718d744821b8506876905"
@@ -121,7 +121,7 @@
       "package_json_hash": "c10ec46edff3e911c2675120d7b9f5787a514fc2"
     },
     "grpc-container-template": {
-      "package_json_hash": "b77d3053c4e5aee2f7e7b3f5255b7a0dd6301437"
+      "package_json_hash": "16f41f67f44ec7a34a89af5220276f17ccc523e8"
     }
   }
 }

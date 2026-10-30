@@ -40,3 +40,7 @@ A live public deployment of this template is available at [https://durable-chat-
    ```bash
    npx wrangler tail
    ```
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

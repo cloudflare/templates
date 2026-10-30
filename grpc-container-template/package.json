@@ -24,7 +24,7 @@
 		"@vitest/snapshot": "4.1.10",
 		"typescript": "5.9.3",
 		"vitest": "4.1.10",
-		"wrangler": "4.136.1"
+		"wrangler": "4.141.0"
 	},
 	"private": true,
 	"scripts": {

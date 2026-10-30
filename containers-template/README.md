@@ -98,3 +98,7 @@ Use the deployed Worker URL to try the same routes. Container instances start wh
 - [Durable Object Container API](https://developers.cloudflare.com/containers/api/durable-object-container/)
 - [Scheduling policy](https://developers.cloudflare.com/containers/configuration/scheduling-policy/#use-the-durable-object-scheduling-policy)
 - [Local development](https://developers.cloudflare.com/containers/guides/local-dev/)
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

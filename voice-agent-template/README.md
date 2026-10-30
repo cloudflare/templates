@@ -97,3 +97,7 @@ npm run deploy
 - [Durable Objects](https://developers.cloudflare.com/durable-objects/)
 - [Model Context Protocol](https://developers.cloudflare.com/agents/model-context-protocol/)
 - [Worker secrets](https://developers.cloudflare.com/workers/configuration/secrets/)
+
+## Code updates
+
+This template uses deferred Durable Object code updates. Active objects can keep running the previous version until they hibernate, for up to 300 seconds. Updates are best effort: store any state needed to recover from a reset.

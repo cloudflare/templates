@@ -17,6 +17,36 @@
 	],
 	"versionGroups": [
 		{
+			"label": "Use Workers types required by deferred update support",
+			"packages": [
+				"hello-world-do-template",
+				"durable-chat-template",
+				"multiplayer-globe-template",
+				"voice-agent-template",
+				"nlweb-template",
+				"workflows-starter-template",
+				"containers-template",
+				"grpc-container-template"
+			],
+			"dependencies": ["@cloudflare/workers-types"],
+			"pinVersion": "^5.20260925.1"
+		},
+		{
+			"label": "Use Wrangler with deferred Durable Object code updates",
+			"packages": [
+				"hello-world-do-template",
+				"durable-chat-template",
+				"multiplayer-globe-template",
+				"voice-agent-template",
+				"nlweb-template",
+				"workflows-starter-template",
+				"containers-template",
+				"grpc-container-template"
+			],
+			"dependencies": ["wrangler"],
+			"pinVersion": "4.141.0"
+		},
+		{
 			"label": "Use Workers types v5 for ctx.access",
 			"packages": ["internal-sites-template"],
 			"dependencies": ["@cloudflare/workers-types"],
