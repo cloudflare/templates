@@ -200,6 +200,49 @@ importers:
         specifier: 4.136.1
         version: 4.136.1(@cloudflare/workers-types@4.20260702.1)(@types/node@25.0.3)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
 
+  brust-template:
+    dependencies:
+      '@brust/core':
+        specifier: 2.0.0-alpha.33
+        version: 2.0.0-alpha.33(@elysia/eden@2.0.0-rc.0(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3)))(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@elysia/eden':
+        specifier: 2.0.0-rc.0
+        version: 2.0.0-rc.0(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3))
+      elysia:
+        specifier: 2.0.0-rc.0
+        version: 2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3)
+      react:
+        specifier: 19.2.1
+        version: 19.2.1
+      react-dom:
+        specifier: 19.2.1
+        version: 19.2.1(react@19.2.1)
+    devDependencies:
+      '@tailwindcss/node':
+        specifier: 4.1.17
+        version: 4.1.17
+      '@tailwindcss/oxide':
+        specifier: 4.1.17
+        version: 4.1.17
+      '@types/bun':
+        specifier: 1.4.4
+        version: 1.4.4
+      '@types/react':
+        specifier: 19.2.7
+        version: 19.2.7
+      bun:
+        specifier: 1.4.4
+        version: 1.4.4
+      tailwindcss:
+        specifier: 4.1.17
+        version: 4.1.17
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      wrangler:
+        specifier: 4.136.1
+        version: 4.136.1(@cloudflare/workers-types@5.20261102.1)(@types/node@24.10.1)(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+
   chanfana-openapi-template:
     dependencies:
       chanfana:
@@ -2318,6 +2361,61 @@ packages:
   '@base-org/account@2.4.0':
     resolution: {integrity: sha512-A4Umpi8B9/pqR78D1Yoze4xHyQaujioVRqqO3d6xuDFw9VRtjg6tK3bPlwE0aW+nVH/ntllCpPa2PbI8Rnjcug==}
 
+  '@brust/core-cf@2.0.0-alpha.33':
+    resolution: {integrity: sha512-1k9pMVOgedAWo4WadQK4wH/elJfquctZLizOSHz1UKROINRHouqOi2/sEG5wkK0VJChb3L4qm7x5e1X78xPJZQ==}
+
+  '@brust/core@2.0.0-alpha.33':
+    resolution: {integrity: sha512-VPLYES38OKI2IISnNWN7TidtFVf0m8yzKvpQBdp30AXIaW9Yc02YPEsBHNQfnjwkdYTMob/TW2PA515IMMwLJg==}
+    hasBin: true
+    peerDependencies:
+      '@elysia/eden': ^2.0.0-rc.0
+      elysia: ^2.0.0-rc.0
+      react: ^19.0.0
+      react-dom: ^19.0.0
+    peerDependenciesMeta:
+      '@elysia/eden':
+        optional: true
+      elysia:
+        optional: true
+
+  '@brust/native-darwin-arm64@2.0.0-alpha.33':
+    resolution: {integrity: sha512-BovDF5BlmNYMh2+Yf8rSnLVUcToPwRVJ7/dZgZjQQ+Yj+oaflEgwLqRu2xivd/XslStu6kavgfUgsi9LMDJKog==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@brust/native-darwin-x64@2.0.0-alpha.33':
+    resolution: {integrity: sha512-ry9+ZqYmmB+iRK8xO9x31APQb+elFJcRPTmauw1Wsb1R+CYibDM0hU9xSsCW5784sDPjsuge8ku32WLdJmm9oQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@brust/native-linux-arm64-gnu@2.0.0-alpha.33':
+    resolution: {integrity: sha512-TwM+BsaABE950V5Q4XTTPjQKk6mR5FROErZJ9ZrjyzkZDHeOWLrLmU/oMvQiQ1AO41wHh3lddFKMiHpQepWs0A==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@brust/native-linux-arm64-musl@2.0.0-alpha.33':
+    resolution: {integrity: sha512-CodHvu8hM3+qxPFspvvGVT0CkaVp++DuSP98gogHKbvEhOHIqi0O4QjyEtbifk4YO6plmrEgSYIHGY16KbDXBg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@brust/native-linux-x64-gnu@2.0.0-alpha.33':
+    resolution: {integrity: sha512-NmBELPlVs3uKyLL8D7f8CXC3Y74EQ42Pnmi22IOdnd+y1wKPZuZUUX4L8zW5xHU33xBt07/RcbA3w9CP4fHkAg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@brust/native-linux-x64-musl@2.0.0-alpha.33':
+    resolution: {integrity: sha512-kiSRNwqjy5eJz8oAg3gFiqbo2EHqkdiSt74DeVRy90tgTeYjRwa3DMTzr71p5xXLh2XPH9CegsN7+Yr7hzfgsQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@brust/runtime-dom@2.0.0-alpha.33':
+    resolution: {integrity: sha512-BPWRUVCqE+VEnRKRJCD070I+OAFbyD30LSk6oPWUw8cPMCN1mk/I8ry61JcEDnR84ZOlJAY+MwiWAtkz1I3jrA==}
+    peerDependencies:
+      react: ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+
   '@capsizecss/unpack@4.0.0':
     resolution: {integrity: sha512-VERIM64vtTP1C4mxQ5thVT9fK0apjPFobqybMtA1UdUujWka24ERHbRHFGmpbbhp73MhV+KSsHQH9C6uOTdEQA==}
     engines: {node: '>=18'}
@@ -2614,6 +2712,11 @@ packages:
     engines: {bun: '>=1', deno: '>=2', node: '>=16'}
     peerDependencies:
       '@noble/ciphers': ^1.0.0
+
+  '@elysia/eden@2.0.0-rc.0':
+    resolution: {integrity: sha512-Hw2YUjGBzeu+Wr1bflrbQLoFGAHK4sQlKHoKFSWNlfgW39yV5VJqf2G8g8VI5lzVgHFWqu0ldAPVWyhB1aFSRg==}
+    peerDependencies:
+      elysia: '>= 2.0.0-rc.0'
 
   '@emnapi/core@1.4.3':
     resolution: {integrity: sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g==}
@@ -4819,6 +4922,66 @@ packages:
     resolution: {integrity: sha512-bLE7BtHrURedCn4Mco3ma9L4Y1GR2SMBuIvjWr7rmQ4/W/4Jy70TIAgZ+0nIlk0xHz1vNP8x8DCns45Sb2XRbg==}
     deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
+  '@oven/bun-darwin-aarch64@1.4.4':
+    resolution: {integrity: sha512-zW/hxwc8sJAILGwB5eTC4i48ouGXf0V4lrxmEOk3JIE6JkYVW1TZh1E2pIempqsezgW1sckTIIDudFON8bJ2Mw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64@1.4.4':
+    resolution: {integrity: sha512-oKGcxLsvh4oHjAo28nPm8c/xN0o/OmGyj1IHYc94vprkWsW2hNg2keEZt5f40cI5Hvu4jDlSRTR0UNpv1UIAxw==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-freebsd-aarch64@1.4.4':
+    resolution: {integrity: sha512-klvA9FlwLxZj3JYIOPQA4bbnHIC3uas8kBE4GaGGkeVgAQP/k8hAzYkOqkSaqHBDbxLrTyFEQArEAevJq6NJzg==}
+    cpu: [arm64]
+    os: [freebsd]
+
+  '@oven/bun-freebsd-x64@1.4.4':
+    resolution: {integrity: sha512-sF1xS/scbyN94P2d0eTiarO6JHxrIvhZNT9hnWjQXW5nwKRtfuP+UYnIMNyvW1BQPcZFP/cvfLBNUIe1ea4zPA==}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@oven/bun-linux-aarch64-android@1.4.4':
+    resolution: {integrity: sha512-5lvn3at5vRC0GxvmiqEiV2/e23tnRi0q5pzR40yfDvDA3OW7PSkt4chF1nA9vnAJhro4/l+ol1FmNP6D3cf/oA==}
+    cpu: [arm64]
+    os: [android]
+
+  '@oven/bun-linux-aarch64-musl@1.4.4':
+    resolution: {integrity: sha512-QFd0P+mHJxbZFbUla4MgiE5OwxysHaUIYxL2pPNkpWtaI7v4ShOpr8OhBmsuyB0xn5rv/ZJnPsj2y8+bB9+g/A==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oven/bun-linux-aarch64@1.4.4':
+    resolution: {integrity: sha512-ZTVtpf9zmHSBVPX1sBwe5agGb/rN34yPGg/Hby8e2Ax2uCUA2URZKlZH7qLntK7qaFJCMXh9v0GWNYN2zINz1w==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-android@1.4.4':
+    resolution: {integrity: sha512-3dMicj9C1DhaIfDkwt/9GtpU0W+q+GazbG9OIlEyL3Q1BBEz2e6ZRz/JiO8D/ECC0caXAqvnpFudehcLlgIwWQ==}
+    cpu: [x64]
+    os: [android]
+
+  '@oven/bun-linux-x64-musl@1.4.4':
+    resolution: {integrity: sha512-lEEjNOJJrbGZu2NVcPI4uXdILcpspezWkA8R/Jr0RCGhM6zQd0Y7JBIIKNAmbX59EeWpeEz7Q78iLbpcAUypUA==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64@1.4.4':
+    resolution: {integrity: sha512-CHbbkmHVM28T1GFq+6GL4Ao4ujwwYwj1CxFFwEFzLanPfNsId9AhbIP0Q4reWuWBkGimUkoQygrK7Rgjtj3vog==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-windows-aarch64@1.4.4':
+    resolution: {integrity: sha512-n0ep5ZRPCZY1+dqFJpnnRUZB1wy4GYU6At8RF+pyzySCLjkN9R4rFh2PtBHAgF/lg1vOl3/CeER3pDM+p40ATA==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@oven/bun-windows-x64@1.4.4':
+    resolution: {integrity: sha512-a3LNctBVO8PjePsFZfwDleF2JXYf2BfQ1u/PLRnBDLnC2Riml+4+LgJpKj4xRGhB92KweGyQI5PXaTkP9qypMQ==}
+    cpu: [x64]
+    os: [win32]
+
   '@oxc-project/types@0.148.0':
     resolution: {integrity: sha512-Nm4s/jB+4FpFsPhWGEC4h7rzksesmtnMXomo6rCMcg/b8zLQuOziRgkCS1fxDCXOlJB/6Q8oABOZ/OP6RIPj9A==}
 
@@ -6820,6 +6983,9 @@ packages:
   '@types/babel__traverse@7.20.7':
     resolution: {integrity: sha512-dkO5fhS7+/oos4ciWxyEyjWe48zmG6wbCheo/G2ZnHx4fs3EU6YC6UM8rk56gAjNJ9P3MTH2jo5jb92/K6wbng==}
 
+  '@types/bun@1.4.4':
+    resolution: {integrity: sha512-9wkRDXUXK124pEnAutE6n/l18j+i9GC5IAHK8TmX/2nlySETmky0OU6yL5U8pW1AoKh++AN9auDCr647BfurjQ==}
+
   '@types/chai@4.3.20':
     resolution: {integrity: sha512-/pC9HAB5I/xMlc5FP77qjCnI16ChlJfW0tGa0IUcFn38VJrTV6DeZ60NU5KZBtaOZqjdpwTWohz5HU1RrhiYxQ==}
 
@@ -7830,6 +7996,15 @@ packages:
     resolution: {integrity: sha512-WDtdLmJvAuNNPzByAYpRo2rF1Mmradw6gvWsQKf63476DDXmomT9zUiGypLcG4ibIM67vhAj8jJRdbmEws2Aqw==}
     engines: {node: '>=6.14.2'}
 
+  bun-types@1.4.4:
+    resolution: {integrity: sha512-yjrJh5oGX7mMPKGd19YXyIjmEuj4G4zNC30bs7PM9Az7NQ3ndF3j6hbeRdvJTRQEhJ/FYQwW0a2moweEi2hMxQ==}
+
+  bun@1.4.4:
+    resolution: {integrity: sha512-hj0ASdG6PNjLZGFAXktWb3Uaj/dcv/1wCsIttoEXADNIQBsGjTr+5uLKYbrDkuc7NT0Tkj4yPIqJI2jDxXdvVg==}
+    cpu: [arm64, x64]
+    os: [darwin, linux, android, freebsd, win32]
+    hasBin: true
+
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
     engines: {node: '>= 0.8'}
@@ -8356,6 +8531,9 @@ packages:
     resolution: {integrity: sha512-KxektNH63SrbfUyDiwXqRb1rLwKt33AmMv+5Nhsw1kqZ13SJBRTgZHtGbE+hH3a1mVW1cz+4pqSWVPAtLVXTzQ==}
     engines: {node: '>=18'}
 
+  deuri@3.0.1:
+    resolution: {integrity: sha512-IUgdopWhjToYbgpYDe3ZCBdzILexypCTCEakqDGQyKSlayxWL7yonY/zeJL9ICIjwVmAm3cpiAyT64rBn34gGg==}
+
   devalue@5.6.1:
     resolution: {integrity: sha512-jDwizj+IlEZBunHcOuuFVBnIMPAEHvTsJj0BcIp94xYguLRVBcXO853px/MyIJvbVzWdsGvrRweIUWJw8hBP7A==}
 
@@ -8435,6 +8613,21 @@ packages:
 
   electron-to-chromium@1.5.262:
     resolution: {integrity: sha512-NlAsMteRHek05jRUxUR0a5jpjYq9ykk6+kO0yRaMi5moe7u0fVIOeQ3Y30A8dIiWFBNUoQGi1ljb1i5VtS9WQQ==}
+
+  elysia@2.0.0-rc.0:
+    resolution: {integrity: sha512-7ks9V+dJcBE2i1CL9+cj2TbiTFdCSNiHfQbfp06g+8om5f72z+hWDnabG6+6bDloZDuvIWwXx8fAJmO3R6UnfA==}
+    engines: {node: '>=22.18'}
+    peerDependencies:
+      '@types/bun': '>= 1.3.0'
+      exact-mirror: '>= 1.2.6'
+      openapi-types: '>= 12.0.0'
+      typebox: '>= 1.3.0'
+      typescript: '>= 5.7.0'
+    peerDependenciesMeta:
+      '@types/bun':
+        optional: true
+      typescript:
+        optional: true
 
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
@@ -8878,6 +9071,14 @@ packages:
   eventsource@3.0.7:
     resolution: {integrity: sha512-CRT1WTyuQoD771GW56XEZFQ/ZoSfWid1alKGDYMmkt2yl8UXrVR4pspqWNEcqKvVIzg6PAltWjxcSSPrboA4iA==}
     engines: {node: '>=18.0.0'}
+
+  exact-mirror@1.2.6:
+    resolution: {integrity: sha512-EGx81nhFP1GE94coJsz94FLzdxWrnkNCJdfdX44rbd7pVcAotWzDlBJUC7yy1Ae7d7dYKpoTtZ1jCAIz2IVtfA==}
+    peerDependencies:
+      typebox: '>= 1.1.0'
+    peerDependenciesMeta:
+      typebox:
+        optional: true
 
   execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
@@ -10150,6 +10351,9 @@ packages:
     resolution: {integrity: sha512-aisnrDP4GNe06UcKFnV5bfMNPBUw4jsLGaWwWfnH3v02GnBuXX2MCVn5RbrWo0j3pczUilYblq7fQ7Nw2t5XKw==}
     engines: {node: '>= 0.8'}
 
+  memoirist@1.2.3:
+    resolution: {integrity: sha512-6wkntadi3vDUBX6y5UDuLsLr+hsojMkaapsZyGGzP6rZoYD6K/pAbrp1cZki24jMewoca3KofRYO0T6EEeHNVg==}
+
   merge-descriptors@1.0.3:
     resolution: {integrity: sha512-gaNvAS7TZ897/rVaZ0nMtAyxNyi/pdbjbAwUpFQpN70GqnVfOiXpeUUMKRBmzXaSQ8DdTX4/0ms62r2K+hE6mQ==}
 
@@ -10762,6 +10966,9 @@ packages:
 
   openapi-fetch@0.13.8:
     resolution: {integrity: sha512-yJ4QKRyNxE44baQ9mY5+r/kAzZ8yXMemtNAOFwOzRXJscdjSxxzWSNlyBAr+o5JjkUw9Lc3W7OIoca0cY3PYnQ==}
+
+  openapi-types@12.1.3:
+    resolution: {integrity: sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==}
 
   openapi-typescript-helpers@0.0.15:
     resolution: {integrity: sha512-opyTPaunsklCBpTK8JGef6mfPhLSnyy5a0IN9vKtx3+4aExf+KxEqYwIy3hqkedXIB97u357uLMJsOnm3GVjsw==}
@@ -12339,6 +12546,9 @@ packages:
   type-is@2.1.0:
     resolution: {integrity: sha512-faYHw0anBbc/kWF3zFTEnxSFOAGUX9GFbOBthvDdLsIlEoWOFOtS0zgCiQYwIskL9iGXZL3kAXD8OoZ4GmMATA==}
     engines: {node: '>= 18'}
+
+  typebox@1.4.3:
+    resolution: {integrity: sha512-u3nyf7ZciAv1GOijVpI0TDt9At5wmEi7lSHSlRrnjuThv1DcB7fgGBqqrz+fGZ54jAfTpOOX0JXwxSIg3pnxQA==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -15072,6 +15282,48 @@ snapshots:
       - zod
     optional: true
 
+  '@brust/core-cf@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/core@2.0.0-alpha.33(@elysia/eden@2.0.0-rc.0(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3)))(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+    dependencies:
+      '@brust/runtime-dom': 2.0.0-alpha.33(react@19.2.1)
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
+      tsconfig-paths: 4.2.0
+    optionalDependencies:
+      '@brust/core-cf': 2.0.0-alpha.33
+      '@brust/native-darwin-arm64': 2.0.0-alpha.33
+      '@brust/native-darwin-x64': 2.0.0-alpha.33
+      '@brust/native-linux-arm64-gnu': 2.0.0-alpha.33
+      '@brust/native-linux-arm64-musl': 2.0.0-alpha.33
+      '@brust/native-linux-x64-gnu': 2.0.0-alpha.33
+      '@brust/native-linux-x64-musl': 2.0.0-alpha.33
+      '@elysia/eden': 2.0.0-rc.0(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3))
+      elysia: 2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3)
+
+  '@brust/native-darwin-arm64@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/native-darwin-x64@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/native-linux-arm64-gnu@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/native-linux-arm64-musl@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/native-linux-x64-gnu@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/native-linux-x64-musl@2.0.0-alpha.33':
+    optional: true
+
+  '@brust/runtime-dom@2.0.0-alpha.33(react@19.2.1)':
+    optionalDependencies:
+      react: 19.2.1
+
   '@capsizecss/unpack@4.0.0':
     dependencies:
       fontkitten: 1.0.1
@@ -15469,6 +15721,10 @@ snapshots:
   '@ecies/ciphers@0.2.5(@noble/ciphers@1.3.0)':
     dependencies:
       '@noble/ciphers': 1.3.0
+
+  '@elysia/eden@2.0.0-rc.0(elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3))':
+    dependencies:
+      elysia: 2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3)
 
   '@emnapi/core@1.4.3':
     dependencies:
@@ -17196,6 +17452,42 @@ snapshots:
   '@oslojs/jwt@0.2.0':
     dependencies:
       '@oslojs/encoding': 0.4.1
+
+  '@oven/bun-darwin-aarch64@1.4.4':
+    optional: true
+
+  '@oven/bun-darwin-x64@1.4.4':
+    optional: true
+
+  '@oven/bun-freebsd-aarch64@1.4.4':
+    optional: true
+
+  '@oven/bun-freebsd-x64@1.4.4':
+    optional: true
+
+  '@oven/bun-linux-aarch64-android@1.4.4':
+    optional: true
+
+  '@oven/bun-linux-aarch64-musl@1.4.4':
+    optional: true
+
+  '@oven/bun-linux-aarch64@1.4.4':
+    optional: true
+
+  '@oven/bun-linux-x64-android@1.4.4':
+    optional: true
+
+  '@oven/bun-linux-x64-musl@1.4.4':
+    optional: true
+
+  '@oven/bun-linux-x64@1.4.4':
+    optional: true
+
+  '@oven/bun-windows-aarch64@1.4.4':
+    optional: true
+
+  '@oven/bun-windows-x64@1.4.4':
+    optional: true
 
   '@oxc-project/types@0.148.0': {}
 
@@ -20084,6 +20376,10 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.5
 
+  '@types/bun@1.4.4':
+    dependencies:
+      bun-types: 1.4.4
+
   '@types/chai@4.3.20': {}
 
   '@types/chai@5.2.2':
@@ -21943,6 +22239,26 @@ snapshots:
     dependencies:
       node-gyp-build: 4.8.4
 
+  bun-types@1.4.4:
+    dependencies:
+      '@types/node': 24.10.1
+      undici-types: 7.16.0
+
+  bun@1.4.4:
+    optionalDependencies:
+      '@oven/bun-darwin-aarch64': 1.4.4
+      '@oven/bun-darwin-x64': 1.4.4
+      '@oven/bun-freebsd-aarch64': 1.4.4
+      '@oven/bun-freebsd-x64': 1.4.4
+      '@oven/bun-linux-aarch64': 1.4.4
+      '@oven/bun-linux-aarch64-android': 1.4.4
+      '@oven/bun-linux-aarch64-musl': 1.4.4
+      '@oven/bun-linux-x64': 1.4.4
+      '@oven/bun-linux-x64-android': 1.4.4
+      '@oven/bun-linux-x64-musl': 1.4.4
+      '@oven/bun-windows-aarch64': 1.4.4
+      '@oven/bun-windows-x64': 1.4.4
+
   bytes@3.1.2: {}
 
   cac@6.7.14: {}
@@ -22400,6 +22716,8 @@ snapshots:
     dependencies:
       base-64: 1.0.0
 
+  deuri@3.0.1: {}
+
   devalue@5.6.1: {}
 
   devlop@1.1.0:
@@ -22488,6 +22806,17 @@ snapshots:
       fast-check: 3.23.2
 
   electron-to-chromium@1.5.262: {}
+
+  elysia@2.0.0-rc.0(@types/bun@1.4.4)(exact-mirror@1.2.6(typebox@1.4.3))(openapi-types@12.1.3)(typebox@1.4.3)(typescript@5.9.3):
+    dependencies:
+      deuri: 3.0.1
+      exact-mirror: 1.2.6(typebox@1.4.3)
+      memoirist: 1.2.3
+      openapi-types: 12.1.3
+      typebox: 1.4.3
+    optionalDependencies:
+      '@types/bun': 1.4.4
+      typescript: 5.9.3
 
   emoji-regex@10.4.0: {}
 
@@ -23314,6 +23643,10 @@ snapshots:
   eventsource@3.0.7:
     dependencies:
       eventsource-parser: 3.0.6
+
+  exact-mirror@1.2.6(typebox@1.4.3):
+    optionalDependencies:
+      typebox: 1.4.3
 
   execa@5.1.1:
     dependencies:
@@ -24955,6 +25288,8 @@ snapshots:
 
   media-typer@1.1.0: {}
 
+  memoirist@1.2.3: {}
+
   merge-descriptors@1.0.3: {}
 
   merge-descriptors@2.0.0: {}
@@ -25881,6 +26216,8 @@ snapshots:
   openapi-fetch@0.13.8:
     dependencies:
       openapi-typescript-helpers: 0.0.15
+
+  openapi-types@12.1.3: {}
 
   openapi-typescript-helpers@0.0.15: {}
 
@@ -27907,6 +28244,8 @@ snapshots:
       content-type: 2.1.0
       media-typer: 1.1.0
       mime-types: 3.0.1
+
+  typebox@1.4.3: {}
 
   typed-array-buffer@1.0.3:
     dependencies:

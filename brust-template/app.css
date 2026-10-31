@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/* Tailwind CSS v4, CSS-first: no tailwind.config. The tokens below are the brust docs palette; each one becomes a
+   utility (bg-paper, text-ink, border-rule, ...). A *.module.css that uses @apply starts with
+   @reference "../app.css"; (see brust docs/css.md). */
+@theme {
+	--color-paper: oklch(94% 0.035 78);
+	--color-sheet: oklch(97% 0.02 82);
+	--color-ink: oklch(18% 0.035 82);
+	--color-ink-2: oklch(36% 0.045 80);
+	--color-rule: oklch(76% 0.05 77);
+	--color-amber: oklch(68% 0.145 74);
+	--color-amber-ink: oklch(46% 0.12 62);
+	--font-sans: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+}
+
+/* Dark mode follows the system: the same tokens, darker values, so every utility switches with them. */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-paper: oklch(20% 0.028 185);
+		--color-sheet: oklch(24% 0.032 182);
+		--color-ink: oklch(91% 0.02 82);
+		--color-ink-2: oklch(77% 0.03 82);
+		--color-rule: oklch(36% 0.032 180);
+		--color-amber: oklch(74% 0.12 78);
+		--color-amber-ink: oklch(81% 0.11 80);
+	}
+}
+
+:root {
+	color-scheme: light dark;
+}

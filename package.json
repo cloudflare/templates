@@ -18,6 +18,7 @@
 	"packageManager": "pnpm@10.2.0",
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"bun",
 			"esbuild",
 			"sharp",
 			"workerd"

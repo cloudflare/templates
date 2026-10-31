@@ -1,0 +1,10 @@
+// Your Cloudflare config. `brust build --target cloudflare` merges this file into dist/cf/wrangler.jsonc and owns
+// main, assets (the ASSETS binding), compatibility_date, no_bundle, build, rules and site.
+{
+	"name": "brust-template",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true
+}
