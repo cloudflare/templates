@@ -13,7 +13,7 @@
       "package_json_hash": "53956a7184176bfd9cb3fe8d18dd2ca63ef3dcb8"
     },
     "durable-chat-template": {
-      "package_json_hash": "a0bc7e6922ddbb717f6c8b234bd3eda984d60f6c"
+      "package_json_hash": "62173499fbaecb77bebc80718456d376f1c0f7e0"
     },
     "llm-chat-app-template": {
       "package_json_hash": "8a4a9ad7b627bb79c4789c439ebff5f5fc5c4577"
@@ -31,13 +31,13 @@
       "package_json_hash": "d06fc61f53fa5a79d25d3452abd242d0f3f1bd1a"
     },
     "react-postgres-fullstack-template": {
-      "package_json_hash": "56edd368ad28f9aa91b7cf15917d470491c6ad9f"
+      "package_json_hash": "c391e27e5337819e83ffb2205886006e9d3a7937"
     },
     "react-router-hono-fullstack-template": {
-      "package_json_hash": "5a1b29cddb73db1ae54fc8451c60b55669eaf7c2"
+      "package_json_hash": "4420b407914b259b294288faaa54b0326e910d82"
     },
     "react-router-starter-template": {
-      "package_json_hash": "d46815f7ec4bdedc1af2f37151b8cc6c24efc4b1"
+      "package_json_hash": "5450ccff26ade3bdae21be960c5e29293d65e90c"
     },
     "remix-starter-template": {
       "package_json_hash": "62aa56ef2eeb0957c6aad6dcf9ef5df1aa7a1721"
@@ -79,7 +79,7 @@
       "package_json_hash": "f5baeb2b08e9d025036e242c9fbfe93ad685eaed"
     },
     "react-router-postgres-ssr-template": {
-      "package_json_hash": "c5e75a51cae0148f6f7580fd4a6cdc430829b2e2"
+      "package_json_hash": "a08c3c3ee3dbbfa806f8d350fb64eabc564562f5"
     },
     "x402-proxy-template": {
       "package_json_hash": "a3b4fefb68c5e8bf1a591303e05aff7a7d9f7ed8"
@@ -97,7 +97,7 @@
       "package_json_hash": "0586d36cd40ea67a05d32517b715ca4da6f1cf0e"
     },
     "ai-brand-visibility-template": {
-      "package_json_hash": "a073cdfe68262badfd2f144b5701d0a50b492487"
+      "package_json_hash": "989829324a4453e14fc8a92302bbdbf5fe1c7739"
     },
     "commerce-llms-txt-template": {
       "package_json_hash": "b52f084baa1e95ef0aa03abcdd64c640cb708db7"
