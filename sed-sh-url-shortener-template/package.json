@@ -1,0 +1,27 @@
+{
+  "name": "sed-sh-url-shortener-template",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A Cloudflare Worker that creates tracked short links using the sed.sh API",
+  "main": "src/index.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "test": "npx playwright test"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0",
+    "@playwright/test": "^1.48.0"
+  },
+  "cloudflare": {
+    "label": "sed.sh URL Shortener",
+    "products": ["Workers"],
+    "categories": ["starter"],
+    "bindings": {
+      "SED_SH_API_KEY": {
+        "type": "secret",
+        "description": "Your sed.sh API key (get one at https://sed.sh/signup)"
+      }
+    }
+  }
+}
