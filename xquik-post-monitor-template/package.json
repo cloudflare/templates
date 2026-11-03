@@ -1,0 +1,45 @@
+{
+	"name": "xquik-post-monitor-template",
+	"description": "Track X posts with Xquik, an X Twitter data API, using Cron Triggers & D1.",
+	"cloudflare": {
+		"label": "Xquik Post Monitor",
+		"products": [
+			"Workers",
+			"D1",
+			"Cron Triggers"
+		],
+		"categories": [
+			"storage"
+		],
+		"docs_url": "https://developers.cloudflare.com/workers/configuration/cron-triggers/",
+		"bindings": {
+			"XQUIK_API_KEY": {
+				"description": "Your Xquik API key. Sign in at [xquik.com](https://xquik.com) & create a key in the dashboard. Without a key, the template runs in demo mode with sample posts."
+			},
+			"XQUIK_SEARCH_QUERY": {
+				"description": "The search term to track. It accepts [X search operators](https://github.com/Xquik-dev/x-twitter-advanced-search)."
+			},
+			"XQUIK_SEARCH_LIMIT": {
+				"description": "The most posts to fetch per scheduled run. Lower it to spend fewer credits."
+			}
+		}
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@cloudflare/workers-types": "^5.20261102.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"build": "wrangler deploy --dry-run --outdir dist",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "wrangler deploy && wrangler d1 migrations apply DB --remote",
+		"dev": "wrangler d1 migrations apply DB --local && wrangler dev --test-scheduled",
+		"test": "vitest run"
+	},
+	"type": "module"
+}
