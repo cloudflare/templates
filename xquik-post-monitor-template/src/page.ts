@@ -25,7 +25,7 @@ const NOTICES: Record<Notice, NoticeCopy> = {
 	invalid_key: {
 		tone: "warning",
 		title: "API key rejected",
-		body: "Xquik rejected the API key. Set a new XQUIK_API_KEY secret.",
+		body: "Xquik rejected the API key. Check the key in your Xquik dashboard.",
 	},
 	no_credits: {
 		tone: "warning",
@@ -45,7 +45,7 @@ const NOTICES: Record<Notice, NoticeCopy> = {
 	sync_pending: {
 		tone: "info",
 		title: "Waiting for the next run",
-		body: "The API key works. Posts appear after the next scheduled run.",
+		body: "Posts appear after the next scheduled run.",
 	},
 };
 
@@ -195,9 +195,12 @@ function renderPost(post: Post, sample: boolean): string {
 
 function renderPosts({ posts, sample }: PageModel): string {
 	if (posts.length === 0) {
-		return `<p class="empty">No posts yet for this search term.</p>`;
+		return `<p class="empty">No posts stored for this search term yet.</p>`;
 	}
-	return posts.map((post) => renderPost(post, sample)).join("\n");
+	const countsNote = sample
+		? ""
+		: `<p class="meta">The Worker stores counts once, when it first fetches a post.</p>\n`;
+	return countsNote + posts.map((post) => renderPost(post, sample)).join("\n");
 }
 
 export function renderPage(model: PageModel): string {

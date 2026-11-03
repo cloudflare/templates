@@ -4,7 +4,7 @@
 
 <!-- dash-content-start -->
 
-Track X posts for a search term. A Cron Trigger stores new posts in D1, & a small page lists them.
+Track X posts for a search term. A Cron Trigger stores new posts in D1, & a page lists the newest 50.
 
 ## Key features
 
@@ -13,7 +13,7 @@ Track X posts for a search term. A Cron Trigger stores new posts in D1, & a smal
 - Each run asks only for posts newer than the newest stored post.
 - The page lists the newest 50 posts for the current search term.
 - Demo mode shows labelled sample posts when no API key is set.
-- No HTTP route starts a run, so page visits spend no credits.
+- No HTTP route starts a run. Page visits never call the search route.
 
 ## Bindings & handlers
 
@@ -79,7 +79,7 @@ Open the [live preview](https://xquik-post-monitor-template.cc8jk4pry5.workers.d
 3. Open API Keys in the dashboard & create a key.
 4. Run `npx wrangler secret put XQUIK_API_KEY`, or paste the key in `.dev.vars` locally.
 
-The page shows a warning if Xquik rejects the key. The key check spends no credits.
+The page shows a warning if Xquik rejects the key.
 
 ## Configuration
 
@@ -105,7 +105,9 @@ Each run spends Xquik credits for the posts it returns. The defaults fetch at mo
 
 ## Limits
 
-Each run stores up to `XQUIK_SEARCH_LIMIT` posts. If more arrive between runs, the older ones are skipped.
+Each run stores up to `XQUIK_SEARCH_LIMIT` posts. If more arrive between runs, the Worker never fetches the older ones.
+
+The Worker stores like, repost & reply counts once, when it first fetches a post.
 
 The page is public. Put [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/) in front of it to keep the search term private.
 

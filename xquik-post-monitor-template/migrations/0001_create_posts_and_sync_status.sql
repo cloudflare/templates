@@ -1,4 +1,4 @@
--- X post IDs exceed JavaScript safe integers, so they stay TEXT. Sort them with CAST.
+-- X post IDs exceed JavaScript safe integers, so they stay TEXT.
 CREATE TABLE posts (
 	query TEXT NOT NULL,
 	id TEXT NOT NULL,

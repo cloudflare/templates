@@ -36,6 +36,8 @@ const OUTCOME_BY_STATUS: Partial<Record<number, Exclude<SyncOutcome, "ok">>> = {
 	429: "rate_limited",
 };
 
+const REJECTED_KEY_ERRORS = new Set(["api_key_paused"]);
+
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
 }
@@ -67,6 +69,19 @@ function parsePost(raw: unknown): Post | null {
 	};
 }
 
+async function failedOutcome(
+	response: Response,
+): Promise<Exclude<SyncOutcome, "ok">> {
+	const body: unknown = await response.json().catch(() => null);
+	const code =
+		isRecord(body) && typeof body.error === "string" ? body.error : null;
+	console.error(
+		`Xquik returned HTTP ${response.status} with error code ${code ?? "none"}`,
+	);
+	if (code !== null && REJECTED_KEY_ERRORS.has(code)) return "invalid_key";
+	return OUTCOME_BY_STATUS[response.status] ?? "failed";
+}
+
 export async function searchPosts({
 	apiKey,
 	query,
@@ -81,17 +96,16 @@ export async function searchPosts({
 
 	try {
 		const response = await fetch(url, { headers: { "x-api-key": apiKey } });
-		if (!response.ok) {
-			console.error(`Xquik search returned HTTP ${response.status}`);
-			return { outcome: OUTCOME_BY_STATUS[response.status] ?? "failed" };
-		}
-		const body: unknown = await response.json();
+		if (!response.ok) return { outcome: await failedOutcome(response) };
+		const body: unknown = await response.json().catch(() => null);
 		if (!isRecord(body) || !Array.isArray(body.tweets)) {
+			console.error("Xquik search returned a body without a tweets list");
 			return { outcome: "failed" };
 		}
 		const posts = body.tweets.map(parsePost).filter((post) => post !== null);
 		return { outcome: "ok", posts };
-	} catch {
+	} catch (error) {
+		console.error(`Xquik search failed with ${String(error)}`);
 		return { outcome: "failed" };
 	}
 }
@@ -100,7 +114,7 @@ export async function isKeyRejected(apiKey: string): Promise<boolean> {
 	try {
 		const url = new URL("/api/v1/account", API_ORIGIN);
 		const response = await fetch(url, { headers: { "x-api-key": apiKey } });
-		return response.status === 401;
+		return !response.ok && (await failedOutcome(response)) === "invalid_key";
 	} catch {
 		return false;
 	}

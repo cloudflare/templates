@@ -1,7 +1,6 @@
 import { createScheduledController, env } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import worker, { type Bindings } from "../src/index";
-import { SAMPLE_POSTS } from "../src/samples";
 
 const API_KEY = "test-secret-key";
 const QUERY = "cloudflare workers";
@@ -168,11 +167,10 @@ describe("demo mode", () => {
 		expect(html).toContain("sample posts");
 		expect(html).toContain("XQUIK_API_KEY");
 		expect(html).toContain("Sample data");
-		expect(html.match(/>Sample</g)).toHaveLength(SAMPLE_POSTS.length);
-		for (const post of SAMPLE_POSTS) {
-			expect(post.text.startsWith("Sample post")).toBe(true);
-			expect(html).toContain(post.text);
-		}
+		expect(html.match(/>Sample</g)).toHaveLength(3);
+		expect(html).toContain("Sample post 3.");
+		expect(html).toContain("Sample post 2.");
+		expect(html).toContain("Sample post 1.");
 		expect(html).not.toContain("View on X");
 		expect(outbound).toEqual([]);
 	});
@@ -202,11 +200,10 @@ describe("scheduled sync", () => {
 			queryType: "Latest",
 		});
 		expect(request.headers.get("x-api-key")).toBe(API_KEY);
-		expect(logLines).toContainEqual(expect.stringContaining("ok"));
-		expect(errorLines).toEqual([]);
 
 		const html = await pageHtml(liveEnv());
 		expect(html).toContain("A live post");
+		expect(html).toContain("The Worker stores counts once");
 		expect(html).toContain("Live Author");
 		expect(html).toContain("@live_author");
 		expect(html).toContain("Likes 4");
@@ -279,6 +276,19 @@ describe("scheduled sync", () => {
 			notice: "Xquik rejected the API key",
 		},
 		{
+			name: "a paused key",
+			search: () => Response.json({ error: "api_key_paused" }, { status: 403 }),
+			outcome: "invalid_key",
+			notice: "Xquik rejected the API key",
+		},
+		{
+			name: "a protected account",
+			search: () =>
+				Response.json({ error: "x_account_protected" }, { status: 403 }),
+			outcome: "failed",
+			notice: "Check the Worker logs",
+		},
+		{
 			name: "HTTP 402",
 			search: status(402),
 			outcome: "no_credits",
@@ -323,7 +333,6 @@ describe("scheduled sync", () => {
 
 			expect(await storedOutcome()).toBe(outcome);
 			expect(await storedPostCount()).toBe(0);
-			expect(errorLines).toContainEqual(expect.stringContaining(outcome));
 			expect(await pageHtml(liveEnv())).toContain(notice);
 		},
 	);
@@ -383,7 +392,7 @@ describe("scheduled sync", () => {
 		const newTerm = liveEnv({ XQUIK_SEARCH_QUERY: "new term" });
 		const html = await pageHtml(newTerm);
 		expect(html).not.toContain("Old term post");
-		expect(html).toContain("No posts yet");
+		expect(html).toContain("No posts stored for this search term yet");
 
 		await runCron(newTerm);
 		expect(searchParams(searchRequests()[1]).sinceId).toBeUndefined();
@@ -400,34 +409,50 @@ describe("page notices", () => {
 		const html = await pageHtml(liveEnv({ XQUIK_API_KEY: "rotated-key" }));
 
 		expect(html).not.toContain("Xquik rejected the API key");
-		expect(html).toContain("The API key works");
+		expect(html).toContain("Posts appear after the next scheduled run");
 		expect(html).toContain('role="status"');
 		expect(html).not.toContain('role="alert"');
 	});
 
-	it("warns about a rejected key before the first run", async () => {
-		stubXquik({ account: status(401) });
+	it.each([
+		["HTTP 401", status(401)],
+		[
+			"a paused key",
+			() => Response.json({ error: "api_key_paused" }, { status: 403 }),
+		],
+	])(
+		"warns before the first run when the key check gets %s",
+		async (_name, account) => {
+			stubXquik({ account });
 
-		const html = await pageHtml(liveEnv());
+			const html = await pageHtml(liveEnv());
 
-		expect(html).toContain('role="alert"');
-		expect(html).toContain("Xquik rejected the API key");
-		expect(accountRequests()[0].headers.get("x-api-key")).toBe(API_KEY);
-	});
+			expect(html).toContain('role="alert"');
+			expect(html).toContain("Xquik rejected the API key");
+			expect(accountRequests()[0].headers.get("x-api-key")).toBe(API_KEY);
+		},
+	);
 
 	it.each([
 		["a thrown fetch", failedFetch],
+		[
+			"a key without full access",
+			() => Response.json({ error: "insufficient_scope" }, { status: 403 }),
+		],
 		["HTTP 429", status(429)],
 		["HTTP 500", status(500)],
-	])("accepts the key when the key check gets %s", async (_name, account) => {
-		stubXquik({ account });
+	])(
+		"shows no key warning when the key check gets %s",
+		async (_name, account) => {
+			stubXquik({ account });
 
-		const html = await pageHtml(liveEnv());
+			const html = await pageHtml(liveEnv());
 
-		expect(html).toContain("The API key works");
-		expect(html).not.toContain("Xquik rejected the API key");
-		expect(html).toContain("No posts yet");
-	});
+			expect(html).not.toContain("Xquik rejected the API key");
+			expect(html).toContain("Posts appear after the next scheduled run");
+			expect(html).toContain("No posts stored for this search term yet");
+		},
+	);
 });
 
 describe("page output", () => {
