@@ -1,5 +1,6 @@
 import "zx/globals";
 import subprocess from "node:child_process";
+import MarkdownError from "./MarkdownError";
 import { getPublishedTemplates } from "./util";
 
 export type DeployLiveDemosConfig = {
@@ -30,11 +31,27 @@ export default async function deployLiveDemos({
 	templateDirectory,
 }: DeployLiveDemosConfig) {
 	const templates = getPublishedTemplates(templateDirectory);
-	await Promise.all(
-		templates.map(({ path: templatePath }) => {
+	const failed: string[] = [];
+	// Deploy every template even if one fails, so a single broken demo
+	// doesn't leave the rest stale.
+	for (const { name, path: templatePath } of templates) {
+		try {
 			runCommand("npm install --force", templatePath);
 			runCommand("npm run build --if-present", templatePath);
 			runCommand("npm run deploy", templatePath);
-		}),
-	);
+		} catch {
+			failed.push(name);
+		}
+	}
+	const deployed = templates.length - failed.length;
+	if (failed.length) {
+		throw new MarkdownError(
+			`Failed to deploy ${failed.length} of ${templates.length} live demos.`,
+			[
+				`Deployed ${deployed} of ${templates.length} live demos. Failed:`,
+				...failed.map((name) => `- ❌ ${name}`),
+			].join("\n"),
+		);
+	}
+	return `Deployed ${deployed} of ${templates.length} live demos.`;
 }
