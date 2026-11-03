@@ -18,7 +18,7 @@
 		"partysocket": "1.1.6",
 		"react": "19.2.1",
 		"react-dom": "19.2.1",
-		"react-router": "7.9.6"
+		"react-router": "7.18.5"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^5.20261102.1",
