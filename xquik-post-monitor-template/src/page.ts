@@ -25,7 +25,7 @@ const NOTICES: Record<Notice, NoticeCopy> = {
 	invalid_key: {
 		tone: "warning",
 		title: "API key rejected",
-		body: "Xquik rejected the API key. Check the key in your Xquik dashboard.",
+		body: "Xquik rejected the API key. Resume it in your Xquik dashboard, or set a new XQUIK_API_KEY secret.",
 	},
 	no_credits: {
 		tone: "warning",

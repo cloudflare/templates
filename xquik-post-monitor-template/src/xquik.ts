@@ -36,7 +36,9 @@ const OUTCOME_BY_STATUS: Partial<Record<number, Exclude<SyncOutcome, "ok">>> = {
 	429: "rate_limited",
 };
 
-const REJECTED_KEY_ERRORS = new Set(["api_key_paused"]);
+const OUTCOME_BY_ERROR_CODE = new Map<string, Exclude<SyncOutcome, "ok">>([
+	["api_key_paused", "invalid_key"],
+]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null;
@@ -69,17 +71,17 @@ function parsePost(raw: unknown): Post | null {
 	};
 }
 
-async function failedOutcome(
-	response: Response,
-): Promise<Exclude<SyncOutcome, "ok">> {
+async function errorCode(response: Response): Promise<string | null> {
 	const body: unknown = await response.json().catch(() => null);
-	const code =
-		isRecord(body) && typeof body.error === "string" ? body.error : null;
-	console.error(
-		`Xquik returned HTTP ${response.status} with error code ${code ?? "none"}`,
-	);
-	if (code !== null && REJECTED_KEY_ERRORS.has(code)) return "invalid_key";
-	return OUTCOME_BY_STATUS[response.status] ?? "failed";
+	return isRecord(body) && typeof body.error === "string" ? body.error : null;
+}
+
+function outcomeOf(
+	status: number,
+	code: string | null,
+): Exclude<SyncOutcome, "ok"> {
+	const byCode = code === null ? undefined : OUTCOME_BY_ERROR_CODE.get(code);
+	return byCode ?? OUTCOME_BY_STATUS[status] ?? "failed";
 }
 
 export async function searchPosts({
@@ -96,7 +98,13 @@ export async function searchPosts({
 
 	try {
 		const response = await fetch(url, { headers: { "x-api-key": apiKey } });
-		if (!response.ok) return { outcome: await failedOutcome(response) };
+		if (!response.ok) {
+			const code = await errorCode(response);
+			console.error(
+				`Xquik search returned HTTP ${response.status} with error code ${code ?? "none"}`,
+			);
+			return { outcome: outcomeOf(response.status, code) };
+		}
 		const body: unknown = await response.json().catch(() => null);
 		if (!isRecord(body) || !Array.isArray(body.tweets)) {
 			console.error("Xquik search returned a body without a tweets list");
@@ -114,7 +122,10 @@ export async function isKeyRejected(apiKey: string): Promise<boolean> {
 	try {
 		const url = new URL("/api/v1/account", API_ORIGIN);
 		const response = await fetch(url, { headers: { "x-api-key": apiKey } });
-		return !response.ok && (await failedOutcome(response)) === "invalid_key";
+		if (response.ok) return false;
+		return (
+			outcomeOf(response.status, await errorCode(response)) === "invalid_key"
+		);
 	} catch {
 		return false;
 	}

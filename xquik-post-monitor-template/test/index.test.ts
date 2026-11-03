@@ -172,6 +172,7 @@ describe("demo mode", () => {
 		expect(html).toContain("Sample post 2.");
 		expect(html).toContain("Sample post 1.");
 		expect(html).not.toContain("View on X");
+		expect(html).not.toContain("The Worker stores counts once");
 		expect(outbound).toEqual([]);
 	});
 
@@ -495,26 +496,43 @@ describe("page output", () => {
 		expect(html).toContain('href="https://xquik.com"');
 	});
 
-	it("keeps the key & raw error bodies out of responses & logs", async () => {
-		stubXquik({
-			search: status(500, `raw error body ${API_KEY}`),
-			account: status(401, `raw error body ${API_KEY}`),
-		});
-		await runCron(liveEnv());
+	it.each([
+		[
+			"text",
+			(code: number) => () =>
+				new Response(`raw error body ${API_KEY}`, { status: code }),
+		],
+		[
+			"JSON",
+			(code: number) => () =>
+				Response.json(
+					{ error: "internal_error", message: `raw error body ${API_KEY}` },
+					{ status: code },
+				),
+		],
+	])(
+		"keeps the key & raw %s error bodies out of responses & logs",
+		async (_name, reply) => {
+			stubXquik({ search: reply(500), account: reply(401) });
+			const beforeFirstRun = await open(liveEnv());
+			await runCron(liveEnv());
 
-		const responses = await Promise.all([
-			open(liveEnv()),
-			open(liveEnv(), "/missing"),
-			open(liveEnv(), "/", "POST"),
-		]);
-		const bodies = await Promise.all(responses.map((reply) => reply.text()));
+			const responses = await Promise.all([
+				open(liveEnv()),
+				open(liveEnv(), "/missing"),
+				open(liveEnv(), "/", "POST"),
+			]);
+			const bodies = await Promise.all(
+				[beforeFirstRun, ...responses].map((response) => response.text()),
+			);
 
-		expect(errorLines.length).toBeGreaterThan(0);
-		for (const text of [...bodies, ...logLines, ...errorLines]) {
-			expect(text).not.toContain(API_KEY);
-			expect(text).not.toContain("raw error body");
-		}
-	});
+			expect(errorLines.length).toBeGreaterThan(0);
+			for (const text of [...bodies, ...logLines, ...errorLines]) {
+				expect(text).not.toContain(API_KEY);
+				expect(text).not.toContain("raw error body");
+			}
+		},
+	);
 });
 
 describe("routes", () => {
