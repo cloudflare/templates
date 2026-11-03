@@ -9,13 +9,7 @@ import {
 } from "./store";
 import { isKeyRejected, searchPosts } from "./xquik";
 
-// wrangler types pins vars to their wrangler.json values & leaves out secrets.
-export type Bindings = {
-	DB: D1Database;
-	XQUIK_API_KEY?: string;
-	XQUIK_SEARCH_QUERY: string;
-	XQUIK_SEARCH_LIMIT: number;
-};
+export type Bindings = Env & { XQUIK_API_KEY?: string };
 
 const HTML_HEADERS = {
 	"content-type": "text/html; charset=utf-8",
