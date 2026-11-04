@@ -8,7 +8,7 @@ jobs:
   check-and-deploy-main:
     name: Check and Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     concurrency: templates-check-and-deploy-main
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -23,7 +23,7 @@ jobs:
       - run: pnpm -w test
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
         shell: bash
 
       - name: Run e2e tests
