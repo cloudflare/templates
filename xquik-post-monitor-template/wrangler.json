@@ -1,0 +1,24 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "xquik-post-monitor-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true
+	},
+	"upload_source_maps": true,
+	"triggers": {
+		"crons": ["0 */6 * * *"]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "xquik-post-monitor-template",
+			"migrations_dir": "migrations"
+		}
+	],
+	"vars": {
+		"XQUIK_SEARCH_QUERY": "cloudflare workers",
+		"XQUIK_SEARCH_LIMIT": 10
+	}
+}
