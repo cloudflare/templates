@@ -1,0 +1,10 @@
+[server]
+address = "127.0.0.1"
+port = 1337
+
+# Elysia actions (docs/actions.md). Defaults: entry = "actions.ts", prefix = "/_brust/action", max_body_bytes = 1048576, max_response_bytes = 8388608
+[actions]
+
+# Worker compatibility date, kept within what the pinned wrangler's local runtime supports.
+[cloudflare]
+compatibility_date = "2026-09-28"

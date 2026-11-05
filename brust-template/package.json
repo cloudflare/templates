@@ -1,0 +1,38 @@
+{
+	"name": "brust-template",
+	"description": "Build a full-stack app with brust: React components compiled ahead of time and served by a Worker.",
+	"cloudflare": {
+		"label": "Brust Starter",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"starter"
+		]
+	},
+	"dependencies": {
+		"@brust/core": "2.0.0-alpha.33",
+		"@elysia/eden": "2.0.0-rc.0",
+		"elysia": "2.0.0-rc.0",
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@tailwindcss/node": "4.1.17",
+		"@tailwindcss/oxide": "4.1.17",
+		"@types/bun": "1.4.4",
+		"@types/react": "19.2.7",
+		"bun": "1.4.4",
+		"tailwindcss": "4.1.17",
+		"typescript": "5.9.3",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"build": "brust build routes.tsx --target cloudflare",
+		"check": "tsc && npm run build && wrangler deploy --dry-run -c dist/cf/wrangler.jsonc",
+		"deploy": "npm run build && wrangler deploy -c dist/cf/wrangler.jsonc",
+		"dev": "brust dev routes.tsx --target cloudflare"
+	},
+	"type": "module"
+}
