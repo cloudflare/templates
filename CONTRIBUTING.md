@@ -45,6 +45,12 @@ Cloudflare's Templates Platform extracts `name`, `description`, and a `cloudflar
   - Can only be provided by a Cloudflare team member. Image files for icons and preview images are stored in the Cloudflare Templates CF account.
   - Preview icon should be an SVG representing the application.
 
+### Worker source maps
+
+Enable `upload_source_maps` in every template's Wrangler configuration. When a framework builds the Worker, also enable external source maps in its server build. With the Cloudflare Vite plugin, set `build.sourcemap: true` for the Worker environment (`worker` or `ssr`), rather than the client environment.
+
+Run `pnpm check:source-maps` after building the templates to verify that each Worker emits usable source maps and that server maps are excluded from public assets. Browser source maps remain a separate choice.
+
 ### `package-lock.json`
 
 All of our templates and Deploy to Cloudflare projects automatically set up Workers CI. In our testing, including a package lock file in the template repository speeds up module resolution by 80% or more.

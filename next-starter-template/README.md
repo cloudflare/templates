@@ -61,3 +61,7 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Worker source maps
+
+This template enables `upload_source_maps` in Wrangler. OpenNext currently discards source maps when bundling its server, so production stacks can identify bundled server code but cannot reliably map back to the original Next.js source. Follow [OpenNext source map support](https://github.com/opennextjs/opennextjs-cloudflare/issues/1124) for adapter support. The repository's framework source map check covers Vite and Astro builds; OpenNext remains excluded until it preserves maps through its bundling and patching steps.
