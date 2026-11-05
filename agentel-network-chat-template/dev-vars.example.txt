@@ -1,0 +1,11 @@
+# Copy to .dev.vars locally. Never commit a populated file.
+AGENTEL_READER_KEY=YOUR_OWN_INFO_READ_KEY
+DEMO_ACCESS_TOKEN=YOUR_RANDOM_OPERATOR_PASSWORD_AT_LEAST_24_CHARS
+MODEL_API_KEY=YOUR_OWN_MODEL_PROVIDER_KEY
+# Optional Anthropic-compatible configuration (hosted compatibility must be tested):
+# MODEL_API_PROTOCOL=anthropic-messages
+# MODEL_API_BASE_URL=https://YOUR_PROVIDER_HOST/anthropic/v1
+# MODEL_NAME=YOUR_TOOL_CAPABLE_MODEL
+# Optional legacy SDK identity tool, inactive in readonly chat and separate from the INFO Reader:
+# AGENTEL_AGENT_ID=YOUR_OWN_AGENT_ID
+# AGENTEL_API_KEY=YOUR_OWN_AGENT_RUNTIME_KEY

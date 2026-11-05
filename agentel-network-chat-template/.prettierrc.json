@@ -1,0 +1,13 @@
+{
+  "useTabs": false,
+  "trailingComma": "none",
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": ["package.json"],
+      "options": {
+        "useTabs": true
+      }
+    }
+  ]
+}

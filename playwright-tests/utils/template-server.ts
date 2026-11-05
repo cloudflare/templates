@@ -56,6 +56,7 @@ export interface Template {
 	devCommand: string;
 	devScript: "dev" | "e2e:dev";
 	healthCheckPath?: string;
+	healthCheckStatus?: number;
 }
 
 type TemplatePackageJson = {
@@ -63,6 +64,7 @@ type TemplatePackageJson = {
 	cloudflare?: {
 		publish?: boolean;
 		healthCheckPath?: string;
+		healthCheckStatus?: number;
 	};
 };
 
@@ -148,6 +150,7 @@ export class TemplateServerManager {
 			devCommand: e2eDevCommand ?? scripts.dev,
 			devScript: e2eDevCommand ? "e2e:dev" : "dev",
 			healthCheckPath: packageJson.cloudflare?.healthCheckPath,
+			healthCheckStatus: packageJson.cloudflare?.healthCheckStatus,
 		};
 	}
 
@@ -222,7 +225,13 @@ export class TemplateServerManager {
 			? `${baseUrl}${template.healthCheckPath}`
 			: baseUrl;
 		try {
-			await this.waitForServer(healthCheckUrl, server, logs, 30000);
+			await this.waitForServer(
+				healthCheckUrl,
+				server,
+				logs,
+				30000,
+				template.healthCheckStatus,
+			);
 		} catch (error) {
 			await this.stopServer(templateName);
 			throw error;
@@ -334,6 +343,7 @@ export class TemplateServerManager {
 		server: ChildProcess,
 		logs: string[],
 		timeout: number,
+		expectedStatus?: number,
 	): Promise<void> {
 		const start = Date.now();
 
@@ -347,7 +357,11 @@ export class TemplateServerManager {
 				const response = await fetch(url, {
 					signal: AbortSignal.timeout(2000),
 				});
-				if (response.ok) {
+				if (
+					expectedStatus === undefined
+						? response.ok
+						: response.status === expectedStatus
+				) {
 					return;
 				}
 			} catch (error) {

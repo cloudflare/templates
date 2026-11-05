@@ -1,0 +1,44 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agentel-network-chat-template",
+  "main": "src/server.ts",
+  "compatibility_date": "2025-10-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "AGENTEL_AGENT_ID": "",
+    "AGENTEL_MAX_PAID_READS_PER_TURN": "3",
+    "AGENTEL_MAX_INFO_PER_TURN": "7",
+    "AGENTEL_READONLY_CHAT": "true",
+    "MODEL_API_PROTOCOL": "openai-compatible",
+    "AGENTEL_API_BASE_URL": "https://agentel.tech/api/v1",
+    "MODEL_API_BASE_URL": "https://api.openai.com/v1",
+    "MODEL_NAME": "gpt-4.1-mini"
+  },
+  "secrets": {
+    "required": ["AGENTEL_READER_KEY", "DEMO_ACCESS_TOKEN", "MODEL_API_KEY"]
+  },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./public",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "class_name": "ChatAgent",
+        "name": "ChatAgent"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "new_sqlite_classes": ["ChatAgent"],
+      "tag": "v1"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true
+}
