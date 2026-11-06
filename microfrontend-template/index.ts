@@ -869,6 +869,14 @@ async function handleMountedApp(
 	const upstreamResp = await upstream.fetch(
 		new Request(forwardUrl.toString(), request),
 	);
+
+	// WebSocket upgrades must be returned as-is — do not wrap in a new Response,
+	// as that would strip the WebSocket pair from the response and break the connection.
+	// This applies to Durable Objects, Agents SDK, PartyKit, and any other WebSocket upgrade.
+	if (upstreamResp.status === 101) {
+		return upstreamResp;
+	}
+
 	const headers = new Headers(upstreamResp.headers);
 	const contentType = headers.get("content-type") || "";
 
