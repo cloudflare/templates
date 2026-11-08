@@ -1,0 +1,49 @@
+{
+	"name": "spraay-x402-batch-template",
+	"description": "Batch payment Worker using Spraay and x402 — pay multiple recipients in one on-chain transaction",
+	"cloudflare": {
+		"label": "Spraay x402 Batch Payments",
+		"products": [
+			"Workers"
+		],
+		"categories": [
+			"starter"
+		],
+		"publish": false,
+		"healthCheckPath": "/health",
+		"bindings": {
+			"JWT_SECRET": {
+				"description": "Secret key for signing JWT authentication tokens issued after a successful x402 payment. Generate with `node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\"`"
+			}
+		}
+	},
+	"dependencies": {
+		"@coinbase/x402": "2.0.0",
+		"hono": "4.11.1",
+		"viem": "2.43.1",
+		"x402-hono": "1.0.0"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "8.50.0",
+		"@typescript-eslint/parser": "8.50.0",
+		"eslint": "9.39.2",
+		"eslint-config-prettier": "10.1.8",
+		"prettier": "3.7.4",
+		"tsx": "4.21.0",
+		"wrangler": "4.136.1",
+		"x402": "1.0.1"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"deploy": "wrangler deploy --minify",
+		"dev": "wrangler dev",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
+		"lint": "npm run typecheck && npm run format:check && eslint .",
+		"lint:fix": "prettier --write . && eslint . --fix",
+		"test": "tsx --test test/index.test.ts",
+		"typecheck": "tsc --noEmit"
+	},
+	"type": "module"
+}

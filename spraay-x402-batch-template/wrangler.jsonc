@@ -1,0 +1,65 @@
+/**
+ * Spraay x402 Batch Payments - Wrangler Configuration
+ *
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "spraay-x402-batch-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"observability": {
+		"enabled": true,
+	},
+	// Workers Static Assets serve the demo UI in public/. Requests that don't
+	// match a static file fall through to the Worker (src/index.ts).
+	"assets": {
+		"directory": "public",
+		"binding": "ASSETS",
+	},
+	"vars": {
+		// =====================================================================
+		// PAY_TO - Wallet that receives x402 payments for API access (REQUIRED)
+		// =====================================================================
+		// Any EVM wallet address. The zero address below is a placeholder:
+		// replace it with your own wallet before accepting real payments.
+		//
+		"PAY_TO": "0x0000000000000000000000000000000000000000",
+		// =====================================================================
+		// NETWORK - Network for x402 settlement (REQUIRED)
+		// =====================================================================
+		// "base-sepolia" for testing (free testnet USDC), "base" for production.
+		// This only controls where the *API access fee* is settled. The batch
+		// transactions this Worker builds always target Base mainnet (8453),
+		// where the Spraay contract is deployed.
+		//
+		"NETWORK": "base-sepolia",
+		// =====================================================================
+		// FACILITATOR_URL - x402 payment verification service
+		// =====================================================================
+		// The facilitator verifies and settles x402 payments for this Worker.
+		// See: https://x402.gitbook.io/x402/core-concepts/facilitator
+		//
+		"FACILITATOR_URL": "https://x402.org/facilitator",
+		// =====================================================================
+		// BATCH_PRICE - Price in USD to call a paid /batch/* endpoint
+		// =====================================================================
+		"BATCH_PRICE": "$0.01",
+		// =====================================================================
+		// SPRAAY_CONTRACT - Spraay batch payment contract on Base mainnet
+		// =====================================================================
+		// https://basescan.org/address/0x1646452F98E36A3c9Cfc3eDD8868221E207B5eEC
+		//
+		"SPRAAY_CONTRACT": "0x1646452F98E36A3c9Cfc3eDD8868221E207B5eEC",
+		// =====================================================================
+		// BASE_RPC_URL - Base mainnet JSON-RPC endpoint
+		// =====================================================================
+		// Used for gas estimation when the caller supplies a `from` address.
+		// The public endpoint is rate limited; replace it with your own RPC
+		// provider for production traffic.
+		//
+		"BASE_RPC_URL": "https://mainnet.base.org",
+	},
+	"upload_source_maps": true,
+}
