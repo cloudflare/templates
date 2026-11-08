@@ -1,0 +1,24 @@
+{
+	"name": "ownlist-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": { "enabled": true },
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "ownlist-template-db",
+			"database_id": "REPLACED_ON_DEPLOY"
+		}
+	],
+	"triggers": {
+		"crons": ["* * * * *"]
+	},
+	"vars": {
+		"FROM_NAME": "My Newsletter",
+		"FROM_EMAIL": "newsletter@example.com",
+		"DOUBLE_OPT_IN": "false",
+		"SEND_BATCH": "40",
+		"SHOW_CREDIT": "true"
+	}
+}
