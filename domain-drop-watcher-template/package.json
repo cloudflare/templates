@@ -1,0 +1,52 @@
+{
+  "name": "domain-drop-watcher-template",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "postdeploy": "wrangler d1 execute domain-drop-watcher --file=schema.sql --remote && node scripts/bootstrap-admin-token.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4",
+    "@playwright/test": "^1.59.1",
+    "typescript": "^5",
+    "vitest": "^1",
+    "wrangler": "^3"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "^13.3.0"
+  },
+  "description": "Watch domains for drop/release events and alert when available. Multi-user dashboard, magic-link + passkey auth.",
+  "cloudflare": {
+    "label": "Domain Drop Watcher",
+    "products": [
+      "Workers",
+      "D1",
+      "Email Routing"
+    ],
+    "categories": [
+      "starter"
+    ],
+    "docs_url": "https://github.com/cloudflare/templates/tree/main/domain-drop-watcher-template#readme",
+    "bindings": {
+      "DB": {
+        "description": "D1 database for users, domains, alerts, audit events"
+      },
+      "EVENTS": {
+        "description": "KV namespace for transient event log"
+      },
+      "BOOTSTRAP": {
+        "description": "KV namespace for first-run admin token"
+      },
+      "EMAIL": {
+        "description": "Send Email binding for magic-link sign-in"
+      }
+    }
+  }
+}

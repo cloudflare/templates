@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "types": ["@cloudflare/workers-types", "vitest/globals"],
+    "isolatedModules": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowJs": true
+  },
+  "include": ["src/**/*", "test/**/*", "scripts/**/*"]
+}
