@@ -25,6 +25,7 @@ import {
 // =============================================================================
 
 export interface SlackPayload {
+	text?: string;
 	blocks: KnownBlock[];
 }
 
@@ -128,7 +129,7 @@ function buildSuccessMessage(
 		blocks.push(buildContextBlock(contextElements));
 	}
 
-	return { blocks };
+	return { text: `✅ ${title}: ${workerName}`, blocks };
 }
 
 function buildFailureMessage(
@@ -159,7 +160,7 @@ function buildFailureMessage(
 		text: { type: "mrkdwn", text: `\`\`\`${error}\`\`\`` },
 	});
 
-	return { blocks };
+	return { text: `❌ Build Failed: ${workerName}`, blocks };
 }
 
 function buildCancelledMessage(event: CloudflareEvent): SlackPayload {
@@ -179,11 +180,12 @@ function buildCancelledMessage(event: CloudflareEvent): SlackPayload {
 		blocks.push(buildContextBlock(contextElements));
 	}
 
-	return { blocks };
+	return { text: `⚠️ Build Cancelled: ${workerName}`, blocks };
 }
 
 function buildFallbackMessage(event: CloudflareEvent): SlackPayload {
 	return {
+		text: `📢 ${event.type || "Unknown event"}`,
 		blocks: [
 			{
 				type: "section",
@@ -232,13 +234,21 @@ export async function sendSlackNotification(
 	webhookUrl: string,
 	payload: SlackPayload,
 ): Promise<void> {
+	const body = JSON.stringify({
+		...payload,
+		text: payload.text || "Workers Build Notification",
+	});
+
 	const response = await fetch(webhookUrl, {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(payload),
+		body,
 	});
 
 	if (!response.ok) {
-		console.error("Slack API error:", response.status, await response.text());
+		const responseText = await response.text();
+		console.error(
+			`Slack API error: ${response.status} - ${responseText}. Payload: ${body}`,
+		);
 	}
 }
