@@ -1,4 +1,4 @@
-import { vi } from "vitest";
+import { vi } from "vite-plus/test";
 
 type ReplyBody = BodyInit | Record<string, unknown> | null | undefined;
 type ReplyHandler = (options: {

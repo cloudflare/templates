@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vite-plus/test";
 import worker, { handleEmail } from "../src/index";
 
 type TestEnv = Omit<Env, "ALLOWED_SENDERS" | "FORWARD_TO" | "ROUTE_ADDRESS"> & {

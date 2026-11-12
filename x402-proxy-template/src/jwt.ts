@@ -64,7 +64,7 @@ async function importSecretKey(secret: string): Promise<CryptoKey> {
 		keyData,
 		{ name: "HMAC", hash: "SHA-256" },
 		false,
-		["sign", "verify"]
+		["sign", "verify"],
 	);
 }
 
@@ -76,7 +76,7 @@ async function importSecretKey(secret: string): Promise<CryptoKey> {
  */
 export async function generateJWT(
 	secret: string,
-	expiresInSeconds: number = 3600
+	expiresInSeconds: number = 3600,
 ): Promise<string> {
 	const now = Math.floor(Date.now() / 1000);
 
@@ -95,10 +95,10 @@ export async function generateJWT(
 
 	// Encode header and payload
 	const encodedHeader = base64UrlEncode(
-		stringToArrayBuffer(JSON.stringify(header))
+		stringToArrayBuffer(JSON.stringify(header)),
 	);
 	const encodedPayload = base64UrlEncode(
-		stringToArrayBuffer(JSON.stringify(payload))
+		stringToArrayBuffer(JSON.stringify(payload)),
 	);
 
 	// Create signature
@@ -107,7 +107,7 @@ export async function generateJWT(
 	const signatureBuffer = await crypto.subtle.sign(
 		"HMAC",
 		key,
-		stringToArrayBuffer(dataToSign)
+		stringToArrayBuffer(dataToSign),
 	);
 	const encodedSignature = base64UrlEncode(signatureBuffer);
 
@@ -123,7 +123,7 @@ export async function generateJWT(
  */
 export async function verifyJWT(
 	token: string,
-	secret: string
+	secret: string,
 ): Promise<JWTPayload | null> {
 	try {
 		// Split token into parts
@@ -143,7 +143,7 @@ export async function verifyJWT(
 			"HMAC",
 			key,
 			signatureBuffer,
-			stringToArrayBuffer(dataToVerify)
+			stringToArrayBuffer(dataToVerify),
 		);
 
 		if (!isValid) {

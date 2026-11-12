@@ -2,5 +2,5 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "text-to-image-template-e2e",
 	"main": "e2e/index.ts",
-	"compatibility_date": "2025-10-08"
+	"compatibility_date": "2025-10-08",
 }

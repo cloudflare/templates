@@ -9,10 +9,10 @@
 	"compatibility_date": "2025-10-08",
 	"assets": {
 		"directory": "./dist",
-		"not_found_handling": "single-page-application"
+		"not_found_handling": "single-page-application",
 	},
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	/**
 	 * Workflows
@@ -23,8 +23,8 @@
 		{
 			"name": "my-workflow",
 			"binding": "MY_WORKFLOW",
-			"class_name": "MyWorkflow"
-		}
+			"class_name": "MyWorkflow",
+		},
 	],
 	/**
 	 * Durable Objects
@@ -35,9 +35,9 @@
 		"bindings": [
 			{
 				"name": "WORKFLOW_STATUS",
-				"class_name": "WorkflowStatusDO"
-			}
-		]
+				"class_name": "WorkflowStatusDO",
+			},
+		],
 	},
 	/**
 	 * Migrations
@@ -46,8 +46,8 @@
 	"migrations": [
 		{
 			"tag": "v1",
-			"new_sqlite_classes": ["WorkflowStatusDO"]
-		}
+			"new_sqlite_classes": ["WorkflowStatusDO"],
+		},
 	],
-	"upload_source_maps": true
+	"upload_source_maps": true,
 }

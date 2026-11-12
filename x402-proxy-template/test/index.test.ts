@@ -36,7 +36,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/./premium/secret"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 400);
@@ -48,7 +48,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/free/../premium/secret"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 400);
@@ -60,7 +60,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/%2e/premium/secret"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 400);
@@ -72,7 +72,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com//premium/secret"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 400);
@@ -84,7 +84,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/premium/secret"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 500);
@@ -96,7 +96,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/premium"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 500);
@@ -108,7 +108,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/%70remium/secret"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 500);
@@ -120,7 +120,7 @@ describe("x402 protected route matching", () => {
 
 		const response = await app.fetch(
 			requestWithRawUrl("https://example.com/premiumXYZ"),
-			env
+			env,
 		);
 
 		assert.equal(response.status, 200);

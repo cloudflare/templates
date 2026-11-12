@@ -184,9 +184,7 @@ export default function Prompts({ loaderData }: Route.ComponentProps) {
 										className="w-4 h-4 accent-brand cursor-pointer shrink-0"
 									/>
 									<span
-										className={`flex-1 ${
-											p.active ? "text-neutral-900" : "text-neutral-400"
-										}`}
+										className={`flex-1 ${p.active ? "text-neutral-900" : "text-neutral-400"}`}
 									>
 										{p.text}
 									</span>

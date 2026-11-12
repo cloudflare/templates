@@ -295,3 +295,17 @@ This scopes the policy to `/admin*` only, so employees can still reach `/deploy`
 ## License
 
 Apache-2.0
+
+## Toolchain
+
+This starter uses [Vite+](https://viteplus.dev). Use Node.js 22.18 or later in
+Node.js 22, Node.js 24.11 or later in Node.js 24, or Node.js 26 or later. Install
+the dependencies with `npm install`. A global `vp` installation is optional.
+
+- `npm run check:toolchain` checks formatting and lint rules.
+- `npm run format` formats the project.
+- `npm run check` runs formatting, lint rules, and the project's other checks.
+
+Use the documented development, build, and deployment scripts for this starter.
+Framework commands and resource setup remain part of those scripts. Keep the
+Vite alias and Vitest override aligned with the installed Vite+ release.

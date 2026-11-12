@@ -7,9 +7,9 @@
 	// Unit tests replace only the container and namespace boundaries.
 	// Keep Docker out of these tests; exercise the real image with wrangler dev.
 	"durable_objects": {
-		"bindings": [{ "name": "MY_CONTAINER", "class_name": "MyContainer" }]
+		"bindings": [{ "name": "MY_CONTAINER", "class_name": "MyContainer" }],
 	},
 	"exports": {
-		"MyContainer": { "type": "durable-object", "storage": "sqlite" }
-	}
+		"MyContainer": { "type": "durable-object", "storage": "sqlite" },
+	},
 }

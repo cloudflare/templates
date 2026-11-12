@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vite-plus/test";
 import { authorizeVoiceAgentRequest } from "../src/auth";
 
 const URL = "https://example.com/agents/voice-agent/test";
@@ -39,7 +39,9 @@ describe("voice agent authentication", () => {
 		const supplied = "incorrect-token";
 		const response = await authorizeVoiceAgentRequest(
 			request(`Bearer ${supplied}`),
-			{ VOICE_AGENT_TOKEN: TOKEN },
+			{
+				VOICE_AGENT_TOKEN: TOKEN,
+			},
 		);
 		const body = await response?.text();
 
@@ -51,7 +53,9 @@ describe("voice agent authentication", () => {
 	it("accepts the configured bearer token", async () => {
 		const response = await authorizeVoiceAgentRequest(
 			request(`Bearer ${TOKEN}`),
-			{ VOICE_AGENT_TOKEN: TOKEN },
+			{
+				VOICE_AGENT_TOKEN: TOKEN,
+			},
 		);
 		expect(response).toBeUndefined();
 	});

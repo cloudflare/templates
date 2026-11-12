@@ -1,6 +1,6 @@
-import { cloudflareTest } from "@cloudflare/vitest-pool-workers";
+import { cloudflareTest } from "@cloudflare/vitest-plugin";
 
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
 
 // Stub Worker A - Returns HTML with asset references for testing URL rewriting
 const workerAScript = /* javascript */ `

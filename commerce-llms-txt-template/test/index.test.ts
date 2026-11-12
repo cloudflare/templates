@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 
 describe("Commerce llms.txt", () => {
 	it("returns 200 and JSON on /api (service info)", async () => {

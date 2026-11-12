@@ -5,7 +5,7 @@
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"containers": [
 		{
@@ -13,24 +13,24 @@
 			"scheduling_policy": "durable_object",
 			"images": {
 				"base": {
-					"dockerfile": "./Dockerfile"
-				}
-			}
-		}
+					"dockerfile": "./Dockerfile",
+				},
+			},
+		},
 	],
 	"durable_objects": {
 		"bindings": [
 			{
 				"class_name": "MyContainer",
-				"name": "MY_CONTAINER"
-			}
-		]
+				"name": "MY_CONTAINER",
+			},
+		],
 	},
 	"upload_source_maps": true,
 	"exports": {
 		"MyContainer": {
 			"type": "durable-object",
-			"storage": "sqlite"
-		}
-	}
+			"storage": "sqlite",
+		},
+	},
 }

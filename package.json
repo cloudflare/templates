@@ -10,10 +10,11 @@
 		"prettier": "3.7.4",
 		"syncpack": "13.0.4",
 		"turbo": "2.6.1",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
 		"vitest": "4.1.10"
 	},
 	"engines": {
-		"node": ">=20.16.0 || >=22.3.0"
+		"node": "^22.19.0 || ^24.11.0 || >=26.0.0"
 	},
 	"packageManager": "pnpm@10.2.0",
 	"pnpm": {
@@ -21,7 +22,10 @@
 			"esbuild",
 			"sharp",
 			"workerd"
-		]
+		],
+		"overrides": {
+			"vite@>=7.0.0": "npm:@voidzero-dev/vite-plus-core@1.4.0"
+		}
 	},
 	"scripts": {
 		"check": "pnpm run check:deps && pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",
@@ -32,8 +36,9 @@
 		"check:turbo": "turbo run check cf-typegen --force",
 		"deploy": "turbo run deploy",
 		"deploy-live-demos": "templates deploy-live-demos .",
-		"fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:turbo && pnpm run fix:prettier",
+		"fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:turbo && pnpm run fix:prettier && pnpm run fix:format",
 		"fix:deps": "syncpack format && syncpack fix-mismatches",
+		"fix:format": "turbo run format",
 		"fix:lockfiles": "templates generate-npm-lockfiles .",
 		"fix:prettier": "prettier . --write",
 		"fix:templates": "templates lint . --fix",

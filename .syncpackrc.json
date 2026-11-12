@@ -33,6 +33,50 @@
 			"pinVersion": "^5.20260831.1"
 		},
 		{
+			"label": "Align @cloudflare/vitest-plugin in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["@cloudflare/vitest-plugin"],
+			"pinVersion": "1.4.10"
+		},
+		{
+			"label": "Align vitest in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["vitest"],
+			"pinVersion": "5.0.5"
+		},
+		{
+			"label": "Align vite in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["vite"],
+			"pinVersion": "npm:@voidzero-dev/vite-plus-core@1.4.0"
+		},
+		{
+			"label": "Align vite-plus in standalone starters",
+			"packages": [
+				"!remix-starter-template",
+				"!to-do-list-kv-template",
+				"!templates",
+				"!cli"
+			],
+			"dependencies": ["vite-plus"],
+			"pinVersion": "1.4.0"
+		},
+		{
 			"label": "Use current Agents SDK for the voice agent template",
 			"packages": ["voice-agent-template"],
 			"dependencies": ["agents"],
@@ -100,12 +144,6 @@
 			"packages": ["to-do-list-kv-template"],
 			"dependencies": ["@cloudflare/vitest-pool-workers"],
 			"pinVersion": "0.11.1"
-		},
-		{
-			"label": "Set vite to v7",
-			"packages": ["*"],
-			"dependencies": ["vite"],
-			"pinVersion": "^7.0.0"
 		}
 	]
 }

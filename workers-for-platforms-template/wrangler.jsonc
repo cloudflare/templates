@@ -8,11 +8,11 @@
 	"workers_dev": true,
 	// Smart Placement - automatically run Worker close to your back-end services
 	"placement": {
-		"mode": "smart"
+		"mode": "smart",
 	},
 	// Observability - enable logging for debugging
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	// Workers for Platforms dispatch namespace
 	// This is the core binding that enables multi-tenant Worker deployment
@@ -21,8 +21,8 @@
 		{
 			"binding": "dispatcher",
 			"namespace": "workers-for-platforms-template",
-			"remote": true
-		}
+			"remote": true,
+		},
 	],
 	// D1 Database for storing project metadata
 	// The database will be auto-provisioned during deployment
@@ -30,17 +30,17 @@
 		{
 			"binding": "DB",
 			"database_name": "workers-for-platforms-template",
-			"database_id": "39f0ae3f-5dbc-4357-aa4d-bc52ce832621"
-		}
+			"database_id": "39f0ae3f-5dbc-4357-aa4d-bc52ce832621",
+		},
 	],
 	// Environment variables
 	"vars": {
 		// Dispatch namespace name - must match the namespace above
 		"DISPATCH_NAMESPACE_NAME": "workers-for-platforms-template",
 		// Optional: Your platform's custom domain (e.g., "myplatform.com"). Leave empty to use workers.dev
-		"CUSTOM_DOMAIN": ""
+		"CUSTOM_DOMAIN": "",
 	},
 	// Note: FALLBACK_ORIGIN, CLOUDFLARE_ZONE_ID, ACCOUNT_ID, and
 	// DISPATCH_NAMESPACE_API_TOKEN are auto-configured by the setup script
-	"upload_source_maps": true
+	"upload_source_maps": true,
 }

@@ -1,13 +1,7 @@
 :root {
 	font-family:
-		system-ui,
-		-apple-system,
-		"Segoe UI",
-		Roboto,
-		Ubuntu,
-		Cantarell,
-		"Helvetica Neue",
-		sans-serif;
+		system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell,
+		"Helvetica Neue", sans-serif;
 	line-height: 1.55;
 	font-weight: 400;
 	color-scheme: light dark;

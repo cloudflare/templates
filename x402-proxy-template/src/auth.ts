@@ -30,7 +30,7 @@ export function requirePaymentOrCookie(paymentMw: MiddlewareHandler) {
 						error:
 							"Server misconfigured: JWT_SECRET not set. See README for setup instructions.",
 					},
-					500
+					500,
 				);
 			}
 
@@ -101,7 +101,7 @@ export function createProtectedRoute(config: ProtectedRouteConfig) {
 					},
 				},
 			},
-			facilitator
+			facilitator,
 		);
 
 		// Apply the combined auth/payment middleware

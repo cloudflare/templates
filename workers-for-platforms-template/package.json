@@ -28,27 +28,38 @@
 		"workers-qb": "0.1.1"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@cloudflare/vitest-plugin": "1.4.10",
 		"@cloudflare/workers-types": "^5.20261102.1",
-		"@vitest/runner": "4.1.10",
-		"@vitest/snapshot": "4.1.10",
 		"typescript": "5.9.3",
-		"vitest": "4.1.10",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
+		"vitest": "5.0.5",
 		"wrangler": "4.136.1"
 	},
 	"engines": {
-		"node": ">=18"
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
 	},
 	"license": "Apache-2.0",
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"build": "node scripts/setup-quick.js",
+		"check": "vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy && node scripts/setup-quick.js --set-secrets",
 		"dev": "wrangler dev --remote",
 		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
+		"format": "vp fmt",
 		"setup": "node scripts/setup.js",
 		"setup:quick": "node scripts/setup-quick.js",
-		"test": "vitest run",
-		"test:watch": "vitest"
+		"test": "vp test run",
+		"test:watch": "vp test"
 	}
 }

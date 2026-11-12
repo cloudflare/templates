@@ -1,0 +1,12 @@
+packages:
+  - "."
+
+overrides:
+  "@react-router/dev>wrangler": "4.136.1"
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vitest: 5.0.5
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
