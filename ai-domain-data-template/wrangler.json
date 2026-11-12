@@ -1,0 +1,13 @@
+{
+	"name": "ai-domain-data-worker",
+	"main": "src/index.ts",
+	"compatibility_date": "2024-01-01",
+	"vars": {
+		"AIDD_SPEC": "https://ai-domain-data.org/spec/v0.1",
+		"AIDD_NAME": "Example Site",
+		"AIDD_DESCRIPTION": "A description of your site or organization",
+		"AIDD_WEBSITE": "https://example.com",
+		"AIDD_CONTACT": "contact@example.com"
+	}
+}
+
