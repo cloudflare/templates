@@ -1,5 +1,5 @@
 import { SELF } from "cloudflare:test";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vite-plus/test";
 
 // Helper function to create a task and return its ID
 async function createTask(taskData: any) {

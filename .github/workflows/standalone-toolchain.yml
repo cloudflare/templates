@@ -1,0 +1,51 @@
+name: Standalone template toolchain
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  templates:
+    runs-on: ubuntu-latest
+    outputs:
+      names: ${{ steps.templates.outputs.names }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: templates
+        shell: bash
+        run: |
+          node --input-type=module <<'JS' >> "$GITHUB_OUTPUT"
+          import { readdirSync, readFileSync } from 'node:fs';
+          const names = readdirSync('.').filter(name => name.endsWith('-template'))
+            .filter(name => JSON.parse(readFileSync(`${name}/package.json`, 'utf8')).devDependencies?.['vite-plus']);
+          console.log(`names=${JSON.stringify(names)}`);
+          JS
+  check:
+    needs: templates
+    runs-on: ubuntu-latest
+    env:
+      NPM_CONFIG_ENGINE_STRICT: "true"
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22.19.0", "24.22.0"]
+        template: ${{ fromJSON(needs.templates.outputs.names) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Copy the standalone project
+        env:
+          TEMPLATE: ${{ matrix.template }}
+        run: cp -R "$TEMPLATE" "$RUNNER_TEMP/starter"
+      - name: Install without workspace dependencies
+        working-directory: ${{ runner.temp }}/starter
+        run: npm ci
+      - name: Check the project-local Vite+ toolchain
+        working-directory: ${{ runner.temp }}/starter
+        run: npm run check:toolchain

@@ -250,7 +250,10 @@ app.post("/api/sites/deploy", async (c) => {
 				} catch (cleanupError) {
 					console.error(
 						"Provisional site cleanup failed after Cloudflare deployment failure",
-						{ deploymentError, cleanupError },
+						{
+							deploymentError,
+							cleanupError,
+						},
 					);
 				}
 			}

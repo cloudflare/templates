@@ -34,7 +34,8 @@ test.describe("AI Brand Visibility Template", () => {
 		await expect(page.getByText("AI Brand Visibility Template")).toBeVisible();
 		await expect(page.getByRole("link", { name: "Add site" })).toBeVisible();
 
-		await page.goto(`${templateUrl}/setup`);
+		await page.getByRole("link", { name: "Add site" }).click();
+		await expect(page).toHaveURL(new URL("/setup", templateUrl).href);
 		await expect(
 			page.getByRole("heading", { name: "AI Brand Visibility Template" }),
 		).toBeVisible();

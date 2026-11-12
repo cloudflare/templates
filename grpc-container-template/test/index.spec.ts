@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vite-plus/test";
 import worker, { GrpcContainer } from "../src/index";
 
 function createSocket(chunks: Uint8Array[] = [], keepOpen = false) {

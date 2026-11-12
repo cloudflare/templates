@@ -81,7 +81,7 @@ This template demonstrates...
 
 **Symptom**: Template has fewer than 5 tests or no test file.
 
-**Fix**: Create tests using `@cloudflare/vitest-pool-workers`. See [Testing Patterns](#testing-patterns) below.
+**Fix**: Create tests using `@cloudflare/vitest-plugin`. See [Testing Patterns](#testing-patterns) below.
 
 ### 5. Using wrangler.toml Instead of wrangler.json
 
@@ -109,26 +109,22 @@ Every template needs a `vitest.config.ts` and test file(s). The simplest setup:
 
 ```typescript
 // vitest.config.ts
-import { defineWorkersProject } from "@cloudflare/vitest-pool-workers/config";
+import { cloudflareTest } from "@cloudflare/vitest-plugin";
+import { defineConfig } from "vite-plus";
 
-export default defineWorkersProject({
-	test: {
-		poolOptions: {
-			workers: {
-				singleWorker: true,
-				wrangler: {
-					configPath: "./wrangler.json",
-				},
-			},
-		},
-	},
+export default defineConfig({
+	plugins: [
+		cloudflareTest({
+			wrangler: { configPath: "./wrangler.jsonc" },
+		}),
+	],
 });
 ```
 
 ```typescript
 // test/index.test.ts
 import { SELF } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 
 describe("Template Name", () => {
 	it("returns 200 on homepage", async () => {
@@ -152,7 +148,8 @@ When a template uses Service Bindings to call other Workers, you need stub worke
 
 ```typescript
 // vitest.config.ts
-import { defineWorkersProject } from "@cloudflare/vitest-pool-workers/config";
+import { cloudflareTest } from "@cloudflare/vitest-plugin";
+import { defineConfig } from "vite-plus";
 
 // Define stub worker as inline JavaScript
 const stubWorkerScript = /* javascript */ `
@@ -166,32 +163,27 @@ export default {
 };
 `;
 
-export default defineWorkersProject({
-	test: {
-		poolOptions: {
-			workers: {
-				singleWorker: true,
-				wrangler: {
-					configPath: "./wrangler.json",
-				},
-				miniflare: {
-					workers: [
-						{
-							name: "my-service-binding-name", // Must match binding name in wrangler.json
-							modules: [
-								{
-									type: "ESModule",
-									path: "index.js",
-									contents: stubWorkerScript,
-								},
-							],
-							compatibilityDate: "2024-01-01",
-						},
-					],
-				},
+export default defineConfig({
+	plugins: [
+		cloudflareTest({
+			wrangler: { configPath: "./wrangler.jsonc" },
+			miniflare: {
+				workers: [
+					{
+						name: "my-service-binding-name", // Must match the configured service name
+						modules: [
+							{
+								type: "ESModule",
+								path: "index.js",
+								contents: stubWorkerScript,
+							},
+						],
+						compatibilityDate: "2024-01-01",
+					},
+				],
 			},
-		},
-	},
+		}),
+	],
 });
 ```
 

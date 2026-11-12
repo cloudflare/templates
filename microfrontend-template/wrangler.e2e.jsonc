@@ -6,9 +6,9 @@
 	"compatibility_flags": ["nodejs_compat"],
 	"services": [
 		{ "binding": "APP1", "service": "worker-a" },
-		{ "binding": "APP2", "service": "worker-b" }
+		{ "binding": "APP2", "service": "worker-b" },
 	],
 	"vars": {
-		"ROUTES": "{\"smoothTransitions\":true,\"routes\":[{\"binding\":\"APP1\",\"path\":\"/\"},{\"binding\":\"APP1\",\"path\":\"/app1\"},{\"binding\":\"APP2\",\"path\":\"/app2\"}]}"
-	}
+		"ROUTES": "{\"smoothTransitions\":true,\"routes\":[{\"binding\":\"APP1\",\"path\":\"/\"},{\"binding\":\"APP1\",\"path\":\"/app1\"},{\"binding\":\"APP2\",\"path\":\"/app2\"}]}",
+	},
 }

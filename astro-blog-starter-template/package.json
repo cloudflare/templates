@@ -20,19 +20,28 @@
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
+		"vite-plus": "1.4.0",
 		"wrangler": "4.136.1"
 	},
 	"engines": {
-		"node": ">=22"
+		"node": "^22.19.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vitest": "5.0.5"
 	},
 	"private": true,
+	"resolutions": {
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"astro": "astro",
 		"build": "astro build",
 		"cf-typegen": "wrangler types",
-		"check": "astro build && tsc && wrangler deploy --dry-run",
+		"check": "astro build && tsc && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy",
 		"dev": "astro dev",
+		"format": "vp fmt",
 		"preview": "astro build && wrangler dev"
 	},
 	"type": "module"

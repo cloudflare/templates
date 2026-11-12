@@ -1,5 +1,5 @@
 import { cloudflareTest } from "@cloudflare/vitest-plugin";
-import { defineConfig } from "vitest/config";
+import { defineConfig } from "vite-plus";
 
 process.env.SEND_EMAIL_AUTH_TOKEN ??= "test-email-sending-token";
 

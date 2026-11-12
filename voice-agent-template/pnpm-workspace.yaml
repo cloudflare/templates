@@ -1,0 +1,12 @@
+packages:
+  - "."
+
+overrides:
+  "@ai-sdk/provider": "4.0.10"
+  vite: npm:@voidzero-dev/vite-plus-core@1.4.0
+  vitest: 5.0.5
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd

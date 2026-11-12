@@ -17,26 +17,39 @@
 		"publish": true
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-plugin": "1.1.3",
+		"@cloudflare/vitest-plugin": "1.4.10",
 		"@grpc/grpc-js": "1.14.5",
 		"@grpc/proto-loader": "0.8.1",
-		"@vitest/runner": "4.1.10",
-		"@vitest/snapshot": "4.1.10",
 		"typescript": "5.9.3",
-		"vitest": "4.1.10",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
+		"vitest": "5.0.5",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"cf-typegen": "wrangler types",
-		"check": "tsc --noEmit && wrangler deploy --dry-run",
+		"check": "tsc --noEmit && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
 		"e2e:dev": "wrangler dev --enable-containers=false",
+		"format": "vp fmt",
 		"grpc:client": "npm --prefix container run client -- 127.0.0.1:8788",
 		"grpc:server": "npm --prefix container start",
 		"start": "wrangler dev",
-		"test": "vitest run",
+		"test": "vp test run",
 		"test:e2e": "node scripts/smoke-test.mjs"
 	},
 	"type": "module"

@@ -1,4 +1,11 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import {
+	afterAll,
+	afterEach,
+	beforeAll,
+	describe,
+	expect,
+	it,
+} from "vite-plus/test";
 import { createTestHarness } from "wrangler";
 
 const TOKEN = "test-harness-voice-agent-token";

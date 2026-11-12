@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vite-plus/test";
 import { checkPrompt } from "../src/voice/checkPrompt";
 import {
 	BLOCKED_OUTPUT_FALLBACK,

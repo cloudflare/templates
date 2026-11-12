@@ -163,9 +163,7 @@ export function CodeDisplay({
 									}`}
 								>
 									<span
-										className={`whitespace-pre ${
-											isHighlighted ? "font-medium" : ""
-										}`}
+										className={`whitespace-pre ${isHighlighted ? "font-medium" : ""}`}
 									>
 										{highlightSyntax(line || " ")}
 									</span>

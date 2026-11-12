@@ -9,18 +9,18 @@
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": ["nodejs_compat"],
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
 			"id": "7853460cd9194ddb864cc211f3fc6e68",
-			"localConnectionString": "postgresql://postgres:postgres@localhost:5432/defaultdb" // Replace with your connection string
-		}
+			"localConnectionString": "postgresql://postgres:postgres@localhost:5432/defaultdb", // Replace with your connection string
+		},
 	],
 	"assets": {
 		"directory": "public",
-		"binding": "ASSETS"
+		"binding": "ASSETS",
 	},
 	/**
 	 * Smart Placement
@@ -52,5 +52,5 @@
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
 	 */
 	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
-	"upload_source_maps": true
+	"upload_source_maps": true,
 }

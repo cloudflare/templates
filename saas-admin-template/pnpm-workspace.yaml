@@ -1,0 +1,10 @@
+packages:
+  - "."
+
+overrides:
+  vitest: 5.0.5
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd

@@ -1,5 +1,5 @@
 import { env, SELF } from "cloudflare:test";
-import { beforeAll, describe, it, expect } from "vitest";
+import { beforeAll, describe, it, expect } from "vite-plus/test";
 import { ENRICHED_KEY } from "../src/lib/store";
 import type { Resource } from "../src/lib/types";
 

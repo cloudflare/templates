@@ -1,5 +1,5 @@
 import { env, introspectWorkflowInstance } from "cloudflare:test";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect } from "vite-plus/test";
 
 describe("MyWorkflow", () => {
 	it("completes and returns expected step result", async () => {

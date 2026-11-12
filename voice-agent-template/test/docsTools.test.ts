@@ -10,7 +10,14 @@ import {
 	type CloudflareDocsAttemptEvent,
 	type DocsToolRuntime,
 } from "../src/voice/docsTools";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	vi,
+} from "vite-plus/test";
 
 function runtime(
 	execute: (

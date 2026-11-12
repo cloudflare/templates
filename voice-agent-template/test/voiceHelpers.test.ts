@@ -1,5 +1,5 @@
 import type { TTSProvider } from "@cloudflare/voice";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vite-plus/test";
 import {
 	CONVERSATION_RETENTION_MS,
 	claimCall,
@@ -60,7 +60,9 @@ describe("retrying TTS", () => {
 		const provider = { synthesize } satisfies TTSProvider;
 		await expect(
 			new RetryingTts(provider).synthesize("hello"),
-		).rejects.toMatchObject({ name: "AbortError" });
+		).rejects.toMatchObject({
+			name: "AbortError",
+		});
 		expect(synthesize).toHaveBeenCalledTimes(1);
 	});
 });

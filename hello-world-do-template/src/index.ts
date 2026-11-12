@@ -35,7 +35,9 @@ export class MyDurableObject extends DurableObject<Env> {
 	async sayHello(): Promise<string> {
 		let result = this.ctx.storage.sql
 			.exec("SELECT 'Hello, World!' as greeting")
-			.one() as { greeting: string };
+			.one() as {
+			greeting: string;
+		};
 		return result.greeting;
 	}
 }

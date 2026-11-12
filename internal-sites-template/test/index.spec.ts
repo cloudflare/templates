@@ -11,7 +11,7 @@ import {
 	expect,
 	it,
 	vi,
-} from "vitest";
+} from "vite-plus/test";
 import { fetchMock } from "./fetch-mock";
 import app, { resetDbInitialized } from "../src/index";
 

@@ -43,25 +43,39 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vite-plugin": "1.52.1",
-		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@cloudflare/vitest-plugin": "1.4.10",
 		"@cloudflare/workers-types": "^5.20261102.1",
 		"@types/react": "19.2.7",
 		"@types/react-dom": "19.2.3",
 		"@vitejs/plugin-react": "5.1.1",
 		"typescript": "5.9.3",
-		"vite": "^7.0.0",
-		"vitest": "4.1.10",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
+		"vitest": "5.0.5",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
-		"build": "tsc -b && vite build",
+		"build": "tsc -b && vp build",
 		"cf-typegen": "wrangler types",
-		"check": "tsc -b && vite build && wrangler deploy --dry-run",
+		"check": "tsc -b && vp build && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "npm run build && wrangler deploy",
-		"dev": "vite",
-		"preview": "npm run build && vite preview",
-		"test": "vitest run"
+		"dev": "vp dev",
+		"format": "vp fmt",
+		"preview": "npm run build && vp preview",
+		"test": "vp test run"
 	},
 	"type": "module"
 }

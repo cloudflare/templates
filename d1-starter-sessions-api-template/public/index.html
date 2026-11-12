@@ -78,17 +78,19 @@
 								<dd>${Number(browserLatency).toFixed(0)}ms</dd>
 							</div>
 
-							${servedByRegion
-								? html`
-										<div>
-											<dt>Served by Region</dt>
-											<dd>
-												${servedByRegion.toUpperCase()}
-												(${servedByPrimary ? "primary" : "replica"})
-											</dd>
-										</div>
-									`
-								: null}
+							${
+								servedByRegion
+									? html`
+											<div>
+												<dt>Served by Region</dt>
+												<dd>
+													${servedByRegion.toUpperCase()}
+													(${servedByPrimary ? "primary" : "replica"})
+												</dd>
+											</div>
+										`
+									: null
+							}
 						</dl>
 					</section>
 				`;
@@ -197,11 +199,14 @@
 									<strong>List orders:</strong> 1 read query to a replica.
 								</li>
 								<li><strong>Reset:</strong> 1 write query to the primary.</li>
-								${primaryRegion
-									? html`<li>
-											<strong>Primary database region:</strong> ${primaryRegion}
-										</li>`
-									: null}
+								${
+									primaryRegion
+										? html`<li>
+												<strong>Primary database region:</strong>
+												${primaryRegion}
+											</li>`
+										: null
+								}
 							</ul>
 						</section>
 
@@ -219,24 +224,26 @@
 										</tr>
 									</thead>
 									<tbody>
-										${!Array.isArray(result?.results)
-											? html`<tr>
-													<td colspan="3">
-														Use the buttons above to load existing orders or
-														create new ones.
-													</td>
-												</tr>`
-											: result.results.length > 0
-												? result.results.reverse().map((row, idx) => {
-														return html`<tr key=${`${row.now}`}>
-															<td>${row.customerId}</td>
-															<td>${row.orderId}</td>
-															<td>${row.quantity}</td>
-														</tr>`;
-													})
-												: html`<tr>
-														<td colspan="3">No orders yet.</td>
-													</tr>`}
+										${
+											!Array.isArray(result?.results)
+												? html`<tr>
+														<td colspan="3">
+															Use the buttons above to load existing orders or
+															create new ones.
+														</td>
+													</tr>`
+												: result.results.length > 0
+													? result.results.reverse().map((row, idx) => {
+															return html`<tr key=${`${row.now}`}>
+																<td>${row.customerId}</td>
+																<td>${row.orderId}</td>
+																<td>${row.quantity}</td>
+															</tr>`;
+														})
+													: html`<tr>
+															<td colspan="3">No orders yet.</td>
+														</tr>`
+										}
 									</tbody>
 								</table>
 							</div>

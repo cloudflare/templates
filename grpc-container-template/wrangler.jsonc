@@ -5,7 +5,7 @@
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": ["nodejs_compat", "experimental"],
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"upload_source_maps": true,
 	// Wrangler exposes this raw TCP listener during local development.
@@ -13,28 +13,28 @@
 		{
 			"protocol": "tcp",
 			"address": "127.0.0.1",
-			"port": 8788
-		}
+			"port": 8788,
+		},
 	],
 	"containers": [
 		{
 			"class_name": "GrpcContainer",
 			"image": "./Dockerfile",
-			"max_instances": 1
-		}
+			"max_instances": 1,
+		},
 	],
 	"durable_objects": {
 		"bindings": [
 			{
 				"name": "GRPC_CONTAINER",
-				"class_name": "GrpcContainer"
-			}
-		]
+				"class_name": "GrpcContainer",
+			},
+		],
 	},
 	"migrations": [
 		{
 			"tag": "v1",
-			"new_sqlite_classes": ["GrpcContainer"]
-		}
-	]
+			"new_sqlite_classes": ["GrpcContainer"],
+		},
+	],
 }

@@ -10,13 +10,13 @@
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"assets": {
 		"binding": "ASSETS",
-		"directory": "./public"
+		"directory": "./public",
 	},
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"ai": {
-		"binding": "AI"
+		"binding": "AI",
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
 }

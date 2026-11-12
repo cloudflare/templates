@@ -5,30 +5,30 @@
 	"main": "./workers/app.ts",
 	"upload_source_maps": true,
 	"observability": {
-		"enabled": true
+		"enabled": true,
 	},
 	"ai": {
-		"binding": "AI"
+		"binding": "AI",
 	},
 	"kv_namespaces": [
 		{
 			"binding": "AEO_KV",
-			"id": "623729d87586478981a14c15ddfe3764"
-		}
+			"id": "623729d87586478981a14c15ddfe3764",
+		},
 	],
 	"queues": {
 		"producers": [
 			{
 				"queue": "brand-visibility-jobs",
-				"binding": "BRAND_VISIBILITY_QUEUE"
-			}
+				"binding": "BRAND_VISIBILITY_QUEUE",
+			},
 		],
 		"consumers": [
 			{
 				"queue": "brand-visibility-jobs",
 				"max_batch_size": 5,
-				"max_concurrency": 10
-			}
-		]
-	}
+				"max_concurrency": 10,
+			},
+		],
+	},
 }

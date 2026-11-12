@@ -18,21 +18,34 @@
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/1343611f-f30d-4c8e-4de9-a9bb0f3e7e00/public"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.21.3",
-		"@vitest/runner": "4.1.10",
-		"@vitest/snapshot": "4.1.10",
+		"@cloudflare/vitest-plugin": "1.4.10",
 		"durable-utils": "0.3.5",
 		"typescript": "5.9.3",
-		"vitest": "4.1.10",
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vite-plus": "1.4.0",
+		"vitest": "5.0.5",
 		"wrangler": "4.136.1"
 	},
+	"engines": {
+		"node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+	},
+	"overrides": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"private": true,
+	"resolutions": {
+		"vite": "npm:@voidzero-dev/vite-plus-core@1.4.0",
+		"vitest": "5.0.5"
+	},
 	"scripts": {
 		"cf-typegen": "wrangler types",
-		"check": "tsc && wrangler deploy --dry-run",
+		"check": "tsc && wrangler deploy --dry-run && vp check",
+		"check:toolchain": "vp check",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"format": "vp fmt",
 		"start": "wrangler dev",
-		"test": "vitest"
+		"test": "vp test"
 	}
 }

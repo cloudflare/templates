@@ -8,11 +8,11 @@
 		{
 			"binding": "DB",
 			"database_name": "workers-for-platforms-template-e2e",
-			"database_id": "00000000-0000-0000-0000-000000000000"
-		}
+			"database_id": "00000000-0000-0000-0000-000000000000",
+		},
 	],
 	"vars": {
 		"DISPATCH_NAMESPACE_NAME": "e2e",
-		"CUSTOM_DOMAIN": ""
-	}
+		"CUSTOM_DOMAIN": "",
+	},
 }
