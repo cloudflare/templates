@@ -18,7 +18,7 @@ function ResourceValueToString(value: ResourceValues, columnName?: string) {
 	return escapeHtml(stringValue);
 }
 
-function escapeHtml(text: string): string {
+export function escapeHtml(text: string): string {
 	return text
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")

@@ -19,6 +19,8 @@ export type Env = {
 	FALLBACK_ORIGIN?: string;
 	// Optional: API token with SSL permissions for custom hostname support
 	CLOUDFLARE_API_TOKEN?: string;
+	// Password for the /admin page. The page is disabled until this is set.
+	ADMIN_PASSWORD?: string;
 };
 
 interface Dispatcher {

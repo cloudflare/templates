@@ -15,6 +15,7 @@ export default defineConfig({
 					// Required for API calls - mock values for testing
 					ACCOUNT_ID: "test-account-id",
 					DISPATCH_NAMESPACE_API_TOKEN: "test-api-token",
+					ADMIN_PASSWORD: "test-admin-password",
 				},
 			},
 		}),
