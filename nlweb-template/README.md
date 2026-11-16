@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/nlweb-template)
 
+> [!NOTE]
+> This template is no longer maintained.
+
 <!-- dash-content-start -->
 
 This is a [NLWeb](https://github.com/nlweb-ai/NLWeb) starter template.

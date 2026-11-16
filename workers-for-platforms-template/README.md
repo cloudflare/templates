@@ -4,6 +4,9 @@ Build your own website hosting platform using [Cloudflare Workers for Platforms]
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/workers-for-platforms-template)
 
+> [!NOTE]
+> This template is no longer maintained. For new projects, use [`internal-sites-template`](https://github.com/cloudflare/templates/tree/main/internal-sites-template) instead.
+
 ![Preview](preview.png)
 
 <!-- dash-content-start -->
