@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/remix-starter-template)
 
+> [!NOTE]
+> This template is no longer maintained. For new projects, use [`react-router-starter-template`](https://github.com/cloudflare/templates/tree/main/react-router-starter-template) instead.
+
 <!-- dash-content-start -->
 
 Build a fullstack Remix application, deployed to Cloudflare Workers.

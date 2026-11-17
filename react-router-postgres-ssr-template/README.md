@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/react-router-postgres-ssr-template)
 
+> [!NOTE]
+> This template is no longer maintained. For new projects, use [`react-postgres-fullstack-template`](https://github.com/cloudflare/templates/tree/main/react-postgres-fullstack-template) instead.
+
 <!-- dash-content-start -->
 
 This project demonstrates a full-stack application with a React Router app with Server-Side Rendering (SSR), served through Cloudflare Workers. The backend consists of API routes built with Hono, running on Cloudflare Workers, connecting to a PostgreSQL database through Hyperdrive. Smart Placement is enabled to automatically position your Worker closer to your database for reduced latency.

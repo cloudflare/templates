@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/grpc-container-template)
 
+> [!NOTE]
+> This template isn't listed in the Cloudflare dashboard for now.
+
 ![gRPC logo](./preview.png)
 
 <!-- dash-content-start -->

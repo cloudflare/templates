@@ -1,5 +1,8 @@
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/agent-commerce-analytics-template)
 
+> [!NOTE]
+> This template is no longer maintained.
+
 # Agent Commerce Analytics
 
 ![Status: Demo-ready](https://img.shields.io/badge/status-demo--ready-green) ![Type: Analytics dashboard](https://img.shields.io/badge/type-analytics--dashboard-blue)
