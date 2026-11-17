@@ -1,5 +1,9 @@
 import { test, expect } from "./fixtures";
 
+test.use({
+	httpCredentials: { username: "admin", password: "e2e-test-password" },
+});
+
 test("renders the PostgreSQL management UI without requiring a database", async ({
 	page,
 	templateUrl,

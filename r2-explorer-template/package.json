@@ -31,6 +31,7 @@
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
-		"dev": "wrangler dev"
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --var ADMIN_PASSWORD:e2e-test-password"
 	}
 }

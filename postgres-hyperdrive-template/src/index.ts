@@ -13,21 +13,19 @@ export default {
 		env: Env,
 		ctx: ExecutionContext,
 	): Promise<Response> {
-		// The dashboard reads and writes your database, so every request,
-		// including the static dashboard files, needs the password.
-		const authError = await checkAdminAuth(request, env);
-		if (authError) {
-			return authError;
-		}
-
 		const url = new URL(request.url);
 
-		// Handle API requests
+		// Handle API requests. They read and write your database, so they
+		// need the password.
 		if (url.pathname.startsWith("/api/")) {
+			const authError = await checkAdminAuth(request, env);
+			if (authError) {
+				return authError;
+			}
 			return handleApiRequest(request, env, ctx);
 		}
 
-		return env.ASSETS.fetch(request);
+		return Response.json({ message: "Hello World!" });
 	},
 };
 
