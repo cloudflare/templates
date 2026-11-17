@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/mysql-hyperdrive-template)
 
+> [!NOTE]
+> This template is no longer maintained. For new projects, use [`postgres-hyperdrive-template`](https://github.com/cloudflare/templates/tree/main/postgres-hyperdrive-template) instead.
+
 <!-- dash-content-start -->
 
 [Hyperdrive](https://developers.cloudflare.com/hyperdrive/) makes connecting to your regional SQL database from Cloudflare Workers fast by:

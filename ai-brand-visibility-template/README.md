@@ -1,5 +1,8 @@
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/ai-brand-visibility-template)
 
+> [!NOTE]
+> This template is no longer maintained.
+
 # AI Brand Visibility Template
 
 <!-- dash-content-start -->

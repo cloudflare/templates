@@ -14,7 +14,7 @@
 		"docs_url": "https://developers.cloudflare.com/containers/",
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/47d25059-b80a-4790-9dff-970e5ddfa100/public",
 		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
-		"publish": true
+		"publish": false
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-plugin": "1.1.3",

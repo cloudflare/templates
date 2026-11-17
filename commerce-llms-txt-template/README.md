@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/commerce-llms-txt-template)
 
+> [!NOTE]
+> This template is no longer maintained. For new projects, use [`agent-visibility-template`](https://github.com/cloudflare/templates/tree/main/agent-visibility-template) instead.
+
 <!-- dash-content-start -->
 
 Make your product catalog visible to AI shopping agents. This template serves a dynamic `/llms.txt` endpoint that uses [Workers AI](https://developers.cloudflare.com/workers-ai/) to transform raw product specs into natural language descriptions agents can reason with.
