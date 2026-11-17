@@ -3,6 +3,8 @@ import { Client } from "pg";
 interface Env {
 	HYPERDRIVE: Hyperdrive;
 	ASSETS: Fetcher;
+	// Password for the dashboard and API. Sign in with the username "admin".
+	ADMIN_PASSWORD?: string;
 }
 
 export default {
@@ -11,6 +13,13 @@ export default {
 		env: Env,
 		ctx: ExecutionContext,
 	): Promise<Response> {
+		// The dashboard reads and writes your database, so every request,
+		// including the static dashboard files, needs the password.
+		const authError = await checkAdminAuth(request, env);
+		if (authError) {
+			return authError;
+		}
+
 		const url = new URL(request.url);
 
 		// Handle API requests
@@ -18,9 +27,35 @@ export default {
 			return handleApiRequest(request, env, ctx);
 		}
 
-		return Response.json({ message: "Hello World!" });
+		return env.ASSETS.fetch(request);
 	},
 };
+
+async function checkAdminAuth(
+	request: Request,
+	env: Env,
+): Promise<Response | undefined> {
+	if (!env.ADMIN_PASSWORD) {
+		return new Response(
+			"The dashboard is disabled. Set the ADMIN_PASSWORD secret to enable it.",
+			{ status: 403 },
+		);
+	}
+	const expected = `Basic ${btoa(`admin:${env.ADMIN_PASSWORD}`)}`;
+	const provided = request.headers.get("Authorization") ?? "";
+	const encoder = new TextEncoder();
+	const [hashA, hashB] = await Promise.all([
+		crypto.subtle.digest("SHA-256", encoder.encode(provided)),
+		crypto.subtle.digest("SHA-256", encoder.encode(expected)),
+	]);
+	if (!crypto.subtle.timingSafeEqual(hashA, hashB)) {
+		return new Response("Unauthorized", {
+			status: 401,
+			headers: { "WWW-Authenticate": 'Basic realm="Dashboard"' },
+		});
+	}
+	return undefined;
+}
 
 async function handleApiRequest(
 	request: Request,
@@ -28,7 +63,6 @@ async function handleApiRequest(
 	ctx: ExecutionContext,
 ): Promise<Response> {
 	const url = new URL(request.url);
-	console.log(env.HYPERDRIVE.connectionString);
 	const client = new Client({
 		connectionString: env.HYPERDRIVE.connectionString,
 	});
@@ -43,7 +77,6 @@ async function handleApiRequest(
         WHERE table_schema = 'public' 
         AND (table_name = 'organizations' OR table_name = 'users')`,
 			);
-			console.log("tables", tables);
 
 			const existingTables = tables.rows.map((t) => t.table_name);
 
