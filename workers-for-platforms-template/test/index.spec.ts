@@ -24,13 +24,22 @@ describe("Workers for Platforms Template", () => {
 	async function makeRequest(
 		path: string,
 		options?: RequestInit,
+		envOverrides?: Record<string, unknown>,
 	): Promise<Response> {
 		const request = new Request(`http://localhost${path}`, options);
 		const ctx = createExecutionContext();
-		const response = await app.fetch(request, env as unknown as TestEnv, ctx);
+		const response = await app.fetch(
+			request,
+			{ ...env, ...envOverrides } as unknown as TestEnv,
+			ctx,
+		);
 		await waitOnExecutionContext(ctx);
 		return response;
 	}
+
+	const adminAuth = {
+		headers: { Authorization: `Basic ${btoa("admin:test-admin-password")}` },
+	};
 
 	describe("Homepage", () => {
 		it("should return the website builder UI on the root path", async () => {
@@ -64,7 +73,7 @@ describe("Workers for Platforms Template", () => {
 
 	describe("Admin Dashboard", () => {
 		it("should return the admin dashboard page", async () => {
-			const response = await makeRequest("/admin");
+			const response = await makeRequest("/admin", adminAuth);
 
 			expect(response.status).toBe(200);
 			expect(response.headers.get("content-type")).toContain("text/html");
@@ -74,7 +83,7 @@ describe("Workers for Platforms Template", () => {
 		});
 
 		it("should show projects section on admin page", async () => {
-			const response = await makeRequest("/admin");
+			const response = await makeRequest("/admin", adminAuth);
 			const html = await response.text();
 
 			// Check for admin page elements that are always present
@@ -82,6 +91,40 @@ describe("Workers for Platforms Template", () => {
 			expect(html).toContain("Projects");
 			// When empty, shows "No projects yet" message
 			expect(html).toMatch(/(Subdomain|No projects yet)/);
+		});
+
+		it("should require credentials", async () => {
+			const response = await makeRequest("/admin");
+			expect(response.status).toBe(401);
+		});
+
+		it("should reject a wrong password", async () => {
+			const response = await makeRequest("/admin", {
+				headers: { Authorization: `Basic ${btoa("admin:wrong")}` },
+			});
+			expect(response.status).toBe(401);
+		});
+
+		it("should be disabled when ADMIN_PASSWORD is not set", async () => {
+			const response = await makeRequest("/admin", adminAuth, {
+				ADMIN_PASSWORD: undefined,
+			});
+			expect(response.status).toBe(403);
+		});
+
+		it("should escape project names", async () => {
+			await env.DB.prepare(
+				"CREATE TABLE IF NOT EXISTS projects (id TEXT PRIMARY KEY, name TEXT NOT NULL, subdomain TEXT UNIQUE NOT NULL, custom_hostname TEXT, script_content TEXT NOT NULL, created_on TEXT NOT NULL, modified_on TEXT NOT NULL)",
+			).run();
+			await env.DB.prepare(
+				"INSERT INTO projects VALUES ('xss-test', '<img src=x onerror=alert(1)>', 'xss-test', NULL, '', '', '')",
+			).run();
+
+			const response = await makeRequest("/admin", adminAuth);
+			const html = await response.text();
+
+			expect(html).toContain("&lt;img src=x onerror=alert(1)&gt;");
+			expect(html).not.toContain("<img src=x onerror=alert(1)>");
 		});
 	});
 
@@ -141,15 +184,10 @@ describe("Workers for Platforms Template", () => {
 		});
 	});
 
-	describe("Database Initialization", () => {
-		it("should handle /init endpoint for database reset", async () => {
-			// Note: This test verifies the endpoint exists and redirects
-			// In a real test with proper mocking, we'd verify the database operations
+	describe("Database Reset", () => {
+		it("should not expose an /init reset endpoint", async () => {
 			const response = await makeRequest("/init", { redirect: "manual" });
-
-			// Should redirect back to root after initialization
-			expect(response.status).toBe(302);
-			expect(response.headers.get("location")).toContain("/");
+			expect(response.status).toBe(404);
 		});
 	});
 });

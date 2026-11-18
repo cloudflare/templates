@@ -25,14 +25,12 @@ import { Hono } from "hono";
 
 import {
 	FetchTable,
-	Initialize,
 	CreateProject,
 	GetProjectBySubdomain,
 	GetProjectByCustomHostname,
 } from "./db";
 import type { Env } from "./env";
 import {
-	DeleteScriptInDispatchNamespace,
 	GetScriptsInDispatchNamespace,
 	PutScriptInDispatchNamespace,
 	PutScriptWithAssetsInDispatchNamespace,
@@ -40,7 +38,7 @@ import {
 	checkEnvConfig,
 } from "./resource";
 import { handleDispatchError, withDb } from "./router";
-import { renderPage, BuildTable, BuildWebsitePage } from "./render";
+import { renderPage, BuildTable, BuildWebsitePage, escapeHtml } from "./render";
 import { Project } from "./types";
 import {
 	createCustomHostname,
@@ -230,19 +228,44 @@ app.get("/", (c) => {
 });
 
 /*
- * Admin page - For debugging/management (hidden)
+ * Admin access - HTTP Basic auth with username "admin" and the
+ * ADMIN_PASSWORD secret. Without the secret, the admin page is disabled.
  */
-app.get("/admin", withDbAndInit, async (c) => {
+const requireAdmin = async (c: any, next: any) => {
+	const password = c.env.ADMIN_PASSWORD;
+	if (!password) {
+		return c.text(
+			"The admin page is disabled. Set the ADMIN_PASSWORD secret to enable it.",
+			403,
+		);
+	}
+	const expected = `Basic ${btoa(`admin:${password}`)}`;
+	const provided = c.req.header("Authorization") ?? "";
+	if (!(await timingSafeEqualStrings(provided, expected))) {
+		return c.text("Unauthorized", 401, {
+			"WWW-Authenticate": 'Basic realm="Admin"',
+		});
+	}
+	await next();
+};
+
+async function timingSafeEqualStrings(a: string, b: string) {
+	const encoder = new TextEncoder();
+	const [hashA, hashB] = await Promise.all([
+		crypto.subtle.digest("SHA-256", encoder.encode(a)),
+		crypto.subtle.digest("SHA-256", encoder.encode(b)),
+	]);
+	return crypto.subtle.timingSafeEqual(hashA, hashB);
+}
+
+/*
+ * Admin page - For debugging/management
+ */
+app.get("/admin", requireAdmin, withDbAndInit, async (c) => {
 	let body = `
     <div class="form-container">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h3 style="margin: 0;">Admin Dashboard</h3>
-        <form action="/init" style="margin: 0;">
-          <button type="submit" class="btn btn-destructive btn-sm">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
-            Reset All Data
-          </button>
-        </form>
       </div>
       <p style="font-size: 13px; color: var(--kumo-muted-foreground); margin-bottom: 20px;">Manage projects and view dispatch namespace scripts.</p>
       
@@ -268,7 +291,9 @@ app.get("/admin", withDbAndInit, async (c) => {
 
 			for (const project of projects) {
 				const subdomain = project.subdomain;
-				const customHostname = project.custom_hostname || "-";
+				const customHostname = project.custom_hostname
+					? escapeHtml(project.custom_hostname)
+					: "-";
 				let hostnameStatus = "-";
 				let sslStatus = "-";
 				let hostnameErrors: string[] = [];
@@ -335,7 +360,7 @@ app.get("/admin", withDbAndInit, async (c) => {
 					}
 
 					// Return original if no match
-					return errors.join("<br>");
+					return errors.map(escapeHtml).join("<br>");
 				};
 
 				// Helper to get user-friendly SSL status message
@@ -366,7 +391,7 @@ app.get("/admin", withDbAndInit, async (c) => {
 
 				body += `
           <tr>
-            <td>${project.name}</td>
+            <td>${escapeHtml(project.name)}</td>
             <td><a href="${c.env.CUSTOM_DOMAIN ? `https://${subdomain}.${c.env.CUSTOM_DOMAIN}` : `https://${subdomain}.workers.dev`}" target="_blank" class="table-link">${subdomain}</a></td>
             <td>${customHostname !== "-" ? `<a href="https://${customHostname}" target="_blank" class="table-link">${customHostname}</a>` : "-"}</td>
             <td class="status-cell">
@@ -462,23 +487,6 @@ app.get("/admin", withDbAndInit, async (c) => {
   </script>`;
 
 	return c.html(renderPage(body, { customDomain: c.env.CUSTOM_DOMAIN }));
-});
-
-/*
- * Initialize example data (now optional since auto-init handles schema)
- */
-app.get("/init", withDbAndInit, async (c) => {
-	const scripts = await GetScriptsInDispatchNamespace(c.env);
-	// Handle case where scripts is null/undefined (e.g., in tests or when API unavailable)
-	if (scripts && Array.isArray(scripts)) {
-		await Promise.all(
-			scripts.map(async (script) =>
-				DeleteScriptInDispatchNamespace(c.env, script.id),
-			),
-		);
-	}
-	await Initialize(c.var.db);
-	return Response.redirect(c.req.url.replace("/init", ""));
 });
 
 /**

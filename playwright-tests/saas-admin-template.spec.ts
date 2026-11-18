@@ -1,5 +1,9 @@
 import { test, expect } from "./fixtures";
 
+test.use({
+	httpCredentials: { username: "admin", password: "e2e-test-password" },
+});
+
 test.describe("SaaS Admin Template", () => {
 	test("should render as expected", async ({ page, templateUrl }) => {
 		await page.goto(templateUrl);

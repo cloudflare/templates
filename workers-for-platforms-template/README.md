@@ -152,7 +152,13 @@ npm run deploy
 
 ## Security
 
-The admin page (`/admin`) shows all projects. Protect it with [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/self-hosted-apps/):
+The admin page (`/admin`) shows all projects. It's disabled until you set an `ADMIN_PASSWORD` secret:
+
+```bash
+npx wrangler secret put ADMIN_PASSWORD
+```
+
+Then sign in with the username `admin` and that password. For stronger protection, also put the page behind [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/applications/configure-apps/self-hosted-apps/):
 
 1. Go to **Zero Trust** → **Access** → **Applications**
 2. Add application for `platform.com/admin*`
@@ -168,7 +174,7 @@ The admin page (`/admin`) shows all projects. Protect it with [Cloudflare Access
 | "Custom domain not working"                 | Check Zone ID and DNS records are correct                                                                                                                |
 | "Custom hostnames require additional setup" | Custom hostname tokens are auto-provisioned during Deploy to Cloudflare                                                                                  |
 | "404 on deployed sites"                     | Ensure uploaded files include `index.html` at the root                                                                                                   |
-| Database errors                             | Visit `/admin` to check status, or `/init` to reset                                                                                                      |
+| Database errors                             | Visit `/admin` to check status                                                                                                                           |
 
 **View logs:**
 

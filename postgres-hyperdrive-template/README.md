@@ -50,11 +50,16 @@ A live public deployment of this template is available at [https://postgres-hype
    ```bash
    npx wrangler deploy
    ```
-4. (Optional) To run your project locally while connecting to your remote database, you must use `wrangler dev --remote` which will run your Worker in Cloudflare's environment so that you can access your remote database. Run the following:
+4. Set a password. The dashboard is disabled until you do. Sign in with the username `admin` and this password:
+   ```bash
+   npx wrangler secret put ADMIN_PASSWORD
+   ```
+   For local development, copy `.dev.vars.example` to `.dev.vars` and set `ADMIN_PASSWORD` there.
+5. (Optional) To run your project locally while connecting to your remote database, you must use `wrangler dev --remote` which will run your Worker in Cloudflare's environment so that you can access your remote database. Run the following:
    ```bash
    npx wrangler dev --remote
    ```
-5. Monitor your worker
+6. Monitor your worker
    ```bash
    npx wrangler tail
    ```

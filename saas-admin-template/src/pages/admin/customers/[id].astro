@@ -1,10 +1,9 @@
 ---
-import { RunCustomerWorkflowButton } from '@/components/admin/run-customer-workflow';
 import Layout from '@/layouts/Layout.astro';
 import { CustomerService } from '@/lib/services/customer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-const { API_TOKEN, DB } = Astro.locals.runtime.env;
+const { DB } = Astro.locals.runtime.env;
 const { id } = Astro.params;
 
 const customerService = new CustomerService(DB);
@@ -32,8 +31,4 @@ const customer = await customerService.getById(id);
       </TableRow>
     </TableBody>
   </Table>
-
-  <div slot="actions">
-    <RunCustomerWorkflowButton apiToken={API_TOKEN} client:only="react" customerId={id} />
-  </div>
 </Layout>

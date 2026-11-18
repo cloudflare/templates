@@ -28,7 +28,7 @@
       "package_json_hash": "56c2b68ded6225743e0f770a61f100d349d40bd1"
     },
     "r2-explorer-template": {
-      "package_json_hash": "d06fc61f53fa5a79d25d3452abd242d0f3f1bd1a"
+      "package_json_hash": "365e6ebb4d4c9fc91b884b170bebf899174727b0"
     },
     "react-postgres-fullstack-template": {
       "package_json_hash": "c391e27e5337819e83ffb2205886006e9d3a7937"
@@ -43,7 +43,7 @@
       "package_json_hash": "42943d0724ed5dc2cab137859daa59b1fd9e1267"
     },
     "saas-admin-template": {
-      "package_json_hash": "21a927cc455368f9ad2f585ac18c985ee2d0e70e"
+      "package_json_hash": "39ce703b1d1615b5404e656423b36529d4697574"
     },
     "text-to-image-template": {
       "package_json_hash": "aae2e3a020f503f09a9306a7fdc2b5713bee32e3"
@@ -76,7 +76,7 @@
       "package_json_hash": "9276f76915cfc1986703e0341b8f3eef5de61622"
     },
     "postgres-hyperdrive-template": {
-      "package_json_hash": "f5baeb2b08e9d025036e242c9fbfe93ad685eaed"
+      "package_json_hash": "30ffdad4cab0d35839984771d2c5eb0cf0efec5d"
     },
     "react-router-postgres-ssr-template": {
       "package_json_hash": "a08c3c3ee3dbbfa806f8d350fb64eabc564562f5"
