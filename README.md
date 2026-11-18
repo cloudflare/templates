@@ -53,9 +53,10 @@ pnpm run test:e2e --ui
 In local mode:
 
 - Tests start development servers automatically for each template
-- Uses one worker to prevent port conflicts
-- Servers are properly cleaned up between different template tests
-- Longer timeouts to account for build and startup time
+- Servers use dynamically allocated ports, so existing local services do not conflict
+- Uses one worker to keep resource usage predictable
+- Servers and temporary environment files are cleaned up between template tests
+- Server logs are attached to failed Playwright tests
 
 #### Live Mode (Testing Deployed Templates)
 
@@ -80,10 +81,12 @@ In live mode:
 
 The test system includes:
 
-- **Automatic template discovery**: Finds all `*-template` directories and analyzes their framework
-- **Smart server management**: Detects framework type (Astro, Next.js, Vite, etc.) and uses appropriate ports
-- **Reliable cleanup**: Properly terminates process trees between test runs
-- **Flexible URL resolution**: Automatically determines live URLs from `wrangler.json` configuration
+- **Automatic template discovery**: Finds all `*-template` directories with a `dev` script
+- **Collision-free server management**: Allocates HTTP and inspector ports dynamically
+- **Reliable cleanup**: Terminates process trees and removes environment files created by the harness
+- **Actionable failures**: Detects early process exits and attaches captured server logs
+- **Coverage enforcement**: Fails when a dev-enabled template has no corresponding E2E spec
+- **Flexible URL resolution**: Automatically determines live URLs from Wrangler configuration
 
 ### Writing Template Tests
 
@@ -101,6 +104,8 @@ test.describe("My Template", () => {
 ```
 
 The `templateUrl` fixture automatically provides the correct URL (local dev server or live deployment) based on the test mode.
+
+If a template's normal `dev` command requires remote resources, add an `e2e:dev` package script backed by local test configuration. The harness prefers `e2e:dev` when present. Keep mocks at external binding boundaries so the production request handler still runs end to end.
 
 #### Playwright Codegen
 

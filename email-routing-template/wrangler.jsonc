@@ -1,0 +1,26 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "email-routing-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./public",
+		"run_worker_first": ["/"]
+	},
+	"vars": {
+		"ROUTE_ADDRESS": "support@company.example",
+		"FORWARD_TO": "owner@mailbox.example",
+		"ALLOWED_SENDERS": "trusted@partner.example"
+	},
+	// Uncomment this top-level section after replacing the example address.
+	// Each entry creates an Email Routing rule managed by Wrangler.
+	// "addresses": [
+	// 	"support@company.example"
+	// 	// Use "*@company.example" instead to route every unmatched address.
+	// ],
+	"observability": {
+		"enabled": true
+	}
+}

@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import Layout from '@/layouts/Layout.astro';
 import { SubscriptionService } from '@/lib/services/subscription';
 
-const { API_TOKEN, DB } = Astro.locals.runtime.env;
+const { DB } = Astro.locals.runtime.env;
 const { id } = Astro.params;
 const subscriptionService = new SubscriptionService(DB);
 const subscription = await subscriptionService.getById(id);

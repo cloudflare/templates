@@ -2,7 +2,7 @@ import {
 	type LoaderFunctionArgs,
 	type ActionFunctionArgs,
 } from "@remix-run/cloudflare";
-import { useLoaderData, Form } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { TodoManager } from "~/to-do-manager";
 
 export const loader = async ({ params, context }: LoaderFunctionArgs) => {
@@ -58,7 +58,7 @@ export default function () {
 					Todo List
 				</h1>
 
-				<Form method="post" className="mb-8 flex gap-2">
+				<form method="post" className="mb-8 flex gap-2">
 					<input
 						type="text"
 						name="text"
@@ -73,7 +73,7 @@ export default function () {
 					>
 						Add
 					</button>
-				</Form>
+				</form>
 
 				<ul className="space-y-2">
 					{todos.map((todo) => (
@@ -81,7 +81,7 @@ export default function () {
 							key={todo.id}
 							className="flex items-center gap-2 bg-white dark:bg-gray-800 p-4 rounded-lg shadow"
 						>
-							<Form method="post" className="flex-1 flex items-center gap-2">
+							<form method="post" className="flex-1 flex items-center gap-2">
 								<input type="hidden" name="id" value={todo.id} />
 								<button
 									type="submit"
@@ -97,9 +97,9 @@ export default function () {
 										{todo.text}
 									</span>
 								</button>
-							</Form>
+							</form>
 
-							<Form method="post">
+							<form method="post">
 								<input type="hidden" name="id" value={todo.id} />
 								<button
 									type="submit"
@@ -109,7 +109,7 @@ export default function () {
 								>
 									Delete
 								</button>
-							</Form>
+							</form>
 						</li>
 					))}
 				</ul>

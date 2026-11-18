@@ -1,5 +1,8 @@
 import { issuer } from "@openauthjs/openauth";
-import { CloudflareStorage } from "@openauthjs/openauth/storage/cloudflare";
+import {
+	CloudflareStorage,
+	type CloudflareStorageOptions,
+} from "@openauthjs/openauth/storage/cloudflare";
 import { PasswordProvider } from "@openauthjs/openauth/provider/password";
 import { PasswordUI } from "@openauthjs/openauth/ui/password";
 import { createSubjects } from "@openauthjs/openauth/subject";
@@ -39,7 +42,7 @@ export default {
 		// The real OpenAuth server code starts here:
 		return issuer({
 			storage: CloudflareStorage({
-				namespace: env.AUTH_STORAGE,
+				namespace: env.AUTH_STORAGE as CloudflareStorageOptions["namespace"],
 			}),
 			subjects,
 			providers: {

@@ -47,11 +47,11 @@ async function deploySnippetToNamespace(
 				main_module: moduleFileName,
 				bindings,
 			},
-			files: {
-				[moduleFileName]: new File([code], moduleFileName, {
+			files: [
+				new File([code], moduleFileName, {
 					type: "application/javascript+module",
 				}),
-			},
+			],
 		},
 	);
 

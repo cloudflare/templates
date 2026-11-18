@@ -1,0 +1,43 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "agent-visibility-template",
+	"main": "./src/worker/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./dist/client",
+		"not_found_handling": "single-page-application",
+		"run_worker_first": [
+			"/.well-known/web-bot-auth/*",
+			"/api",
+			"/api/*",
+			"/index.json",
+			"/jsonld",
+			"/llms-full.txt",
+			"/llms.txt",
+			"/robots.txt",
+			"/*.jsonld",
+			"/*.md"
+		]
+	},
+	"ai": {
+		"binding": "AI"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "VISIBILITY_CACHE",
+			"id": "5c11e02adb2d45dea62b336d46ce135f"
+		}
+	],
+	"vars": {
+		"SITE_NAME": "Acme Docs",
+		"SITE_DESCRIPTION": "Product documentation for the Acme platform.",
+		"AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+		"ENRICHMENT_CACHE_TTL": "3600",
+		"CONTENT_SIGNAL": "ai-input=yes, search=yes, ai-train=no",
+		"ENABLE_WEB_BOT_AUTH": "false"
+	}
+}

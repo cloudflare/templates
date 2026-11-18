@@ -1,0 +1,56 @@
+{
+	"name": "workflows-starter-template",
+	"description": "Interactive starter template demonstrating Cloudflare Workflows with real-time status updates",
+	"cloudflare": {
+		"label": "Workflows Starter",
+		"products": [
+			"Workers",
+			"Workflows",
+			"Durable Objects"
+		],
+		"categories": [
+			"starter"
+		],
+		"publish": true,
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/4380d39a-b907-437c-e784-500fcc10cb00/preview",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/6d6e9a49-5c10-4ef6-bfa8-b6577a656300/public",
+		"docs_url": "https://developers.cloudflare.com/workflows/"
+	},
+	"dependencies": {
+		"react": "19.2.1",
+		"react-dom": "19.2.1"
+	},
+	"devDependencies": {
+		"@cloudflare/vite-plugin": "1.52.1",
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@eslint/js": "9.39.1",
+		"@tailwindcss/vite": "4.1.17",
+		"@types/react": "19.2.7",
+		"@types/react-dom": "19.2.3",
+		"@vitejs/plugin-react-swc": "4.0.0",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"eslint": "9.39.2",
+		"eslint-plugin-react-hooks": "7.0.1",
+		"eslint-plugin-react-refresh": "0.4.24",
+		"globals": "16.5.0",
+		"tailwindcss": "4.1.17",
+		"typescript": "5.9.3",
+		"typescript-eslint": "8.48.0",
+		"vite": "^7.0.0",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc -b && vite build",
+		"cf-typegen": "wrangler types",
+		"check": "tsc && wrangler deploy --dry-run",
+		"deploy": "npm run build && wrangler deploy",
+		"dev": "vite",
+		"lint": "eslint .",
+		"preview": "npm run build && vite preview",
+		"test": "vitest run"
+	},
+	"type": "module"
+}

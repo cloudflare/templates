@@ -124,7 +124,8 @@ export function collectTemplateFiles(
 		.filter(
 			({ filePath }) =>
 				!filePath.includes("node_modules") &&
-				!fs.statSync(filePath).isDirectory() &&
+				// lstat so symlinks are skipped rather than followed
+				fs.lstatSync(filePath).isFile() &&
 				!gitIgnored(filePath),
 		)
 		.map(({ name, filePath }) => ({
@@ -135,7 +136,7 @@ export function collectTemplateFiles(
 
 function gitIgnored(filePath: string): boolean {
 	try {
-		subprocess.execSync(`git check-ignore ${filePath}`);
+		subprocess.execFileSync("git", ["check-ignore", "--", filePath]);
 		return true;
 	} catch {
 		return false;

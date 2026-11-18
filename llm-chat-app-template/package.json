@@ -1,7 +1,6 @@
 {
 	"name": "llm-chat-app-template",
 	"description": "A simple chat application powered by Cloudflare Workers AI",
-	"private": true,
 	"cloudflare": {
 		"label": "LLM Chat App",
 		"products": [
@@ -18,18 +17,22 @@
 		"publish": true
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.44",
-		"@cloudflare/workers-types": "^4.20250425.0",
-		"@types/node": "24.0.4",
-		"typescript": "5.8.3",
-		"vitest": "3.2.4",
-		"wrangler": "4.21.x"
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@cloudflare/workers-types": "^5.20261102.1",
+		"@types/node": "24.10.1",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
 	},
+	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"check": "tsc --noEmit && wrangler deploy --dry-run",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --config wrangler.e2e.jsonc",
 		"start": "wrangler dev",
 		"test": "vitest"
 	}

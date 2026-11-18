@@ -1,0 +1,10 @@
+.git
+.wrangler
+node_modules
+.dev.vars*
+.env*
+test
+scripts
+README.md
+preview.png
+worker-configuration.d.ts

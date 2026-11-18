@@ -1,0 +1,36 @@
+{
+	"name": "workers-builds-notifications-template",
+	"description": "Send Workers Builds status notifications to Slack, Discord, or any webhook via Event Subscriptions.",
+	"cloudflare": {
+		"label": "Workers Builds Notifications",
+		"products": [
+			"Workers Builds",
+			"Queues"
+		],
+		"categories": [
+			"starter"
+		],
+		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/b58a5d9e-3d04-4685-f744-b590dc19ed00/preview",
+		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/7ee998bb-6d98-43ab-dd7f-3f2d85a89c00/public",
+		"publish": true
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@cloudflare/workers-types": "^5.20261102.1",
+		"@slack/types": "2.19.0",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
+	},
+	"private": true,
+	"scripts": {
+		"cf-typegen": "wrangler types",
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"tail": "wrangler tail",
+		"test": "vitest run",
+		"test:watch": "vitest"
+	}
+}

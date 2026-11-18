@@ -1,0 +1,8 @@
+# Workers for Platforms Template - Secrets
+# Copy to .dev.vars for local development
+
+# API tokens are auto-provisioned during Deploy to Cloudflare.
+
+# Password for the /admin page. Sign in with the username "admin".
+# The admin page is disabled until this is set.
+ADMIN_PASSWORD=

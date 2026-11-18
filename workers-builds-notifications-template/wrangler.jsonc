@@ -1,0 +1,32 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "workers-builds-notifications-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./public"
+	},
+	/**
+	 * Queue Consumer Configuration
+	 *
+	 * IMPORTANT: Update the "queue" value below to match your queue name.
+	 */
+	"queues": {
+		"consumers": [
+			{
+				"queue": "builds-event-subscriptions",
+				"max_batch_size": 10,
+				"max_batch_timeout": 30,
+				"max_retries": 3
+			}
+		]
+	}
+}

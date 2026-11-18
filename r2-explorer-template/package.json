@@ -1,7 +1,6 @@
 {
 	"name": "r2-explorer-template",
 	"description": "A Google Drive Interface for your Cloudflare R2 Buckets!",
-	"private": true,
 	"cloudflare": {
 		"label": "R2-Explorer App",
 		"products": [
@@ -14,18 +13,25 @@
 		],
 		"preview_icon_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/63b00585-f444-4ef1-1bd9-ccfec714fd00/public",
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/739b4cf5-9f2c-47ad-0e82-99c5993d3e00/preview",
-		"publish": true
+		"publish": true,
+		"bindings": {
+			"ADMIN_PASSWORD": {
+				"description": "Password for the R2 Explorer dashboard. Sign in with the username `admin`. Generate one with `openssl rand -base64 24`."
+			}
+		}
 	},
 	"dependencies": {
-		"r2-explorer": "1.1.5"
+		"r2-explorer": "1.1.10"
 	},
 	"devDependencies": {
-		"typescript": "5.8.3",
-		"wrangler": "4.21.x"
+		"typescript": "5.9.3",
+		"wrangler": "4.136.1"
 	},
+	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
-		"dev": "wrangler dev"
+		"dev": "wrangler dev",
+		"e2e:dev": "wrangler dev --var ADMIN_PASSWORD:e2e-test-password"
 	}
 }

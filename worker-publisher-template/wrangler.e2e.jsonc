@@ -1,0 +1,10 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "worker-publisher-template-e2e",
+	"main": "./src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"vars": {
+		"CLOUDFLARE_ACCOUNT_ID": "",
+		"READONLY": "true"
+	}
+}

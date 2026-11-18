@@ -1,0 +1,14 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "microfrontend-template-e2e",
+	"main": "./index.ts",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"services": [
+		{ "binding": "APP1", "service": "worker-a" },
+		{ "binding": "APP2", "service": "worker-b" }
+	],
+	"vars": {
+		"ROUTES": "{\"smoothTransitions\":true,\"routes\":[{\"binding\":\"APP1\",\"path\":\"/\"},{\"binding\":\"APP1\",\"path\":\"/app1\"},{\"binding\":\"APP2\",\"path\":\"/app2\"}]}"
+	}
+}

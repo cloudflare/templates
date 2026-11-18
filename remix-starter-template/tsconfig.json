@@ -16,6 +16,7 @@
 			"@cloudflare/workers-types",
 			"vite/client"
 		],
+		"preserveSymlinks": true,
 		"isolatedModules": true,
 		"esModuleInterop": true,
 		"jsx": "react-jsx",

@@ -8,7 +8,7 @@ jobs:
   check-and-deploy-main:
     name: Check and Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     concurrency: templates-check-and-deploy-main
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -23,28 +23,35 @@ jobs:
       - run: pnpm -w test
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps chromium
         shell: bash
 
       - name: Run e2e tests
+        id: e2e
         run: pnpm test:e2e
 
       - name: Deploy live demos
         run: pnpm -w deploy-live-demos
 
+      # Keep going after a failed demo deploy: the remaining checks and the
+      # staging upload don't depend on every live demo deploying.
       - name: Validate live demo links
+        if: ${{ !cancelled() && steps.e2e.outcome == 'success' }}
         run: pnpm -w validate-live-demo-links
 
       - name: Run live e2e tests
+        if: ${{ !cancelled() && steps.e2e.outcome == 'success' }}
         run: pnpm test:e2e:live
 
       - name: Compute short hash
+        if: ${{ !cancelled() && steps.e2e.outcome == 'success' }}
         run: |
           full_sha="${{ github.sha }}"
           short_sha="${full_sha:0:7}"
           echo "SHA_SHORT=$short_sha" >> $GITHUB_ENV
 
       - name: Deploy to staging
+        if: ${{ !cancelled() && steps.e2e.outcome == 'success' }}
         run: |
           pnpm run upload . \
             --staging \

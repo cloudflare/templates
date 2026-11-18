@@ -68,7 +68,12 @@ A live public deployment of this template is available at [https://demo.r2explor
    ```bash
    npx wrangler deploy
    ```
-4. Monitor your worker
+4. Set a password. R2 Explorer is disabled until you do. Sign in with the username `admin` and this password:
+   ```bash
+   npx wrangler secret put ADMIN_PASSWORD
+   ```
+   For local development, copy `.dev.vars.example` to `.dev.vars` and set `ADMIN_PASSWORD` there.
+5. Monitor your worker
    ```bash
    npx wrangler tail
    ```
@@ -79,4 +84,4 @@ By default this template is **readonly**.
 
 in order for you to enable editing, just update the `readonly` flag in your `src/index.ts` file.
 
-Its highly recommended that you setup security first, [learn more here](https://r2explorer.com/getting-started/security/).
+The dashboard and API require the `ADMIN_PASSWORD` secret. To use Cloudflare Access instead, [learn more here](https://r2explorer.com/getting-started/security/).

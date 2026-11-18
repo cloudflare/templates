@@ -1,0 +1,44 @@
+@import "tailwindcss" source(".");
+
+@theme {
+	/* Kumo tokens from stratus */
+	--color-canvas: #fafafa;
+	--color-surface: #ffffff;
+	--color-surface-secondary: #fcfcfc;
+	--color-elevated: #fafafa;
+	--color-tint: #f5f5f5;
+	--color-brand: #046cfe;
+	--color-brand-hover: #1347e5;
+	--color-ring: rgba(10, 10, 10, 0.1);
+	--color-success: #16a34a;
+	--color-success-tint: #d1fae5;
+	--color-danger: #b91c1c;
+	--color-danger-tint: #fee2e2;
+	--color-info-tint: #dbeafe;
+	--color-warning-tint: #fefce8;
+	--color-violet-bg: #ede9fe;
+	--color-violet: #5b21b6;
+
+	--font-sans:
+		ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+html,
+body {
+	@apply bg-canvas text-neutral-900 antialiased;
+	font-size: 14px;
+	line-height: 1.43;
+}
+
+/* Dot grid background */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	background-image: radial-gradient(circle, #a3a3a3 0.6px, transparent 0.6px);
+	background-size: 24px 24px;
+	opacity: 0.4;
+	pointer-events: none;
+}

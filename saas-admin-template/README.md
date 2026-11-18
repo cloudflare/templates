@@ -2,6 +2,9 @@
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/saas-admin-template)
 
+> [!NOTE]
+> This template is no longer maintained.
+
 ![SaaS Admin Template](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/52b88668-0144-489c-dd02-fe620270ba00/public)
 
 <!-- dash-content-start -->
@@ -103,6 +106,8 @@ npx wrangler secret put API_TOKEN
 
 ## Usage
 
-This project includes a fully functional admin dashboard with customer and subscription management capabilities. It also includes an API with token authentication to access resources via REST, returning JSON data.
+This project includes a read-only admin dashboard for customers and subscriptions, and an API with token authentication to create and read them via REST, returning JSON data.
 
-It also includes a "Customer Workflow", built with [Cloudflare Workflows](https://developers.cloudflare.com/workflows). This workflow can be triggered in the UI or via the REST API to do arbitrary actions in the background for any given user. See [`customer_workflow.ts`]() to learn more about what you can do in this workflow.
+The dashboard pages under `/admin` ask for a username and password. Sign in with the username `admin` and your `API_TOKEN` as the password. Until `API_TOKEN` is set, the dashboard is disabled.
+
+It also includes a "Customer Workflow", built with [Cloudflare Workflows](https://developers.cloudflare.com/workflows). This workflow can be triggered via the REST API to do arbitrary actions in the background for any given user. See [`customer_workflow.ts`]() to learn more about what you can do in this workflow.

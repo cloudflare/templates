@@ -1,0 +1,12 @@
+# Dependencies
+/node_modules
+
+# Cloudflare
+/.wrangler
+
+# Test output
+/coverage
+/test-results
+
+# OS files
+.DS_Store

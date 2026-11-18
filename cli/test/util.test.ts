@@ -1,7 +1,12 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
-import { getTemplates, readJson, writeJson } from "../src/util";
+import {
+	collectTemplateFiles,
+	getTemplates,
+	readJson,
+	writeJson,
+} from "../src/util";
 
 describe("util", () => {
 	const testDir = path.join(__dirname, "test-templates");
@@ -77,6 +82,62 @@ describe("util", () => {
 			const read = readJson(testFile) as { test: boolean };
 
 			expect(read.test).toBe(true);
+		});
+	});
+
+	describe("collectTemplateFiles", () => {
+		const marker = "collect-template-files-marker";
+		const markerPath = path.join(process.cwd(), marker);
+
+		afterEach(() => {
+			fs.rmSync(markerPath, { force: true });
+		});
+
+		test("does not interpret template paths as shell syntax", () => {
+			const template = path.join(testDir, `a;touch ${marker};b-template`);
+			fs.mkdirSync(template, { recursive: true });
+			writeJson(path.join(template, "package.json"), {});
+
+			const files = collectTemplateFiles(template).map(({ file }) => file.name);
+
+			expect(fs.existsSync(markerPath)).toBe(false);
+			expect(files).toEqual(["package.json"]);
+		});
+
+		test("still skips git-ignored files", () => {
+			fs.writeFileSync(path.join(dashTemplate, "debug.log"), "");
+
+			const files = collectTemplateFiles(dashTemplate).map(
+				({ file }) => file.name,
+			);
+
+			expect(files).toContain("package.json");
+			expect(files).not.toContain("debug.log");
+		});
+
+		test("skips symlinks to files outside the template", () => {
+			const outside = path.join(testDir, "outside.txt");
+			fs.writeFileSync(outside, "outside the template");
+			fs.symlinkSync(outside, path.join(dashTemplate, "linked.txt"));
+
+			const files = collectTemplateFiles(dashTemplate).map(
+				({ file }) => file.name,
+			);
+
+			expect(files).toEqual(["package.json"]);
+		});
+
+		test("skips dangling symlinks", () => {
+			fs.symlinkSync(
+				path.join(testDir, "missing.txt"),
+				path.join(dashTemplate, "dangling.txt"),
+			);
+
+			const files = collectTemplateFiles(dashTemplate).map(
+				({ file }) => file.name,
+			);
+
+			expect(files).toEqual(["package.json"]);
 		});
 	});
 });

@@ -1,6 +1,5 @@
 {
 	"name": "mysql-hyperdrive-template",
-	"private": true,
 	"cloudflare": {
 		"label": "Worker + D1 Database",
 		"products": [
@@ -18,15 +17,18 @@
 		"preview_image_url": "https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/197c675e-4dbc-4c19-be36-9415d4979800/public"
 	},
 	"dependencies": {
-		"@types/node": "24.0.4",
-		"mysql2": "3.14.0"
+		"@types/node": "24.10.1",
+		"mysql2": "3.15.3"
 	},
 	"devDependencies": {
-		"@cloudflare/vitest-pool-workers": "0.8.44",
-		"typescript": "5.8.3",
-		"vitest": "3.2.4",
-		"wrangler": "4.21.x"
+		"@cloudflare/vitest-pool-workers": "0.21.3",
+		"@vitest/runner": "4.1.10",
+		"@vitest/snapshot": "4.1.10",
+		"typescript": "5.9.3",
+		"vitest": "4.1.10",
+		"wrangler": "4.136.1"
 	},
+	"private": true,
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"check": "tsc && wrangler deploy --dry-run",

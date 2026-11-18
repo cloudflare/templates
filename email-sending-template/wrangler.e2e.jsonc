@@ -1,0 +1,19 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "email-sending-template",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-10-08",
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./public",
+		"run_worker_first": ["/", "/send"]
+	},
+	"secrets": {
+		"required": ["SEND_EMAIL_AUTH_TOKEN"]
+	},
+	"vars": {
+		"FROM_ADDRESS": "sender@test.invalid",
+		"TO_ADDRESS": "recipient@test.invalid"
+	},
+	"send_email": [{ "name": "EMAIL" }]
+}

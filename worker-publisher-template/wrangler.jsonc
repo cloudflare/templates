@@ -8,7 +8,7 @@
 		{
 			"binding": "DISPATCHER",
 			"namespace": "my-dispatch-namespace",
-			"experimental_remote": true
+			"remote": true
 		}
 	],
 	"observability": {
