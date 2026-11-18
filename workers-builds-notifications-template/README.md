@@ -164,16 +164,20 @@ Subscribe your queue to Workers Builds events.
 wrangler queues subscription create builds-event-subscriptions \
   --source workersBuilds.worker \
   --events build.succeeded,build.failed \
-  --worker-name <YOUR_CONSUMER_WORKER_NAME>
+  --worker-name <YOUR_SOURCE_BUILD_WORKER_NAME>
 ```
 
+> `--worker-name` is the source Worker being built (the project you want notifications for), not the queue consumer Worker.
+>
+> To receive notifications for multiple projects, create one subscription per source Worker name.
+>
 > For more details, see [Event Subscriptions Documentation](https://developers.cloudflare.com/queues/event-subscriptions/)
 
 ---
 
 ### 7. Test It!
 
-Trigger a build on any worker in your account. You should see a notification in your channel within seconds!
+Trigger a build on a worker you subscribed to. You should see a notification in your channel within seconds!
 
 ---
 
@@ -182,11 +186,12 @@ Trigger a build on any worker in your account. You should see a notification in 
 ```
 ┌─────────────────┐     ┌─────────────┐     ┌──────────────────┐     ┌─────────┐
 │ Workers Builds  │────▶│   Queue     │────▶│ This Consumer    │────▶│ Webhook │
-│ (any worker)    │     │             │     │ Worker           │     │         │
+│ (subscribed     │     │             │     │ Worker           │     │         │
+│ worker(s))      │     │             │     │                  │     │         │
 └─────────────────┘     └─────────────┘     └──────────────────┘     └─────────┘
 ```
 
-1. **Any worker** in your account triggers a build
+1. A **subscribed worker** in your account triggers a build
 2. **Workers Builds** publishes an event to your **Queue**
 3. **This consumer worker** processes the event and sends a notification to your **webhook**
 
