@@ -18,7 +18,7 @@ Besides being able to see the OpenAPI schema (openapi.json) in the browser, you 
 <!-- dash-content-end -->
 
 > [!IMPORTANT]
-> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/openapi-template#setup-steps) before deploying.
+> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/chanfana-openapi-template#setup-steps) before deploying.
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ Outside of this repo, you can start a new project with this template using [C3](
 npm create cloudflare@latest -- --template=cloudflare/templates/chanfana-openapi-template
 ```
 
-A live public deployment of this template is available at [https://openapi-template.templates.workers.dev](https://openapi-template.templates.workers.dev)
+A live public deployment of this template is available at [https://chanfana-openapi-template.templates.workers.dev](https://chanfana-openapi-template.templates.workers.dev)
 
 ## Setup Steps
 
