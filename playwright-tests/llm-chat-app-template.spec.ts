@@ -23,4 +23,20 @@ test.describe("LLM Chat App Template", () => {
 		).toBeVisible();
 		await expect(page.locator("#chat-messages div").nth(2)).toBeVisible();
 	});
+
+	test("Shows message text as text, not HTML", async ({
+		page,
+		templateUrl,
+	}) => {
+		const message = '<img src="x" id="injected">';
+		await page.goto(templateUrl);
+		await page
+			.getByRole("textbox", { name: "Type your message here..." })
+			.fill(message);
+		await page.getByRole("button", { name: "Send" }).click();
+		await expect(
+			page.locator("#chat-messages").getByText(message, { exact: true }),
+		).toBeVisible();
+		await expect(page.locator("#injected")).toHaveCount(0);
+	});
 });
