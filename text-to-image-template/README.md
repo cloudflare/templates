@@ -6,7 +6,7 @@
 
 <!-- dash-content-start -->
 
-Generate images based on text prompts using [Workers AI](https://developers.cloudflare.com/workers-ai/). In this example, going to the website will generate an image from the prompt "cyberpunk cat" using the `@cf/stabilityai/stable-diffusion-xl-base-1.0` model. Be patient! Your image may take a few seconds to generate.
+Generate images based on text prompts using [Workers AI](https://developers.cloudflare.com/workers-ai/). In this example, going to the website will generate an image from the prompt "cyberpunk cat" using the `@cf/black-forest-labs/flux-2-klein-9b` model. Be patient! Your image may take a few seconds to generate.
 
 <!-- dash-content-end -->
 

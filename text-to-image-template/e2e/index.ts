@@ -1,9 +1,17 @@
 import worker from "../src/index";
 
-const pngSignature = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
+const jpegStart = String.fromCharCode(0xff, 0xd8, 0xff, 0xe0);
+let calls = 0;
 const env = {
 	AI: {
-		run: async () => pngSignature,
+		run: async () => {
+			calls++;
+			// Flag every other image, so each request needs one retry.
+			if (calls % 2 === 1) {
+				throw new Error("3030: Your output has been flagged.");
+			}
+			return { image: btoa(jpegStart) };
+		},
 	},
 } as unknown as Env;
 
