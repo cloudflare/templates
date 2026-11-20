@@ -19,7 +19,21 @@ export default defineConfig({
       },
     },
   }),
-  integrations: [react(), tailwind({ applyBaseStyles: true })],
+  integrations: [
+    {
+      name: "worker-source-maps",
+      hooks: {
+        "astro:build:setup": ({ target, vite }) => {
+          if (target === "server") {
+            vite.build ??= {};
+            vite.build.sourcemap = true;
+          }
+        },
+      },
+    },
+    react(),
+    tailwind({ applyBaseStyles: true }),
+  ],
   output: "server",
   vite: {
     resolve: {
